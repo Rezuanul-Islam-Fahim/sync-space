@@ -1,11 +1,13 @@
-const express = require('express');
-const app = express()
-const port = 3000;
+import createApp from './app.js'
 
-app.get('/', (req, res) => {
-    res.send(`Hello World on port ${port}`);
-})
+const PORT = process.env.PORT || 3000
 
-app.listen(port, () => {
-    console.log(`App is listening on port ${port}`)
-})
+const start = () => {
+    const app = createApp()
+
+    app.listen(PORT, () => {
+        console.log(`Server started on port: ${PORT}`)
+    })
+}
+
+start()
