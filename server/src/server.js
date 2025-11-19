@@ -1,8 +1,12 @@
 import createApp from './app.js'
+import { initDB } from './infra/db.js'
+import config from './config/index.js'
 
-const PORT = process.env.PORT || 3000
+const PORT = config.port || 3000
 
-const start = () => {
+const start = async () => {
+    await initDB()
+
     const app = createApp()
 
     app.listen(PORT, () => {
@@ -11,3 +15,7 @@ const start = () => {
 }
 
 start()
+    .catch(err => {
+        console.log('Failed to start: ', err)
+        process.exit(1)
+    })
