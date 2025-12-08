@@ -1,4 +1,3 @@
-import React from "react";
 
 const FormCheckbox = ({ name, checked, onChange, children }) => {
   return (
