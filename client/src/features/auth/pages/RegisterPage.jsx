@@ -85,18 +85,26 @@ const RegisterPage = () => {
                 {...field}
                 value={formData[field.name]}
                 onChange={handleChange}
+                error={errors[field.name]}
               />
             ))}
 
-            <FormCheckbox
-              name="agreeToTerms"
-              checked={formData.agreeToTerms}
-              onChange={handleChange}
-              required={true}
-            >
-              I agree to Discord's <span className="text-[#00A8FC]">Terms</span>
-              .
-            </FormCheckbox>
+            <div className="mb-2">
+              <FormCheckbox
+                name="agreeToTerms"
+                checked={formData.agreeToTerms}
+                onChange={handleChange}
+              >
+                I agree to Discord's{" "}
+                <span className="text-[#00A8FC]">Terms</span>.
+              </FormCheckbox>
+              {/* Manual Error message for Checkbox */}
+              {errors.agreeToTerms && (
+                <p className="text-[#F23F42] text-xs font-medium ml-8 mt-[-4px]">
+                  You must agree to the terms to continue.
+                </p>
+              )}
+            </div>
 
             <FormCheckbox
               name="newsletter"
