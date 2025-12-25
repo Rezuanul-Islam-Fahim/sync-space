@@ -17,7 +17,6 @@ export const registerUser = async (data) => {
         email,
         password: hashedPassword
     })
-    const { password: _, ...userWithoutPassword } = newUser
 
-    return userWithoutPassword
+    return newUser
 }
