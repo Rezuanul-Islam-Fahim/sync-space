@@ -1,6 +1,7 @@
 import createApp from './app.js'
 import { initDB, closeDB } from './infra/db.js'
 import config from './config/index.js'
+import logger from './utils/logger.js'
 
 const PORT = config.port
 
@@ -9,7 +10,7 @@ const start = async () => {
     const app = createApp()
 
     const server = app.listen(PORT, () => {
-        console.log(`Server started on port: ${PORT}`)
+        logger.info(`Server started on port: ${PORT}`)
     })
 
     const shutdown = async (signal) => {

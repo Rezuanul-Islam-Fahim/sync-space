@@ -8,7 +8,10 @@ const envSchema = Joi.object({
         .allow('development', 'production')
         .default('development'),
     PORT: Joi.number().default(3000),
-    MONGODB_URI: Joi.string().required().description('Mongo DB url')
+    MONGODB_URI: Joi.string().required().description('Mongo DB url'),
+    LOG_LEVEL: Joi.string()
+        .allow('error', 'warn', 'info', 'http', 'debug')
+        .default('info')
 }).unknown()
 
 const { error, value: envVars } = envSchema.validate(process.env)
@@ -22,7 +25,8 @@ const config = {
     env: envVars.NODE_ENV,
     db: {
         uri: envVars.MONGODB_URI
-    }
+    },
+    LOG_LEVEL: envVars.LOG_LEVEL
 }
 
 export const isDev = () => config.env === 'development';
