@@ -2,7 +2,7 @@ import createApp from './app.js'
 import { initDB, closeDB } from './infra/db.js'
 import config from './config/index.js'
 
-const PORT = config.port || 3000
+const PORT = config.port
 
 const start = async () => {
     await initDB()
