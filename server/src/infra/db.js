@@ -1,20 +1,21 @@
 import mongoose from 'mongoose'
 import config from '../config/index.js'
+import logger from '../utils/logger.js'
 
 const mongooseOptions = {}
 
 export const initDB = async () => {
     try {
         mongoose.connection.on('connected', () => {
-            console.log('Mongoose connected to DB.')
+            logger.info('Mongoose connected to DB.')
         })
 
         mongoose.connection.on('error', (err) => {
-            console.error('Mongoose connection error:', err)
+            logger.error('Mongoose connection error:', err)
         })
 
         mongoose.connection.on('disconnected', () => {
-            console.log('Mongoose disconnected.')
+            logger.warn('Mongoose disconnected.')
         })
 
         await mongoose.connect(config.db.uri, mongooseOptions)

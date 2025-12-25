@@ -11,7 +11,7 @@ const envSchema = Joi.object({
     MONGODB_URI: Joi.string().required().description('Mongo DB url'),
     LOG_LEVEL: Joi.string()
         .allow('error', 'warn', 'info', 'http', 'debug')
-        .default('info')
+        .default('debug')
 }).unknown()
 
 const { error, value: envVars } = envSchema.validate(process.env)

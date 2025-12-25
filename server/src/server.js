@@ -14,7 +14,7 @@ const start = async () => {
     })
 
     const shutdown = async (signal) => {
-        console.log(`\n\'${signal}\' received. Shutting down gracefully...`)
+        logger.info(`\n\'${signal}\' received. Shutting down gracefully...`)
 
         // Stop accepting new connections
         server.close(async () => {
@@ -22,13 +22,13 @@ const start = async () => {
                 await closeDB()
                 process.exit(0)
             } catch (err) {
-                console.error('Error during shutdown:', err)
+                logger.error('Error during shutdown:', err)
                 process.exit(1)
             }
         })
 
         setTimeout(() => {
-            console.error('Forced shutdown due to timeout.')
+            logger.error('Forced shutdown due to timeout.')
             process.exit(1)
         }, 30000)
     }
@@ -39,6 +39,6 @@ const start = async () => {
 
 start()
     .catch(err => {
-        console.error('Failed to start:', err)
+        logger.error('Failed to start:', err)
         process.exit(1)
     })
