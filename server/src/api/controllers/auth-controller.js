@@ -1,7 +1,6 @@
-import { isDev } from '../../config/index.js'
 import * as authServices from '../../services/auth-services.js'
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
     try {
         const { email, password } = req.body
 
@@ -16,12 +15,6 @@ export const register = async (req, res) => {
         })
     }
     catch (err) {
-        console.log('Error occurred: ', err)
-
-        res.status(500).json({
-            success: false,
-            message: 'Registration failed',
-            error: isDev() ? err.message : undefined
-        })
+        next(err)
     }
 }

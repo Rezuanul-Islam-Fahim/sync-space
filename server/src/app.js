@@ -1,5 +1,6 @@
 import express from 'express'
 import router from './api/routes/index.js'
+import { errorHandler } from './middlewares/errorHandler.js'
 
 const createApp = () => {
     const app = express()
@@ -7,6 +8,8 @@ const createApp = () => {
     app.use(express.json())
 
     app.use('/api', router)
+
+    app.use(errorHandler)
 
     return app
 }
