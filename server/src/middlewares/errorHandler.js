@@ -1,9 +1,12 @@
+import { isDev } from '../config/index.js'
+
 export const errorHandler = (err, req, res, next) => {
     const statusCode = err.statusCode || 500
 
-    return res.status(statusCode).json({
+    res.status(statusCode).json({
         success: false,
-        message: err.message || undefined,
-        error: err.error
+        message: err.message || 'Internal Server Error',
+        errors: isDev() ? err.errors : undefined,
+        stack: isDev() ? err.stack : undefined
     })
 }

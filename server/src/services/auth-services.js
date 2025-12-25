@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt'
 import * as userRepo from '../repositories/user-repo.js'
+import AppError from '../utils/app-error.js'
 
 export const registerUser = async (data) => {
     const { email, password } = data
@@ -7,10 +8,7 @@ export const registerUser = async (data) => {
     const existingUser = await userRepo.findByEmail(email)
 
     if (existingUser) {
-        const error = new Error('User with this email is already registered')
-        error.statusCode = 409
-
-        throw error
+        throw new AppError('User with this email is already registered', 409)
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
