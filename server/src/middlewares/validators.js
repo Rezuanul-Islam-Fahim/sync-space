@@ -14,10 +14,11 @@ export const validate = (req, res, next) => {
     const errors = validationResult(req)
 
     if (!errors.isEmpty()) {
-        return res.status(400).json({
-            success: false,
-            error: errors.array()
-        })
+        const error = new Error();
+        error.statusCode = 400;
+        error.error = errors.array();
+
+        return next(error)
     }
 
     next()
