@@ -6,3 +6,7 @@ export const createUser = async (userData) => {
 
     return savedData.toObject()
 }
+
+export const findByEmail = (email) => {
+    return User.findOne({ email }).lean()
+}
