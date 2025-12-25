@@ -11,4 +11,6 @@ const config = {
     }
 }
 
+export const isDev = () => config.env === 'dev';
+
 export default config
