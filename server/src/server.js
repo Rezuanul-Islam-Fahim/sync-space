@@ -1,21 +1,44 @@
 import createApp from './app.js'
-import { initDB } from './infra/db.js'
+import { initDB, closeDB } from './infra/db.js'
 import config from './config/index.js'
+import logger from './utils/logger.js'
 
-const PORT = config.port || 3000
+const PORT = config.port
 
 const start = async () => {
     await initDB()
-
     const app = createApp()
 
-    app.listen(PORT, () => {
-        console.log(`Server started on port: ${PORT}`)
+    const server = app.listen(PORT, () => {
+        logger.info(`Server started on port: ${PORT}`)
     })
+
+    const shutdown = async (signal) => {
+        logger.info(`\n\'${signal}\' received. Shutting down gracefully...`)
+
+        // Stop accepting new connections
+        server.close(async () => {
+            try {
+                await closeDB()
+                process.exit(0)
+            } catch (err) {
+                logger.error('Error during shutdown:', err)
+                process.exit(1)
+            }
+        })
+
+        setTimeout(() => {
+            logger.error('Forced shutdown due to timeout.')
+            process.exit(1)
+        }, 30000)
+    }
+
+    process.on('SIGTERM', shutdown)
+    process.on('SIGINT', shutdown)
 }
 
 start()
     .catch(err => {
-        console.log('Failed to start: ', err)
+        logger.error('Failed to start:', err)
         process.exit(1)
     })

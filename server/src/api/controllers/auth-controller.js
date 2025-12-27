@@ -1,12 +1,8 @@
-import * as authServices from '../../services/auth-services.js'
+import * as authService from '../../services/auth-service.js'
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
     try {
-        const { email, password } = req.body
-
-        const userData = await authServices.registerUser(
-            { email, password }
-        )
+        const userData = await authService.registerUser(req.body)
 
         res.status(201).json({
             success: true,
@@ -15,6 +11,6 @@ export const register = async (req, res) => {
         })
     }
     catch (err) {
-        console.log('Error occurred: ', err)
+        next(err)
     }
 }
