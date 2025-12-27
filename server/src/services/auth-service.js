@@ -3,7 +3,7 @@ import * as userRepo from '../repositories/user-repo.js'
 import AppError from '../utils/app-error.js'
 
 export const registerUser = async (data) => {
-    const { email, password } = data
+    const { email, username, password, dateOfBirth } = data
 
     const existingUser = await userRepo.findByEmail(email)
 
@@ -15,7 +15,9 @@ export const registerUser = async (data) => {
 
     const newUser = await userRepo.createUser({
         email,
-        password: hashedPassword
+        username,
+        password: hashedPassword,
+        dateOfBirth
     })
 
     return newUser
