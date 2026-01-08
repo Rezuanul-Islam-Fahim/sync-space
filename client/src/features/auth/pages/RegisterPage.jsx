@@ -64,7 +64,7 @@ const RegisterPage = () => {
               />
             ))}
 
-            <div className="mb-2">
+            <div className="mb-4">
               <FormCheckbox name="agreeToTerms">
                 I agree to Discord's{' '}
                 <span className="text-[#00A8FC]">Terms</span>.

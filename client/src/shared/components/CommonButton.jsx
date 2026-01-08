@@ -2,10 +2,10 @@ import { Link } from 'react-router';
 
 const CommonButton = ({ children, navigate, secondary = false }) => {
   let className =
-    'w-full text-white font-medium py-3 px-6 rounded-md transition-colors duration-300 cursor-pointer';
+    'w-full text-white font-medium py-2.5 px-6 rounded-md transition-colors duration-200 cursor-pointer';
 
   if (!secondary) {
-    className += ' bg-[#5865F2] hover:bg-[#4752c4]';
+    className += ' bg-[#5865F2] hover:bg-[#404BC2]';
   } else {
     className += ' bg-[#4f545c] hover:bg-[#686d73]';
   }
