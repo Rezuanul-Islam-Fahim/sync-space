@@ -3,14 +3,7 @@ import { Link } from 'react-router-dom';
 import CommonInput from '@/shared/components/CommonInput';
 import CommonCheckbox from '@/shared/components/CommonCheckbox';
 import CommonButton from '@/shared/components/CommonButton';
-
-const REGISTER_FIELDS = [
-  { name: 'email', label: 'Email', type: 'email', required: true },
-  { name: 'displayName', label: 'Display Name', type: 'text' },
-  { name: 'username', label: 'Username', type: 'text', required: true },
-  { name: 'password', label: 'Password', type: 'password', required: true },
-  { name: 'dob', label: 'Date of Birth', type: 'date', required: true },
-];
+import REGISTER_FIELDS from '../constants/registerFields';
 
 const RegisterPage = () => {
   const [errors, setErrors] = useState({});
