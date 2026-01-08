@@ -1,4 +1,4 @@
-const FormCheckbox = ({ name, checked, onChange, children }) => {
+const CommonFormCheckbox = ({ name, checked, onChange, children }) => {
   return (
     <div className="flex items-start gap-3 mb-2">
       <div className="relative flex items-center">
@@ -34,4 +34,4 @@ const FormCheckbox = ({ name, checked, onChange, children }) => {
   );
 };
 
-export default FormCheckbox;
+export default CommonFormCheckbox;

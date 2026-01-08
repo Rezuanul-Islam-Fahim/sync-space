@@ -1,4 +1,4 @@
-const FormInput = ({
+const CommonFormInput = ({
   label,
   name,
   type = 'text',
@@ -29,7 +29,6 @@ const FormInput = ({
       <input
         type={type}
         name={name}
-        required={required}
         className="w-full bg-[#1E1F22] text-[#DBDEE1] p-2.5 rounded-[3px] outline-none focus:ring-0 border-none font-medium h-10"
         {...props}
       />
@@ -37,4 +36,4 @@ const FormInput = ({
   );
 };
 
-export default FormInput;
+export default CommonFormInput;

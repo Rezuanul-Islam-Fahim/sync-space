@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import FormInput from '@/features/auth/components/FormInput';
-import FormCheckbox from '@/features/auth/components/FormCheckbox';
+import CommonFormInput from '@/shared/components/CommonFormInput';
+import FormCheckbox from '@/shared/components/CommonFormCheckbox';
 import CommonButton from '@/shared/components/CommonButton';
 
 const REGISTER_FIELDS = [
@@ -72,7 +72,6 @@ const RegisterPage = () => {
         {/* Left Side Banner */}
         <div className="hidden md:flex w-[350px] bg-[#2B2D31]">Bleh!</div>
 
-        {/* Right Side: Actual Form */}
         <div className="flex-1 p-8 bg-[#313338]">
           <h2 className="text-2xl font-bold text-center text-[#F2F3F5] mb-6">
             Create an account
@@ -80,7 +79,7 @@ const RegisterPage = () => {
 
           <form onSubmit={handleSubmit}>
             {REGISTER_FIELDS.map((field) => (
-              <FormInput
+              <CommonFormInput
                 key={field.name}
                 {...field}
                 value={formData[field.name]}
@@ -105,14 +104,6 @@ const RegisterPage = () => {
                 </p>
               )}
             </div>
-
-            <FormCheckbox
-              name="newsletter"
-              checked={formData.newsletter}
-              onChange={handleChange}
-            >
-              (Optional) Send me emails with updates.
-            </FormCheckbox>
 
             <CommonButton onClick={() => {}}>Continue</CommonButton>
 
