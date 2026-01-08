@@ -1,5 +1,5 @@
-import { Link } from 'react-router';
 import { IoMdChatbubbles } from 'react-icons/io';
+import CommonButton from '../../../shared/components/CommonButton';
 
 const OnboardingPage = () => {
   return (
@@ -21,18 +21,10 @@ const OnboardingPage = () => {
         </div>
 
         <div className="flex flex-col gap-4 pt-4">
-          <Link
-            to="/login"
-            className="w-full bg-[#5865F2] hover:bg-[#4752c4] text-white font-medium py-3 px-6 rounded-md transition-colors duration-200"
-          >
-            Log In
-          </Link>
-          <Link
-            to="/register"
-            className="w-full bg-[#4f545c] hover:bg-[#686d73] text-white font-medium py-3 px-6 rounded-md transition-colors duration-200"
-          >
+          <CommonButton navigate={'/login'}>Log In</CommonButton>
+          <CommonButton navigate={'/register'} secondary={true}>
             Register
-          </Link>
+          </CommonButton>
         </div>
       </div>
     </div>

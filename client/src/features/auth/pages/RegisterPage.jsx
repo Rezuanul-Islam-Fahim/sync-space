@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import FormInput from '../components/FormInput';
 import FormCheckbox from '../components/FormCheckbox';
 import AuthButton from '../components/AuthButton';
+import CommonButton from '../../../shared/components/CommonButton';
 
 const REGISTER_FIELDS = [
   { name: 'email', label: 'Email', type: 'email', required: true },
@@ -114,7 +115,7 @@ const RegisterPage = () => {
               (Optional) Send me emails with updates.
             </FormCheckbox>
 
-            <AuthButton>Continue</AuthButton>
+            <CommonButton onClick={() => {}}>Continue</CommonButton>
 
             <div className="text-sm text-[#949BA4] mt-4">
               <Link to="/login" className="text-[#00A8FC] hover:underline">
