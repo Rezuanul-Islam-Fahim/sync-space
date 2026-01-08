@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import FormInput from '../components/FormInput';
-import FormCheckbox from '../components/FormCheckbox';
-import AuthButton from '../components/AuthButton';
-import CommonButton from '../../../shared/components/CommonButton';
+import FormInput from '@/features/auth/components/FormInput';
+import FormCheckbox from '@/features/auth/components/FormCheckbox';
+import CommonButton from '@/shared/components/CommonButton';
 
 const REGISTER_FIELDS = [
   { name: 'email', label: 'Email', type: 'email', required: true },

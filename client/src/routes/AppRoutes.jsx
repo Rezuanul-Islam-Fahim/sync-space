@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router';
-import { LoginPage, RegisterPage } from '../features/auth';
-import { OnboardingPage } from '../features/onboarding';
+import { LoginPage, RegisterPage } from '@/features/auth';
+import { OnboardingPage } from '@/features/onboarding';
 
 const AppRoutes = () => {
   return (
