@@ -1,14 +1,12 @@
-const CommonFormCheckbox = ({ name, checked, onChange, children }) => {
+const CommonCheckbox = ({ children, name }) => {
   return (
-    <div className="flex items-start gap-3 mb-2">
+    <div className="flex items-start gap-3">
       <div className="relative flex items-center">
         <input
           type="checkbox"
           name={name}
           id={name}
-          checked={checked}
-          onChange={onChange}
-          className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-[#4E5058] bg-[#1E1F22] checked:border-[#5865F2] checked:bg-[#5865F2] focus:outline-none transition-all"
+          className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-[#61646e] bg-[#383a40] checked:border-[#5865F2] checked:bg-[#5865F2] focus:outline-none transition-all"
         />
         <svg
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none opacity-0 peer-checked:opacity-100 text-white transition-opacity"
@@ -34,4 +32,4 @@ const CommonFormCheckbox = ({ name, checked, onChange, children }) => {
   );
 };
 
-export default CommonFormCheckbox;
+export default CommonCheckbox;
