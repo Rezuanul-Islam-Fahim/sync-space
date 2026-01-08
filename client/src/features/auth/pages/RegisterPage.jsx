@@ -12,44 +12,22 @@ const REGISTER_FIELDS = [
 ];
 
 const RegisterPage = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    username: '',
-    password: '',
-    dob: '',
-    agreeToTerms: false,
-    newsletter: false,
-  });
-
   const [errors, setErrors] = useState({});
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
-    }
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
-  };
 
   const validateForm = () => {
     const newError = {};
 
-    if (formData.password.length < 6) {
-      newError.password = 'Must be 6 characters long';
-    }
+    // if (formData.password.length < 6) {
+    //   newError.password = 'Must be 6 characters long';
+    // }
 
-    if (!formData.agreeToTerms) {
-      newError.agreeToTerms = 'You must agree to the Terms & Conditions';
-    }
+    // if (!formData.agreeToTerms) {
+    //   newError.agreeToTerms = 'You must agree to the Terms & Conditions';
+    // }
 
-    if (!formData.email) newError.email = 'This field is required';
-    if (!formData.username) newError.username = 'This field is required';
-    if (!formData.dob) newError.dob = 'This field is required';
+    // if (!formData.email) newError.email = 'This field is required';
+    // if (!formData.username) newError.username = 'This field is required';
+    // if (!formData.dob) newError.dob = 'This field is required';
 
     setErrors(newError);
 
@@ -59,8 +37,8 @@ const RegisterPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (validateForm(formData) == true) {
-      console.log('Form submitted:', formData);
+    if (validateForm() == true) {
+      // console.log('Form submitted:', formData);
     } else {
       console.log('Form has errors:', errors);
     }
@@ -82,18 +60,12 @@ const RegisterPage = () => {
               <CommonFormInput
                 key={field.name}
                 {...field}
-                value={formData[field.name]}
-                onChange={handleChange}
                 error={errors[field.name]}
               />
             ))}
 
             <div className="mb-2">
-              <FormCheckbox
-                name="agreeToTerms"
-                checked={formData.agreeToTerms}
-                onChange={handleChange}
-              >
+              <FormCheckbox name="agreeToTerms">
                 I agree to Discord's{' '}
                 <span className="text-[#00A8FC]">Terms</span>.
               </FormCheckbox>
@@ -105,7 +77,7 @@ const RegisterPage = () => {
               )}
             </div>
 
-            <CommonButton onClick={() => {}}>Continue</CommonButton>
+            <CommonButton>Continue</CommonButton>
 
             <div className="text-sm text-[#949BA4] mt-4">
               <Link to="/login" className="text-[#00A8FC] hover:underline">
