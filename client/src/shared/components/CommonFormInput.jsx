@@ -1,9 +1,8 @@
-
-const FormInput = ({
+const CommonFormInput = ({
   label,
   name,
-  type = "text",
-  className = "",
+  type = 'text',
+  className = '',
   required = false,
   error,
   ...props
@@ -13,10 +12,10 @@ const FormInput = ({
       <div className="flex justify-between items-center mb-2">
         <label
           className={`block text-xs font-bold uppercase ${
-            error ? "text-[#F23F42]" : "text-[#B5BAC1]"
+            error ? 'text-[#F23F42]' : 'text-[#B5BAC1]'
           }`}
         >
-          {label}{" "}
+          {label}{' '}
           {required && !error && <span className="text-[#F23F42] ml-1">*</span>}
         </label>
 
@@ -30,7 +29,6 @@ const FormInput = ({
       <input
         type={type}
         name={name}
-        required={required}
         className="w-full bg-[#1E1F22] text-[#DBDEE1] p-2.5 rounded-[3px] outline-none focus:ring-0 border-none font-medium h-10"
         {...props}
       />
@@ -38,4 +36,4 @@ const FormInput = ({
   );
 };
 
-export default FormInput;
+export default CommonFormInput;
