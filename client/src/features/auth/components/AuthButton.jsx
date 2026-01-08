@@ -1,5 +1,4 @@
-
-const AuthButton = ({ children, onClick, type = "submit" }) => {
+const AuthButton = ({ children, onClick, type = 'submit' }) => {
   return (
     <button
       type={type}

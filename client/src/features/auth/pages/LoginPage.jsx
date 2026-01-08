@@ -1,12 +1,12 @@
-import { Link } from 'react-router'
+import { Link } from 'react-router';
 
 const LoginPage = () => {
-    return (
-        <>
-            <h1>This is login Page</h1>
-            <Link to={'/register'}>Register Now</Link>
-        </>
-    )
-}
+  return (
+    <>
+      <h1>This is login Page</h1>
+      <Link to={'/register'}>Register Now</Link>
+    </>
+  );
+};
 
-export default LoginPage
+export default LoginPage;

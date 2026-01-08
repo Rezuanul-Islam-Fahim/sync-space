@@ -1,22 +1,22 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import FormInput from "../components/FormInput";
-import FormCheckbox from "../components/FormCheckbox";
-import AuthButton from "../components/AuthButton";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import FormInput from '../components/FormInput';
+import FormCheckbox from '../components/FormCheckbox';
+import AuthButton from '../components/AuthButton';
 
 const REGISTER_FIELDS = [
-  { name: "email", label: "Email", type: "email", required: true },
-  { name: "username", label: "Username", type: "text", required: true },
-  { name: "password", label: "Password", type: "password", required: true },
-  { name: "dob", label: "Date of Birth", type: "date", required: true },
+  { name: 'email', label: 'Email', type: 'email', required: true },
+  { name: 'username', label: 'Username', type: 'text', required: true },
+  { name: 'password', label: 'Password', type: 'password', required: true },
+  { name: 'dob', label: 'Date of Birth', type: 'date', required: true },
 ];
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
-    email: "",
-    username: "",
-    password: "",
-    dob: "",
+    email: '',
+    username: '',
+    password: '',
+    dob: '',
     agreeToTerms: false,
     newsletter: false,
   });
@@ -27,12 +27,12 @@ const RegisterPage = () => {
     const { name, value, type, checked } = e.target;
 
     if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
+      setErrors((prev) => ({ ...prev, [name]: '' }));
     }
 
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
@@ -40,16 +40,16 @@ const RegisterPage = () => {
     const newError = {};
 
     if (formData.password.length < 6) {
-      newError.password = "Must be 6 characters long";
+      newError.password = 'Must be 6 characters long';
     }
 
     if (!formData.agreeToTerms) {
-      newError.agreeToTerms = "You must agree to the Terms & Conditions";
+      newError.agreeToTerms = 'You must agree to the Terms & Conditions';
     }
 
-    if (!formData.email) newError.email = "This field is required";
-    if (!formData.username) newError.username = "This field is required";
-    if (!formData.dob) newError.dob = "This field is required";
+    if (!formData.email) newError.email = 'This field is required';
+    if (!formData.username) newError.username = 'This field is required';
+    if (!formData.dob) newError.dob = 'This field is required';
 
     setErrors(newError);
 
@@ -60,9 +60,9 @@ const RegisterPage = () => {
     e.preventDefault();
 
     if (validateForm(formData) == true) {
-      console.log("Form submitted:", formData);
+      console.log('Form submitted:', formData);
     } else {
-      console.log("Form has errors:", errors);
+      console.log('Form has errors:', errors);
     }
   };
 
@@ -95,7 +95,7 @@ const RegisterPage = () => {
                 checked={formData.agreeToTerms}
                 onChange={handleChange}
               >
-                I agree to Discord's{" "}
+                I agree to Discord's{' '}
                 <span className="text-[#00A8FC]">Terms</span>.
               </FormCheckbox>
               {/* Manual Error message for Checkbox */}

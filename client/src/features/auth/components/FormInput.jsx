@@ -1,9 +1,8 @@
-
 const FormInput = ({
   label,
   name,
-  type = "text",
-  className = "",
+  type = 'text',
+  className = '',
   required = false,
   error,
   ...props
@@ -13,10 +12,10 @@ const FormInput = ({
       <div className="flex justify-between items-center mb-2">
         <label
           className={`block text-xs font-bold uppercase ${
-            error ? "text-[#F23F42]" : "text-[#B5BAC1]"
+            error ? 'text-[#F23F42]' : 'text-[#B5BAC1]'
           }`}
         >
-          {label}{" "}
+          {label}{' '}
           {required && !error && <span className="text-[#F23F42] ml-1">*</span>}
         </label>
 
