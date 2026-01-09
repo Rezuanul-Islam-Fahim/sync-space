@@ -1,7 +1,7 @@
 const CommonCheckbox = ({ children, error, ...props }, ref) => {
   return (
     <div className="flex flex-col mb-6">
-      <div className="flex items-start gap-3 mb-1">
+      <div className="flex items-center gap-3 mb-1">
         <div className="relative flex items-center">
           <input
             ref={ref}
