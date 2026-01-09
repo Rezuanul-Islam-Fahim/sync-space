@@ -6,6 +6,7 @@ import CommonCheckbox from '@/shared/components/CommonCheckbox';
 import CommonButton from '@/shared/components/CommonButton';
 import REGISTER_FIELDS from '../constants/registerFields';
 import registerSchema from '../schemas/registerSchema';
+import AuthWrapper from '../components/AuthWrapper';
 
 const RegisterPage = () => {
   const {
@@ -21,11 +22,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="bg-discord-content-bg rounded-lg w-full sm:w-[400px] p-8 shadow-2xs">
-      <h2 className="text-2xl font-bold text-center text-discord-text-header mb-6">
-        Create an account
-      </h2>
-
+    <AuthWrapper header="Create an account" className="sm:w-[400px]">
       <form onSubmit={handleSubmit(onSubmit)}>
         {REGISTER_FIELDS.map(({ name, ...field }) => (
           <CommonInput
@@ -52,7 +49,7 @@ const RegisterPage = () => {
           </Link>
         </div>
       </form>
-    </div>
+    </AuthWrapper>
   );
 };
 
