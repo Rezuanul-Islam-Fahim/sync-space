@@ -1,16 +1,20 @@
 import { Link } from 'react-router';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import AuthWrapper from '../components/AuthWrapper';
 import LOGIN_FIELDS from '../constants/loginFields';
 import CommonInput from '@/shared/components/CommonInput';
 import CommonButton from '@/shared/components/CommonButton';
+import loginSchema from '../schemas/loginSchema';
 
 const LoginPage = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+  });
 
   const onSubmit = (data) => {
     console.log('Form submitted: ', data);
