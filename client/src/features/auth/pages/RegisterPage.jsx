@@ -4,39 +4,36 @@ import CommonInput from '@/shared/components/CommonInput';
 import CommonCheckbox from '@/shared/components/CommonCheckbox';
 import CommonButton from '@/shared/components/CommonButton';
 import REGISTER_FIELDS from '../constants/registerFields';
+import registerSchema from '../schemas/registerSchema';
 
 const RegisterPage = () => {
   const [errors, setErrors] = useState({});
 
-  const validateForm = (e) => {
-    const { elements } = e.currentTarget;
-
-    const newError = {};
-
-    if (elements.password.value.length < 6) {
-      newError.password = 'Must be 6 characters long';
-    }
-
-    if (!elements.agreeToTerms.checked) {
-      newError.agreeToTerms = 'You must agree to the Terms & Conditions';
-    }
-
-    if (!elements.email.value) newError.email = 'This field is required';
-    if (!elements.username.value) newError.username = 'This field is required';
-    if (!elements.dob.value) newError.dob = 'This field is required';
-
-    setErrors(newError);
-
-    return Object.keys(newError).length === 0;
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (validateForm(e) == true) {
-      console.log('Form submitted');
+    const { elements } = e.currentTarget;
+
+    const result = registerSchema.safeParse({
+      email: elements.email.value,
+      displayName: elements.displayName.value,
+      username: elements.username.value,
+      password: elements.password.value,
+      dob: elements.dob.value,
+      agreeToTerms: elements.agreeToTerms.checked,
+    });
+
+    if (!result.success) {
+      const { fieldErrors } = result.error.flatten();
+
+      const errors = Object.fromEntries(
+        Object.entries(fieldErrors).map(([k, v]) => [k, v?.[0]])
+      );
+
+      setErrors(errors);
     } else {
-      console.log('Form has errors:', errors);
+      setErrors({});
+      console.log('Form submitted successfully');
     }
   };
 
