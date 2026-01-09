@@ -1,6 +1,8 @@
-const CommonCheckbox = ({ children, error, ...props }, ref) => {
+import cn from '../utils/cn';
+
+const CommonCheckbox = ({ children, error, className, ...props }, ref) => {
   return (
-    <div className="flex flex-col mb-6">
+    <div className={cn('flex flex-col', className)}>
       <div className="flex items-center gap-3 mb-1">
         <div className="relative flex items-center">
           <input

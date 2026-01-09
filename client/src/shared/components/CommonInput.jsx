@@ -3,7 +3,7 @@ import React from 'react';
 const CommonInput = React.forwardRef(
   ({ label, required = false, error, ...props }, ref) => {
     return (
-      <div className="mb-5">
+      <div className="mt-5">
         <div className="flex justify-between items-center mb-2">
           <label className="block text-sm font-semibold text-white">
             {label}{' '}

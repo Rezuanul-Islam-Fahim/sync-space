@@ -6,7 +6,7 @@ const AuthWrapper = ({ children, header, className }) => {
 
   return (
     <div className={cn(baseClassName, className)}>
-      <h2 className="text-2xl font-bold text-center text-discord-text-header mb-6">
+      <h2 className="text-2xl font-bold text-center text-discord-text-header mb-4">
         {header}
       </h2>
       {children}

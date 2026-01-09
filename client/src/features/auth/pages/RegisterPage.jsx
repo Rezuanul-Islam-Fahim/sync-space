@@ -36,6 +36,7 @@ const RegisterPage = () => {
         <CommonCheckbox
           {...register('agreeToTerms')}
           error={errors.agreeToTerms}
+          className="mt-4 mb-5"
         >
           I agree to Discord Clone's{' '}
           <span className="text-discord-link">Terms</span>.
@@ -43,8 +44,11 @@ const RegisterPage = () => {
 
         <CommonButton>Create Account</CommonButton>
 
-        <div className="text-sm mt-4">
-          <Link to="/login" className="text-discord-link hover:underline">
+        <div className="mt-1">
+          <Link
+            to="/login"
+            className="text-discord-link text-sm mt-4 hover:underline"
+          >
             Already have an account?
           </Link>
         </div>

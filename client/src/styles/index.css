@@ -7,13 +7,14 @@
   --color-discord-tertiary-hover: #6d6f78;
   --color-discord-input: #1e1f22;
   --color-discord-danger: #da373c;
-  --color-discord-link: #00a8fc;
+  --color-discord-link: #8fa2f5;
   --color-discord-main-bg: #313338;
   --color-discord-content-bg: #2b2d31;
 
   /* Added text colors for consistency if needed later */
   --color-discord-text: #dbdee1;
   --color-discord-text-header: #f2f3f5;
+  --color-discord-text-info: #b8b8bc;
   --color-discord-text-muted: #949ba4;
 
   /* Borders */
