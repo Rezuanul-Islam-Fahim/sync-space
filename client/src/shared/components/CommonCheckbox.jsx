@@ -7,7 +7,7 @@ const CommonCheckbox = ({ children, error, ...props }, ref) => {
             ref={ref}
             type="checkbox"
             {...props}
-            className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-[#61646e] bg-[#383a40] checked:border-[#5865F2] checked:bg-[#5865F2] focus:outline-none transition-all"
+            className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-[#61646e] bg-discord-content-bg checked:border-discord-primary checked:bg-discord-primary focus:outline-none transition-all"
           />
           <svg
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none opacity-0 peer-checked:opacity-100 text-white transition-opacity"
@@ -31,7 +31,7 @@ const CommonCheckbox = ({ children, error, ...props }, ref) => {
         </label>
       </div>
       {error && (
-        <span className="text-xs text-[#F23F42] italic font-medium">
+        <span className="text-xs text-discord-danger italic font-medium">
           {error.message}
         </span>
       )}

@@ -3,10 +3,10 @@ import CommonButton from '@/shared/components/CommonButton';
 
 const OnboardingPage = () => {
   return (
-    <div className="min-h-screen bg-[#2f3136] flex flex-col justify-center items-center text-white p-4">
+    <div className="min-h-screen bg-discord-main-bg flex flex-col justify-center items-center text-white p-4">
       <div className="max-w-md w-full text-center space-y-8">
         <div className="flex justify-center">
-          <IoMdChatbubbles color="#5865F2" size="5rem" />
+          <IoMdChatbubbles className="text-discord-primary" size="5rem" />
         </div>
 
         <div className="space-y-4">

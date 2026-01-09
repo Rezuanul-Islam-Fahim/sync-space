@@ -1,1 +1,13 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@theme {
+  --color-discord-primary: #5865f3;
+  --color-discord-primary-hover: #404bc2;
+  --color-discord-tertiary: #4f545c;
+  --color-discord-tertiary-hover: #686d73;
+  --color-discord-input: #34353c;
+  --color-discord-danger: #f23f42;
+  --color-discord-link: #00a8fc;
+  --color-discord-main-bg: #2f3136;
+  --color-discord-content-bg: #383a40;
+}

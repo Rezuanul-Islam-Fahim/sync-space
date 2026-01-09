@@ -5,9 +5,9 @@ const CommonButton = ({ children, navigate, secondary = false }) => {
     'w-full text-white font-medium py-2.5 px-6 rounded-lg transition-colors duration-200 cursor-pointer';
 
   if (!secondary) {
-    className += ' bg-[#5865f3] hover:bg-[#404BC2]';
+    className += ' bg-discord-primary hover:bg-discord-primary-hover';
   } else {
-    className += ' bg-[#4f545c] hover:bg-[#686d73]';
+    className += ' bg-discord-tertiary hover:bg-discord-tertiary-hover';
   }
 
   return navigate !== undefined ? (

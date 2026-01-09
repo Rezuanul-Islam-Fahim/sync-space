@@ -21,8 +21,8 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#2f3136] flex items-center justify-center p-8">
-      <div className="p-8 bg-[#383a40] rounded-lg w-[400px] shadow-2xs">
+    <div className="min-h-screen w-full bg-discord-main-bg flex items-center justify-center p-8">
+      <div className="p-8 bg-discord-content-bg rounded-lg w-[400px] shadow-2xs">
         <h2 className="text-2xl font-bold text-center text-[#F2F3F5] mb-6">
           Create an account
         </h2>
@@ -42,13 +42,13 @@ const RegisterPage = () => {
             error={errors.agreeToTerms}
           >
             I agree to Discord Clone's{' '}
-            <span className="text-[#00A8FC]">Terms</span>.
+            <span className="text-discord-link">Terms</span>.
           </CommonCheckbox>
 
           <CommonButton>Create Account</CommonButton>
 
-          <div className="text-sm text-[#949BA4] mt-4">
-            <Link to="/login" className="text-[#00A8FC] hover:underline">
+          <div className="text-sm mt-4">
+            <Link to="/login" className="text-discord-link hover:underline">
               Already have an account?
             </Link>
           </div>
