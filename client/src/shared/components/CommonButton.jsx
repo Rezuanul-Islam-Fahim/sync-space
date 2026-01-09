@@ -1,21 +1,20 @@
 import { Link } from 'react-router';
+import cn from '@/shared/utils/cn';
 
-const CommonButton = ({ children, navigate, secondary = false }) => {
-  let className =
+const CommonButton = ({ children, navigate, secondary = false, className }) => {
+  const baseClassNames =
     'w-full text-white font-medium py-2.5 px-6 rounded-lg transition-colors duration-200 cursor-pointer';
-
-  if (!secondary) {
-    className += ' bg-discord-primary hover:bg-discord-primary-hover';
-  } else {
-    className += ' bg-discord-tertiary hover:bg-discord-tertiary-hover';
-  }
+  const secondaryClassNames = !secondary
+    ? 'bg-discord-primary hover:bg-discord-primary-hover'
+    : 'bg-discord-tertiary hover:bg-discord-tertiary-hover';
+  const combinedClassNames = cn(baseClassNames, secondaryClassNames, className);
 
   return navigate !== undefined ? (
-    <Link to={navigate} className={className}>
+    <Link to={navigate} className={combinedClassNames}>
       {children}
     </Link>
   ) : (
-    <button className={className} type="submit">
+    <button className={combinedClassNames} type="submit">
       {children}
     </button>
   );
