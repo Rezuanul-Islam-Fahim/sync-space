@@ -1,33 +1,40 @@
-const CommonCheckbox = ({ children, name }) => {
+const CommonCheckbox = ({ children, error, ...props }, ref) => {
   return (
-    <div className="flex items-start gap-3">
-      <div className="relative flex items-center">
-        <input
-          type="checkbox"
-          name={name}
-          id={name}
-          className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-[#61646e] bg-[#383a40] checked:border-[#5865F2] checked:bg-[#5865F2] focus:outline-none transition-all"
-        />
-        <svg
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none opacity-0 peer-checked:opacity-100 text-white transition-opacity"
-          viewBox="0 0 14 10"
-          fill="none"
-        >
-          <path
-            d="M1 5L4.5 8.5L13 1"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+    <div className="flex flex-col mb-6">
+      <div className="flex items-start gap-3 mb-1">
+        <div className="relative flex items-center">
+          <input
+            ref={ref}
+            type="checkbox"
+            {...props}
+            className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-[#61646e] bg-[#383a40] checked:border-[#5865F2] checked:bg-[#5865F2] focus:outline-none transition-all"
           />
-        </svg>
+          <svg
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none opacity-0 peer-checked:opacity-100 text-white transition-opacity"
+            viewBox="0 0 14 10"
+            fill="none"
+          >
+            <path
+              d="M1 5L4.5 8.5L13 1"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
+        <label
+          htmlFor={props.name}
+          className="text-xs text-[#949BA4] leading-4 cursor-pointer select-none"
+        >
+          {children}
+        </label>
       </div>
-      <label
-        htmlFor={name}
-        className="text-xs text-[#949BA4] leading-4 cursor-pointer select-none"
-      >
-        {children}
-      </label>
+      {error && (
+        <span className="text-xs text-[#F23F42] italic font-medium">
+          {error.message}
+        </span>
+      )}
     </div>
   );
 };

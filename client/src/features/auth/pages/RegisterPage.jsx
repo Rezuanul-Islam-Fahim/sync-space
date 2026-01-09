@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'react-router-dom';
 import CommonInput from '@/shared/components/CommonInput';
 import CommonCheckbox from '@/shared/components/CommonCheckbox';
@@ -7,34 +8,16 @@ import REGISTER_FIELDS from '../constants/registerFields';
 import registerSchema from '../schemas/registerSchema';
 
 const RegisterPage = () => {
-  const [errors, setErrors] = useState({});
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(registerSchema),
+  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const { elements } = e.currentTarget;
-
-    const result = registerSchema.safeParse({
-      email: elements.email.value,
-      displayName: elements.displayName.value,
-      username: elements.username.value,
-      password: elements.password.value,
-      dob: elements.dob.value,
-      agreeToTerms: elements.agreeToTerms.checked,
-    });
-
-    if (!result.success) {
-      const { fieldErrors } = result.error.flatten();
-
-      const errors = Object.fromEntries(
-        Object.entries(fieldErrors).map(([k, v]) => [k, v?.[0]])
-      );
-
-      setErrors(errors);
-    } else {
-      setErrors({});
-      console.log('Form submitted successfully');
-    }
+  const onSubmit = (data) => {
+    console.log(data);
   };
 
   return (
@@ -44,27 +27,23 @@ const RegisterPage = () => {
           Create an account
         </h2>
 
-        <form onSubmit={handleSubmit}>
-          {REGISTER_FIELDS.map((field) => (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {REGISTER_FIELDS.map(({ name, ...field }) => (
             <CommonInput
-              key={field.name}
+              key={name}
+              {...register(name)}
               {...field}
-              error={errors[field.name]}
+              error={errors[name]}
             />
           ))}
 
-          <div className="mb-6">
-            <CommonCheckbox name="agreeToTerms">
-              I agree to Discord Clone's{' '}
-              <span className="text-[#00A8FC]">Terms</span>.
-            </CommonCheckbox>
-
-            {errors.agreeToTerms && (
-              <span className="text-xs text-[#F23F42] italic font-medium">
-                {errors.agreeToTerms}
-              </span>
-            )}
-          </div>
+          <CommonCheckbox
+            {...register('agreeToTerms')}
+            error={errors.agreeToTerms}
+          >
+            I agree to Discord Clone's{' '}
+            <span className="text-[#00A8FC]">Terms</span>.
+          </CommonCheckbox>
 
           <CommonButton>Create Account</CommonButton>
 
