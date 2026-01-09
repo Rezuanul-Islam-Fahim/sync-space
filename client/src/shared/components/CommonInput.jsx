@@ -13,7 +13,7 @@ const CommonInput = React.forwardRef(
 
         <input
           ref={ref}
-          className="w-full bg-discord-input text-[#DBDEE1] p-3 rounded-lg outline-none border-2 border-[#3d3d45] focus:border-discord-primary font-medium h-11"
+          className="w-full bg-discord-input text-discord-text p-3 rounded-lg outline-none border-2 border-discord-input-border focus:border-discord-primary font-medium h-11"
           {...props}
         />
 

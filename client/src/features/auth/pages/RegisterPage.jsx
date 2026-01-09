@@ -22,7 +22,7 @@ const RegisterPage = () => {
 
   return (
     <div className="p-8 bg-discord-content-bg rounded-lg w-[400px] shadow-2xs">
-      <h2 className="text-2xl font-bold text-center text-[#F2F3F5] mb-6">
+      <h2 className="text-2xl font-bold text-center text-discord-text-header mb-6">
         Create an account
       </h2>
 

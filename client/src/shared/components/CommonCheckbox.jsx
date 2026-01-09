@@ -8,7 +8,7 @@ const CommonCheckbox = ({ children, error, ...props }, ref) => {
             type="checkbox"
             id={props.name}
             {...props}
-            className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-[#61646e] bg-discord-content-bg checked:border-discord-primary checked:bg-discord-primary focus:outline-none transition-all"
+            className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-discord-checkbox-border bg-discord-content-bg checked:border-discord-primary checked:bg-discord-primary focus:outline-none transition-all"
           />
           <svg
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none opacity-0 peer-checked:opacity-100 text-white transition-opacity"
@@ -26,7 +26,7 @@ const CommonCheckbox = ({ children, error, ...props }, ref) => {
         </div>
         <label
           htmlFor={props.name}
-          className="text-xs text-[#949BA4] leading-4 cursor-pointer select-none"
+          className="text-xs text-discord-text-muted leading-4 cursor-pointer select-none"
         >
           {children}
         </label>
