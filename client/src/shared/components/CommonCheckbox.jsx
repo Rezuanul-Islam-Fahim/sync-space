@@ -6,6 +6,7 @@ const CommonCheckbox = ({ children, error, ...props }, ref) => {
           <input
             ref={ref}
             type="checkbox"
+            id={props.name}
             {...props}
             className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-[#61646e] bg-discord-content-bg checked:border-discord-primary checked:bg-discord-primary focus:outline-none transition-all"
           />
