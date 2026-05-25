@@ -8,3 +8,7 @@ export const createUser = async (userData) => {
 export const findByEmail = (email) => {
     return User.findOne({ email })
 }
+
+export const findByUsername = (username) => {
+    return User.findOne({ username })
+}

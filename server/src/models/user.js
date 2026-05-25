@@ -14,7 +14,8 @@ const userSchema = new mongoose.Schema(
         },
         password: {
             type: String,
-            required: true
+            required: true,
+            minLength: 6
         },
         avatar: {
             type: String,
@@ -27,11 +28,11 @@ const userSchema = new mongoose.Schema(
         },
         banner: {
             type: String,
-            default: null,
+            default: null
         },
         bannerColor: {
             type: String,
-            default: null,
+            default: '#5865F2'
         },
         dateOfBirth: {
             type: Date,
@@ -48,7 +49,7 @@ const userSchema = new mongoose.Schema(
         },
         lastOnline: {
             type: Date,
-            default: Date.now
+            default: null
         }
     },
     { timestamps: true }

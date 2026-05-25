@@ -3,22 +3,20 @@ import * as userRepo from '../repositories/user-repo.js'
 import AppError from '../utils/app-error.js'
 
 export const registerUser = async (data) => {
-    const { email, username, password, dateOfBirth } = data
+    const existingUserByEmail = await userRepo.findByEmail(data.email)
+    const existingUserByUsername = await userRepo.findByUsername(data.username)
 
-    const existingUser = await userRepo.findByEmail(email)
-
-    if (existingUser) {
+    if (existingUserByEmail) {
         throw new AppError('User with this email is already registered', 409)
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10)
+    if (existingUserByUsername) {
+        throw new AppError('Username is already taken', 409)
+    }
 
-    const newUser = await userRepo.createUser({
-        email,
-        username,
-        password: hashedPassword,
-        dateOfBirth
-    })
+    const hashedPassword = await bcrypt.hash(data.password, 10)
+
+    const newUser = await userRepo.createUser({ ...data, password: hashedPassword })
 
     return newUser
 }
