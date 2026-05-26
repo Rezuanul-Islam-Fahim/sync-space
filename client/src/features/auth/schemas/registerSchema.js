@@ -11,7 +11,7 @@ const registerSchema = z.object({
     .string()
     .nonempty({ message: 'This field is required' })
     .min(6, { message: 'Must be at least 6 characters long' }),
-  dob: z.string().nonempty({ message: 'This field is required' }),
+  dateOfBirth: z.string().nonempty({ message: 'This field is required' }),
   agreeToTerms: z.literal(true, {
     error: 'You must agree to the terms and conditions',
   }),
