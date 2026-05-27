@@ -26,12 +26,12 @@ const LoginPage = () => {
         We're so exited to see you again!
       </p>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {LOGIN_FIELDS.map(({ name, ...field }) => (
+        {LOGIN_FIELDS.map(attr => (
           <CommonInput
-            key={name}
-            {...register(name)}
-            {...field}
-            error={errors[name]}
+            key={attr.name}
+            {...register(attr.name)}
+            {...attr}
+            error={errors[attr.name]}
           />
         ))}
 

@@ -1,13 +1,14 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 const loginSchema = z.object({
   email: z
     .string()
-    .nonempty('This field is required')
-    .email('Valid email is required'),
+    .nonempty('Email is required')
+    .pipe(z.email('Please enter a valid Email')),
+
   password: z
     .string()
-    .nonempty('This field is required')
+    .nonempty('Password is required')
     .min(6, { error: 'Password must be at least 6 characters long' }),
 });
 
