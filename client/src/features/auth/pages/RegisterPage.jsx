@@ -24,12 +24,12 @@ const RegisterPage = () => {
   return (
     <AuthWrapper header="Create an account" className="sm:w-[400px]">
       <form onSubmit={handleSubmit(onSubmit)}>
-        {REGISTER_FIELDS.map(({ name, ...field }) => (
+        {REGISTER_FIELDS.map(attr => (
           <CommonInput
-            key={name}
-            {...register(name)}
-            {...field}
-            error={errors[name]}
+            key={attr.name}
+            {...register(attr.name)}
+            {...attr}
+            error={errors[attr.name]}
           />
         ))}
 
