@@ -1,25 +1,46 @@
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form';
+import { useSelector, useDispatch } from 'react-redux';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CommonInput from '@/shared/components/CommonInput';
 import CommonCheckbox from '@/shared/components/CommonCheckbox';
 import CommonButton from '@/shared/components/CommonButton';
 import REGISTER_FIELDS from '../constants/registerFields';
 import registerSchema from '../schemas/registerSchema';
 import AuthWrapper from '../components/AuthWrapper';
+import { registerUser, selectNewUser, clearAuthError } from '../store/authSlice'
 
 const RegisterPage = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const { isLoading, error, user } = useSelector(selectNewUser)
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    console.log(data)
+
+    await dispatch(registerUser(data)).unwrap()
+
+    if (user) {
+      navigate('/login')
+    }
   };
+
+  useEffect(() => {
+    const subscription = watch(() => {
+      if (error) dispatch(clearAuthError())
+    })
+
+    return () => subscription.unsubscribe()
+  }, [watch, error, dispatch])
 
   return (
     <AuthWrapper header="Create an account" className="sm:w-[400px]">
@@ -42,7 +63,15 @@ const RegisterPage = () => {
           <span className="text-discord-link">Terms</span>.
         </CommonCheckbox>
 
-        <CommonButton>Create Account</CommonButton>
+        {error && (
+          <div className="border border-discord-danger bg-discord-danger/20 px-4 py-2 rounded-md mb-5">
+            {error}
+          </div>
+        )}
+
+        <CommonButton disabled={isLoading}>
+          {!isLoading ? 'Create Account' : 'Create Account...'}
+        </CommonButton>
 
         <div className="mt-1">
           <Link
