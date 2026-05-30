@@ -20,6 +20,16 @@ export const registerValidation = [
         .isLength({ min: 6 })
         .withMessage('Password must be at least 6 characters'),
 
+    body('displayName')
+        .optional({ values: 'null' })
+        .isString()
+        .withMessage('Display Name must be a valid string'),
+
+    body('agreeToTerms')
+        .default(false)
+        .isBoolean()
+        .withMessage('Agree-to-Terms must be a boolean'),
+
     body('avatar')
         .optional({ values: 'null' })
         .isURL()

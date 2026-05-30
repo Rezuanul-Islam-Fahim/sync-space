@@ -10,12 +10,22 @@ const userSchema = new mongoose.Schema(
         username: {
             type: String,
             required: true,
-            unique: true
+            unique: true,
+            minLength: 3,
+            maxLength: 30
         },
         password: {
             type: String,
             required: true,
             minLength: 6
+        },
+        displayName: {
+            type: String,
+            default: null
+        },
+        agreeToTerms: {
+            type: Boolean,
+            default: false
         },
         avatar: {
             type: String,
