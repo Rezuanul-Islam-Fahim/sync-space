@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast'
 import CommonInput from '@/shared/components/CommonInput';
 import CommonCheckbox from '@/shared/components/CommonCheckbox';
 import CommonButton from '@/shared/components/CommonButton';
@@ -30,7 +31,11 @@ const RegisterPage = () => {
     await dispatch(registerUser(data)).unwrap()
 
     if (user) {
-      navigate('/login')
+      toast.success('Account created successfully')
+
+      setTimeout(() => {
+        navigate('/login')
+      }, 3000)
     }
   };
 
