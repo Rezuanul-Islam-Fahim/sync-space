@@ -14,7 +14,7 @@ const start = async () => {
     })
 
     const shutdown = async (signal) => {
-        logger.info(`\n\'${signal}\' received. Shutting down gracefully...`)
+        logger.info(`\n'${signal}' received. Shutting down gracefully...`)
 
         // Stop accepting new connections
         server.close(async () => {
