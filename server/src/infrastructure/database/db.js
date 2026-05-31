@@ -2,7 +2,11 @@ import mongoose from 'mongoose'
 import config from '../../common/config.js'
 import logger from '../../utils/logger.js'
 
-const mongooseOptions = {}
+const mongooseOptions = {
+    maxPoolSize: 10,
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+}
 
 export const initDB = async () => {
     mongoose.connection.on('connected', () => {
