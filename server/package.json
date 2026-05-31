@@ -1,7 +1,7 @@
 {
     "name": "server",
     "version": "1.0.0",
-    "description": "",
+    "description": "Backend server for a Discord clone built with the MERN stack.",
     "main": "src/server.js",
     "scripts": {
         "start": "node src/server.js",
@@ -12,9 +12,16 @@
         "format:check": "prettier \"src/**/*.js\" \"*.{js,json,md}\" --check"
     },
     "keywords": [],
-    "author": "",
+    "author": "Rezuanul Islam Fahim",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Rezuanul-Islam-Fahim/discord-clone-mern.git"
+    },
     "license": "ISC",
     "type": "module",
+    "engines": {
+        "node": ">=18.0.0"
+    },
     "dependencies": {
         "bcrypt": "^6.0.0",
         "cors": "^2.8.5",
