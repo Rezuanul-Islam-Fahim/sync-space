@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import * as userRepo from './auth.repository.js'
 import AppError from '../../utils/app.error.js'
+import config from '../../common/config.js'
 
 export const registerUser = async (data) => {
     const existingUserByEmail = await userRepo.findByEmail(data.email)
@@ -14,7 +15,7 @@ export const registerUser = async (data) => {
         throw new AppError('Username is already taken', 409)
     }
 
-    const hashedPassword = await bcrypt.hash(data.password, 10)
+    const hashedPassword = await bcrypt.hash(data.password, config.auth.saltRounds)
 
     const newUser = await userRepo.createUser({ ...data, password: hashedPassword })
 

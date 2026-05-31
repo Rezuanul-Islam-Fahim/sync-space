@@ -11,7 +11,8 @@ const envSchema = Joi.object({
     MONGODB_URI: Joi.string().required().description('Mongo DB url'),
     LOG_LEVEL: Joi.string()
         .allow('error', 'warn', 'info', 'http', 'debug')
-        .default('debug')
+        .default('debug'),
+    BCRYPT_SALT_ROUNDS: Joi.number().integer().min(4).max(31).default(10)
 }).unknown()
 
 const { error, value: envVars } = envSchema.validate(process.env)
@@ -26,7 +27,10 @@ const config = {
     db: {
         uri: envVars.MONGODB_URI
     },
-    logLevel: envVars.LOG_LEVEL
+    logLevel: envVars.LOG_LEVEL,
+    auth: {
+        saltRounds: envVars.BCRYPT_SALT_ROUNDS
+    }
 }
 
 export const isDev = () => config.env === 'development';
