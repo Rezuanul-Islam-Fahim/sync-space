@@ -23,7 +23,7 @@ export class RegisterRequestDto {
 export class RegisterResponseDto {
     constructor(user) {
         this.id = user._id.toString()
-        this.email = user.emai
+        this.email = user.email
         this.username = user.username
         this.displayName = user.displayName
         this.password = user.password
