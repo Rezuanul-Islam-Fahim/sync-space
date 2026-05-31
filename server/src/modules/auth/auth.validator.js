@@ -21,20 +21,24 @@ export const registerValidation = [
     registerAllowedFieldsValidation,
 
     body('email')
-        .notEmpty().withMessage('Email is required')
+        .notEmpty()
+        .withMessage('Email is required')
         .bail()
-        .isEmail().withMessage('Email must be valid')
+        .isEmail()
+        .withMessage('Email must be valid')
         .normalizeEmail(),
 
     body('username')
-        .notEmpty().withMessage('Username is required')
+        .notEmpty()
+        .withMessage('Username is required')
         .bail()
         .trim()
         .isLength({ min: 3, max: 30 })
         .withMessage('Username must be between 3 and 30 characters'),
 
     body('password')
-        .notEmpty().withMessage('Password is required')
+        .notEmpty()
+        .withMessage('Password is required')
         .bail()
         .isLength({ min: 6 })
         .withMessage('Password must be at least 6 characters'),
@@ -45,9 +49,9 @@ export const registerValidation = [
         .withMessage('Display Name must be a valid string'),
 
     body('dateOfBirth')
-        .notEmpty().withMessage('Date-of-birth is required')
+        .notEmpty()
+        .withMessage('Date-of-birth is required')
         .bail()
         .isISO8601()
-        .withMessage('Enter a valid date (YYYY-MM-DD)'),
-
+        .withMessage('Enter a valid date (YYYY-MM-DD)')
 ]

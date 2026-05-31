@@ -14,8 +14,7 @@ export const register = async (req, res, next) => {
             statusCode: 201,
             message: 'New user created successfully'
         })
-    }
-    catch (err) {
+    } catch (err) {
         next(err)
     }
 }

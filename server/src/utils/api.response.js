@@ -5,7 +5,13 @@ export default class ApiResponse {
         return res.status(statusCode).json({ success: true, data, message })
     }
 
-    static error({ res, statusCode, message = 'Internal Server Error', errors, stack }) {
+    static error({
+        res,
+        statusCode,
+        message = 'Internal Server Error',
+        errors,
+        stack
+    }) {
         return res.status(statusCode).json({
             success: false,
             message,

@@ -5,11 +5,6 @@ import { validate } from '../../common/validator.js'
 
 const router = express.Router()
 
-router.post(
-    '/register',
-    registerValidation,
-    validate,
-    authController.register
-)
+router.post('/register', registerValidation, validate, authController.register)
 
 export default router

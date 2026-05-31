@@ -33,6 +33,6 @@ const config = {
     }
 }
 
-export const isDev = () => config.env === 'development';
+export const isDev = () => config.env === 'development'
 
 export default config

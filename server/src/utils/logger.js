@@ -28,7 +28,7 @@ const consoleFormat = winston.format.combine(
     winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
     winston.format.colorize({ all: true }),
     winston.format.printf(
-        (info) => `${info.timestamp} (${info.level}) ${info.message}`
+        info => `${info.timestamp} (${info.level}) ${info.message}`
     )
 )
 
@@ -57,9 +57,9 @@ const logger = winston.createLogger({
 })
 
 logger.stream = {
-    write: (message) => {
+    write: message => {
         logger.http(message.trim())
     }
 }
 
-export default logger 
+export default logger

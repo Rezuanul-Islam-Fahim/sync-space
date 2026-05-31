@@ -13,7 +13,7 @@ const start = async () => {
         logger.info(`Server started on port: ${PORT}`)
     })
 
-    const shutdown = async (signal) => {
+    const shutdown = async signal => {
         logger.info(`\n'${signal}' received. Shutting down gracefully...`)
 
         // Stop accepting new connections
@@ -37,8 +37,7 @@ const start = async () => {
     process.on('SIGINT', shutdown)
 }
 
-start()
-    .catch(err => {
-        logger.error('Failed to start:', err)
-        process.exit(1)
-    })
+start().catch(err => {
+    logger.error('Failed to start:', err)
+    process.exit(1)
+})

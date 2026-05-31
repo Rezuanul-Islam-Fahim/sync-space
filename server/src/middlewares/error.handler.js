@@ -13,5 +13,11 @@ export const errorHandler = (err, req, res, _next) => {
         ip: req.ip
     })
 
-    ApiResponse.error({ res, statusCode, message, errors: err.errors, stack: err.stack })
+    ApiResponse.error({
+        res,
+        statusCode,
+        message,
+        errors: err.errors,
+        stack: err.stack
+    })
 }

@@ -1,11 +1,12 @@
 import { REGISTER_ALLOWED_FIELDS } from './auth.constant.js'
 
-const pickAllowed = (body) => REGISTER_ALLOWED_FIELDS.reduce((obj, field) => {
-    if (Object.prototype.hasOwnProperty.call(body, field)) {
-        obj[field] = body[field]
-    }
-    return obj
-}, {})
+const pickAllowed = body =>
+    REGISTER_ALLOWED_FIELDS.reduce((obj, field) => {
+        if (Object.prototype.hasOwnProperty.call(body, field)) {
+            obj[field] = body[field]
+        }
+        return obj
+    }, {})
 
 export class RegisterRequestDto {
     constructor(data) {

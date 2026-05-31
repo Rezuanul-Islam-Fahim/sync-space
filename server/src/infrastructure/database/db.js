@@ -9,7 +9,7 @@ export const initDB = async () => {
         logger.info('Mongoose connected to DB.')
     })
 
-    mongoose.connection.on('error', (err) => {
+    mongoose.connection.on('error', err => {
         logger.error('Mongoose connection error:', err)
     })
 
