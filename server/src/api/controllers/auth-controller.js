@@ -1,16 +1,17 @@
 import * as authService from '../../services/auth-service.js'
 import { RegisterRequestDto, RegisterResponseDto } from '../dtos/auth.dto.js'
+import ApiResponse from '../../utils/api-response.js'
 
 export const register = async (req, res, next) => {
     try {
         const requestDto = RegisterRequestDto.from(req.body)
         const userData = await authService.registerUser(requestDto)
         const responseDto = RegisterResponseDto.from(userData)
-        console.log(responseDto)
 
-        res.status(201).json({
-            success: true,
+        ApiResponse.success({
+            res,
             data: responseDto,
+            statusCode: 201,
             message: 'New user created successfully'
         })
     }
