@@ -1,6 +1,6 @@
 import createApp from './app.js'
-import { initDB, closeDB } from './infra/db.js'
-import config from './config/index.js'
+import { initDB, closeDB } from './infrastructure/database/db.js'
+import config from './common/config.js'
 import logger from './utils/logger.js'
 
 const PORT = config.port

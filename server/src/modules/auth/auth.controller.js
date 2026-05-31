@@ -1,6 +1,6 @@
-import * as authService from '../../services/auth-service.js'
-import { RegisterRequestDto, RegisterResponseDto } from '../dtos/auth.dto.js'
-import ApiResponse from '../../utils/api-response.js'
+import * as authService from './auth.service.js'
+import { RegisterRequestDto, RegisterResponseDto } from './auth.dto.js'
+import ApiResponse from '../../utils/api.response.js'
 
 export const register = async (req, res, next) => {
     try {

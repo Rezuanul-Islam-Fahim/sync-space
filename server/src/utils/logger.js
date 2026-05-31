@@ -1,5 +1,5 @@
 import winston from 'winston'
-import config from '../config/index.js'
+import config from '../common/config.js'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
@@ -38,7 +38,7 @@ const fileFormat = winston.format.combine(
 )
 
 const logger = winston.createLogger({
-    level: config.LOG_LEVEL,
+    level: config.logLevel,
     levels,
     transports: [
         new winston.transports.Console({

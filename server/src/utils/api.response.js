@@ -1,4 +1,4 @@
-import { isDev } from '../config/index.js'
+import { isDev } from '../common/config.js'
 
 export default class ApiResponse {
     static success({ res, data, statusCode, message = 'OK' }) {

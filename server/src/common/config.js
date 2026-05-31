@@ -26,7 +26,7 @@ const config = {
     db: {
         uri: envVars.MONGODB_URI
     },
-    LOG_LEVEL: envVars.LOG_LEVEL
+    logLevel: envVars.LOG_LEVEL
 }
 
 export const isDev = () => config.env === 'development';

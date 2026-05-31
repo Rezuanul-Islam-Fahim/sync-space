@@ -1,6 +1,6 @@
 import express from 'express'
-import router from './api/routes/index.js'
-import { errorHandler } from './middlewares/error-handler.js'
+import router from './common/router.js'
+import { errorHandler } from './middlewares/error.handler.js'
 import helmet from 'helmet'
 import cors from 'cors'
 import morgan from 'morgan'
