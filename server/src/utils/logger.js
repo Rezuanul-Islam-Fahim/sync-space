@@ -1,5 +1,5 @@
 import winston from 'winston'
-import config from '../common/config.js'
+import config from '../config/index.js'
 import path from 'path'
 import { fileURLToPath } from 'url'
 

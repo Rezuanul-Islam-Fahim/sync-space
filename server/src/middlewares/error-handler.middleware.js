@@ -1,5 +1,5 @@
 import logger from '../utils/logger.js'
-import ApiResponse from '../utils/api.response.js'
+import ApiResponse from '../common/api-response.js'
 
 export const errorHandler = (err, req, res, _next) => {
     const statusCode = err.statusCode || 500

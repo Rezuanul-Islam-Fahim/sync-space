@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
-import * as userRepo from './auth.repository.js'
-import AppError from '../../utils/app.error.js'
-import config from '../../common/config.js'
+import { userRepo } from '../user/index.js'
+import AppError from '../../common/app-error.js'
+import config from '../../config/index.js'
 
 export const registerUser = async data => {
     const existingUserByEmail = await userRepo.findByEmail(data.email)
