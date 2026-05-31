@@ -1,10 +1,11 @@
-import { isDev } from '../config/index.js'
 import logger from '../utils/logger.js'
+import ApiResponse from '../utils/api-response.js'
 
 export const errorHandler = (err, req, res, next) => {
     const statusCode = err.statusCode || 500
+    const message = err.message
 
-    logger.error(err.message, {
+    logger.error(message, {
         statusCode,
         stack: err.stack,
         path: req.originalUrl,
@@ -12,10 +13,5 @@ export const errorHandler = (err, req, res, next) => {
         ip: req.ip
     })
 
-    res.status(statusCode).json({
-        success: false,
-        message: err.message || 'Internal Server Error',
-        errors: isDev() ? err.errors : undefined,
-        stack: isDev() ? err.stack : undefined
-    })
+    ApiResponse.error({ res, statusCode, message, errors: err.errors, stack: err.stack })
 }
