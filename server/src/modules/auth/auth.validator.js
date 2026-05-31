@@ -1,6 +1,25 @@
-import { body } from 'express-validator';
+import { body } from 'express-validator'
+import { REGISTER_ALLOWED_FIELDS } from './auth.constant.js'
+
+const registerAllowedFieldsValidation = body().custom(payload => {
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+        throw new Error('Request body must be an object')
+    }
+
+    const unknownFields = Object.keys(payload).filter(key => {
+        return !REGISTER_ALLOWED_FIELDS.includes(key)
+    })
+
+    if (unknownFields.length > 0) {
+        throw new Error('Unknown field(s): ' + unknownFields.join(', '))
+    }
+
+    return true
+})
 
 export const registerValidation = [
+    registerAllowedFieldsValidation,
+
     body('email')
         .notEmpty().withMessage('Email is required')
         .bail()
@@ -25,49 +44,10 @@ export const registerValidation = [
         .isString()
         .withMessage('Display Name must be a valid string'),
 
-    body('agreeToTerms')
-        .default(false)
-        .isBoolean()
-        .withMessage('Agree-to-Terms must be a boolean'),
-
-    body('avatar')
-        .optional({ values: 'null' })
-        .isURL()
-        .withMessage('Enter a valid avatar url'),
-
-    body('bio')
-        .optional({ values: 'null' })
-        .isLength({ max: 190 })
-        .withMessage('Bio should be maximum of 190 characters'),
-
-    body('banner')
-        .optional({ values: 'null' })
-        .isURL()
-        .withMessage('Enter a valid banner url'),
-
-    body('bannerColor')
-        .optional({ values: 'null' })
-        .matches(/^#?(?:[0-9A-Fa-f]{3,4}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/)
-        .withMessage('Banner color must be a valid hex code'),
-
     body('dateOfBirth')
         .notEmpty().withMessage('Date-of-birth is required')
         .bail()
         .isISO8601()
         .withMessage('Enter a valid date (YYYY-MM-DD)'),
 
-    body('isVerified')
-        .optional({ values: 'null' })
-        .isBoolean()
-        .withMessage('is-verified must be a boolean'),
-
-    body('status')
-        .optional({ values: 'null' })
-        .isIn(['online', 'offline', 'idle', 'dnd'])
-        .withMessage('Status must be one of: online, offline, idle, dnd'),
-
-    body('lastOnline')
-        .optional({ values: 'null' })
-        .isISO8601()
-        .withMessage('Enter a valid date')
 ]

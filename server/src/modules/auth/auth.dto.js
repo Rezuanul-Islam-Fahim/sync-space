@@ -1,14 +1,22 @@
+import { REGISTER_ALLOWED_FIELDS } from './auth.constant.js'
+
+const pickAllowed = (body) => REGISTER_ALLOWED_FIELDS.reduce((obj, field) => {
+    if (Object.prototype.hasOwnProperty.call(body, field)) {
+        obj[field] = body[field]
+    }
+    return obj
+}, {})
+
 export class RegisterRequestDto {
     constructor(data) {
         this.email = data.email
         this.username = data.username
         this.password = data.password
         this.displayName = data.displayName
-        this.agreeToTerms = data.agreeToTerms ?? false
         this.avatar = data.avatar
         this.bio = data.bio
         this.banner = data.banner
-        this.bannerColor = data.bannerColor ?? '5865F2'
+        this.bannerColor = data.bannerColor
         this.dateOfBirth = data.dateOfBirth
         this.isVerified = data.isVerified
         this.status = data.status
@@ -16,7 +24,7 @@ export class RegisterRequestDto {
     }
 
     static from(body) {
-        return new RegisterRequestDto(body)
+        return new RegisterRequestDto(pickAllowed(body))
     }
 }
 
@@ -27,7 +35,6 @@ export class RegisterResponseDto {
         this.username = user.username
         this.displayName = user.displayName
         this.password = user.password
-        this.agreeToTerms = user.agreeToTerms
         this.avatar = user.avatar
         this.bio = user.bio
         this.banner = user.banner
