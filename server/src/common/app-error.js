@@ -4,6 +4,9 @@ class AppError extends Error {
 
         this.statusCode = statusCode
         this.errors = errors
+        this.isOperational = true
+
+        Error.captureStackTrace(this, this.constructor)
     }
 }
 

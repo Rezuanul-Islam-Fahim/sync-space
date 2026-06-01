@@ -1,14 +1,20 @@
 import logger from '../utils/logger.js'
 import ApiResponse from '../common/api-response.js'
 import { INTERNAL_SERVER_ERROR } from '../constants/http-status.js'
+import { DEFAULT_ERROR } from '../constants/app-messages.js'
+import { isDev } from '../config/index.js'
 
 export const errorHandler = (err, req, res, _next) => {
-    const statusCode = err.statusCode || INTERNAL_SERVER_ERROR
-    const message = err.message
+    const isOperational = err.isOperational
+    const statusCode = isOperational
+        ? err.statusCode || INTERNAL_SERVER_ERROR
+        : INTERNAL_SERVER_ERROR
+    const message = isOperational ? err.message : DEFAULT_ERROR
 
-    logger.error(message, {
+    logger.error(err.message, {
         statusCode,
         stack: err.stack,
+        isOperational,
         path: req.originalUrl,
         method: req.method,
         ip: req.ip
@@ -18,7 +24,7 @@ export const errorHandler = (err, req, res, _next) => {
         res,
         statusCode,
         message,
-        errors: err.errors,
-        stack: err.stack
+        errors: isOperational ? err.errors : undefined,
+        stack: isDev() ? err.stack : undefined
     })
 }
