@@ -7,14 +7,14 @@ import morgan from 'morgan'
 import hpp from 'hpp'
 import logger from './utils/logger.js'
 import requestIdAttach from './middlewares/request-id.middleware.js'
+import corsConfig from './config/cors.js'
 
 const createApp = () => {
     const app = express()
 
     app.use(requestIdAttach)
-
     app.use(helmet())
-    app.use(cors())
+    app.use(cors(corsConfig))
     app.use(hpp())
     app.use(morgan('combined', { stream: logger.stream }))
     app.use(express.json())
