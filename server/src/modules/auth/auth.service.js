@@ -9,7 +9,10 @@ export const registerUser = async data => {
     const existingUserByUsername = await userRepo.findByUsername(data.username)
 
     if (existingUserByEmail) {
-        throw new AppError('User with this email is already registered', CONFLICT)
+        throw new AppError(
+            'User with this email is already registered',
+            CONFLICT
+        )
     }
 
     if (existingUserByUsername) {
