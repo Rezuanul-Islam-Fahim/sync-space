@@ -1,8 +1,9 @@
 import logger from '../utils/logger.js'
 import ApiResponse from '../common/api-response.js'
+import { INTERNAL_SERVER_ERROR } from '../constants/http-status.js'
 
 export const errorHandler = (err, req, res, _next) => {
-    const statusCode = err.statusCode || 500
+    const statusCode = err.statusCode || INTERNAL_SERVER_ERROR
     const message = err.message
 
     logger.error(message, {

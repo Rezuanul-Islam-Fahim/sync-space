@@ -1,5 +1,5 @@
 import express from 'express'
-import router from './common/router.js'
+import router from './routes/index.js'
 import { errorHandler } from './middlewares/error-handler.middleware.js'
 import helmet from 'helmet'
 import cors from 'cors'

@@ -1,6 +1,8 @@
 import * as authService from './auth.service.js'
 import { RegisterRequestDto, RegisterResponseDto } from './auth.dto.js'
 import ApiResponse from '../../common/api-response.js'
+import { CREATED } from '../../constants/http-status.js'
+import { USER_CREATED } from '../../constants/app-messages.js'
 
 export const register = async (req, res, next) => {
     try {
@@ -11,8 +13,8 @@ export const register = async (req, res, next) => {
         ApiResponse.success({
             res,
             data: responseDto,
-            statusCode: 201,
-            message: 'New user created successfully'
+            statusCode: CREATED,
+            message: USER_CREATED
         })
     } catch (err) {
         next(err)
