@@ -32,7 +32,9 @@ if (cError) {
 }
 
 if (parsedCorsOrigins.includes('*') && parsedCorsOrigins.length > 1) {
-    throw new Error('Cors Origin validation error: "*" can not be combined with other origins')
+    throw new Error(
+        'Cors Origin validation error: "*" can not be combined with other origins'
+    )
 }
 
 const config = {
