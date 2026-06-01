@@ -5,12 +5,12 @@ dotenv.config()
 
 const envSchema = Joi.object({
     NODE_ENV: Joi.string()
-        .allow('development', 'production')
+        .valid('development', 'production')
         .default('development'),
     PORT: Joi.number().integer().default(3000),
     MONGODB_URI: Joi.string().required().description('Mongo DB url'),
     LOG_LEVEL: Joi.string()
-        .allow('error', 'warn', 'info', 'http', 'debug')
+        .valid('error', 'warn', 'info', 'http', 'debug')
         .default('debug'),
     BCRYPT_SALT_ROUNDS: Joi.number().integer().min(4).max(31).default(10),
     CORS_ORIGINS: Joi.string().trim().default('*')
