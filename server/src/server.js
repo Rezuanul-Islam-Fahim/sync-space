@@ -13,7 +13,7 @@ const start = async () => {
         logger.info(`Server started on port: ${PORT}`)
     })
 
-    const shutdown = async signal => {
+    const shutdown = signal => {
         logger.info(`\n'${signal}' received. Shutting down gracefully...`)
 
         // Stop accepting new connections
@@ -35,6 +35,14 @@ const start = async () => {
 
     process.on('SIGTERM', shutdown)
     process.on('SIGINT', shutdown)
+    process.on('unhandledRejection', reason => {
+        logger.error('Unhandled Rejection: ', reason)
+        shutdown('unhandledRejection')
+    })
+    process.on('uncaughtException', err => {
+        logger.error('Uncaught Exception: ', err)
+        process.exit(1)
+    })
 }
 
 start().catch(err => {
