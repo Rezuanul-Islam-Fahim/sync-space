@@ -64,12 +64,12 @@ const RegisterPage = () => {
           error={errors.agreeToTerms}
           className="mt-4 mb-5"
         >
-          I agree to Discord Clone's{' '}
-          <span className="text-discord-link">Terms</span>.
+          I agree to Sync Space's{' '}
+          <span className="text-link">Terms</span>.
         </CommonCheckbox>
 
         {error && (
-          <div className="border border-discord-danger bg-discord-danger/20 px-4 py-2 rounded-md mb-5">
+          <div className="border border-danger bg-danger/20 px-4 py-2 rounded-md mb-5">
             {error}
           </div>
         )}
@@ -81,7 +81,7 @@ const RegisterPage = () => {
         <div className="mt-1">
           <Link
             to="/login"
-            className="text-discord-link text-sm mt-4 hover:underline"
+            className="text-link text-sm mt-4 hover:underline"
           >
             Already have an account?
           </Link>

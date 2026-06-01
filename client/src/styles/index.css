@@ -1,23 +1,23 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-discord-primary: #5865f2;
-  --color-discord-primary-hover: #4752c4;
-  --color-discord-tertiary: #4e5058;
-  --color-discord-tertiary-hover: #6d6f78;
-  --color-discord-input: #1e1f22;
-  --color-discord-danger: #da373c;
-  --color-discord-link: #8fa2f5;
-  --color-discord-main-bg: #313338;
-  --color-discord-content-bg: #2b2d31;
+  --color-primary: #5865f2;
+  --color-primary-hover: #4752c4;
+  --color-tertiary: #4e5058;
+  --color-tertiary-hover: #6d6f78;
+  --color-input: #1e1f22;
+  --color-danger: #da373c;
+  --color-link: #8fa2f5;
+  --color-main-bg: #313338;
+  --color-content-bg: #2b2d31;
 
   /* Added text colors for consistency if needed later */
-  --color-discord-text: #dbdee1;
-  --color-discord-text-header: #f2f3f5;
-  --color-discord-text-info: #b8b8bc;
-  --color-discord-text-muted: #949ba4;
+  --color-text: #dbdee1;
+  --color-text-header: #f2f3f5;
+  --color-text-info: #b8b8bc;
+  --color-text-muted: #949ba4;
 
   /* Borders */
-  --color-discord-input-border: #3d3d45;
-  --color-discord-checkbox-border: #61646e;
+  --color-input-border: #3d3d45;
+  --color-checkbox-border: #61646e;
 }

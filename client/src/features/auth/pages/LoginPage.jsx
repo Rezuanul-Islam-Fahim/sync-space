@@ -22,7 +22,7 @@ const LoginPage = () => {
 
   return (
     <AuthWrapper header="Welcome back!" className="sm:w-[500px]">
-      <p className="text-sm text-discord-text-info text-center">
+      <p className="text-sm text-text-info text-center">
         We're so exited to see you again!
       </p>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -36,7 +36,7 @@ const LoginPage = () => {
         ))}
 
         <div className="mt-1">
-          <Link to="" className="text-discord-link text-sm hover:underline">
+          <Link to="" className="text-link text-sm hover:underline">
             Forgot your password?
           </Link>
         </div>
@@ -45,10 +45,10 @@ const LoginPage = () => {
 
         <div className="mt-2">
           <div className="flex flex-row gap-1">
-            <p className="text-sm text-discord-text-info">Need an account?</p>
+            <p className="text-sm text-text-info">Need an account?</p>
             <Link
               to="/register"
-              className="text-discord-link text-sm hover:underline"
+              className="text-link text-sm hover:underline"
             >
               Register
             </Link>

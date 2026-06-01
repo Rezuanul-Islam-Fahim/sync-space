@@ -1,7 +1,7 @@
 {
     "name": "server",
     "version": "1.0.0",
-    "description": "Backend server for a Discord clone built with the MERN stack.",
+    "description": "Backend server for a Sync Space built with the MERN stack.",
     "main": "src/server.js",
     "scripts": {
         "start": "node src/server.js",
@@ -15,7 +15,7 @@
     "author": "Rezuanul Islam Fahim",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Rezuanul-Islam-Fahim/discord-clone-mern.git"
+        "url": "git+https://github.com/Rezuanul-Islam-Fahim/sync-space.git"
     },
     "license": "ISC",
     "type": "module",
