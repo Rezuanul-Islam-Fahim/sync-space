@@ -35,7 +35,6 @@ export class RegisterResponseDto {
         this.email = user.email
         this.username = user.username
         this.displayName = user.displayName
-        this.password = user.password
         this.avatar = user.avatar
         this.bio = user.bio
         this.banner = user.banner
