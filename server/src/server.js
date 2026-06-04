@@ -41,7 +41,7 @@ const start = async () => {
     });
     process.on('uncaughtException', err => {
         logger.error('Uncaught Exception: ', err);
-        process.exit(1);
+        shutdown('uncaughtException');
     });
 };
 
