@@ -30,8 +30,6 @@ const RegisterPage = () => {
     });
 
     const onSubmit = async data => {
-        console.log(data);
-
         await dispatch(registerUser(data)).unwrap();
 
         if (user) {

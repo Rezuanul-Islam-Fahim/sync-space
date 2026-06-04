@@ -12,12 +12,10 @@ export const registerUser = createAsyncThunk(
     async (payload, { rejectWithValue }) => {
         try {
             const response = await authService.register(payload);
-            console.log(response.data);
             return response.data;
         } catch (error) {
             const errorMessage =
                 error.response?.data?.message || 'Internal error';
-            console.log(error.response?.data);
             return rejectWithValue(errorMessage);
         }
     }
