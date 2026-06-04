@@ -1,21 +1,21 @@
-import { body } from 'express-validator'
-import { REGISTER_ALLOWED_FIELDS } from './auth.constant.js'
+import { body } from 'express-validator';
+import { REGISTER_ALLOWED_FIELDS } from './auth.constant.js';
 
 const registerAllowedFieldsValidation = body().custom(payload => {
     if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
-        throw new Error('Request body must be an object')
+        throw new Error('Request body must be an object');
     }
 
     const unknownFields = Object.keys(payload).filter(key => {
-        return !REGISTER_ALLOWED_FIELDS.includes(key)
-    })
+        return !REGISTER_ALLOWED_FIELDS.includes(key);
+    });
 
     if (unknownFields.length > 0) {
-        throw new Error('Unknown field(s): ' + unknownFields.join(', '))
+        throw new Error('Unknown field(s): ' + unknownFields.join(', '));
     }
 
-    return true
-})
+    return true;
+});
 
 export const registerValidation = [
     registerAllowedFieldsValidation,
@@ -53,5 +53,5 @@ export const registerValidation = [
         .withMessage('Date-of-birth is required')
         .bail()
         .isISO8601()
-        .withMessage('Enter a valid date (YYYY-MM-DD)')
-]
+        .withMessage('Enter a valid date (YYYY-MM-DD)'),
+];

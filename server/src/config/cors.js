@@ -1,8 +1,8 @@
-import config from './index.js'
+import config from './index.js';
 
-const corsOrigins = config.corsOrigins
+const corsOrigins = config.corsOrigins;
 
 export default {
     origin: corsOrigins,
-    credentials: corsOrigins !== '*'
-}
+    credentials: corsOrigins !== '*',
+};

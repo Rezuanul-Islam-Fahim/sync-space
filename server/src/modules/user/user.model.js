@@ -1,75 +1,75 @@
-import mongoose from 'mongoose'
-import { USER_STATUS, BANNER_DEFAULT_COLOR } from './user.constant.js'
+import mongoose from 'mongoose';
+import { USER_STATUS, BANNER_DEFAULT_COLOR } from './user.constant.js';
 
 const userSchema = new mongoose.Schema(
     {
         email: {
             type: String,
             required: true,
-            unique: true
+            unique: true,
         },
         username: {
             type: String,
             required: true,
             unique: true,
             minLength: 3,
-            maxLength: 30
+            maxLength: 30,
         },
         password: {
             type: String,
             required: true,
-            minLength: 6
+            minLength: 6,
         },
         displayName: {
             type: String,
-            default: null
+            default: null,
         },
         avatar: {
             type: String,
-            default: null
+            default: null,
         },
         bio: {
             type: String,
             maxLength: 190,
-            default: null
+            default: null,
         },
         banner: {
             type: String,
-            default: null
+            default: null,
         },
         bannerColor: {
             type: String,
-            default: BANNER_DEFAULT_COLOR
+            default: BANNER_DEFAULT_COLOR,
         },
         dateOfBirth: {
             type: Date,
-            required: true
+            required: true,
         },
         isVerified: {
             type: Boolean,
-            default: false
+            default: false,
         },
         status: {
             type: String,
             enum: USER_STATUS,
-            default: 'offline'
+            default: 'offline',
         },
         lastOnline: {
             type: Date,
-            default: null
-        }
+            default: null,
+        },
     },
     { timestamps: true }
-)
+);
 
 const transform = (doc, ret) => {
-    delete ret.password
-    delete ret.__v
+    delete ret.password;
+    delete ret.__v;
 
-    return ret
-}
+    return ret;
+};
 
-userSchema.set('toJSON', { transform })
-userSchema.set('toObject', { transform })
+userSchema.set('toJSON', { transform });
+userSchema.set('toObject', { transform });
 
-export const User = mongoose.model('User', userSchema)
+export const User = mongoose.model('User', userSchema);

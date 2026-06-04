@@ -3,5 +3,5 @@ export const REGISTER_ALLOWED_FIELDS = [
     'username',
     'password',
     'displayName',
-    'dateOfBirth'
-]
+    'dateOfBirth',
+];
