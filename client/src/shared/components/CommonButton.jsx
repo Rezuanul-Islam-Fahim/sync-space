@@ -7,6 +7,7 @@ const CommonButton = ({
     secondary = false,
     className,
     disabled = false,
+    onClick,
 }) => {
     const baseClassNames =
         'w-full text-white font-medium py-2.5 px-6 rounded-lg transition-colors duration-200 cursor-pointer';
@@ -25,6 +26,7 @@ const CommonButton = ({
         </Link>
     ) : (
         <button
+            onClick={onClick}
             className={combinedClassNames}
             type="submit"
             disabled={disabled}
