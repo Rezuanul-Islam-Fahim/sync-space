@@ -7,11 +7,11 @@ import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from './shared/components/ErrorFallback';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <ErrorBoundary fallbackRender={ErrorFallback}>
-                <App />
-            </ErrorBoundary>
-        </Provider>
-    </React.StrictMode>
+  <React.StrictMode>
+    <Provider store={store}>
+      <ErrorBoundary fallbackRender={ErrorFallback}>
+        <App />
+      </ErrorBoundary>
+    </Provider>
+  </React.StrictMode>
 );
