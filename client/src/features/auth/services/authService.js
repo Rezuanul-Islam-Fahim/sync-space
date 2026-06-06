@@ -1,8 +1,9 @@
 import axiosClient from '@/shared/api/axiosClient';
+import API_ENDPOINTS from '@/shared/config/api';
 
 const authService = {
   register: async userData => {
-    return await axiosClient.post('/auth/register', userData);
+    return await axiosClient.post(API_ENDPOINTS.AUTH.REGISTER, userData);
   },
 };
 
