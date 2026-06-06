@@ -1,5 +1,5 @@
 import React from 'react';
-import cn from '../utils/cn';
+import cn from '../utils/classNames';
 
 const CommonCheckbox = React.forwardRef(
   ({ children, error, className, ...props }, ref) => {

@@ -3,9 +3,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import AuthWrapper from '../components/AuthWrapper';
 import LOGIN_FIELDS from '../constants/loginFields';
-import CommonInput from '@/shared/components/CommonInput';
-import CommonButton from '@/shared/components/CommonButton';
 import loginSchema from '../schemas/loginSchema';
+import { CommonButton, CommonInput } from '@/shared/components';
 
 const LoginPage = () => {
   const {

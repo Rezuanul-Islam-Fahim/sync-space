@@ -1,9 +1,9 @@
 import { lazy } from 'react';
 import { Routes, Route } from 'react-router';
-import PreAuthLayout from '@/shared/layouts/PreAuthLayout';
-import APP_ROUTES from '@/shared/config/routes';
+import { PreAuthLayout } from '@/shared/layouts';
+import { APP_ROUTES } from '@/shared/config';
 
-const HomePage = lazy(() => import('@/features/home'));
+const HomePage = lazy(() => import('@/features/home/pages/HomePage'));
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'));
 const RegisterPage = lazy(() => import('@/features/auth/pages/RegisterPage'));
 

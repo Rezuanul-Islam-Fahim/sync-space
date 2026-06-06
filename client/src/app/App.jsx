@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { BrowserRouter } from 'react-router';
 import { Toaster } from 'react-hot-toast';
 import AppRoutes from '@/routes/AppRoutes';
-import SuspenseFallback from '@/shared/components/SuspenseFallback';
+import { SuspenseFallback } from '@/shared/components';
 
 const App = () => {
   return (

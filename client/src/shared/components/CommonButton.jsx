@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import cn from '@/shared/utils/cn';
+import { classNames } from '@/shared/utils';
 
 const CommonButton = ({
   children,
@@ -14,7 +14,11 @@ const CommonButton = ({
   const secondaryClassNames = !secondary
     ? 'bg-primary hover:bg-primary-hover'
     : 'bg-tertiary hover:bg-tertiary-hover';
-  const combinedClassNames = cn(baseClassNames, secondaryClassNames, className);
+  const combinedClassNames = classNames(
+    baseClassNames,
+    secondaryClassNames,
+    className
+  );
 
   return navigate !== undefined ? (
     <Link to={navigate} className={combinedClassNames}>

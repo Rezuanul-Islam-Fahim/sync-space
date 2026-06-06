@@ -4,12 +4,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import CommonInput from '@/shared/components/CommonInput';
-import CommonCheckbox from '@/shared/components/CommonCheckbox';
-import CommonButton from '@/shared/components/CommonButton';
 import REGISTER_FIELDS from '../constants/registerFields';
 import registerSchema from '../schemas/registerSchema';
 import AuthWrapper from '../components/AuthWrapper';
+import { CommonButton, CommonInput, CommonCheckbox } from '@/shared/components';
 import {
   registerUser,
   selectNewUser,

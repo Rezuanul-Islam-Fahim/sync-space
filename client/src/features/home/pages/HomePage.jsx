@@ -1,5 +1,5 @@
 import { IoMdChatbubbles } from 'react-icons/io';
-import CommonButton from '@/shared/components/CommonButton';
+import { CommonButton } from '@/shared/components';
 
 const HomePage = () => {
   return (

@@ -1,10 +1,10 @@
-import cn from '@/shared/utils/cn';
+import { classNames } from '@/shared/utils';
 
 const AuthWrapper = ({ children, header, className }) => {
   const baseClassName = 'bg-content-bg rounded-lg w-full p-8 shadow-2xs';
 
   return (
-    <div className={cn(baseClassName, className)}>
+    <div className={classNames(baseClassName, className)}>
       <h2 className="text-2xl font-bold text-center text-text-header mb-4">
         {header}
       </h2>
