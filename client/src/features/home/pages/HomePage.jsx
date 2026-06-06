@@ -1,7 +1,7 @@
 import { IoMdChatbubbles } from 'react-icons/io';
 import CommonButton from '@/shared/components/CommonButton';
 
-const OnboardingPage = () => {
+const HomePage = () => {
   return (
     <div className="max-w-md w-full text-center space-y-8">
       <div className="flex justify-center">
@@ -29,4 +29,4 @@ const OnboardingPage = () => {
   );
 };
 
-export default OnboardingPage;
+export default HomePage;
