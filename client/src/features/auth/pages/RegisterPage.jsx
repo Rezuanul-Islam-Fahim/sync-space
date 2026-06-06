@@ -15,7 +15,6 @@ import {
   selectNewUser,
   clearAuthError,
 } from '../store/authSlice';
-import MainWrapper from '@/shared/components/MainWrapper';
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -51,47 +50,45 @@ const RegisterPage = () => {
   }, [watch, error, dispatch]);
 
   return (
-    <MainWrapper>
-      <AuthWrapper header="Create an account" className="sm:w-[400px]">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {REGISTER_FIELDS.map(attr => (
-            <CommonInput
-              key={attr.name}
-              {...register(attr.name)}
-              {...attr}
-              error={errors[attr.name]}
-            />
-          ))}
+    <AuthWrapper header="Create an account" className="sm:w-[400px]">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {REGISTER_FIELDS.map(attr => (
+          <CommonInput
+            key={attr.name}
+            {...register(attr.name)}
+            {...attr}
+            error={errors[attr.name]}
+          />
+        ))}
 
-          <CommonCheckbox
-            {...register('agreeToTerms')}
-            error={errors.agreeToTerms}
-            className="mt-4 mb-5"
-          >
-            I agree to Sync Space's <span className="text-link">Terms</span>.
-          </CommonCheckbox>
+        <CommonCheckbox
+          {...register('agreeToTerms')}
+          error={errors.agreeToTerms}
+          className="mt-4 mb-5"
+        >
+          I agree to Sync Space's <span className="text-link">Terms</span>.
+        </CommonCheckbox>
 
-          {error && (
-            <div className="border border-danger bg-danger/20 px-4 py-2 rounded-md mb-5">
-              {error}
-            </div>
-          )}
-
-          <CommonButton disabled={isLoading}>
-            {!isLoading ? 'Create Account' : 'Create Account...'}
-          </CommonButton>
-
-          <div className="mt-1">
-            <Link
-              to="/login"
-              className="text-link text-sm mt-4 hover:underline"
-            >
-              Already have an account?
-            </Link>
+        {error && (
+          <div className="border border-danger/40 bg-danger/15 text-text-header px-4 py-2 rounded-md mb-5">
+            {error}
           </div>
-        </form>
-      </AuthWrapper>
-    </MainWrapper>
+        )}
+
+        <CommonButton disabled={isLoading}>
+          {!isLoading ? 'Create Account' : 'Create Account...'}
+        </CommonButton>
+
+        <div className="mt-1">
+          <Link
+            to="/login"
+            className="text-link text-sm mt-4 hover:underline"
+          >
+            Already have an account?
+          </Link>
+        </div>
+      </form>
+    </AuthWrapper>
   );
 };
 

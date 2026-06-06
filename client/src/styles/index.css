@@ -3,21 +3,34 @@
 @theme {
   --color-primary: #5865f2;
   --color-primary-hover: #4752c4;
-  --color-tertiary: #4e5058;
-  --color-tertiary-hover: #6d6f78;
-  --color-input: #1e1f22;
-  --color-danger: #da373c;
-  --color-link: #8fa2f5;
+  --color-tertiary: #4f545c;
+  --color-tertiary-hover: #5d6470;
+  --color-input: #232428;
+  --color-danger: #f23f42;
+  --color-link: #00a8fc;
   --color-main-bg: #313338;
   --color-content-bg: #2b2d31;
 
-  /* Added text colors for consistency if needed later */
   --color-text: #dbdee1;
   --color-text-header: #f2f3f5;
-  --color-text-info: #b8b8bc;
+  --color-text-info: #b5bac1;
   --color-text-muted: #949ba4;
 
-  /* Borders */
-  --color-input-border: #3d3d45;
-  --color-checkbox-border: #61646e;
+  --color-input-border: #3f4147;
+  --color-checkbox-border: #72767d;
+}
+
+@layer base {
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+    background: var(--color-main-bg);
+    color: var(--color-text);
+  }
+
+  body {
+    margin: 0;
+  }
 }

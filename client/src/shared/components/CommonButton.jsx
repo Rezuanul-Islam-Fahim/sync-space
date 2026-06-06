@@ -10,7 +10,7 @@ const CommonButton = ({
   onClick,
 }) => {
   const baseClassNames =
-    'w-full text-white font-medium py-2.5 px-6 rounded-lg transition-colors duration-200 cursor-pointer';
+    'w-full text-text-header font-medium py-2.5 px-6 rounded-lg transition-colors duration-200 cursor-pointer';
   const secondaryClassNames = !secondary
     ? 'bg-primary hover:bg-primary-hover'
     : 'bg-tertiary hover:bg-tertiary-hover';
