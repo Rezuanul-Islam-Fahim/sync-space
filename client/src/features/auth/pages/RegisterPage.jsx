@@ -80,10 +80,7 @@ const RegisterPage = () => {
         </CommonButton>
 
         <div className="mt-1">
-          <Link
-            to="/login"
-            className="text-link text-sm mt-4 hover:underline"
-          >
+          <Link to="/login" className="text-link text-sm mt-4 hover:underline">
             Already have an account?
           </Link>
         </div>

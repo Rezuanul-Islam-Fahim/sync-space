@@ -16,7 +16,7 @@ const LoginPage = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = () => { };
+  const onSubmit = () => {};
 
   return (
     <AuthWrapper header="Welcome back!" className="sm:w-[500px]">
@@ -44,10 +44,7 @@ const LoginPage = () => {
         <div className="mt-2">
           <div className="flex flex-row gap-1">
             <p className="text-sm text-text-info">Need an account?</p>
-            <Link
-              to="/register"
-              className="text-link text-sm hover:underline"
-            >
+            <Link to="/register" className="text-link text-sm hover:underline">
               Register
             </Link>
           </div>

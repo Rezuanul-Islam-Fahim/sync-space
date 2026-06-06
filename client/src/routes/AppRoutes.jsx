@@ -1,7 +1,10 @@
+import { lazy } from 'react';
 import { Routes, Route } from 'react-router';
-import { LoginPage, RegisterPage } from '@/features/auth';
-import { OnboardingPage } from '@/features/onboarding';
 import PreAuthLayout from '@/shared/layouts/PreAuthLayout';
+
+const OnboardingPage = lazy(() => import('@/features/onboarding'));
+const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'));
+const RegisterPage = lazy(() => import('@/features/auth/pages/RegisterPage'));
 
 const AppRoutes = () => {
   return (
