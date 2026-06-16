@@ -4,8 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import REGISTER_FIELDS from '../constants/registerFields';
-import registerSchema from '../schemas/registerSchema';
 import AuthWrapper from '../components/AuthWrapper';
 import { Button, Input, Checkbox } from '@/shared/components';
 import {
@@ -13,6 +11,7 @@ import {
   selectNewUser,
   clearAuthError,
 } from '../store/authSlice';
+import registerSchema, { registerFields } from '../config/register.config';
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -50,7 +49,7 @@ const RegisterPage = () => {
   return (
     <AuthWrapper header="Create an account" className="sm:w-[400px]">
       <form onSubmit={handleSubmit(onSubmit)}>
-        {REGISTER_FIELDS.map(attr => (
+        {registerFields.map(attr => (
           <Input
             key={attr.name}
             {...register(attr.name)}

@@ -2,9 +2,8 @@ import { Link } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import AuthWrapper from '../components/AuthWrapper';
-import LOGIN_FIELDS from '../constants/loginFields';
-import loginSchema from '../schemas/loginSchema';
 import { Button, Input } from '@/shared/components';
+import { loginFields, loginSchema } from '../config/login.config';
 
 const LoginPage = () => {
   const {
@@ -15,7 +14,7 @@ const LoginPage = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = () => { };
+  const onSubmit = () => {};
 
   return (
     <AuthWrapper header="Welcome back!" className="sm:w-[500px]">
@@ -23,7 +22,7 @@ const LoginPage = () => {
         We're so exited to see you again!
       </p>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {LOGIN_FIELDS.map(attr => (
+        {loginFields.map(attr => (
           <Input
             key={attr.name}
             {...register(attr.name)}
