@@ -1,4 +1,4 @@
-import CommonButton from './CommonButton';
+import Button from './Button';
 import { BiSolidErrorCircle } from 'react-icons/bi';
 
 const ErrorFallback = ({ error, resetErrorBoundary }) => {
@@ -13,7 +13,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => {
       <p className="text-sm text-text-header mb-6 bg-input border border-input-border p-3 rounded overflow-auto">
         {error.message}
       </p>
-      <CommonButton onClick={resetErrorBoundary}>Try to recover</CommonButton>
+      <Button onClick={resetErrorBoundary}>Try to recover</Button>
     </div>
   );
 };

@@ -1,5 +1,5 @@
-export { default as CommonButton } from './CommonButton';
-export { default as CommonCheckbox } from './CommonCheckbox';
-export { default as CommonInput } from './CommonInput';
+export { default as Button } from './Button';
+export { default as Checkbox } from './Checkbox';
+export { default as Input } from './Input';
 export { default as ErrorFallback } from './ErrorFallback';
 export { default as SuspenseFallback } from './SuspenseFallback';

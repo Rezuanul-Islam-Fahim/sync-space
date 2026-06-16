@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from '../utils/classNames';
 
-const CommonCheckbox = React.forwardRef(
+const Checkbox = React.forwardRef(
   ({ children, error, className, ...props }, ref) => {
     return (
       <div className={cn('flex flex-col', className)}>
@@ -45,4 +45,4 @@ const CommonCheckbox = React.forwardRef(
   }
 );
 
-export default CommonCheckbox;
+export default Checkbox;

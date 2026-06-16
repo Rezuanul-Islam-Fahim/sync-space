@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import AuthWrapper from '../components/AuthWrapper';
 import LOGIN_FIELDS from '../constants/loginFields';
 import loginSchema from '../schemas/loginSchema';
-import { CommonButton, CommonInput } from '@/shared/components';
+import { Button, Input } from '@/shared/components';
 
 const LoginPage = () => {
   const {
@@ -15,7 +15,7 @@ const LoginPage = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = () => {};
+  const onSubmit = () => { };
 
   return (
     <AuthWrapper header="Welcome back!" className="sm:w-[500px]">
@@ -24,7 +24,7 @@ const LoginPage = () => {
       </p>
       <form onSubmit={handleSubmit(onSubmit)}>
         {LOGIN_FIELDS.map(attr => (
-          <CommonInput
+          <Input
             key={attr.name}
             {...register(attr.name)}
             {...attr}
@@ -38,7 +38,7 @@ const LoginPage = () => {
           </Link>
         </div>
 
-        <CommonButton className="mt-5">Login</CommonButton>
+        <Button className="mt-5">Login</Button>
 
         <div className="mt-2">
           <div className="flex flex-row gap-1">

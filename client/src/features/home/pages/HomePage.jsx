@@ -1,5 +1,5 @@
 import { IoMdChatbubbles } from 'react-icons/io';
-import { CommonButton } from '@/shared/components';
+import { Button } from '@/shared/components';
 
 const HomePage = () => {
   return (
@@ -20,10 +20,10 @@ const HomePage = () => {
       </div>
 
       <div className="flex flex-col gap-4 pt-4">
-        <CommonButton navigate={'/login'}>Log In</CommonButton>
-        <CommonButton navigate={'/register'} secondary={true}>
+        <Button navigate={'/login'}>Log In</Button>
+        <Button navigate={'/register'} secondary={true}>
           Register
-        </CommonButton>
+        </Button>
       </div>
     </div>
   );

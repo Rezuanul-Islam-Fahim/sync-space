@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import { classNames } from '@/shared/utils';
 
-const CommonButton = ({
+const Button = ({
   children,
   navigate,
   secondary = false,
@@ -36,4 +36,4 @@ const CommonButton = ({
   );
 };
 
-export default CommonButton;
+export default Button;

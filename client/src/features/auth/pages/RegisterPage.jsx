@@ -7,7 +7,7 @@ import { toast } from 'react-hot-toast';
 import REGISTER_FIELDS from '../constants/registerFields';
 import registerSchema from '../schemas/registerSchema';
 import AuthWrapper from '../components/AuthWrapper';
-import { CommonButton, CommonInput, CommonCheckbox } from '@/shared/components';
+import { Button, Input, Checkbox } from '@/shared/components';
 import {
   registerUser,
   selectNewUser,
@@ -51,7 +51,7 @@ const RegisterPage = () => {
     <AuthWrapper header="Create an account" className="sm:w-[400px]">
       <form onSubmit={handleSubmit(onSubmit)}>
         {REGISTER_FIELDS.map(attr => (
-          <CommonInput
+          <Input
             key={attr.name}
             {...register(attr.name)}
             {...attr}
@@ -59,13 +59,13 @@ const RegisterPage = () => {
           />
         ))}
 
-        <CommonCheckbox
+        <Checkbox
           {...register('agreeToTerms')}
           error={errors.agreeToTerms}
           className="mt-4 mb-5"
         >
           I agree to Sync Space's <span className="text-link">Terms</span>.
-        </CommonCheckbox>
+        </Checkbox>
 
         {error && (
           <div className="border border-danger/40 bg-danger/15 text-text-header px-4 py-2 rounded-md mb-5">
@@ -73,9 +73,9 @@ const RegisterPage = () => {
           </div>
         )}
 
-        <CommonButton disabled={isLoading}>
+        <Button disabled={isLoading}>
           {!isLoading ? 'Create Account' : 'Create Account...'}
-        </CommonButton>
+        </Button>
 
         <div className="mt-1">
           <Link to="/login" className="text-link text-sm mt-4 hover:underline">

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CommonInput = React.forwardRef(
+const Input = React.forwardRef(
   ({ label, required = false, error, ...props }, ref) => {
     return (
       <div className="mt-5">
@@ -26,4 +26,4 @@ const CommonInput = React.forwardRef(
   }
 );
 
-export default CommonInput;
+export default Input;
