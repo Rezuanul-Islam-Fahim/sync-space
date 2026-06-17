@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { toast } from 'react-hot-toast';
 import AuthWrapper from '../components/AuthWrapper';
 import { Button, Input, Checkbox } from '@/shared/components';
