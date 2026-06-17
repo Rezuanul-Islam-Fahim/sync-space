@@ -14,7 +14,7 @@ const LoginPage = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = () => { };
+  const onSubmit = () => {};
 
   return (
     <AuthWrapper header="Welcome back!" className="sm:w-[500px]">
