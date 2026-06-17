@@ -14,12 +14,12 @@ const LoginPage = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = () => {};
+  const onSubmit = () => { };
 
   return (
     <AuthWrapper header="Welcome back!" className="sm:w-[500px]">
       <p className="text-sm text-text-info text-center">
-        We're so exited to see you again!
+        We're so excited to see you again!
       </p>
       <form onSubmit={handleSubmit(onSubmit)}>
         {loginFields.map(attr => (
