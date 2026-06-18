@@ -1,18 +1,29 @@
 import { z } from 'zod';
+import UI_TEXT from '../constants/uiText';
 
 export const loginFields = [
-  { name: 'email', label: 'Email', type: 'email', required: true },
-  { name: 'password', label: 'Password', type: 'password', required: true },
+  {
+    name: 'email',
+    label: UI_TEXT.login.emailLabel,
+    type: 'email',
+    required: true,
+  },
+  {
+    name: 'password',
+    label: UI_TEXT.login.passwordLabel,
+    type: 'password',
+    required: true,
+  },
 ];
 
 export const loginSchema = z.object({
   email: z
     .string()
-    .nonempty('Email is required')
-    .pipe(z.email('Please enter a valid Email')),
+    .nonempty(UI_TEXT.login.emailRequiredWarn)
+    .pipe(z.email(UI_TEXT.login.invalidEmailWarn)),
 
   password: z
     .string()
-    .nonempty('Password is required')
-    .min(6, { error: 'Password must be at least 6 characters long' }),
+    .nonempty(UI_TEXT.login.passwordRequiredWarn)
+    .min(6, { error: UI_TEXT.login.passwordValidationWarn }),
 });

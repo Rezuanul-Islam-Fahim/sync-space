@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import AuthWrapper from '../components/AuthWrapper';
 import { Button, Input } from '@/shared/components';
 import { loginFields, loginSchema } from '../config/login.config';
+import UI_TEXT from '../constants/uiText';
 
 const LoginPage = () => {
   const {
@@ -17,9 +18,9 @@ const LoginPage = () => {
   const onSubmit = () => {};
 
   return (
-    <AuthWrapper header="Welcome back!" className="sm:w-[500px]">
+    <AuthWrapper header={UI_TEXT.login.header} className="sm:w-[500px]">
       <p className="text-sm text-text-info text-center">
-        We're so excited to see you again!
+        {UI_TEXT.login.subtitle}
       </p>
       <form onSubmit={handleSubmit(onSubmit)}>
         {loginFields.map(attr => (
@@ -33,17 +34,19 @@ const LoginPage = () => {
 
         <div className="mt-1">
           <Link to="" className="text-link text-sm hover:underline">
-            Forgot your password?
+            {UI_TEXT.login.forgotPassword}
           </Link>
         </div>
 
-        <Button className="mt-5">Login</Button>
+        <Button className="mt-5">{UI_TEXT.login.loginLink}</Button>
 
         <div className="mt-2">
           <div className="flex flex-row gap-1">
-            <p className="text-sm text-text-info">Need an account?</p>
+            <p className="text-sm text-text-info">
+              {UI_TEXT.login.needAccount}
+            </p>
             <Link to="/register" className="text-link text-sm hover:underline">
-              Register
+              {UI_TEXT.login.registerLink}
             </Link>
           </div>
         </div>
