@@ -1,13 +1,33 @@
 import { z } from 'zod';
+import UI_TEXT from '../constants/uiText';
 
 export const registerFields = [
-  { name: 'email', label: 'Email', type: 'email', required: true },
-  { name: 'displayName', label: 'Display Name', type: 'text' },
-  { name: 'username', label: 'Username', type: 'text', required: true },
-  { name: 'password', label: 'Password', type: 'password', required: true },
+  {
+    name: 'email',
+    label: UI_TEXT.register.emailLabel,
+    type: 'email',
+    required: true,
+  },
+  {
+    name: 'displayName',
+    label: UI_TEXT.register.displayNameLabel,
+    type: 'text',
+  },
+  {
+    name: 'username',
+    label: UI_TEXT.register.usernameLabel,
+    type: 'text',
+    required: true,
+  },
+  {
+    name: 'password',
+    label: UI_TEXT.register.passwordLabel,
+    type: 'password',
+    required: true,
+  },
   {
     name: 'dateOfBirth',
-    label: 'Date of Birth',
+    label: UI_TEXT.register.dateOfBirthLabel,
     type: 'date',
     required: true,
   },
@@ -16,28 +36,28 @@ export const registerFields = [
 const registerSchema = z.object({
   email: z
     .string()
-    .nonempty('Email is required')
-    .pipe(z.email('Please enter a valid email')),
+    .nonempty(UI_TEXT.register.emailRequiredWarn)
+    .pipe(z.email(UI_TEXT.register.invalidEmailWarn)),
 
   displayName: z.string().optional(),
 
   username: z
     .string()
-    .nonempty('Username is required')
-    .min(3, { error: 'Username must be at least 3 characters long' })
-    .max(30, { error: 'Username should be maximum of 30 characters' }),
+    .nonempty(UI_TEXT.register.usernameRequiredWarn)
+    .min(3, { error: UI_TEXT.register.usernameValidationWarn })
+    .max(30, { error: UI_TEXT.register.usernameMaxValidationWarn }),
 
   password: z
     .string()
-    .nonempty('Password is required')
-    .min(6, { error: 'Password must be at least 6 characters' }),
+    .nonempty(UI_TEXT.register.passwordRequiredWarn)
+    .min(6, { error: UI_TEXT.register.passwordValidationWarn }),
 
   dateOfBirth: z
     .string()
-    .nonempty('Date of Birth is required')
-    .pipe(z.coerce.date({ error: 'Please enter a valid date' })),
+    .nonempty(UI_TEXT.register.dateOfBirthRequiredWarn)
+    .pipe(z.coerce.date({ error: UI_TEXT.register.invalidDateOfBirthWarn })),
 
-  agreeToTerms: z.literal(true, { error: 'You must agree to the terms' }),
+  agreeToTerms: z.literal(true, { error: UI_TEXT.register.agreeToTermsWarn }),
 });
 
 export default registerSchema;

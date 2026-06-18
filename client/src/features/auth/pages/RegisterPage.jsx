@@ -12,6 +12,7 @@ import {
   clearAuthError,
 } from '../store/authSlice';
 import registerSchema, { registerFields } from '../config/register.config';
+import UI_TEXT from '../constants/uiText';
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ const RegisterPage = () => {
   }, [watch, error, dispatch]);
 
   return (
-    <AuthWrapper header="Create an account" className="sm:w-[400px]">
+    <AuthWrapper header={UI_TEXT.register.header} className="sm:w-[400px]">
       <form onSubmit={handleSubmit(onSubmit)}>
         {registerFields.map(attr => (
           <Input
@@ -63,7 +64,8 @@ const RegisterPage = () => {
           error={errors.agreeToTerms}
           className="mt-4 mb-5"
         >
-          I agree to Sync Space's <span className="text-link">Terms</span>.
+          {UI_TEXT.register.agreeToTermsPrefix}{' '}
+          <span className="text-link">{UI_TEXT.register.termsLink}</span>.
         </Checkbox>
 
         {error && (
@@ -73,12 +75,12 @@ const RegisterPage = () => {
         )}
 
         <Button disabled={isLoading}>
-          {!isLoading ? 'Create Account' : 'Create Account...'}
+          {!isLoading ? UI_TEXT.register.submit : UI_TEXT.register.submitting}
         </Button>
 
         <div className="mt-1">
           <Link to="/login" className="text-link text-sm mt-4 hover:underline">
-            Already have an account?
+            {UI_TEXT.register.hasAccount}
           </Link>
         </div>
       </form>
