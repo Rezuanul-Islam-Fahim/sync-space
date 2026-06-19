@@ -6,18 +6,14 @@ import { Link, useNavigate } from 'react-router';
 import { toast } from 'react-hot-toast';
 import AuthWrapper from '../components/AuthWrapper';
 import { Button, Input, Checkbox } from '@/shared/components';
-import {
-  registerUser,
-  selectNewUser,
-  clearAuthError,
-} from '../store/authSlice';
+import { registerUser, clearAuthError } from '../store/authSlice';
 import registerSchema, { registerFields } from '../config/register.config';
 import UI_TEXT from '../constants/uiText';
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoading, error } = useSelector(selectNewUser);
+  const { isLoading, error } = useSelector(state => state.auth);
   const {
     register,
     handleSubmit,

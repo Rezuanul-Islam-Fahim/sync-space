@@ -46,5 +46,3 @@ const authSlice = createSlice({
 
 export const authReducer = authSlice.reducer;
 export const { clearAuthError } = authSlice.actions;
-
-export const selectNewUser = state => state.auth;
