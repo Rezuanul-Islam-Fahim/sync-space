@@ -22,7 +22,7 @@ export const registerUser = createAsyncThunk(
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState: initialState,
+  initialState,
   reducers: {
     clearAuthError: state => {
       state.error = null;
