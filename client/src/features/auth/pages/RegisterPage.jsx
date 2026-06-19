@@ -17,7 +17,7 @@ import UI_TEXT from '../constants/uiText';
 const RegisterPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoading, error, user } = useSelector(selectNewUser);
+  const { isLoading, error } = useSelector(selectNewUser);
   const {
     register,
     handleSubmit,
@@ -28,9 +28,9 @@ const RegisterPage = () => {
   });
 
   const onSubmit = async data => {
-    await dispatch(registerUser(data)).unwrap();
+    const createdUser = await dispatch(registerUser(data)).unwrap();
 
-    if (user) {
+    if (createdUser) {
       toast.success('Account created successfully');
 
       setTimeout(() => {
