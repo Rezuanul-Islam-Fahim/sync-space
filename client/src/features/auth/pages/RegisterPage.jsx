@@ -28,7 +28,8 @@ const RegisterPage = () => {
   });
 
   const onSubmit = async data => {
-    const createdUser = await dispatch(registerUser(data)).unwrap();
+    const { agreeToTerms: _agreeToTerms, ...payload } = data;
+    const createdUser = await dispatch(registerUser(payload)).unwrap();
 
     if (createdUser) {
       toast.success('Account created successfully');
