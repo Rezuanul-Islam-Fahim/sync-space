@@ -5,6 +5,7 @@ import AuthWrapper from '../components/AuthWrapper';
 import { Button, Input } from '@/shared/components';
 import { loginFields, loginSchema } from '../config/login.config';
 import UI_TEXT from '../constants/uiText';
+import { APP_ROUTES } from '@/shared/config';
 
 const LoginPage = () => {
   const {
@@ -45,7 +46,10 @@ const LoginPage = () => {
             <p className="text-sm text-text-info">
               {UI_TEXT.login.needAccount}
             </p>
-            <Link to="/register" className="text-link text-sm hover:underline">
+            <Link
+              to={APP_ROUTES.REGISTER}
+              className="text-link text-sm hover:underline"
+            >
               {UI_TEXT.login.registerLink}
             </Link>
           </div>

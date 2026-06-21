@@ -9,6 +9,7 @@ import { Button, Input, Checkbox } from '@/shared/components';
 import { registerUser, clearAuthError } from '../store/authSlice';
 import registerSchema, { registerFields } from '../config/register.config';
 import UI_TEXT from '../constants/uiText';
+import { APP_ROUTES } from '@/shared/config';
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ const RegisterPage = () => {
       toast.success('Account created successfully');
 
       setTimeout(() => {
-        navigate('/login');
+        navigate(APP_ROUTES.LOGIN);
       }, 3000);
     }
   };
@@ -76,7 +77,10 @@ const RegisterPage = () => {
         </Button>
 
         <div className="mt-1">
-          <Link to="/login" className="text-link text-sm mt-4 hover:underline">
+          <Link
+            to={APP_ROUTES.LOGIN}
+            className="text-link text-sm mt-4 hover:underline"
+          >
             {UI_TEXT.register.hasAccount}
           </Link>
         </div>
