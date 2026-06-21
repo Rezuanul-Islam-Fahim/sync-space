@@ -1,13 +1,7 @@
+import { Link } from 'react-router';
 import { classNames } from '@/shared/utils';
 
-const Button = ({
-  children,
-  secondary = false,
-  className,
-  disabled = false,
-  onClick,
-  type = 'button',
-}) => {
+const LinkButton = ({ children, navigate, secondary = false, className }) => {
   const baseClassNames =
     'w-full text-text-header font-medium py-2.5 px-6 rounded-lg transition-colors duration-200 cursor-pointer';
   const secondaryClassNames = !secondary
@@ -20,15 +14,10 @@ const Button = ({
   );
 
   return (
-    <button
-      onClick={onClick}
-      className={combinedClassNames}
-      type={type}
-      disabled={disabled}
-    >
+    <Link to={navigate} className={combinedClassNames}>
       {children}
-    </button>
+    </Link>
   );
 };
 
-export default Button;
+export default LinkButton;

@@ -39,7 +39,9 @@ const LoginPage = () => {
           </Link>
         </div>
 
-        <Button className="mt-5">{UI_TEXT.login.loginLink}</Button>
+        <Button className="mt-5" type="submit">
+          {UI_TEXT.login.loginLink}
+        </Button>
 
         <div className="mt-2">
           <div className="flex flex-row gap-1">

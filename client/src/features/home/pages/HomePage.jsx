@@ -1,5 +1,5 @@
 import { IoMdChatbubbles } from 'react-icons/io';
-import { Button } from '@/shared/components';
+import { LinkButton } from '@/shared/components';
 import UI_TEXT from '../constants/uiText';
 import { APP_ROUTES } from '@/shared/config';
 
@@ -18,10 +18,12 @@ const HomePage = () => {
       </div>
 
       <div className="flex flex-col gap-4 pt-4">
-        <Button navigate={APP_ROUTES.LOGIN}>{UI_TEXT.loginButton}</Button>
-        <Button navigate={APP_ROUTES.REGISTER} secondary={true}>
+        <LinkButton navigate={APP_ROUTES.LOGIN}>
+          {UI_TEXT.loginButton}
+        </LinkButton>
+        <LinkButton navigate={APP_ROUTES.REGISTER} secondary={true}>
           {UI_TEXT.registerButton}
-        </Button>
+        </LinkButton>
       </div>
     </div>
   );

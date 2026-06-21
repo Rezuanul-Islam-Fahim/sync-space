@@ -72,7 +72,7 @@ const RegisterPage = () => {
           </div>
         )}
 
-        <Button disabled={isLoading}>
+        <Button type="submit" disabled={isLoading}>
           {!isLoading ? UI_TEXT.register.submit : UI_TEXT.register.submitting}
         </Button>
 

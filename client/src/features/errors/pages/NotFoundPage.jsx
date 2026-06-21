@@ -1,4 +1,4 @@
-import { Button } from '@/shared/components';
+import { LinkButton } from '@/shared/components';
 import { APP_ROUTES } from '@/shared/config';
 import { BiSolidErrorCircle } from 'react-icons/bi';
 import UI_TEXT from '../constants/uiText';
@@ -21,7 +21,9 @@ const NotFoundPage = () => {
           {UI_TEXT.error.notFound.description}
         </p>
 
-        <Button navigate={APP_ROUTES.HOME}>{UI_TEXT.error.returnHome}</Button>
+        <LinkButton navigate={APP_ROUTES.HOME}>
+          {UI_TEXT.error.returnHome}
+        </LinkButton>
       </div>
     </div>
   );
