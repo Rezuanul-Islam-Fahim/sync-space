@@ -1,5 +1,6 @@
 import React from 'react';
 import cn from '../utils/classNames';
+import FieldError from './FieldError';
 
 const Checkbox = React.forwardRef(
   ({ children, error, className, id, ...props }, ref) => {
@@ -40,15 +41,7 @@ const Checkbox = React.forwardRef(
             {children}
           </label>
         </div>
-        {error && (
-          <span
-            id={errorId}
-            role="alert"
-            className="text-xs text-danger italic font-medium"
-          >
-            {error.message}
-          </span>
-        )}
+        {error && <FieldError errorId={errorId}>{error.message}</FieldError>}
       </div>
     );
   }

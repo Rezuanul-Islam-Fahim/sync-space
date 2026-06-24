@@ -4,3 +4,4 @@ export { default as Checkbox } from './Checkbox';
 export { default as Input } from './Input';
 export { default as ErrorFallback } from './ErrorFallback';
 export { default as SuspenseFallback } from './SuspenseFallback';
+export { default as FieldError } from './FieldError';

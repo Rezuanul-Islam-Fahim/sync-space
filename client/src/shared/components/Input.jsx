@@ -1,4 +1,5 @@
 import React from 'react';
+import FieldError from './FieldError';
 
 const Input = React.forwardRef(
   ({ label, required = false, error, id, ...props }, ref) => {
@@ -30,15 +31,7 @@ const Input = React.forwardRef(
           {...props}
         />
 
-        {error && (
-          <span
-            id={errorId}
-            className="text-xs text-danger italic font-medium"
-            role="alert"
-          >
-            {error.message}
-          </span>
-        )}
+        {error && <FieldError errorId={errorId}>{error.message}</FieldError>}
       </div>
     );
   }
