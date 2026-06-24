@@ -2,7 +2,10 @@ import React from 'react';
 import cn from '../utils/classNames';
 
 const Checkbox = React.forwardRef(
-  ({ children, error, className, ...props }, ref) => {
+  ({ children, error, className, id, ...props }, ref) => {
+    const inputId = id || props.name;
+    const errorId = inputId ? `${inputId}-error` : undefined;
+
     return (
       <div className={cn('flex flex-col', className)}>
         <div className="flex items-center gap-3 mb-1">
@@ -10,8 +13,10 @@ const Checkbox = React.forwardRef(
             <input
               ref={ref}
               type="checkbox"
-              id={props.name}
+              id={inputId}
               {...props}
+              aria-invalid={error ? true : false}
+              aria-describedby={error ? errorId : undefined}
               className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-checkbox-border bg-content-bg checked:border-primary checked:bg-primary focus:outline-none transition-all"
             />
             <svg
@@ -29,14 +34,18 @@ const Checkbox = React.forwardRef(
             </svg>
           </div>
           <label
-            htmlFor={props.name}
+            htmlFor={inputId}
             className="text-xs text-text-muted leading-4 cursor-pointer select-none"
           >
             {children}
           </label>
         </div>
         {error && (
-          <span className="text-xs text-danger italic font-medium">
+          <span
+            id={errorId}
+            role="alert"
+            className="text-xs text-danger italic font-medium"
+          >
             {error.message}
           </span>
         )}
