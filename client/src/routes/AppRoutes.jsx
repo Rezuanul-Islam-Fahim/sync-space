@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { Route,Routes } from 'react-router';
+import { Route, Routes } from 'react-router';
 
 import { APP_ROUTES } from '@/shared/config';
 import { PreAuthLayout } from '@/shared/layouts';
