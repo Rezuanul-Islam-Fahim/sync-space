@@ -1,7 +1,9 @@
 import { IoMdChatbubbles } from 'react-icons/io';
+
 import { LinkButton } from '@/shared/components';
-import UI_TEXT from '../constants/uiText';
 import { APP_ROUTES } from '@/shared/config';
+
+import UI_TEXT from '../constants/uiText';
 
 const HomePage = () => {
   return (

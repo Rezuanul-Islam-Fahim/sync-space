@@ -1,6 +1,8 @@
+import { BiSolidErrorCircle } from 'react-icons/bi';
+
 import { LinkButton } from '@/shared/components';
 import { APP_ROUTES } from '@/shared/config';
-import { BiSolidErrorCircle } from 'react-icons/bi';
+
 import UI_TEXT from '../constants/uiText';
 
 const NotFoundPage = () => {

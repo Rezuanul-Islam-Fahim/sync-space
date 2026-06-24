@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import UI_TEXT from '../constants/uiText';
 
 export const registerFields = [

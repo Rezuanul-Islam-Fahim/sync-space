@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+
 import { classNames } from '@/shared/utils';
 
 const LinkButton = ({ children, navigate, secondary = false, className }) => {

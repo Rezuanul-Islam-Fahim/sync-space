@@ -1,11 +1,13 @@
-import { Link } from 'react-router';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import AuthWrapper from '../components/AuthWrapper';
+import { useForm } from 'react-hook-form';
+import { Link } from 'react-router';
+
 import { Button, Input } from '@/shared/components';
+import { APP_ROUTES } from '@/shared/config';
+
+import AuthWrapper from '../components/AuthWrapper';
 import { loginFields, loginSchema } from '../config/login.config';
 import UI_TEXT from '../constants/uiText';
-import { APP_ROUTES } from '@/shared/config';
 
 const LoginPage = () => {
   const {

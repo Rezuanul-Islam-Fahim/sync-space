@@ -1,5 +1,6 @@
-import Button from './Button';
 import { BiSolidErrorCircle } from 'react-icons/bi';
+
+import Button from './Button';
 
 const ErrorFallback = ({ error, resetErrorBoundary }) => {
   return (

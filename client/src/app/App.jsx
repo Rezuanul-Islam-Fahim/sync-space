@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
-import { BrowserRouter } from 'react-router';
 import { Toaster } from 'react-hot-toast';
+import { BrowserRouter } from 'react-router';
+
 import AppRoutes from '@/routes/AppRoutes';
 import { SuspenseFallback } from '@/shared/components';
 

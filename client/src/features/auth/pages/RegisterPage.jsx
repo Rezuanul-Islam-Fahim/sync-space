@@ -1,15 +1,17 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSelector, useDispatch } from 'react-redux';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, useNavigate } from 'react-router';
 import { toast } from 'react-hot-toast';
+import { useDispatch,useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router';
+
+import { Button, Checkbox,Input } from '@/shared/components';
+import { APP_ROUTES } from '@/shared/config';
+
 import AuthWrapper from '../components/AuthWrapper';
-import { Button, Input, Checkbox } from '@/shared/components';
-import { registerUser, clearAuthError } from '../store/authSlice';
 import registerSchema, { registerFields } from '../config/register.config';
 import UI_TEXT from '../constants/uiText';
-import { APP_ROUTES } from '@/shared/config';
+import { clearAuthError,registerUser } from '../store/authSlice';
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
