@@ -5,3 +5,5 @@ export const REGISTER_ALLOWED_FIELDS = [
     'displayName',
     'dateOfBirth',
 ];
+
+export const LOGIN_ALLOWED_FIELDS = ['email', 'password'];

@@ -1,24 +1,12 @@
 import { body } from 'express-validator';
-import { REGISTER_ALLOWED_FIELDS } from './auth.constant.js';
-
-const registerAllowedFieldsValidation = body().custom(payload => {
-    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
-        throw new Error('Request body must be an object');
-    }
-
-    const unknownFields = Object.keys(payload).filter(key => {
-        return !REGISTER_ALLOWED_FIELDS.includes(key);
-    });
-
-    if (unknownFields.length > 0) {
-        throw new Error('Unknown field(s): ' + unknownFields.join(', '));
-    }
-
-    return true;
-});
+import {
+    REGISTER_ALLOWED_FIELDS,
+    LOGIN_ALLOWED_FIELDS,
+} from './auth.constant.js';
+import allowedFieldsValidator from '../../utils/allowed-fields-validator.js';
 
 export const registerValidation = [
-    registerAllowedFieldsValidation,
+    allowedFieldsValidator(REGISTER_ALLOWED_FIELDS),
 
     body('email')
         .notEmpty()
@@ -54,4 +42,23 @@ export const registerValidation = [
         .bail()
         .isISO8601()
         .withMessage('Enter a valid date (YYYY-MM-DD)'),
+];
+
+export const loginValidation = [
+    allowedFieldsValidator(LOGIN_ALLOWED_FIELDS),
+
+    body('email')
+        .notEmpty()
+        .withMessage('Email is required')
+        .bail()
+        .isEmail()
+        .withMessage('Email must be valid')
+        .normalizeEmail(),
+
+    body('password')
+        .notEmpty()
+        .withMessage('Password is required')
+        .bail()
+        .isLength({ min: 6 })
+        .withMessage('Password must be at least 6 characters'),
 ];
