@@ -27,28 +27,7 @@ export class RegisterRequestDto {
     }
 }
 
-export class RegisterResponseDto {
-    constructor(user) {
-        this.id = user._id.toString();
-        this.email = user.email;
-        this.username = user.username;
-        this.displayName = user.displayName;
-        this.avatar = user.avatar;
-        this.bio = user.bio;
-        this.banner = user.banner;
-        this.bannerColor = user.bannerColor;
-        this.dateOfBirth = user.dateOfBirth;
-        this.isVerified = user.isVerified;
-        this.status = user.status;
-        this.lastOnline = user.lastOnline;
-        this.createdAt = user.createdAt;
-        this.updatedAt = user.updatedAt;
-    }
-
-    static from(user) {
-        return new RegisterResponseDto(user);
-    }
-}
+export { UserDto as RegisterResponseDto } from '../user/index.js';
 
 export class LoginRequestDto {
     constructor(data) {
