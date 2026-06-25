@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { userRepo } from '../user/index.js';
 import AppError from '../../common/app-error.js';
-import { CONFLICT } from '../../constants/http-status.js';
+import { CONFLICT, NOT_FOUND } from '../../constants/http-status.js';
 import config from '../../config/index.js';
 
 export const registerUser = async data => {
@@ -30,4 +30,14 @@ export const registerUser = async data => {
     });
 
     return newUser;
+};
+
+export const loginUser = async data => {
+    const userByEmail = await userRepo.findByEmail(data.email);
+
+    if (!userByEmail) {
+        throw new AppError('User with this email is not found', NOT_FOUND);
+    }
+
+    return true;
 };

@@ -2,7 +2,10 @@ import * as authService from './auth.service.js';
 import { RegisterRequestDto, RegisterResponseDto } from './auth.dto.js';
 import ApiResponse from '../../common/api-response.js';
 import { CREATED } from '../../constants/http-status.js';
-import { USER_CREATED } from '../../constants/app-messages.js';
+import {
+    USER_CREATED,
+    LOGIN_SUCCESSFUL,
+} from '../../constants/app-messages.js';
 import catchAsync from '../../common/catch-async.js';
 
 export const register = catchAsync(async (req, res) => {
@@ -15,5 +18,16 @@ export const register = catchAsync(async (req, res) => {
         data: responseDto,
         statusCode: CREATED,
         message: USER_CREATED,
+    });
+});
+
+export const login = catchAsync(async (req, res) => {
+    const userData = await authService.loginUser(req.body);
+
+    ApiResponse.success({
+        res,
+        data: userData,
+        statusCode: CREATED,
+        message: LOGIN_SUCCESSFUL,
     });
 });
