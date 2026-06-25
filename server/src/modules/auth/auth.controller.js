@@ -1,7 +1,7 @@
 import * as authService from './auth.service.js';
 import { RegisterRequestDto, RegisterResponseDto } from './auth.dto.js';
 import ApiResponse from '../../common/api-response.js';
-import { CREATED } from '../../constants/http-status.js';
+import { CREATED, OK } from '../../constants/http-status.js';
 import {
     USER_CREATED,
     LOGIN_SUCCESSFUL,
@@ -27,7 +27,7 @@ export const login = catchAsync(async (req, res) => {
     ApiResponse.success({
         res,
         data: userData,
-        statusCode: CREATED,
+        statusCode: OK,
         message: LOGIN_SUCCESSFUL,
     });
 });
