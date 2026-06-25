@@ -11,11 +11,12 @@ import {
 
 export const registerUser = async data => {
     const existingUserByEmail = await userRepo.findByEmail(data.email);
-    const existingUserByUsername = await userRepo.findByUsername(data.username);
 
     if (existingUserByEmail) {
         throw new AppError(EMAIL_ALREADY_REGISTERED, CONFLICT);
     }
+
+    const existingUserByUsername = await userRepo.findByUsername(data.username);
 
     if (existingUserByUsername) {
         throw new AppError(USERNAME_ALREADY_TAKEN, CONFLICT);
