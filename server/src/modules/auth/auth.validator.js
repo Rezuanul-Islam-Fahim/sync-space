@@ -4,44 +4,55 @@ import {
     LOGIN_ALLOWED_FIELDS,
 } from './auth.constant.js';
 import allowedFieldsValidator from '../../utils/allowed-fields-validator.js';
+import {
+    EMAIL_REQUIRED,
+    EMAIL_INVALID,
+    USERNAME_REQUIRED,
+    USERNAME_LENGTH_ERROR,
+    PASSWORD_REQUIRED,
+    PASSWORD_LENGTH_ERROR,
+    DISPLAY_NAME_INVALID,
+    DOB_REQUIRED,
+    DOB_INVALID,
+} from '../../constants/app-messages.js';
 
 export const registerValidation = [
     allowedFieldsValidator(REGISTER_ALLOWED_FIELDS),
 
     body('email')
         .notEmpty()
-        .withMessage('Email is required')
+        .withMessage(EMAIL_REQUIRED)
         .bail()
         .isEmail()
-        .withMessage('Email must be valid')
+        .withMessage(EMAIL_INVALID)
         .normalizeEmail(),
 
     body('username')
         .notEmpty()
-        .withMessage('Username is required')
+        .withMessage(USERNAME_REQUIRED)
         .bail()
         .trim()
         .isLength({ min: 3, max: 30 })
-        .withMessage('Username must be between 3 and 30 characters'),
+        .withMessage(USERNAME_LENGTH_ERROR),
 
     body('password')
         .notEmpty()
-        .withMessage('Password is required')
+        .withMessage(PASSWORD_REQUIRED)
         .bail()
         .isLength({ min: 6 })
-        .withMessage('Password must be at least 6 characters'),
+        .withMessage(PASSWORD_LENGTH_ERROR),
 
     body('displayName')
         .optional({ values: 'null' })
         .isString()
-        .withMessage('Display Name must be a valid string'),
+        .withMessage(DISPLAY_NAME_INVALID),
 
     body('dateOfBirth')
         .notEmpty()
-        .withMessage('Date-of-birth is required')
+        .withMessage(DOB_REQUIRED)
         .bail()
         .isISO8601()
-        .withMessage('Enter a valid date (YYYY-MM-DD)'),
+        .withMessage(DOB_INVALID),
 ];
 
 export const loginValidation = [
@@ -49,16 +60,16 @@ export const loginValidation = [
 
     body('email')
         .notEmpty()
-        .withMessage('Email is required')
+        .withMessage(EMAIL_REQUIRED)
         .bail()
         .isEmail()
-        .withMessage('Email must be valid')
+        .withMessage(EMAIL_INVALID)
         .normalizeEmail(),
 
     body('password')
         .notEmpty()
-        .withMessage('Password is required')
+        .withMessage(PASSWORD_REQUIRED)
         .bail()
         .isLength({ min: 6 })
-        .withMessage('Password must be at least 6 characters'),
+        .withMessage(PASSWORD_LENGTH_ERROR),
 ];
