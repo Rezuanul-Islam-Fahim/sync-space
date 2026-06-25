@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { userRepo } from '../user/index.js';
 import AppError from '../../common/app-error.js';
-import { CONFLICT, NOT_FOUND } from '../../constants/http-status.js';
+import { CONFLICT, UNAUTHORIZED } from '../../constants/http-status.js';
 import config from '../../config/index.js';
 
 export const registerUser = async data => {
@@ -33,11 +33,17 @@ export const registerUser = async data => {
 };
 
 export const loginUser = async data => {
-    const userByEmail = await userRepo.findByEmail(data.email);
+    const user = await userRepo.findByEmail(data.email);
 
-    if (!userByEmail) {
-        throw new AppError('User with this email is not found', NOT_FOUND);
+    if (!user) {
+        throw new AppError('Invalid Email or Password', UNAUTHORIZED);
     }
 
-    return true;
+    const isMatch = await bcrypt.compare(data.password, user.password);
+
+    if (!isMatch) {
+        throw new AppError('Invalid Email or Password', UNAUTHORIZED);
+    }
+
+    return user;
 };
