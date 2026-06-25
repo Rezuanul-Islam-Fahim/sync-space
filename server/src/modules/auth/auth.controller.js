@@ -1,5 +1,9 @@
 import * as authService from './auth.service.js';
-import { RegisterRequestDto, RegisterResponseDto } from './auth.dto.js';
+import {
+    LoginRequestDto,
+    RegisterRequestDto,
+    RegisterResponseDto,
+} from './auth.dto.js';
 import ApiResponse from '../../common/api-response.js';
 import { CREATED, OK } from '../../constants/http-status.js';
 import {
@@ -22,7 +26,8 @@ export const register = catchAsync(async (req, res) => {
 });
 
 export const login = catchAsync(async (req, res) => {
-    const userData = await authService.loginUser(req.body);
+    const requestDto = LoginRequestDto.from(req.body);
+    const userData = await authService.loginUser(requestDto);
 
     ApiResponse.success({
         res,

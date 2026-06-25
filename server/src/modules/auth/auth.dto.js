@@ -1,4 +1,7 @@
-import { REGISTER_ALLOWED_FIELDS } from './auth.constant.js';
+import {
+    LOGIN_ALLOWED_FIELDS,
+    REGISTER_ALLOWED_FIELDS,
+} from './auth.constant.js';
 import allowedFieldsFilter from '../../utils/allowed-fields-filter.js';
 
 export class RegisterRequestDto {
@@ -44,5 +47,18 @@ export class RegisterResponseDto {
 
     static from(user) {
         return new RegisterResponseDto(user);
+    }
+}
+
+export class LoginRequestDto {
+    constructor(data) {
+        this.email = data.email;
+        this.password = data.password;
+    }
+
+    static from(data) {
+        return new LoginRequestDto(
+            allowedFieldsFilter(data, LOGIN_ALLOWED_FIELDS)
+        );
     }
 }
