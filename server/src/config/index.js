@@ -16,13 +16,13 @@ const envSchema = Joi.object({
     CORS_ORIGINS: Joi.string().trim().default('*'),
     JWT_SECRET: Joi.string().required().description('JWT secret key'),
     JWT_EXPIRES_IN: Joi.string()
-        .required()
+        .default('15m')
         .description('JWT token expiration time'),
     JWT_REFRESH_SECRET: Joi.string()
         .required()
         .description('JWT refresh secret key'),
     JWT_REFRESH_EXPIRES_IN: Joi.string()
-        .required()
+        .default('7d')
         .description('Jwt refresh token expiration time'),
 }).unknown();
 
