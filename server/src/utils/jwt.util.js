@@ -14,3 +14,11 @@ export const generateToken = (userId, email) => {
 
     return { token, refreshToken };
 };
+
+export const verifyAccessToken = token => {
+    return jwt.verify(token, config.jwt.secret);
+};
+
+export const verifyRefreshToken = token => {
+    return jwt.verify(token, config.jwt.refreshSecret);
+};
