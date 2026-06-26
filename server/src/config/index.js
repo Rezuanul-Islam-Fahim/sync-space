@@ -14,6 +14,16 @@ const envSchema = Joi.object({
         .default('debug'),
     BCRYPT_SALT_ROUNDS: Joi.number().integer().min(4).max(31).default(10),
     CORS_ORIGINS: Joi.string().trim().default('*'),
+    JWT_SECRET: Joi.string().required().description('JWT secret key'),
+    JWT_EXPIRES_IN: Joi.string()
+        .required()
+        .description('JWT token expiration time'),
+    JWT_REFRESH_SECRET: Joi.string()
+        .required()
+        .description('JWT refresh secret key'),
+    JWT_REFRESH_EXPIRES_IN: Joi.string()
+        .required()
+        .description('Jwt refresh token expiration time'),
 }).unknown();
 
 const { error, value: envVars } = envSchema.validate(process.env);
@@ -49,6 +59,12 @@ const config = {
     },
     corsOrigins:
         parsedCorsOrigins.length > 1 ? parsedCorsOrigins : parsedCorsOrigins[0],
+    jwt: {
+        secret: envVars.JWT_SECRET,
+        expiresIn: envVars.JWT_EXPIRES_IN,
+        refreshSecret: envVars.JWT_REFRESH_SECRET,
+        refreshExpiresIn: envVars.JWT_REFRESH_EXPIRES_IN,
+    },
 };
 
 export const isDev = () => config.env === 'development';
