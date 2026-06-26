@@ -27,11 +27,11 @@ export const register = catchAsync(async (req, res) => {
 
 export const login = catchAsync(async (req, res) => {
     const requestDto = LoginRequestDto.from(req.body);
-    const userData = await authService.loginUser(requestDto);
+    const { user, tokens } = await authService.loginUser(requestDto);
 
     ApiResponse.success({
         res,
-        data: userData,
+        data: { user, tokens },
         statusCode: OK,
         message: LOGIN_SUCCESSFUL,
     });

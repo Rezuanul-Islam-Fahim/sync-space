@@ -8,6 +8,7 @@ import {
     USERNAME_ALREADY_TAKEN,
     INVALID_CREDENTIALS,
 } from '../../constants/app-messages.js';
+import { generateToken } from '../../utils/jwt.util.js';
 
 export const registerUser = async data => {
     const existingUserByEmail = await userRepo.findByEmail(data.email);
@@ -48,5 +49,7 @@ export const loginUser = async data => {
         throw new AppError(INVALID_CREDENTIALS, UNAUTHORIZED);
     }
 
-    return user;
+    const tokens = generateToken(user._id, user.email);
+
+    return { user, tokens };
 };
