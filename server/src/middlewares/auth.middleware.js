@@ -5,7 +5,7 @@ import {
     TOKEN_NOT_FOUND,
     USER_UNAVAILABLE,
 } from '../constants/app-messages.js';
-import { UNAUTHORIZED } from '../constants/http-status';
+import { UNAUTHORIZED } from '../constants/http-status.js';
 import { userRepo } from '../modules/user/index.js';
 import { verifyAccessToken } from '../utils/jwt.util.js';
 
