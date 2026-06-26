@@ -9,6 +9,10 @@ export const findByEmail = email => {
     return User.findOne({ email });
 };
 
+export const findById = id => {
+    return User.findOne({ id });
+};
+
 export const findByUsername = username => {
     return User.findOne({ username });
 };

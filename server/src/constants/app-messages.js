@@ -9,6 +9,10 @@ export const EMAIL_ALREADY_REGISTERED =
     'User with this email is already registered';
 export const USERNAME_ALREADY_TAKEN = 'Username is already taken';
 export const INVALID_CREDENTIALS = 'Invalid Email or Password';
+export const TOKEN_NOT_FOUND = 'Authentication token is missing. Please log in';
+export const INVALID_TOKEN = 'Invalid or expired authentication token';
+export const USER_UNAVAILABLE =
+    'The user belonging to this token no longer exists';
 
 // Validation messages
 export const EMAIL_REQUIRED = 'Email is required';
