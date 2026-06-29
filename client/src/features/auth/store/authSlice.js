@@ -15,7 +15,25 @@ export const registerUser = createAsyncThunk(
       const response = await authService.register(payload);
       return response.data;
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 'Internal error';
+      const errorMessage =
+        error.response?.data?.message || 'Internal Server Error';
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const loginUser = createAsyncThunk(
+  'auth/login',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await authService.login(payload);
+      const { user, tokens } = response.data.data;
+      localStorage.setItem('token', tokens.token);
+      localStorage.setItem('refreshToken', tokens.refreshToken);
+      return user;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || 'Internal Server Error';
       return rejectWithValue(errorMessage);
     }
   }
