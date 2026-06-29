@@ -46,10 +46,7 @@ export class LoginRequestDto {
 export class LoginResponseDto {
     constructor({ user, tokens }) {
         this.user = UserDto.from(user);
-        this.tokens = {
-            token: tokens.token,
-            refreshToken: tokens.refreshToken,
-        };
+        this.tokens = tokens;
     }
 
     static from(loginData) {
