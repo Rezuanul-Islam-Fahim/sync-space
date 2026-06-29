@@ -3,6 +3,7 @@ import {
     REGISTER_ALLOWED_FIELDS,
 } from './auth.constant.js';
 import allowedFieldsFilter from '../../utils/allowed-fields-filter.js';
+import { UserDto } from '../user/index.js';
 
 export class RegisterRequestDto {
     constructor(data) {
@@ -27,7 +28,7 @@ export class RegisterRequestDto {
     }
 }
 
-export { UserDto as RegisterResponseDto } from '../user/index.js';
+export { UserDto as RegisterResponseDto };
 
 export class LoginRequestDto {
     constructor(data) {
@@ -39,5 +40,19 @@ export class LoginRequestDto {
         return new LoginRequestDto(
             allowedFieldsFilter(data, LOGIN_ALLOWED_FIELDS)
         );
+    }
+}
+
+export class LoginResponseDto {
+    constructor({ user, tokens }) {
+        this.user = UserDto.from(user);
+        this.tokens = {
+            token: tokens.token,
+            refreshToken: tokens.refreshToken,
+        };
+    }
+
+    static from(loginData) {
+        return new LoginResponseDto(loginData);
     }
 }
