@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
 
-import { Button, Checkbox, Input } from '@/shared/components';
+import { Button, Checkbox, ErrorBox, Input } from '@/shared/components';
 import { APP_ROUTES } from '@/shared/config';
 
 import AuthWrapper from '../components/AuthWrapper';
@@ -32,10 +32,7 @@ const RegisterPage = () => {
 
     if (createdUser) {
       toast.success('Account created successfully');
-
-      setTimeout(() => {
-        navigate(APP_ROUTES.LOGIN);
-      }, 3000);
+      navigate(APP_ROUTES.LOGIN);
     }
   };
 
@@ -68,11 +65,7 @@ const RegisterPage = () => {
           <span className="text-link">{UI_TEXT.register.termsLink}</span>.
         </Checkbox>
 
-        {error && (
-          <div className="border border-danger/40 bg-danger/15 text-text-header px-4 py-2 rounded-md mb-5">
-            {error}
-          </div>
-        )}
+        {error && <ErrorBox>{error}</ErrorBox>}
 
         <Button type="submit" isLoading={isLoading}>
           {UI_TEXT.register.submit}

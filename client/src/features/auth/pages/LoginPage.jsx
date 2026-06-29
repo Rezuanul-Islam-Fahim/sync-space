@@ -1,24 +1,45 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router';
 
-import { Button, Input } from '@/shared/components';
+import { Button, ErrorBox, Input } from '@/shared/components';
 import { APP_ROUTES } from '@/shared/config';
 
 import AuthWrapper from '../components/AuthWrapper';
 import { loginFields, loginSchema } from '../config/login.config';
 import UI_TEXT from '../constants/uiText';
+import { clearAuthError, loginUser } from '../store/authSlice';
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
+  const { isLoading, error } = useSelector(state => state.auth);
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = () => {};
+  const onSubmit = async data => {
+    const loggedUser = await dispatch(loginUser(data)).unwrap();
+
+    if (loggedUser) {
+      toast.success('Login successful');
+    }
+  };
+
+  useEffect(() => {
+    const subscription = watch(() => {
+      if (error) dispatch(clearAuthError());
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch, error, dispatch]);
 
   return (
     <AuthWrapper header={UI_TEXT.login.header} className="sm:w-[500px]">
@@ -35,13 +56,15 @@ const LoginPage = () => {
           />
         ))}
 
-        <div className="mt-1">
+        <div className="mt-1 mb-2">
           <Link to="" className="text-link text-sm hover:underline">
             {UI_TEXT.login.forgotPassword}
           </Link>
         </div>
 
-        <Button className="mt-5" type="submit">
+        {error && <ErrorBox>{error}</ErrorBox>}
+
+        <Button className="mt-2" type="submit" isLoading={isLoading}>
           {UI_TEXT.login.loginLink}
         </Button>
 
