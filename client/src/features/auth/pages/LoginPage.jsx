@@ -41,6 +41,10 @@ const LoginPage = () => {
     return () => subscription.unsubscribe();
   }, [watch, error, dispatch]);
 
+  useEffect(() => {
+    dispatch(clearAuthError());
+  }, [dispatch]);
+
   return (
     <AuthWrapper header={UI_TEXT.login.header} className="sm:w-[500px]">
       <p className="text-sm text-text-info text-center">

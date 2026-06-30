@@ -44,6 +44,10 @@ const RegisterPage = () => {
     return () => subscription.unsubscribe();
   }, [watch, error, dispatch]);
 
+  useEffect(() => {
+    dispatch(clearAuthError());
+  }, [dispatch]);
+
   return (
     <AuthWrapper header={UI_TEXT.register.header} className="sm:w-[400px]">
       <form onSubmit={handleSubmit(onSubmit)}>
