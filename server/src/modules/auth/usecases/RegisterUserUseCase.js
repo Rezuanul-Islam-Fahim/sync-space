@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt';
-import AppError from '../../../common/app-error';
-import config from '../../../config';
+import AppError from '../../../common/app-error.js';
+import config from '../../../config/index.js';
 import {
     EMAIL_ALREADY_REGISTERED,
     USERNAME_ALREADY_TAKEN,
-} from '../../../constants/app-messages';
-import { CONFLICT } from '../../../constants/http-status';
+} from '../../../constants/app-messages.js';
+import { CONFLICT } from '../../../constants/http-status.js';
 
 export class RegisterUserUseCase {
     constructor({ userRepository }) {

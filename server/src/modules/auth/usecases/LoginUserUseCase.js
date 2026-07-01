@@ -1,10 +1,8 @@
 import bcrypt from 'bcrypt';
-import AppError from '../../../common/app-error';
-import {
-    INVALID_CREDENTIALS,
-    UNAUTHORIZED,
-} from '../../../constants/http-status';
-import { generateToken } from '../../../utils/jwt.util';
+import AppError from '../../../common/app-error.js';
+import { INVALID_CREDENTIALS } from '../../../constants/app-messages.js';
+import { UNAUTHORIZED } from '../../../constants/http-status.js';
+import { generateToken } from '../../../utils/jwt.util.js';
 
 export class LoginUserUseCase {
     constructor({ userRepository }) {

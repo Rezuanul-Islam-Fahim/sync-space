@@ -1,4 +1,3 @@
-import * as authService from './auth.service.js';
 import {
     LoginRequestDto,
     LoginResponseDto,
@@ -12,10 +11,11 @@ import {
     LOGIN_SUCCESSFUL,
 } from '../../constants/app-messages.js';
 import catchAsync from '../../common/catch-async.js';
+import { loginUserUseCase, registerUserUseCase } from './usecases/index.js';
 
 export const register = catchAsync(async (req, res) => {
     const requestDto = RegisterRequestDto.from(req.body);
-    const userData = await authService.registerUser(requestDto);
+    const userData = await registerUserUseCase.execute(requestDto);
     const responseDto = RegisterResponseDto.from(userData);
 
     ApiResponse.success({
@@ -28,7 +28,7 @@ export const register = catchAsync(async (req, res) => {
 
 export const login = catchAsync(async (req, res) => {
     const requestDto = LoginRequestDto.from(req.body);
-    const loginData = await authService.loginUser(requestDto);
+    const loginData = await loginUserUseCase.execute(requestDto);
     const responseDto = LoginResponseDto.from(loginData);
 
     ApiResponse.success({
