@@ -12,7 +12,7 @@ export class RegisterUserUseCase {
         this.userRepository = userRepository;
     }
 
-    async execute(data) {
+    execute = async data => {
         const existingUserByEmail = await this.userRepository.findByEmail(
             data.email
         );
@@ -40,5 +40,5 @@ export class RegisterUserUseCase {
         });
 
         return newUser;
-    }
+    };
 }

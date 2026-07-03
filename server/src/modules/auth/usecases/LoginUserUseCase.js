@@ -9,7 +9,7 @@ export class LoginUserUseCase {
         this.userRepository = userRepository;
     }
 
-    async execute(data) {
+    execute = async data => {
         const user = await this.userRepository.findByEmail(data.email);
 
         if (!user) {
@@ -25,5 +25,5 @@ export class LoginUserUseCase {
         const tokens = generateToken(user._id, user.email);
 
         return { user, tokens };
-    }
+    };
 }
