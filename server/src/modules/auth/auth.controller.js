@@ -11,30 +11,38 @@ import {
     LOGIN_SUCCESSFUL,
 } from '../../constants/app-messages.js';
 import catchAsync from '../../common/catch-async.js';
-import { loginUserUseCase, registerUserUseCase } from './usecases/index.js';
 
-export const register = catchAsync(async (req, res) => {
-    const requestDto = RegisterRequestDto.from(req.body);
-    const userData = await registerUserUseCase.execute(requestDto);
-    const responseDto = RegisterResponseDto.from(userData);
+class AuthController {
+    constructor({ loginUserUseCase, registerUserUseCase }) {
+        this.loginUserUseCase = loginUserUseCase;
+        this.registerUserUseCase = registerUserUseCase;
+    }
 
-    ApiResponse.success({
-        res,
-        data: responseDto,
-        statusCode: CREATED,
-        message: USER_CREATED,
+    register = catchAsync(async (req, res) => {
+        const requestDto = RegisterRequestDto.from(req.body);
+        const userData = await this.registerUserUseCase.execute(requestDto);
+        const responseDto = RegisterResponseDto.from(userData);
+
+        ApiResponse.success({
+            res,
+            data: responseDto,
+            statusCode: CREATED,
+            message: USER_CREATED,
+        });
     });
-});
 
-export const login = catchAsync(async (req, res) => {
-    const requestDto = LoginRequestDto.from(req.body);
-    const loginData = await loginUserUseCase.execute(requestDto);
-    const responseDto = LoginResponseDto.from(loginData);
+    login = catchAsync(async (req, res) => {
+        const requestDto = LoginRequestDto.from(req.body);
+        const loginData = await this.loginUserUseCase.execute(requestDto);
+        const responseDto = LoginResponseDto.from(loginData);
 
-    ApiResponse.success({
-        res,
-        data: responseDto,
-        statusCode: OK,
-        message: LOGIN_SUCCESSFUL,
+        ApiResponse.success({
+            res,
+            data: responseDto,
+            statusCode: OK,
+            message: LOGIN_SUCCESSFUL,
+        });
     });
-});
+}
+
+export default AuthController;
