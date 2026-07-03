@@ -1,18 +1,24 @@
-import { User } from './user.model.js';
+class UserRepository {
+    constructor(userModel) {
+        this.userModel = userModel;
+    }
 
-export const createUser = async userData => {
-    const newUser = new User(userData);
-    return await newUser.save();
-};
+    async createUser(userData) {
+        const newUser = new this.userModel(userData);
+        return await newUser.save();
+    }
 
-export const findByEmail = email => {
-    return User.findOne({ email });
-};
+    async findByEmail(email) {
+        return await this.userModel.findOne({ email });
+    }
 
-export const findById = id => {
-    return User.findOne({ _id: id });
-};
+    async findById(id) {
+        return await this.userModel.findOne({ _id: id });
+    }
 
-export const findByUsername = username => {
-    return User.findOne({ username });
-};
+    async findByUsername(username) {
+        return await this.userModel.findOne({ username });
+    }
+}
+
+export default UserRepository;

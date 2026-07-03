@@ -6,7 +6,7 @@ import {
     USER_UNAVAILABLE,
 } from '../constants/app-messages.js';
 import { UNAUTHORIZED } from '../constants/http-status.js';
-import { userRepo } from '../modules/user/index.js';
+import { userRepository } from '../modules/user/index.js';
 import { verifyAccessToken } from '../utils/jwt.util.js';
 
 export const authenticate = catchAsync(async (req, _, next) => {
@@ -26,7 +26,7 @@ export const authenticate = catchAsync(async (req, _, next) => {
     try {
         const decodedToken = verifyAccessToken(token);
 
-        const currentUser = await userRepo.findById(decodedToken.sub);
+        const currentUser = await userRepository.findById(decodedToken.sub);
 
         if (!currentUser) {
             throw new AppError(USER_UNAVAILABLE, UNAUTHORIZED);
