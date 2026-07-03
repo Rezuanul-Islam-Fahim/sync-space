@@ -3,22 +3,22 @@ class UserRepository {
         this.userModel = userModel;
     }
 
-    async createUser(userData) {
+    createUser = async userData => {
         const newUser = new this.userModel(userData);
         return await newUser.save();
-    }
+    };
 
-    async findByEmail(email) {
+    findByEmail = async email => {
         return await this.userModel.findOne({ email });
-    }
+    };
 
-    async findById(id) {
+    findById = async id => {
         return await this.userModel.findOne({ _id: id });
-    }
+    };
 
-    async findByUsername(username) {
+    findByUsername = async username => {
         return await this.userModel.findOne({ username });
-    }
+    };
 }
 
 export default UserRepository;
