@@ -32,6 +32,7 @@
         "hpp": "^0.2.3",
         "joi": "^18.0.2",
         "jsonwebtoken": "^9.0.3",
+        "migrate-mongo": "^14.0.7",
         "mongoose": "^8.20.0",
         "morgan": "^1.10.1",
         "uuid": "^14.0.0",
