@@ -1,8 +1,11 @@
 import express from 'express';
-import authRouter from '../modules/auth/index.js';
+import { makeAuthUseCases, makeAuthRouter } from '../modules/auth/index.js';
+import { userRepository } from '../modules/user/index.js';
 
 const router = express.Router();
 
-router.use('/auth', authRouter);
+const authUseCases = makeAuthUseCases({ userRepository });
+
+router.use('/auth', makeAuthRouter(authUseCases));
 
 export default router;
