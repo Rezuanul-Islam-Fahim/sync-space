@@ -1,6 +1,6 @@
 export class UserSnapshotDto {
     constructor(user) {
-        this.id = user._id ? user._id.toString() : user.id?.toString();
+        this.id = user.id?.toString();
         this.username = user.username;
         this.displayName = user.displayName;
         this.avatar = user.avatar;
