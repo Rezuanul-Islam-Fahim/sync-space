@@ -1,4 +1,7 @@
 import jwt from 'jsonwebtoken';
+import { INVALID_TOKEN } from '../../constants/app-messages.js';
+import AppError from '../../common/app-error.js';
+import { UNAUTHORIZED } from '../../constants/http-status.js';
 
 export default class JwtTokenService {
     constructor({ secret, expiresIn, refreshSecret, refreshExpiresIn }) {
@@ -8,7 +11,7 @@ export default class JwtTokenService {
         this.refreshExpiresIn = refreshExpiresIn;
     }
 
-    generateToken = (userId, email) => {
+    generateTokens = (userId, email) => {
         const payload = { sub: userId, email };
 
         const token = jwt.sign(payload, this.secret, {
@@ -23,10 +26,18 @@ export default class JwtTokenService {
     };
 
     verifyAccessToken = token => {
-        return jwt.verify(token, this.secret);
+        try {
+            return jwt.verify(token, this.secret);
+        } catch (error) {
+            throw new AppError(INVALID_TOKEN, UNAUTHORIZED);
+        }
     };
 
     verifyRefreshToken = token => {
-        return jwt.verify(token, this.refreshSecret);
+        try {
+            return jwt.verify(token, this.refreshSecret);
+        } catch (error) {
+            throw new AppError(INVALID_TOKEN, UNAUTHORIZED);
+        }
     };
 }

@@ -1,8 +1,6 @@
-import jwt from 'jsonwebtoken';
 import AppError from '../common/app-error.js';
 import catchAsync from '../common/catch-async.js';
 import {
-    INVALID_TOKEN,
     TOKEN_NOT_FOUND,
     USER_UNAVAILABLE,
 } from '../constants/app-messages.js';
@@ -23,29 +21,13 @@ export const makeAuthenticate = (userRepository, tokenService) =>
             throw new AppError(TOKEN_NOT_FOUND, UNAUTHORIZED);
         }
 
-        try {
-            const decodedToken = tokenService.verifyAccessToken(token);
-            const currentUser = await userRepository.findById(decodedToken.sub);
+        const decodedToken = tokenService.verifyAccessToken(token);
+        const currentUser = await userRepository.findById(decodedToken.sub);
 
-            if (!currentUser) {
-                throw new AppError(USER_UNAVAILABLE, UNAUTHORIZED);
-            }
-
-            req.user = currentUser;
-            next();
-        } catch (err) {
-            if (err instanceof AppError) {
-                throw err;
-            }
-
-            if (
-                err instanceof jwt.JsonWebTokenError ||
-                err instanceof jwt.TokenExpiredError ||
-                err instanceof jwt.NotBeforeError
-            ) {
-                throw new AppError(INVALID_TOKEN, UNAUTHORIZED);
-            }
-
-            throw err;
+        if (!currentUser) {
+            throw new AppError(USER_UNAVAILABLE, UNAUTHORIZED);
         }
+
+        req.user = currentUser;
+        next();
     });
