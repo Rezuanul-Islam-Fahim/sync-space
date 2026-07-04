@@ -1,3 +1,4 @@
+import jwt from 'jwt';
 import AppError from '../common/app-error.js';
 import catchAsync from '../common/catch-async.js';
 import {
@@ -25,7 +26,6 @@ export const makeAuthenticate = userRepository =>
 
         try {
             const decodedToken = verifyAccessToken(token);
-
             const currentUser = await userRepository.findById(decodedToken.sub);
 
             if (!currentUser) {
@@ -35,6 +35,18 @@ export const makeAuthenticate = userRepository =>
             req.user = currentUser;
             next();
         } catch (err) {
-            throw new AppError(INVALID_TOKEN, UNAUTHORIZED);
+            if (err instanceof AppError) {
+                throw err;
+            }
+
+            if (
+                err instanceof jwt.JsonWebTokenError ||
+                err instanceof jwt.TokenExpiredError ||
+                err instanceof jwt.NotBeforeError
+            ) {
+                throw new AppError(INVALID_TOKEN, UNAUTHORIZED);
+            }
+
+            throw err;
         }
     });
