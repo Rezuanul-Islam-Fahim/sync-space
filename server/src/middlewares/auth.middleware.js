@@ -7,9 +7,8 @@ import {
     USER_UNAVAILABLE,
 } from '../constants/app-messages.js';
 import { UNAUTHORIZED } from '../constants/http-status.js';
-import { verifyAccessToken } from '../utils/jwt.util.js';
 
-export const makeAuthenticate = userRepository =>
+export const makeAuthenticate = (userRepository, tokenService) =>
     catchAsync(async (req, _, next) => {
         let token;
 
@@ -25,7 +24,7 @@ export const makeAuthenticate = userRepository =>
         }
 
         try {
-            const decodedToken = verifyAccessToken(token);
+            const decodedToken = tokenService.verifyAccessToken(token);
             const currentUser = await userRepository.findById(decodedToken.sub);
 
             if (!currentUser) {

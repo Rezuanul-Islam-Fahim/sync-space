@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt';
 import AppError from '../../../common/app-error.js';
 import config from '../../../config/index.js';
 import {
@@ -8,8 +7,9 @@ import {
 import { CONFLICT } from '../../../constants/http-status.js';
 
 export class RegisterUserUseCase {
-    constructor({ userRepository }) {
+    constructor({ userRepository, passwordHasher }) {
         this.userRepository = userRepository;
+        this.passwordHasher = passwordHasher;
     }
 
     execute = async data => {
@@ -29,7 +29,7 @@ export class RegisterUserUseCase {
             throw new AppError(USERNAME_ALREADY_TAKEN, CONFLICT);
         }
 
-        const hashedPassword = await bcrypt.hash(
+        const hashedPassword = await this.passwordHasher.hash(
             data.password,
             config.auth.saltRounds
         );

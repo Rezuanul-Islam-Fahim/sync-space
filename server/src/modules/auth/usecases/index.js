@@ -1,7 +1,18 @@
 import { LoginUserUseCase } from './LoginUserUseCase.js';
 import { RegisterUserUseCase } from './RegisterUserUseCase.js';
 
-export const makeAuthUseCases = ({ userRepository }) => ({
-    loginUserUseCase: new LoginUserUseCase({ userRepository }),
-    registerUserUseCase: new RegisterUserUseCase({ userRepository }),
+export const makeAuthUseCases = ({
+    userRepository,
+    passwordHasher,
+    tokenService,
+}) => ({
+    loginUserUseCase: new LoginUserUseCase({
+        userRepository,
+        passwordHasher,
+        tokenService,
+    }),
+    registerUserUseCase: new RegisterUserUseCase({
+        userRepository,
+        passwordHasher,
+    }),
 });

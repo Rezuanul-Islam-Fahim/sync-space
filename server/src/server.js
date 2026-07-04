@@ -6,19 +6,26 @@ import { AuthController, makeAuthUseCases } from './modules/auth/index.js';
 import { UserRepository, User } from './modules/user/index.js';
 import makeRoutes from './routes/index.js';
 import { makeAuthenticate } from './middlewares/auth.middleware.js';
+import BcryptPasswordHasher from './infrastructure/security/bcrypt-password-hasher.js';
+import JwtTokenService from './infrastructure/security/jwt-token-service.js';
 
 const PORT = config.port;
 
 const createContainer = () => {
     const userRepository = new UserRepository(User);
+    const passwordHasher = new BcryptPasswordHasher();
+    const tokenService = new JwtTokenService(config.jwt);
+
     const { loginUserUseCase, registerUserUseCase } = makeAuthUseCases({
         userRepository,
+        passwordHasher,
+        tokenService,
     });
     const authController = new AuthController({
         loginUserUseCase,
         registerUserUseCase,
     });
-    const authenticate = makeAuthenticate(userRepository);
+    const authenticate = makeAuthenticate(userRepository, tokenService);
 
     return { authController, authenticate };
 };

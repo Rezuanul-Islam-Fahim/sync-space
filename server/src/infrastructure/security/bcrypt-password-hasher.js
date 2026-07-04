@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 
-export class BcryptPasswordHasher {
+export default class BcryptPasswordHasher {
     hash = async (password, saltRounds) => {
         return await bcrypt.hash(password, saltRounds);
     };
