@@ -1,10 +1,13 @@
-const toPlainObject = value => {
+const toRawObject = value => {
     if (!value) return null;
-    return typeof value.toObject === 'function' ? value.toObject() : value;
+
+    return typeof value.toObject === 'function'
+        ? value.toObject({ transform: false })
+        : value;
 };
 
 const toUserEntity = value => {
-    const user = toPlainObject(value);
+    const user = toRawObject(value);
     if (!user) return null;
 
     return {
@@ -26,7 +29,7 @@ const toUserEntity = value => {
 };
 
 const toAuthUserEntity = value => {
-    const user = toPlainObject(value);
+    const user = toRawObject(value);
     if (!user) return null;
 
     return {

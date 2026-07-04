@@ -25,8 +25,10 @@ export class LoginUserUseCase {
             throw new AppError(INVALID_CREDENTIALS, UNAUTHORIZED);
         }
 
-        const tokens = this.tokenService.generateTokens(user._id, user.email);
+        const tokens = this.tokenService.generateTokens(user.id, user.email);
 
-        return { user, tokens };
+        const { password: _password, ...safeUser } = user;
+
+        return { user: safeUser, tokens };
     };
 }
