@@ -1,6 +1,3 @@
-import { User } from './user.model.js';
-export { User };
+export { User } from './user.model.js';
 export { UserSnapshotDto, UserDto } from './user.dto.js';
-
-import UserRepository from './user.repository.js';
-export const userRepository = new UserRepository(User);
+export { default as UserRepository } from './user.repository.js';

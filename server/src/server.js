@@ -2,12 +2,31 @@ import createApp from './app.js';
 import { initDB, closeDB } from './infrastructure/database/connection.js';
 import config from './config/index.js';
 import logger from './utils/logger.js';
+import { AuthController, makeAuthUseCases } from './modules/auth/index.js';
+import { UserRepository, User } from './modules/user/index.js';
+import makeRoutes from './routes/index.js';
 
 const PORT = config.port;
 
+const createContainer = () => {
+    const userRepository = new UserRepository(User);
+    const { loginUserUseCase, registerUserUseCase } = makeAuthUseCases({
+        userRepository,
+    });
+    const authController = new AuthController({
+        loginUserUseCase,
+        registerUserUseCase,
+    });
+
+    return { authController };
+};
+
 const start = async () => {
     await initDB();
-    const app = createApp();
+
+    const container = createContainer();
+    const router = makeRoutes(container);
+    const app = createApp({ router });
 
     const server = app.listen(PORT, () => {
         logger.info(`Server started on port: ${PORT}`);
