@@ -1,4 +1,4 @@
-import jwt from 'jwt';
+import jwt from 'jsonwebtoken';
 import AppError from '../common/app-error.js';
 import catchAsync from '../common/catch-async.js';
 import {
