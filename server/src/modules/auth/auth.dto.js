@@ -11,14 +11,7 @@ export class RegisterRequestDto {
         this.username = data.username;
         this.password = data.password;
         this.displayName = data.displayName;
-        this.avatar = data.avatar;
-        this.bio = data.bio;
-        this.banner = data.banner;
-        this.bannerColor = data.bannerColor;
         this.dateOfBirth = data.dateOfBirth;
-        this.isVerified = data.isVerified;
-        this.status = data.status;
-        this.lastOnline = data.lastOnline;
     }
 
     static from(body) {
