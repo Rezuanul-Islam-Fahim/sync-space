@@ -6,26 +6,28 @@ const toRawObject = value => {
         : value;
 };
 
+const mapUserFields = user => ({
+    id: (user._id ?? user.id)?.toString(),
+    email: user.email,
+    username: user.username,
+    displayName: user.displayName,
+    avatar: user.avatar,
+    bio: user.bio,
+    banner: user.banner,
+    bannerColor: user.bannerColor,
+    dateOfBirth: user.dateOfBirth,
+    isVerified: user.isVerified,
+    status: user.status,
+    lastOnline: user.lastOnline,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+});
+
 const toUserEntity = value => {
     const user = toRawObject(value);
     if (!user) return null;
 
-    return {
-        id: (user._id ?? user.id)?.toString(),
-        email: user.email,
-        username: user.username,
-        displayName: user.displayName,
-        avatar: user.avatar,
-        bio: user.bio,
-        banner: user.banner,
-        bannerColor: user.bannerColor,
-        dateOfBirth: user.dateOfBirth,
-        isVerified: user.isVerified,
-        status: user.status,
-        lastOnline: user.lastOnline,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-    };
+    return mapUserFields(user);
 };
 
 const toAuthUserEntity = value => {
@@ -33,7 +35,7 @@ const toAuthUserEntity = value => {
     if (!user) return null;
 
     return {
-        ...toUserEntity(user),
+        ...mapUserFields(user),
         password: user.password,
     };
 };
