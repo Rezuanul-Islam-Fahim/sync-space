@@ -1,5 +1,4 @@
 import AppError from '../../../common/app-error.js';
-import config from '../../../config/index.js';
 import {
     EMAIL_ALREADY_REGISTERED,
     USERNAME_ALREADY_TAKEN,
@@ -7,9 +6,10 @@ import {
 import { CONFLICT } from '../../../constants/http-status.js';
 
 export class RegisterUserUseCase {
-    constructor({ userRepository, passwordHasher }) {
+    constructor({ userRepository, passwordHasher, saltRounds }) {
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
+        this.saltRounds = saltRounds;
     }
 
     execute = async data => {
@@ -31,7 +31,7 @@ export class RegisterUserUseCase {
 
         const hashedPassword = await this.passwordHasher.hash(
             data.password,
-            config.auth.saltRounds
+            this.saltRounds
         );
 
         const newUser = await this.userRepository.createUser({

@@ -5,6 +5,7 @@ export const makeAuthUseCases = ({
     userRepository,
     passwordHasher,
     tokenService,
+    saltRounds,
 }) => ({
     loginUserUseCase: new LoginUserUseCase({
         userRepository,
@@ -14,5 +15,6 @@ export const makeAuthUseCases = ({
     registerUserUseCase: new RegisterUserUseCase({
         userRepository,
         passwordHasher,
+        saltRounds,
     }),
 });

@@ -15,11 +15,13 @@ const createContainer = () => {
     const userRepository = new UserRepository(User);
     const passwordHasher = new BcryptPasswordHasher();
     const tokenService = new JwtTokenService(config.jwt);
+    const saltRounds = config.auth.saltRounds;
 
     const { loginUserUseCase, registerUserUseCase } = makeAuthUseCases({
         userRepository,
         passwordHasher,
         tokenService,
+        saltRounds,
     });
     const authController = new AuthController({
         loginUserUseCase,
