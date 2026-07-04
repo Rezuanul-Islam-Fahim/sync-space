@@ -12,7 +12,8 @@
         "format:check": "prettier \"src/**/*.js\" \"*.{js,json,md}\" --check",
         "db:migrate": "migrate-mongo up",
         "db:migrate:down": "migrate-mongo down",
-        "db:migrate:status": "migrate-mongo status"
+        "db:migrate:status": "migrate-mongo status",
+        "db:seed": "node src/infrastructure/database/seeds/seeder.js"
     },
     "keywords": [],
     "author": "Rezuanul Islam Fahim",
