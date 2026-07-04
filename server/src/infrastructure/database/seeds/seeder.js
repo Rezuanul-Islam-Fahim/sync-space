@@ -14,7 +14,7 @@ const runSeeder = async () => {
 
         const seedUsers = await getSeedUsers();
         logger.info(`Inserting ${seedUsers.length} seed users...`);
-        User.insertMany(seedUsers);
+        await User.insertMany(seedUsers);
 
         logger.info('Database seeded successfully!');
     } catch (err) {
