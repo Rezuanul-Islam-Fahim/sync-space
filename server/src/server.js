@@ -5,6 +5,7 @@ import logger from './utils/logger.js';
 import { AuthController, makeAuthUseCases } from './modules/auth/index.js';
 import { UserRepository, User } from './modules/user/index.js';
 import makeRoutes from './routes/index.js';
+import { makeAuthenticate } from './middlewares/auth.middleware.js';
 
 const PORT = config.port;
 
@@ -17,8 +18,9 @@ const createContainer = () => {
         loginUserUseCase,
         registerUserUseCase,
     });
+    const authenticate = makeAuthenticate(userRepository);
 
-    return { authController };
+    return { authController, authenticate };
 };
 
 const start = async () => {
