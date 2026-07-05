@@ -1,5 +1,5 @@
-import logger from '../utils/logger.js';
-import ApiResponse from '../common/api-response.js';
+import logger from '../infrastructure/logger/logger.js';
+import ApiResponse from '../common/responses/api-response.js';
 import { INTERNAL_SERVER_ERROR } from '../constants/http-status.js';
 import { DEFAULT_ERROR } from '../constants/app-messages.js';
 import { isDev } from '../config/index.js';

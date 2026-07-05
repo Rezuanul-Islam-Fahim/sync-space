@@ -1,4 +1,4 @@
-import AppError from '../../../common/app-error.js';
+import AppError from '../../../common/errors/app-error.js';
 import { INVALID_CREDENTIALS } from '../../../constants/app-messages.js';
 import { UNAUTHORIZED } from '../../../constants/http-status.js';
 

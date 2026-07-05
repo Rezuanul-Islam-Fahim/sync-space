@@ -1,4 +1,4 @@
-import logger from '../../../utils/logger.js';
+import logger from '../../logger/logger.js';
 import { closeDB, initDB } from '../connection.js';
 import { User } from '../../../modules/user/index.js';
 import { getSeedUsers } from './user.seed.js';

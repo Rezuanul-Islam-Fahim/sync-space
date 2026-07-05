@@ -1,7 +1,7 @@
 import createApp from './app.js';
 import { initDB, closeDB } from './infrastructure/database/connection.js';
 import config from './config/index.js';
-import logger from './utils/logger.js';
+import logger from './infrastructure/logger/logger.js';
 import { AuthController, makeAuthUseCases } from './modules/auth/index.js';
 import { UserRepository, User } from './modules/user/index.js';
 import makeRoutes from './routes/index.js';

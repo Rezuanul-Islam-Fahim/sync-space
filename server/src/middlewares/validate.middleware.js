@@ -1,5 +1,5 @@
 import { validationResult } from 'express-validator';
-import AppError from '../common/app-error.js';
+import AppError from '../common/errors/app-error.js';
 import { BAD_REQUEST } from '../constants/http-status.js';
 
 const validate = (req, res, next) => {

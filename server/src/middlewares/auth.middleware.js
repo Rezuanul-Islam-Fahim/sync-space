@@ -1,4 +1,4 @@
-import AppError from '../common/app-error.js';
+import AppError from '../common/errors/app-error.js';
 import catchAsync from '../common/catch-async.js';
 import {
     TOKEN_NOT_FOUND,

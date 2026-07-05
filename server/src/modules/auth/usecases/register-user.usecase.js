@@ -1,4 +1,4 @@
-import AppError from '../../../common/app-error.js';
+import AppError from '../../../common/errors/app-error.js';
 import {
     EMAIL_ALREADY_REGISTERED,
     USERNAME_ALREADY_TAKEN,
