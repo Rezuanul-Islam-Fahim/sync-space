@@ -2,61 +2,46 @@ import express from 'express';
 import config from './config/index.js';
 import createApp from './app.js';
 
+// ── Infrastructure ────────────────────────────────────────────────────────────
 import { UserModel } from './infrastructure/database/models/user.model.js';
 import { MongoUserRepository } from './infrastructure/repositories/index.js';
 import {
     BcryptPasswordHasher,
     JwtTokenService,
 } from './infrastructure/security/index.js';
+
+// ── Shared middlewares ────────────────────────────────────────────────────────
 import { makeAuthenticate } from './shared/middlewares/auth.middleware.js';
 
-// Auth Module
-import {
-    AuthController,
-    LoginUserUseCase,
-    RegisterUserUseCase,
-    createAuthRouter,
-} from './modules/auth/index.js';
+// ── Module factories ──────────────────────────────────────────────────────────
+import { createAuthModule } from './modules/auth/index.js';
 
 export const composeDependencies = () => {
-    // 1. Instantiating Outbound Adapters
+    // 1. Outbound adapters (infrastructure implementations)
     const userRepository = new MongoUserRepository(UserModel);
     const passwordHasher = new BcryptPasswordHasher();
     const tokenService = new JwtTokenService(config.jwt);
     const saltRounds = config.auth.saltRounds;
 
-    // 2. Instantiating Use Cases (injecting adapters through ports)
-    const loginUserUseCase = new LoginUserUseCase({
-        userRepository,
-        passwordHasher,
-        tokenService,
-    });
-    const registerUserUseCase = new RegisterUserUseCase({
-        userRepository,
-        passwordHasher,
-        saltRounds,
-    });
+    // 2. Shared infrastructure bundle passed into every module
+    const infra = { userRepository, passwordHasher, tokenService, saltRounds };
 
-    // 3. Instantiating Controllers (Inbound Adapters)
-    const authController = new AuthController({
-        loginUserUseCase,
-        registerUserUseCase,
-    });
+    // 3. Module composition — each module wires its own internals
+    const authModule = createAuthModule(infra);
 
-    // 4. Instantiating Middlewares
+    // 4. Shared middlewares that cross module boundaries
     const authenticate = makeAuthenticate(userRepository, tokenService);
 
-    // 5. Explicit Route Wiring (Composition Root)
-    const authRouter = createAuthRouter(authController);
+    // 5. Route wiring — all routes versioned under /api/v1
+    const v1Router = express.Router();
+    v1Router.use('/auth', authModule.router);
+    // Future modules: v1Router.use('/users', userModule.router);
 
     const apiRouter = express.Router();
-    apiRouter.use('/auth', authRouter);
+    apiRouter.use('/v1', v1Router);
 
-    // 6. Instantiating Express App
+    // 6. Express app
     const app = createApp({ router: apiRouter });
 
-    return {
-        app,
-        authenticate,
-    };
+    return { app, authenticate };
 };

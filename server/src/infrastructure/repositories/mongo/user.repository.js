@@ -8,7 +8,8 @@ class MongoUserRepository extends UserRepositoryPort {
     }
 
     createUser = async userData => {
-        const newUser = new this.userModel(userData);
+        const persistenceData = UserMapper.toPersistence(userData);
+        const newUser = new this.userModel(persistenceData);
         const savedUser = await newUser.save();
 
         return UserMapper.toDomain(savedUser);

@@ -5,11 +5,12 @@ export default class ApiResponse {
         return res.status(statusCode).json({ statusCode, data, message });
     }
 
-    static error({ res, statusCode, message, errors, stack }) {
+    static error({ res, statusCode, message, errors, requestId, stack }) {
         return res.status(statusCode).json({
             statusCode,
             message,
             errors,
+            requestId,
             stack,
         });
     }

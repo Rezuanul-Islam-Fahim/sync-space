@@ -25,3 +25,8 @@ export const PASSWORD_LENGTH_ERROR = 'Password must be at least 6 characters';
 export const DISPLAY_NAME_INVALID = 'Display Name must be a valid string';
 export const DOB_REQUIRED = 'Date-of-birth is required';
 export const DOB_INVALID = 'Enter a valid date (YYYY-MM-DD)';
+
+// Database / infrastructure error messages
+export const DUPLICATE_FIELD_VALUE = field =>
+    `An account with this ${field} already exists`;
+export const INVALID_ID = 'Invalid resource identifier';
