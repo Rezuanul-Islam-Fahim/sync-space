@@ -49,6 +49,7 @@ export class RegisterUserUseCase {
             email: data.email,
             username: data.username,
             password: hashedPassword,
+            displayName: data.displayName,
             dateOfBirth: data.dateOfBirth,
         });
 
