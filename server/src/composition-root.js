@@ -2,9 +2,7 @@ import express from 'express';
 import config from './config/index.js';
 import createApp from './app.js';
 
-// Infrastructure & Adapters
-import { UserModel } from './modules/user/index.js';
-import UserRepository from './modules/user/user.repository.js';
+import { UserModel, UserRepository } from './modules/user/index.js';
 import BcryptPasswordHasher from './infrastructure/security/bcrypt-password-hasher.service.js';
 import JwtTokenService from './infrastructure/security/jwt-token.service.js';
 import { makeAuthenticate } from './middlewares/auth.middleware.js';

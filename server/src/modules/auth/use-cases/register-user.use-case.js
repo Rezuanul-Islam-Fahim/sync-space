@@ -4,7 +4,7 @@ import {
     USERNAME_ALREADY_TAKEN,
 } from '../../../constants/app-messages.constant.js';
 import { CONFLICT } from '../../../constants/http-status.constant.js';
-import { UserRepositoryPort } from '../../user/ports/user-repository.port.js';
+import { UserRepositoryPort } from '../../user/index.js';
 import { PasswordHasherPort } from '../ports/password-hasher.port.js';
 
 export class RegisterUserUseCase {
