@@ -1,4 +1,4 @@
-import ApiResponse from '../responses/api.response.js';
+import ApiResponse from '../response/api.response.js';
 import AppError from '../errors/app.error.js';
 import {
     BAD_REQUEST,

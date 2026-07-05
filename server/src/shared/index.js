@@ -1,6 +1,6 @@
 export { default as catchAsync } from './utils/catch-async.util.js';
 export { default as AppError } from './errors/app.error.js';
-export { default as ApiResponse } from './responses/api.response.js';
+export { default as ApiResponse } from './response/api.response.js';
 export { default as allowedFieldsFilter } from './utils/allowed-fields-filter.util.js';
 export { PasswordHasherPort } from './ports/password-hasher.port.js';
 export { TokenServicePort } from './ports/token-service.port.js';
