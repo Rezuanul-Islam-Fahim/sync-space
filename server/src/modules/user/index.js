@@ -9,3 +9,4 @@ export { FindUserByIdUseCase } from './application/use-cases/find-user-by-id.use
 export { FindUserByUsernameUseCase } from './application/use-cases/find-user-by-username.use-case.js';
 export { ValidateCredentialsUseCase } from './application/use-cases/validate-credentials.use-case.js';
 export { UserAuthAdapter } from './infrastructure/adapters/user-auth.adapter.js';
+export { composeUserModule } from './user.composition.js';

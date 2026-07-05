@@ -5,6 +5,7 @@ import {
     CONFLICT,
 } from '../../../../constants/index.js';
 import { AuthUserProviderPort } from '../ports/auth-user-provider.port.js';
+import { User } from '../../../user/index.js';
 
 export class RegisterUserUseCase {
     constructor({ authUserProvider, passwordHasher, saltRounds }) {
@@ -44,10 +45,14 @@ export class RegisterUserUseCase {
             this.saltRounds
         );
 
-        const newUser = await this.authUserProvider.createUser({
-            ...data,
+        const userEntity = new User({
+            email: data.email,
+            username: data.username,
             password: hashedPassword,
+            dateOfBirth: data.dateOfBirth,
         });
+
+        const newUser = await this.authUserProvider.createUser(userEntity);
 
         return newUser;
     };

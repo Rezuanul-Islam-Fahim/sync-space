@@ -4,15 +4,15 @@ export class User {
         email,
         username,
         password,
-        displayName,
-        avatar,
-        bio,
-        banner,
-        bannerColor,
+        displayName = null,
+        avatar = null,
+        bio = null,
+        banner = null,
+        bannerColor = '#5865F2',
         dateOfBirth,
-        isVerified,
-        status,
-        lastOnline,
+        isVerified = false,
+        status = 'offline',
+        lastOnline = null,
         createdAt,
         updatedAt,
     }) {
@@ -31,5 +31,12 @@ export class User {
         this.lastOnline = lastOnline;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        Object.freeze(this);
+    }
+
+    excludePassword() {
+        const props = { ...this };
+        delete props.password;
+        return new User(props);
     }
 }

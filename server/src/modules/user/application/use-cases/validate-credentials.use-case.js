@@ -33,7 +33,6 @@ export class ValidateCredentialsUseCase {
         }
 
         // Prevent password hash from leaving the user module
-        user.password = undefined;
-        return user;
+        return user.excludePassword();
     };
 }
