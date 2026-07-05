@@ -1,5 +1,5 @@
 import AppError from '../errors/app.error.js';
-import catchAsync from '../catch-async.js';
+import catchAsync from '../catch-async.util.js';
 import {
     TOKEN_NOT_FOUND,
     USER_UNAVAILABLE,

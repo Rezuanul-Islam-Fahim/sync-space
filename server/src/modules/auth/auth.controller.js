@@ -10,7 +10,7 @@ import {
     USER_CREATED,
     LOGIN_SUCCESSFUL,
 } from '../../constants/app-messages.constant.js';
-import catchAsync from '../../shared/catch-async.js';
+import catchAsync from '../../shared/catch-async.util.js';
 
 class AuthController {
     constructor({ loginUserUseCase, registerUserUseCase }) {

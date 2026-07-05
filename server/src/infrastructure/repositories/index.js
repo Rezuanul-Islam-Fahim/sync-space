@@ -1,1 +1,1 @@
-export { default as MongoUserRepository } from './mongo-user.repository.js';
+export { default as MongoUserRepository } from './mongo/user.repository.js';
