@@ -2,6 +2,7 @@ import winston from 'winston';
 import config from '../../../config/index.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { LoggerPort } from '../../ports/logger.port.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -37,29 +38,63 @@ const fileFormat = winston.format.combine(
     winston.format.json()
 );
 
-const logger = winston.createLogger({
-    level: config.logLevel,
-    levels,
-    transports: [
-        new winston.transports.Console({
-            format: consoleFormat,
-        }),
-        new winston.transports.File({
-            filename: path.join(__dirname, '../../../../logs/error.log'),
-            level: 'error',
-            format: fileFormat,
-        }),
-        new winston.transports.File({
-            filename: path.join(__dirname, '../../../../logs/combined.log'),
-            format: fileFormat,
-        }),
-    ],
-});
+class WinstonLoggerAdapter extends LoggerPort {
+    constructor() {
+        super();
+        this._logger = winston.createLogger({
+            level: config.logLevel,
+            levels,
+            transports: [
+                new winston.transports.Console({
+                    format: consoleFormat,
+                }),
+                new winston.transports.File({
+                    filename: path.join(
+                        __dirname,
+                        '../../../../logs/error.log'
+                    ),
+                    level: 'error',
+                    format: fileFormat,
+                }),
+                new winston.transports.File({
+                    filename: path.join(
+                        __dirname,
+                        '../../../../logs/combined.log'
+                    ),
+                    format: fileFormat,
+                }),
+            ],
+        });
+    }
 
-logger.stream = {
-    write: message => {
-        logger.http(message.trim());
-    },
-};
+    info(message, meta) {
+        this._logger.info(message, meta);
+    }
 
+    warn(message, meta) {
+        this._logger.warn(message, meta);
+    }
+
+    error(message, meta) {
+        this._logger.error(message, meta);
+    }
+
+    http(message, meta) {
+        this._logger.http(message, meta);
+    }
+
+    debug(message, meta) {
+        this._logger.debug(message, meta);
+    }
+
+    get stream() {
+        return {
+            write: message => {
+                this.http(message.trim());
+            },
+        };
+    }
+}
+
+const logger = new WinstonLoggerAdapter();
 export default logger;

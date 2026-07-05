@@ -1,5 +1,5 @@
 import { UserRepositoryPort } from '../../application/ports/user-repository.port.js';
-import { UserMapper } from '../../domain/user.mapper.js';
+import { UserMapper } from '../mappers/user.mapper.js';
 
 class UserRepository extends UserRepositoryPort {
     constructor(userModel) {

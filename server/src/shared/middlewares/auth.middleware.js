@@ -6,13 +6,15 @@ import {
     UNAUTHORIZED,
 } from '../../constants/index.js';
 
-import { FindUserByIdUseCase } from '../../modules/user/index.js';
 import { TokenServicePort } from '../ports/token-service.port.js';
 
 export const makeAuthenticate = (findUserByIdUseCase, tokenService) => {
-    if (!(findUserByIdUseCase instanceof FindUserByIdUseCase)) {
+    if (
+        !findUserByIdUseCase ||
+        typeof findUserByIdUseCase.execute !== 'function'
+    ) {
         throw new Error(
-            'makeAuthenticate: findUserByIdUseCase must implement FindUserByIdUseCase'
+            'makeAuthenticate: findUserByIdUseCase must be an object with an execute method'
         );
     }
     if (!(tokenService instanceof TokenServicePort)) {

@@ -1,7 +1,7 @@
 import {
     LOGIN_ALLOWED_FIELDS,
     REGISTER_ALLOWED_FIELDS,
-} from '../auth.constant.js';
+} from '../domain/auth.constant.js';
 import { allowedFieldsFilter } from '../../../shared/index.js';
 import { UserDto } from '../../user/index.js';
 

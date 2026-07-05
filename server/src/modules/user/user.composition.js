@@ -1,19 +1,24 @@
+import { UserModel } from './infrastructure/database/user.model.js';
+import UserRepository from './infrastructure/repositories/user.repository.js';
 import {
-    UserModel,
-    UserRepository,
     CreateUserUseCase,
     FindUserByEmailUseCase,
     FindUserByIdUseCase,
     FindUserByUsernameUseCase,
     ValidateCredentialsUseCase,
-    UserAuthAdapter,
 } from './index.js';
 
 /**
  * Composes the user module's dependencies.
  *
  * @param {{ passwordHasher: import('../../shared/ports/password-hasher.port.js').PasswordHasherPort }} deps
- * @returns {{ findUserByIdUseCase: FindUserByIdUseCase, authUserProvider: UserAuthAdapter }}
+ * @returns {{
+ *   findUserByIdUseCase: FindUserByIdUseCase,
+ *   createUserUseCase: CreateUserUseCase,
+ *   findUserByEmailUseCase: FindUserByEmailUseCase,
+ *   findUserByUsernameUseCase: FindUserByUsernameUseCase,
+ *   validateCredentialsUseCase: ValidateCredentialsUseCase
+ * }}
  */
 export const composeUserModule = ({ passwordHasher }) => {
     const userRepository = new UserRepository(UserModel);
@@ -31,15 +36,11 @@ export const composeUserModule = ({ passwordHasher }) => {
         passwordHasher,
     });
 
-    const authUserProvider = new UserAuthAdapter({
+    return {
         createUserUseCase,
         findUserByEmailUseCase,
+        findUserByIdUseCase,
         findUserByUsernameUseCase,
         validateCredentialsUseCase,
-    });
-
-    return {
-        findUserByIdUseCase,
-        authUserProvider,
     };
 };

@@ -5,6 +5,7 @@ import createApp from './app.js';
 // ── Infrastructure & Modules ──────────────────────────────────────────────────
 import { composeUserModule } from './modules/user/index.js';
 import { createAuthModule } from './modules/auth/index.js';
+import { UserProviderAdapter } from './modules/auth/infrastructure/adapters/user-provider.adapter.js';
 import {
     BcryptPasswordHasher,
     JwtTokenService,
@@ -20,8 +21,21 @@ export const composeDependencies = ({ logger }) => {
     const saltRounds = config.auth.saltRounds;
 
     // 2. Module Composition
-    const { findUserByIdUseCase, authUserProvider } = composeUserModule({
+    const {
+        findUserByIdUseCase,
+        createUserUseCase,
+        findUserByEmailUseCase,
+        findUserByUsernameUseCase,
+        validateCredentialsUseCase,
+    } = composeUserModule({
         passwordHasher,
+    });
+
+    const authUserProvider = new UserProviderAdapter({
+        createUserUseCase,
+        findUserByEmailUseCase,
+        findUserByUsernameUseCase,
+        validateCredentialsUseCase,
     });
 
     const authModule = createAuthModule({

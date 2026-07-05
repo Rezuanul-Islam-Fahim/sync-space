@@ -1,6 +1,6 @@
-import { AuthUserProviderPort } from '../../../auth/application/ports/auth-user-provider.port.js';
+import { AuthUserProviderPort } from '../../application/ports/auth-user-provider.port.js';
 
-export class UserAuthAdapter extends AuthUserProviderPort {
+export class UserProviderAdapter extends AuthUserProviderPort {
     constructor({
         createUserUseCase,
         findUserByEmailUseCase,

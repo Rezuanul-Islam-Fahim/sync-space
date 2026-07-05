@@ -2,7 +2,7 @@ import { body } from 'express-validator';
 import {
     REGISTER_ALLOWED_FIELDS,
     LOGIN_ALLOWED_FIELDS,
-} from '../auth.constant.js';
+} from '../domain/auth.constant.js';
 import { allowedFieldsValidator } from '../../../shared/index.js';
 import {
     EMAIL_REQUIRED,
