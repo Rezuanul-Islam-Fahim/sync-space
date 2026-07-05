@@ -5,12 +5,14 @@ import {
     CONFLICT,
     INTERNAL_SERVER_ERROR,
     DEFAULT_ERROR,
-    DUPLICATE_FIELD_VALUE,
-    INVALID_ID,
     UNAUTHORIZED,
     FORBIDDEN,
     NOT_FOUND,
 } from '../constants/index.js';
+import {
+    INVALID_ID,
+    formatDuplicateFieldError,
+} from '../infrastructure/database/database-errors.js';
 import { isDev } from '../../config/index.js';
 
 const errorCodeToHttpStatus = {
@@ -37,7 +39,7 @@ const handleCastError = err =>
 
 const handleDuplicateKeyError = err => {
     const field = Object.keys(err.keyValue)[0];
-    return new AppError(DUPLICATE_FIELD_VALUE(field), 'CONFLICT');
+    return new AppError(formatDuplicateFieldError(field), 'CONFLICT');
 };
 
 const errorNormalizers = [

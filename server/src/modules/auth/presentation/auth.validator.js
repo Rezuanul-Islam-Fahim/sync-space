@@ -9,7 +9,7 @@ import {
     DISPLAY_NAME_INVALID,
     DOB_REQUIRED,
     DOB_INVALID,
-} from '../../../shared/constants/index.js';
+} from '../domain/auth.constant.js';
 
 export const registerValidation = [
     body('email')

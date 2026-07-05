@@ -3,7 +3,7 @@ import {
     TokenGeneratorPort,
     PasswordHasherPort,
 } from '../../../../shared/index.js';
-import { INVALID_CREDENTIALS } from '../../../../shared/constants/index.js';
+import { INVALID_CREDENTIALS } from '../../domain/auth.constant.js';
 import { AuthUserReaderPort } from '../ports/auth-user-reader.port.js';
 
 export class LoginUserUseCase {

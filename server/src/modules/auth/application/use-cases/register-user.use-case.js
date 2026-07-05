@@ -2,7 +2,7 @@ import { AppError, PasswordHasherPort } from '../../../../shared/index.js';
 import {
     EMAIL_ALREADY_REGISTERED,
     USERNAME_ALREADY_TAKEN,
-} from '../../../../shared/constants/index.js';
+} from '../../domain/auth.constant.js';
 import { AuthUserReaderPort } from '../ports/auth-user-reader.port.js';
 import { AuthUserWriterPort } from '../ports/auth-user-writer.port.js';
 import { User } from '../../../user/index.js';
