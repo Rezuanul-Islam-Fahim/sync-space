@@ -3,9 +3,7 @@ import { User } from '../../domain/user.entity.js';
 const toRawObject = value => {
     if (!value) return null;
 
-    return typeof value.toObject === 'function'
-        ? value.toObject({ transform: false })
-        : value;
+    return typeof value.toObject === 'function' ? value.toObject() : value;
 };
 
 export class UserMapper {

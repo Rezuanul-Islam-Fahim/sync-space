@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { AppError, TokenServicePort } from '../../index.js';
-import { INVALID_TOKEN, UNAUTHORIZED } from '../../constants/index.js';
+import { INVALID_TOKEN } from '../../constants/index.js';
 
 export default class JwtTokenService extends TokenServicePort {
     constructor({ secret, expiresIn, refreshSecret, refreshExpiresIn }) {
@@ -13,7 +13,6 @@ export default class JwtTokenService extends TokenServicePort {
 
     generateTokens = (userId, email) => {
         const payload = { sub: userId, email };
-
         const token = jwt.sign(payload, this.secret, {
             expiresIn: this.expiresIn,
         });
@@ -29,7 +28,7 @@ export default class JwtTokenService extends TokenServicePort {
         try {
             return jwt.verify(token, this.secret);
         } catch (error) {
-            throw new AppError(INVALID_TOKEN, UNAUTHORIZED);
+            throw new AppError(INVALID_TOKEN, 'UNAUTHORIZED');
         }
     };
 
@@ -37,7 +36,7 @@ export default class JwtTokenService extends TokenServicePort {
         try {
             return jwt.verify(token, this.refreshSecret);
         } catch (error) {
-            throw new AppError(INVALID_TOKEN, UNAUTHORIZED);
+            throw new AppError(INVALID_TOKEN, 'UNAUTHORIZED');
         }
     };
 }

@@ -10,6 +10,9 @@ export const envSchema = Joi.object({
         .valid('error', 'warn', 'info', 'http', 'debug')
         .default('debug'),
     BCRYPT_SALT_ROUNDS: Joi.number().integer().min(4).max(31).default(10),
+    MONGODB_MAX_POOL_SIZE: Joi.number().integer().min(1).default(10),
+    MONGODB_SELECTION_TIMEOUT_MS: Joi.number().integer().min(0).default(5000),
+    MONGODB_SOCKET_TIMEOUT_MS: Joi.number().integer().min(0).default(45000),
     CORS_ORIGINS: Joi.string().trim().default('*'),
     JWT_SECRET: Joi.string().required().description('JWT secret key'),
     JWT_EXPIRES_IN: Joi.string()

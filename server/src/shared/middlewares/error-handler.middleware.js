@@ -7,8 +7,20 @@ import {
     DEFAULT_ERROR,
     DUPLICATE_FIELD_VALUE,
     INVALID_ID,
+    UNAUTHORIZED,
+    FORBIDDEN,
+    NOT_FOUND,
 } from '../constants/index.js';
 import { isDev } from '../../config/index.js';
+
+const errorCodeToHttpStatus = {
+    BAD_REQUEST,
+    UNAUTHORIZED,
+    FORBIDDEN,
+    NOT_FOUND,
+    CONFLICT,
+    INTERNAL_SERVER_ERROR,
+};
 
 // ── Mongoose / MongoDB error normalisers ─────────────────────────────────────
 
@@ -17,15 +29,15 @@ const handleValidationError = err => {
         acc[el.path] = el.message;
         return acc;
     }, {});
-    return new AppError(err.message, BAD_REQUEST, errors);
+    return new AppError(err.message, 'BAD_REQUEST', errors);
 };
 
 const handleCastError = err =>
-    new AppError(`${INVALID_ID}: ${err.value}`, BAD_REQUEST);
+    new AppError(`${INVALID_ID}: ${err.value}`, 'BAD_REQUEST');
 
 const handleDuplicateKeyError = err => {
     const field = Object.keys(err.keyValue)[0];
-    return new AppError(DUPLICATE_FIELD_VALUE(field), CONFLICT);
+    return new AppError(DUPLICATE_FIELD_VALUE(field), 'CONFLICT');
 };
 
 const errorNormalizers = [
@@ -52,7 +64,7 @@ export const makeErrorHandler = logger => (err, req, res, _next) => {
 
     const isOperational = error.isOperational;
     const statusCode = isOperational
-        ? error.statusCode || INTERNAL_SERVER_ERROR
+        ? errorCodeToHttpStatus[error.errorCode] || INTERNAL_SERVER_ERROR
         : INTERNAL_SERVER_ERROR;
     const message = isOperational ? error.message : DEFAULT_ERROR;
     const requestId = req.id;

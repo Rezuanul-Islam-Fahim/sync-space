@@ -1,8 +1,5 @@
 import { AppError, TokenServicePort } from '../../../../shared/index.js';
-import {
-    INVALID_CREDENTIALS,
-    UNAUTHORIZED,
-} from '../../../../shared/constants/index.js';
+import { INVALID_CREDENTIALS } from '../../../../shared/constants/index.js';
 import { AuthUserProviderPort } from '../ports/auth-user-provider.port.js';
 
 export class LoginUserUseCase {
@@ -28,7 +25,7 @@ export class LoginUserUseCase {
         );
 
         if (!user) {
-            throw new AppError(INVALID_CREDENTIALS, UNAUTHORIZED);
+            throw new AppError(INVALID_CREDENTIALS, 'UNAUTHORIZED');
         }
 
         const tokens = this.tokenService.generateTokens(user.id, user.email);

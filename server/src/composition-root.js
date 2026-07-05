@@ -21,20 +21,12 @@ export const composeDependencies = ({ logger }) => {
     const saltRounds = config.auth.saltRounds;
 
     // 2. Module Composition
-    const {
-        findUserByIdUseCase,
-        createUserUseCase,
-        findUserByEmailUseCase,
-        findUserByUsernameUseCase,
-        validateCredentialsUseCase,
-    } = composeUserModule({
+    const { userRepository, validateCredentialsUseCase } = composeUserModule({
         passwordHasher,
     });
 
     const authUserProvider = new UserProviderAdapter({
-        createUserUseCase,
-        findUserByEmailUseCase,
-        findUserByUsernameUseCase,
+        userRepository,
         validateCredentialsUseCase,
     });
 
@@ -46,7 +38,7 @@ export const composeDependencies = ({ logger }) => {
     });
 
     // 3. Shared middlewares
-    const authenticate = makeAuthenticate(findUserByIdUseCase, tokenService);
+    const authenticate = makeAuthenticate(userRepository, tokenService);
 
     // 4. Route wiring — all routes versioned under /api/v1
     const v1Router = express.Router();

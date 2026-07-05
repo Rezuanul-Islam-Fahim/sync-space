@@ -2,7 +2,6 @@ import { AppError, PasswordHasherPort } from '../../../../shared/index.js';
 import {
     EMAIL_ALREADY_REGISTERED,
     USERNAME_ALREADY_TAKEN,
-    CONFLICT,
 } from '../../../../shared/constants/index.js';
 import { AuthUserProviderPort } from '../ports/auth-user-provider.port.js';
 import { User } from '../../../user/index.js';
@@ -30,14 +29,14 @@ export class RegisterUserUseCase {
         );
 
         if (existingUserByEmail) {
-            throw new AppError(EMAIL_ALREADY_REGISTERED, CONFLICT);
+            throw new AppError(EMAIL_ALREADY_REGISTERED, 'CONFLICT');
         }
 
         const existingUserByUsername =
             await this.authUserProvider.findByUsername(data.username);
 
         if (existingUserByUsername) {
-            throw new AppError(USERNAME_ALREADY_TAKEN, CONFLICT);
+            throw new AppError(USERNAME_ALREADY_TAKEN, 'CONFLICT');
         }
 
         const hashedPassword = await this.passwordHasher.hash(

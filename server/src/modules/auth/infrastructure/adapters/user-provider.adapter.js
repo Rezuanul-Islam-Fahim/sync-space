@@ -1,29 +1,22 @@
 import { AuthUserProviderPort } from '../../application/ports/auth-user-provider.port.js';
 
 export class UserProviderAdapter extends AuthUserProviderPort {
-    constructor({
-        createUserUseCase,
-        findUserByEmailUseCase,
-        findUserByUsernameUseCase,
-        validateCredentialsUseCase,
-    }) {
+    constructor({ userRepository, validateCredentialsUseCase }) {
         super();
-        this.createUserUseCase = createUserUseCase;
-        this.findUserByEmailUseCase = findUserByEmailUseCase;
-        this.findUserByUsernameUseCase = findUserByUsernameUseCase;
+        this.userRepository = userRepository;
         this.validateCredentialsUseCase = validateCredentialsUseCase;
     }
 
     createUser = async userData => {
-        return this.createUserUseCase.execute(userData);
+        return this.userRepository.createUser(userData);
     };
 
     findByEmail = async email => {
-        return this.findUserByEmailUseCase.execute(email);
+        return this.userRepository.findByEmail(email);
     };
 
     findByUsername = async username => {
-        return this.findUserByUsernameUseCase.execute(username);
+        return this.userRepository.findByUsername(username);
     };
 
     validateCredentials = async (email, password) => {

@@ -1,20 +1,13 @@
 import AppError from '../errors/app.error.js';
 import catchAsync from '../utils/catch-async.util.js';
-import {
-    TOKEN_NOT_FOUND,
-    USER_UNAVAILABLE,
-    UNAUTHORIZED,
-} from '../constants/index.js';
+import { TOKEN_NOT_FOUND, USER_UNAVAILABLE } from '../constants/index.js';
 
 import { TokenServicePort } from '../ports/token-service.port.js';
 
-export const makeAuthenticate = (findUserByIdUseCase, tokenService) => {
-    if (
-        !findUserByIdUseCase ||
-        typeof findUserByIdUseCase.execute !== 'function'
-    ) {
+export const makeAuthenticate = (userRepository, tokenService) => {
+    if (!userRepository || typeof userRepository.findById !== 'function') {
         throw new Error(
-            'makeAuthenticate: findUserByIdUseCase must be an object with an execute method'
+            'makeAuthenticate: userRepository must be an object with a findById method'
         );
     }
     if (!(tokenService instanceof TokenServicePort)) {
@@ -33,14 +26,14 @@ export const makeAuthenticate = (findUserByIdUseCase, tokenService) => {
         }
 
         if (!token) {
-            throw new AppError(TOKEN_NOT_FOUND, UNAUTHORIZED);
+            throw new AppError(TOKEN_NOT_FOUND, 'UNAUTHORIZED');
         }
 
         const decodedToken = tokenService.verifyAccessToken(token);
-        const currentUser = await findUserByIdUseCase.execute(decodedToken.sub);
+        const currentUser = await userRepository.findById(decodedToken.sub);
 
         if (!currentUser) {
-            throw new AppError(USER_UNAVAILABLE, UNAUTHORIZED);
+            throw new AppError(USER_UNAVAILABLE, 'UNAUTHORIZED');
         }
 
         req.user = currentUser;

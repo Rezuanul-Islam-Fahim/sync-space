@@ -15,6 +15,9 @@ const config = {
     env: envVars.NODE_ENV,
     db: {
         uri: envVars.MONGODB_URI,
+        maxPoolSize: envVars.MONGODB_MAX_POOL_SIZE,
+        serverSelectionTimeoutMS: envVars.MONGODB_SELECTION_TIMEOUT_MS,
+        socketTimeoutMS: envVars.MONGODB_SOCKET_TIMEOUT_MS,
     },
     logLevel: envVars.LOG_LEVEL,
     auth: {

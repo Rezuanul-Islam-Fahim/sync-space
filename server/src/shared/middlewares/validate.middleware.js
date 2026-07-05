@@ -1,6 +1,5 @@
 import { validationResult } from 'express-validator';
 import AppError from '../errors/app.error.js';
-import { BAD_REQUEST } from '../constants/index.js';
 
 const validate = (req, res, next) => {
     const errors = validationResult(req);
@@ -10,7 +9,7 @@ const validate = (req, res, next) => {
             .array()
             .map(obj => `${obj.msg}.`)
             .join(' ');
-        const error = new AppError(messageStr, BAD_REQUEST, errors.array());
+        const error = new AppError(messageStr, 'BAD_REQUEST', errors.array());
 
         return next(error);
     }

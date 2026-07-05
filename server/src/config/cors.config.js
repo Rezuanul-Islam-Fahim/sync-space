@@ -16,7 +16,9 @@ export const parseCorsOrigins = originsStr => {
         );
     }
 
-    return parsedCorsOrigins.length > 1
-        ? parsedCorsOrigins
-        : parsedCorsOrigins[0];
+    if (parsedCorsOrigins.length === 1 && parsedCorsOrigins[0] === '*') {
+        return '*';
+    }
+
+    return parsedCorsOrigins;
 };

@@ -1,12 +1,6 @@
 import mongoose from 'mongoose';
 import config from '../../../config/index.js';
 
-const mongooseOptions = {
-    maxPoolSize: 10,
-    serverSelectionTimeoutMS: 5000,
-    socketTimeoutMS: 45000,
-};
-
 export const initDB = async ({ logger }) => {
     mongoose.connection.on('connected', () => {
         logger.info('Mongoose connected to DB.');
@@ -20,7 +14,11 @@ export const initDB = async ({ logger }) => {
         logger.warn('Mongoose disconnected.');
     });
 
-    await mongoose.connect(config.db.uri, mongooseOptions);
+    await mongoose.connect(config.db.uri, {
+        maxPoolSize: config.db.maxPoolSize,
+        serverSelectionTimeoutMS: config.db.serverSelectionTimeoutMS,
+        socketTimeoutMS: config.db.socketTimeoutMS,
+    });
 };
 
 export const closeDB = async () => {
