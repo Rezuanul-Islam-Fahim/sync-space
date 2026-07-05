@@ -16,7 +16,7 @@ import { makeAuthenticate } from './shared/middlewares/auth.middleware.js';
 // ── Module factories ──────────────────────────────────────────────────────────
 import { createAuthModule } from './modules/auth/index.js';
 
-export const composeDependencies = () => {
+export const composeDependencies = ({ logger }) => {
     // 1. Outbound adapters (infrastructure implementations)
     const userRepository = new MongoUserRepository(UserModel);
     const passwordHasher = new BcryptPasswordHasher();
@@ -41,7 +41,7 @@ export const composeDependencies = () => {
     apiRouter.use('/v1', v1Router);
 
     // 6. Express app
-    const app = createApp({ router: apiRouter });
+    const app = createApp({ router: apiRouter, logger });
 
     return { app, authenticate };
 };

@@ -1,4 +1,3 @@
-import logger from '../../infrastructure/logging/logger.js';
 import ApiResponse from '../responses/api.response.js';
 import AppError from '../errors/app.error.js';
 import {
@@ -31,15 +30,27 @@ const handleDuplicateKeyError = err => {
     return new AppError(DUPLICATE_FIELD_VALUE(field), CONFLICT);
 };
 
+const errorNormalizers = [
+    {
+        canHandle: err => err.name === 'ValidationError',
+        handle: handleValidationError,
+    },
+    { canHandle: err => err.name === 'CastError', handle: handleCastError },
+    { canHandle: err => err.code === 11000, handle: handleDuplicateKeyError },
+];
+
 // ── Main error handler ────────────────────────────────────────────────────────
 
-export const errorHandler = (err, req, res, _next) => {
+export const makeErrorHandler = logger => (err, req, res, _next) => {
     // Normalise known infrastructure errors into operational AppErrors
     let error = err;
 
-    if (err.name === 'ValidationError') error = handleValidationError(err);
-    else if (err.name === 'CastError') error = handleCastError(err);
-    else if (err.code === 11000) error = handleDuplicateKeyError(err);
+    for (const normalizer of errorNormalizers) {
+        if (normalizer.canHandle(err)) {
+            error = normalizer.handle(err);
+            break;
+        }
+    }
 
     const isOperational = error.isOperational;
     const statusCode = isOperational

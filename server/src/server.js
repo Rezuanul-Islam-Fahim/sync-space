@@ -9,9 +9,9 @@ import { composeDependencies } from './composition-root.js';
 const PORT = config.port;
 
 const start = async () => {
-    await initDB();
+    await initDB({ logger });
 
-    const { app } = composeDependencies();
+    const { app } = composeDependencies({ logger });
 
     const server = app.listen(PORT, () => {
         logger.info(`Server started on port: ${PORT}`);

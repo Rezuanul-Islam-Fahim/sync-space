@@ -15,7 +15,7 @@ const runSeeder = async () => {
 
         logger.info('Starting database seeding...');
 
-        await initDB();
+        await initDB({ logger });
 
         logger.info('Clearing existing users...');
         await UserModel.deleteMany({});
