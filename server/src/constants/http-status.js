@@ -6,14 +6,3 @@ export const FORBIDDEN = 403;
 export const NOT_FOUND = 404;
 export const CONFLICT = 409;
 export const INTERNAL_SERVER_ERROR = 500;
-
-export default {
-    OK,
-    CREATED,
-    BAD_REQUEST,
-    UNAUTHORIZED,
-    FORBIDDEN,
-    NOT_FOUND,
-    CONFLICT,
-    INTERNAL_SERVER_ERROR,
-};
