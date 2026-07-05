@@ -3,16 +3,18 @@ import config from './config/index.js';
 import createApp from './app.js';
 
 // ── Infrastructure ────────────────────────────────────────────────────────────
-import { UserModel } from './modules/user/infrastructure/database/user.model.js';
-import UserRepository from './modules/user/infrastructure/repositories/user.repository.js';
-import { UserService } from './modules/user/application/services/user.service.js';
+import {
+    UserModel,
+    UserRepository,
+    UserService,
+} from './modules/user/index.js';
 import {
     BcryptPasswordHasher,
     JwtTokenService,
 } from './infrastructure/security/index.js';
 
 // ── Shared middlewares ────────────────────────────────────────────────────────
-import { makeAuthenticate } from './shared/middlewares/auth.middleware.js';
+import { makeAuthenticate } from './shared/index.js';
 
 // ── Module factories ──────────────────────────────────────────────────────────
 import { createAuthModule } from './modules/auth/index.js';

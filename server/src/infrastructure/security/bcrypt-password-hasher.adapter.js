@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { PasswordHasherPort } from '../../shared/ports/password-hasher.port.js';
+import { PasswordHasherPort } from '../../shared/index.js';
 
 export default class BcryptPasswordHasher extends PasswordHasherPort {
     hash = async (password, saltRounds) => {

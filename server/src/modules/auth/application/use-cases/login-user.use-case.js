@@ -1,9 +1,13 @@
-import AppError from '../../../../shared/errors/app.error.js';
-import { INVALID_CREDENTIALS } from '../../../../constants/app-messages.constant.js';
-import { UNAUTHORIZED } from '../../../../constants/http-status.constant.js';
+import {
+    AppError,
+    PasswordHasherPort,
+    TokenServicePort,
+} from '../../../../shared/index.js';
+import {
+    INVALID_CREDENTIALS,
+    UNAUTHORIZED,
+} from '../../../../constants/index.js';
 import { UserServicePort } from '../../../user/index.js';
-import { PasswordHasherPort } from '../../../../shared/ports/password-hasher.port.js';
-import { TokenServicePort } from '../../../../shared/ports/token-service.port.js';
 
 export class LoginUserUseCase {
     constructor({ userService, passwordHasher, tokenService }) {
@@ -28,9 +32,7 @@ export class LoginUserUseCase {
     }
 
     execute = async data => {
-        const user = await this.userService.findByEmailWithPassword(
-            data.email
-        );
+        const user = await this.userService.findByEmailWithPassword(data.email);
 
         if (!user) {
             throw new AppError(INVALID_CREDENTIALS, UNAUTHORIZED);

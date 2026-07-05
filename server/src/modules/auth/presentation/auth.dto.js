@@ -2,7 +2,7 @@ import {
     LOGIN_ALLOWED_FIELDS,
     REGISTER_ALLOWED_FIELDS,
 } from '../auth.constant.js';
-import allowedFieldsFilter from '../../../shared/utils/allowed-fields-filter.util.js';
+import { allowedFieldsFilter } from '../../../shared/index.js';
 import { UserDto } from '../../user/index.js';
 
 export class RegisterRequestDto {

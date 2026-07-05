@@ -1,7 +1,4 @@
-import {
-    initDB,
-    closeDB,
-} from './infrastructure/database/database.connection.js';
+import { initDB, closeDB } from './infrastructure/database/index.js';
 import config from './config/index.js';
 import logger from './infrastructure/logging/logger.js';
 import { composeDependencies } from './composition-root.js';

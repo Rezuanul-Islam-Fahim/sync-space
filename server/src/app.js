@@ -3,10 +3,12 @@ import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
 import hpp from 'hpp';
-import requestIdAttach from './shared/middlewares/request-id.middleware.js';
 import config from './config/index.js';
-import { makeErrorHandler } from './shared/middlewares/error-handler.middleware.js';
-import unknownRoutesHandler from './shared/middlewares/unknown-routes.middleware.js';
+import {
+    requestIdAttach,
+    makeErrorHandler,
+    unknownRoutesHandler,
+} from './shared/index.js';
 
 const createApp = ({ router, logger }) => {
     const app = express();

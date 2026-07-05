@@ -4,12 +4,10 @@ import {
     BAD_REQUEST,
     CONFLICT,
     INTERNAL_SERVER_ERROR,
-} from '../../constants/http-status.constant.js';
-import {
     DEFAULT_ERROR,
     DUPLICATE_FIELD_VALUE,
     INVALID_ID,
-} from '../../constants/app-messages.constant.js';
+} from '../../constants/index.js';
 import { isDev } from '../../config/index.js';
 
 // ── Mongoose / MongoDB error normalisers ─────────────────────────────────────

@@ -3,3 +3,5 @@ export { UserSnapshotDto, UserDto } from './presentation/user.dto.js';
 export { UserRepositoryPort } from './application/ports/user-repository.port.js';
 export { UserServicePort } from './application/ports/user-service.port.js';
 export { UserService } from './application/services/user.service.js';
+export { UserModel } from './infrastructure/database/user.model.js';
+export { default as UserRepository } from './infrastructure/repositories/user.repository.js';

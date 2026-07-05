@@ -3,8 +3,8 @@ import catchAsync from '../catch-async.util.js';
 import {
     TOKEN_NOT_FOUND,
     USER_UNAVAILABLE,
-} from '../../constants/app-messages.constant.js';
-import { UNAUTHORIZED } from '../../constants/http-status.constant.js';
+    UNAUTHORIZED,
+} from '../../constants/index.js';
 
 import { UserServicePort } from '../../modules/user/index.js';
 import { TokenServicePort } from '../ports/token-service.port.js';
