@@ -1,6 +1,6 @@
 import express from 'express';
 import { loginValidation, registerValidation } from './auth.validator.js';
-import validate from '../../shared/middlewares/validate.middleware.js';
+import validate from '../../../shared/middlewares/validate.middleware.js';
 
 export const createAuthRouter = authController => {
     const router = express.Router();

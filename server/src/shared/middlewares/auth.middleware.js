@@ -7,7 +7,7 @@ import {
 import { UNAUTHORIZED } from '../../constants/http-status.constant.js';
 
 import { UserRepositoryPort } from '../../modules/user/index.js';
-import { TokenServicePort } from '../../modules/auth/index.js';
+import { TokenServicePort } from '../ports/token-service.port.js';
 
 export const makeAuthenticate = (userRepository, tokenService) => {
     if (!(userRepository instanceof UserRepositoryPort)) {

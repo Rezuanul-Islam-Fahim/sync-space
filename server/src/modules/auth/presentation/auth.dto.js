@@ -1,9 +1,9 @@
 import {
     LOGIN_ALLOWED_FIELDS,
     REGISTER_ALLOWED_FIELDS,
-} from './auth.constant.js';
-import allowedFieldsFilter from '../../shared/utils/allowed-fields-filter.util.js';
-import { UserDto } from '../user/index.js';
+} from '../auth.constant.js';
+import allowedFieldsFilter from '../../../shared/utils/allowed-fields-filter.util.js';
+import { UserDto } from '../../user/index.js';
 
 export class RegisterRequestDto {
     constructor(data) {

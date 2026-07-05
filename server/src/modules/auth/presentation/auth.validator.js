@@ -2,8 +2,8 @@ import { body } from 'express-validator';
 import {
     REGISTER_ALLOWED_FIELDS,
     LOGIN_ALLOWED_FIELDS,
-} from './auth.constant.js';
-import allowedFieldsValidator from '../../shared/middlewares/allowed-fields-validator.middleware.js';
+} from '../auth.constant.js';
+import allowedFieldsValidator from '../../../shared/middlewares/allowed-fields-validator.middleware.js';
 import {
     EMAIL_REQUIRED,
     EMAIL_INVALID,
@@ -14,7 +14,7 @@ import {
     DISPLAY_NAME_INVALID,
     DOB_REQUIRED,
     DOB_INVALID,
-} from '../../constants/app-messages.constant.js';
+} from '../../../constants/app-messages.constant.js';
 
 export const registerValidation = [
     allowedFieldsValidator(REGISTER_ALLOWED_FIELDS),
