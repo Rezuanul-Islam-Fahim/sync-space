@@ -3,10 +3,12 @@ import config from './config/index.js';
 import createApp from './app.js';
 
 import { UserModel } from './infrastructure/database/models/user.model.js';
-import MongoUserRepository from './infrastructure/repositories/mongo-user.repository.js';
-import BcryptPasswordHasher from './infrastructure/security/bcrypt-password-hasher.service.js';
-import JwtTokenService from './infrastructure/security/jwt-token.service.js';
-import { makeAuthenticate } from './middlewares/auth.middleware.js';
+import { MongoUserRepository } from './infrastructure/repositories/index.js';
+import {
+    BcryptPasswordHasher,
+    JwtTokenService,
+} from './infrastructure/security/index.js';
+import { makeAuthenticate } from './common/middlewares/auth.middleware.js';
 
 // Auth Module
 import {

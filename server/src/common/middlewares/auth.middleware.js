@@ -1,13 +1,13 @@
-import AppError from '../common/errors/app.error.js';
-import catchAsync from '../common/catch-async.js';
+import AppError from '../errors/app.error.js';
+import catchAsync from '../catch-async.js';
 import {
     TOKEN_NOT_FOUND,
     USER_UNAVAILABLE,
-} from '../constants/app-messages.constant.js';
-import { UNAUTHORIZED } from '../constants/http-status.constant.js';
+} from '../../constants/app-messages.constant.js';
+import { UNAUTHORIZED } from '../../constants/http-status.constant.js';
 
-import { UserRepositoryPort } from '../modules/user/index.js';
-import { TokenServicePort } from '../modules/auth/index.js';
+import { UserRepositoryPort } from '../../modules/user/index.js';
+import { TokenServicePort } from '../../modules/auth/index.js';
 
 export const makeAuthenticate = (userRepository, tokenService) => {
     if (!(userRepository instanceof UserRepositoryPort)) {
