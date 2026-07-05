@@ -1,6 +1,6 @@
 import AuthController from './presentation/auth.controller.js';
-import { LoginUserUseCase } from './use-cases/login-user.use-case.js';
-import { RegisterUserUseCase } from './use-cases/register-user.use-case.js';
+import { LoginUserUseCase } from './application/use-cases/login-user.use-case.js';
+import { RegisterUserUseCase } from './application/use-cases/register-user.use-case.js';
 import { createAuthRouter } from './presentation/auth.router.js';
 
 // ── Re-exports (contracts & validators) ──────────────────────────────────────
