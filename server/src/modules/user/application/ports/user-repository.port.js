@@ -7,7 +7,7 @@ export class UserRepositoryPort {
         throw new Error('Method not implemented');
     }
 
-    findAuthByEmail(_email) {
+    findByEmailWithPassword(_email) {
         throw new Error('Method not implemented');
     }
 

@@ -3,8 +3,8 @@ import config from './config/index.js';
 import createApp from './app.js';
 
 // ── Infrastructure ────────────────────────────────────────────────────────────
-import { UserModel } from './infrastructure/database/models/user.model.js';
-import { MongoUserRepository } from './infrastructure/repositories/index.js';
+import { UserModel } from './modules/user/infrastructure/database/user.model.js';
+import UserRepository from './modules/user/infrastructure/repositories/user.repository.js';
 import {
     BcryptPasswordHasher,
     JwtTokenService,
@@ -18,7 +18,7 @@ import { createAuthModule } from './modules/auth/index.js';
 
 export const composeDependencies = ({ logger }) => {
     // 1. Outbound adapters (infrastructure implementations)
-    const userRepository = new MongoUserRepository(UserModel);
+    const userRepository = new UserRepository(UserModel);
     const passwordHasher = new BcryptPasswordHasher();
     const tokenService = new JwtTokenService(config.jwt);
     const saltRounds = config.auth.saltRounds;

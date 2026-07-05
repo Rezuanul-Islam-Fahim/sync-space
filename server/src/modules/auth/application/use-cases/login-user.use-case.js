@@ -28,7 +28,9 @@ export class LoginUserUseCase {
     }
 
     execute = async data => {
-        const user = await this.userRepository.findAuthByEmail(data.email);
+        const user = await this.userRepository.findByEmailWithPassword(
+            data.email
+        );
 
         if (!user) {
             throw new AppError(INVALID_CREDENTIALS, UNAUTHORIZED);
