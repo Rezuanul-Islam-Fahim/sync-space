@@ -1,7 +1,7 @@
-import { UserRepositoryPort } from './ports/user-repository.port.js';
-import { UserMapper } from './user.mapper.js';
+import { UserRepositoryPort } from '../../modules/user/ports/user-repository.port.js';
+import { UserMapper } from '../../modules/user/user.mapper.js';
 
-class UserRepository extends UserRepositoryPort {
+class MongoUserRepository extends UserRepositoryPort {
     constructor(userModel) {
         super();
         this.userModel = userModel;
@@ -15,7 +15,9 @@ class UserRepository extends UserRepositoryPort {
     };
 
     findByEmail = async email => {
-        const user = await this.userModel.findOne({ email });
+        const user = await this.userModel
+            .findOne({ email })
+            .select('-password');
 
         return UserMapper.toDomain(user);
     };
@@ -27,16 +29,20 @@ class UserRepository extends UserRepositoryPort {
     };
 
     findById = async id => {
-        const user = await this.userModel.findOne({ _id: id });
+        const user = await this.userModel
+            .findOne({ _id: id })
+            .select('-password');
 
         return UserMapper.toDomain(user);
     };
 
     findByUsername = async username => {
-        const user = await this.userModel.findOne({ username });
+        const user = await this.userModel
+            .findOne({ username })
+            .select('-password');
 
         return UserMapper.toDomain(user);
     };
 }
 
-export default UserRepository;
+export default MongoUserRepository;

@@ -4,3 +4,4 @@ export { RegisterUserUseCase } from './use-cases/register-user.use-case.js';
 export { loginValidation, registerValidation } from './auth.validator.js';
 export { PasswordHasherPort } from './ports/password-hasher.port.js';
 export { TokenServicePort } from './ports/token-service.port.js';
+export { createAuthRouter } from './auth.router.js';

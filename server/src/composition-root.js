@@ -2,7 +2,8 @@ import express from 'express';
 import config from './config/index.js';
 import createApp from './app.js';
 
-import { UserModel, UserRepository } from './modules/user/index.js';
+import { UserModel } from './infrastructure/database/models/user.model.js';
+import MongoUserRepository from './infrastructure/repositories/mongo-user.repository.js';
 import BcryptPasswordHasher from './infrastructure/security/bcrypt-password-hasher.service.js';
 import JwtTokenService from './infrastructure/security/jwt-token.service.js';
 import { makeAuthenticate } from './middlewares/auth.middleware.js';
@@ -12,14 +13,12 @@ import {
     AuthController,
     LoginUserUseCase,
     RegisterUserUseCase,
-    loginValidation,
-    registerValidation,
+    createAuthRouter,
 } from './modules/auth/index.js';
-import validate from './middlewares/validate.middleware.js';
 
 export const composeDependencies = () => {
     // 1. Instantiating Outbound Adapters
-    const userRepository = new UserRepository(UserModel);
+    const userRepository = new MongoUserRepository(UserModel);
     const passwordHasher = new BcryptPasswordHasher();
     const tokenService = new JwtTokenService(config.jwt);
     const saltRounds = config.auth.saltRounds;
@@ -46,14 +45,7 @@ export const composeDependencies = () => {
     const authenticate = makeAuthenticate(userRepository, tokenService);
 
     // 5. Explicit Route Wiring (Composition Root)
-    const authRouter = express.Router();
-    authRouter.post(
-        '/register',
-        registerValidation,
-        validate,
-        authController.register
-    );
-    authRouter.post('/login', loginValidation, validate, authController.login);
+    const authRouter = createAuthRouter(authController);
 
     const apiRouter = express.Router();
     apiRouter.use('/auth', authRouter);

@@ -1,6 +1,6 @@
 import logger from '../../logger/logger.js';
 import { closeDB, initDB } from '../connection.js';
-import { UserModel } from '../../../modules/user/index.js';
+import { UserModel } from '../models/user.model.js';
 import { getSeedUsers } from './user.seed.js';
 import { isDev } from '../../../config/index.js';
 
