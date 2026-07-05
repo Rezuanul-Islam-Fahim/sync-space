@@ -1,5 +1,5 @@
 import winston from 'winston';
-import config from '../../config/index.js';
+import config from '../../../config/index.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -45,12 +45,12 @@ const logger = winston.createLogger({
             format: consoleFormat,
         }),
         new winston.transports.File({
-            filename: path.join(__dirname, '../../../logs/error.log'),
+            filename: path.join(__dirname, '../../../../logs/error.log'),
             level: 'error',
             format: fileFormat,
         }),
         new winston.transports.File({
-            filename: path.join(__dirname, '../../../logs/combined.log'),
+            filename: path.join(__dirname, '../../../../logs/combined.log'),
             format: fileFormat,
         }),
     ],

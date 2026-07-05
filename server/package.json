@@ -13,7 +13,7 @@
         "db:migrate": "migrate-mongo up",
         "db:migrate:down": "migrate-mongo down",
         "db:migrate:status": "migrate-mongo status",
-        "db:seed": "node src/infrastructure/database/seeds/seeder.js"
+        "db:seed": "node src/shared/infrastructure/database/seeds/seeder.js"
     },
     "keywords": [],
     "author": "Rezuanul Islam Fahim",

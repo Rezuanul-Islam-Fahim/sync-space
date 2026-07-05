@@ -11,7 +11,7 @@ import {
 import {
     BcryptPasswordHasher,
     JwtTokenService,
-} from './infrastructure/security/index.js';
+} from './shared/infrastructure/security/index.js';
 
 // ── Shared middlewares ────────────────────────────────────────────────────────
 import { makeAuthenticate } from './shared/index.js';

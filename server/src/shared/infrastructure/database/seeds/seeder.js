@@ -1,8 +1,8 @@
-import { logger } from '../../logging/index.js';
+import logger from '../../logging/logger.js';
 import { closeDB, initDB } from '../index.js';
-import { UserModel } from '../../../modules/user/index.js';
+import { UserModel } from '../../../../modules/user/index.js';
 import { getSeedUsers } from './user.seed.js';
-import { isDev } from '../../../config/index.js';
+import { isDev } from '../../../../config/index.js';
 
 const runSeeder = async () => {
     try {
