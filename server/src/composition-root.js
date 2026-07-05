@@ -8,7 +8,7 @@ import {
     BcryptPasswordHasher,
     JwtTokenService,
 } from './infrastructure/security/index.js';
-import { makeAuthenticate } from './common/middlewares/auth.middleware.js';
+import { makeAuthenticate } from './shared/middlewares/auth.middleware.js';
 
 // Auth Module
 import {

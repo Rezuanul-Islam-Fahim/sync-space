@@ -3,11 +3,11 @@ import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
 import hpp from 'hpp';
-import logger from './infrastructure/logger/logger.js';
-import requestIdAttach from './common/middlewares/request-id.middleware.js';
+import logger from './infrastructure/logging/logger.js';
+import requestIdAttach from './shared/middlewares/request-id.middleware.js';
 import corsConfig from './config/cors.js';
-import { errorHandler } from './common/middlewares/error-handler.middleware.js';
-import unknownRoutesHandler from './common/middlewares/unknown-routes.middleware.js';
+import { errorHandler } from './shared/middlewares/error-handler.middleware.js';
+import unknownRoutesHandler from './shared/middlewares/unknown-routes.middleware.js';
 
 const createApp = ({ router }) => {
     const app = express();

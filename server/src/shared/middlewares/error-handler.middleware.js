@@ -1,4 +1,4 @@
-import logger from '../../infrastructure/logger/logger.js';
+import logger from '../../infrastructure/logging/logger.js';
 import ApiResponse from '../responses/api.response.js';
 import { INTERNAL_SERVER_ERROR } from '../../constants/http-status.constant.js';
 import { DEFAULT_ERROR } from '../../constants/app-messages.constant.js';

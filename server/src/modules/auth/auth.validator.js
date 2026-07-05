@@ -3,7 +3,7 @@ import {
     REGISTER_ALLOWED_FIELDS,
     LOGIN_ALLOWED_FIELDS,
 } from './auth.constant.js';
-import allowedFieldsValidator from '../../common/middlewares/allowed-fields-validator.middleware.js';
+import allowedFieldsValidator from '../../shared/middlewares/allowed-fields-validator.middleware.js';
 import {
     EMAIL_REQUIRED,
     EMAIL_INVALID,

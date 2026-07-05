@@ -1,11 +1,11 @@
-import AppError from '../../../common/errors/app.error.js';
+import AppError from '../../../shared/errors/app.error.js';
 import {
     EMAIL_ALREADY_REGISTERED,
     USERNAME_ALREADY_TAKEN,
 } from '../../../constants/app-messages.constant.js';
 import { CONFLICT } from '../../../constants/http-status.constant.js';
 import { UserRepositoryPort } from '../../user/index.js';
-import { PasswordHasherPort } from '../ports/password-hasher.port.js';
+import { PasswordHasherPort } from '../../../shared/ports/password-hasher.port.js';
 
 export class RegisterUserUseCase {
     constructor({ userRepository, passwordHasher, saltRounds }) {

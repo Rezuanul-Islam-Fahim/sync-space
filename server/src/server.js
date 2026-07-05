@@ -1,6 +1,6 @@
 import { initDB, closeDB } from './infrastructure/database/connection.js';
 import config from './config/index.js';
-import logger from './infrastructure/logger/logger.js';
+import logger from './infrastructure/logging/logger.js';
 import { composeDependencies } from './composition-root.js';
 
 const PORT = config.port;

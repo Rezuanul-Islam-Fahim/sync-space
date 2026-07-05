@@ -4,13 +4,13 @@ import {
     RegisterRequestDto,
     RegisterResponseDto,
 } from './auth.dto.js';
-import ApiResponse from '../../common/responses/api.response.js';
+import ApiResponse from '../../shared/responses/api.response.js';
 import { CREATED, OK } from '../../constants/http-status.constant.js';
 import {
     USER_CREATED,
     LOGIN_SUCCESSFUL,
 } from '../../constants/app-messages.constant.js';
-import catchAsync from '../../common/catch-async.js';
+import catchAsync from '../../shared/catch-async.js';
 
 class AuthController {
     constructor({ loginUserUseCase, registerUserUseCase }) {
