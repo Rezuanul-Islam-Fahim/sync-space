@@ -1,11 +1,7 @@
 import winston from 'winston';
 import config from '../../../config/index.js';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { LoggerPort } from '../../ports/logger.port.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const levels = {
     error: 0,
@@ -38,29 +34,26 @@ const fileFormat = winston.format.combine(
     winston.format.json()
 );
 
-class WinstonLoggerAdapter extends LoggerPort {
-    constructor() {
+export class WinstonLoggerAdapter extends LoggerPort {
+    constructor({ logLevel, logDir } = {}) {
         super();
+        const resolvedLogLevel = logLevel || config.logLevel || 'debug';
+        const resolvedLogDir = logDir || path.join(process.cwd(), 'logs');
+
         this._logger = winston.createLogger({
-            level: config.logLevel,
+            level: resolvedLogLevel,
             levels,
             transports: [
                 new winston.transports.Console({
                     format: consoleFormat,
                 }),
                 new winston.transports.File({
-                    filename: path.join(
-                        __dirname,
-                        '../../../../logs/error.log'
-                    ),
+                    filename: path.join(resolvedLogDir, 'error.log'),
                     level: 'error',
                     format: fileFormat,
                 }),
                 new winston.transports.File({
-                    filename: path.join(
-                        __dirname,
-                        '../../../../logs/combined.log'
-                    ),
+                    filename: path.join(resolvedLogDir, 'combined.log'),
                     format: fileFormat,
                 }),
             ],

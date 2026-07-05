@@ -8,12 +8,7 @@ import { AuthUserWriterPort } from '../ports/auth-user-writer.port.js';
 import { User } from '../../../user/index.js';
 
 export class RegisterUserUseCase {
-    constructor({
-        authUserReader,
-        authUserWriter,
-        passwordHasher,
-        saltRounds,
-    }) {
+    constructor({ authUserReader, authUserWriter, passwordHasher }) {
         if (!(authUserReader instanceof AuthUserReaderPort)) {
             throw new Error(
                 'RegisterUserUseCase: authUserReader must implement AuthUserReaderPort'
@@ -32,7 +27,6 @@ export class RegisterUserUseCase {
         this.authUserReader = authUserReader;
         this.authUserWriter = authUserWriter;
         this.passwordHasher = passwordHasher;
-        this.saltRounds = saltRounds;
     }
 
     async execute(data) {
@@ -51,10 +45,7 @@ export class RegisterUserUseCase {
             throw new AppError(USERNAME_ALREADY_TAKEN, 'CONFLICT');
         }
 
-        const hashedPassword = await this.passwordHasher.hash(
-            data.password,
-            this.saltRounds
-        );
+        const hashedPassword = await this.passwordHasher.hash(data.password);
 
         const userEntity = new User({
             email: data.email,

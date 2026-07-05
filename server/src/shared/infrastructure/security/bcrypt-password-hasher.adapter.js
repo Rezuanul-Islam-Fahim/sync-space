@@ -2,11 +2,16 @@ import bcrypt from 'bcrypt';
 import { PasswordHasherPort } from '../../index.js';
 
 export default class BcryptPasswordHasher extends PasswordHasherPort {
-    hash = async (password, saltRounds) => {
-        return await bcrypt.hash(password, saltRounds);
-    };
+    constructor({ saltRounds } = {}) {
+        super();
+        this.saltRounds = saltRounds || 10;
+    }
 
-    compare = async (password, hashedPassword) => {
+    async hash(password) {
+        return await bcrypt.hash(password, this.saltRounds);
+    }
+
+    async compare(password, hashedPassword) {
         return await bcrypt.compare(password, hashedPassword);
-    };
+    }
 }

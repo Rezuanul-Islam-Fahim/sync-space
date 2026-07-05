@@ -1,5 +1,5 @@
 export class PasswordHasherPort {
-    hash(_password, _saltRounds) {
+    hash(_password) {
         throw new Error('Method not implemented');
     }
 

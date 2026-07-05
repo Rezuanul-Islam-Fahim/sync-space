@@ -20,10 +20,11 @@ import { makeAuthenticate } from './shared/index.js';
 
 export const composeDependencies = ({ logger }) => {
     // 1. Shared Infrastructure/Outbound adapters
-    const passwordHasher = new BcryptPasswordHasher();
+    const passwordHasher = new BcryptPasswordHasher({
+        saltRounds: config.auth.saltRounds,
+    });
     const tokenGenerator = new JwtTokenGenerator(config.jwt);
     const tokenVerifier = new JwtTokenVerifier(config.jwt);
-    const saltRounds = config.auth.saltRounds;
 
     // 2. Module Composition
     const { userReader, userWriter } = composeUserModule({
@@ -38,7 +39,6 @@ export const composeDependencies = ({ logger }) => {
         authUserWriter,
         passwordHasher,
         tokenGenerator,
-        saltRounds,
     });
 
     // 3. Shared middlewares

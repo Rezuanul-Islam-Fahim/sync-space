@@ -1,11 +1,21 @@
-import { DEFAULT_SUCCESS } from '../constants/index.js';
+import {
+    DEFAULT_SUCCESS,
+    OK,
+    INTERNAL_SERVER_ERROR,
+} from '../constants/index.js';
 
 export default class ApiResponse {
-    static success({ res, data, statusCode, message = DEFAULT_SUCCESS }) {
+    static success({ res, data, statusCode = OK, message = DEFAULT_SUCCESS }) {
         return res.status(statusCode).json({ statusCode, data, message });
     }
 
-    static error({ res, statusCode, message, errors, stack }) {
+    static error({
+        res,
+        statusCode = INTERNAL_SERVER_ERROR,
+        message,
+        errors,
+        stack,
+    }) {
         return res.status(statusCode).json({
             statusCode,
             message,
