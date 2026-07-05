@@ -1,15 +1,11 @@
-import dotenv from 'dotenv';
+import config from './src/config/index.js';
 
-dotenv.config();
-
-const envVars = process.env;
-
-const config = {
+const migrateMongoConfig = {
     mongodb: {
-        url: envVars.MONGODB_URI,
-        databaseName: envVars.MONGODB_URI.substring(
-            envVars.MONGODB_URI.lastIndexOf('/') + 1
-        ).split('?')[0],
+        url: config.db.uri,
+        databaseName: config.db.uri
+            .substring(config.db.uri.lastIndexOf('/') + 1)
+            .split('?')[0],
         options: {
             useNewUrlParser: true,
             useUnifiedTopology: true,
@@ -22,4 +18,4 @@ const config = {
     moduleSystem: 'esm',
 };
 
-export default config;
+export default migrateMongoConfig;
