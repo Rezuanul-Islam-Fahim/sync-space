@@ -4,6 +4,7 @@ import createApp from './app.js';
 
 // ── Infrastructure & Modules ──────────────────────────────────────────────────
 import { composeUserModule } from './modules/user/index.js';
+import { UserModel } from './modules/user/infrastructure/database/user.model.js';
 import { composeAuthModule } from './modules/auth/index.js';
 import {
     UserReaderAdapter,
@@ -28,6 +29,7 @@ export const composeDependencies = ({ logger }) => {
 
     // 2. Module Composition
     const { userReader, userWriter } = composeUserModule({
+        userModel: UserModel,
         passwordHasher,
     });
 

@@ -1,4 +1,3 @@
-import { UserModel } from './infrastructure/database/user.model.js';
 import {
     UserReaderRepository,
     UserWriterRepository,
@@ -8,16 +7,20 @@ import { ValidateCredentialsUseCase } from './index.js';
 /**
  * Composes the user module's dependencies.
  *
- * @param {{ passwordHasher: import('../../shared/ports/password-hasher.port.js').PasswordHasherPort }} deps
+ * @param {{ userModel: import('mongoose').Model, passwordHasher: import('../../shared/ports/password-hasher.port.js').PasswordHasherPort }} deps
  * @returns {{
  *   userReader: UserReaderRepository,
  *   userWriter: UserWriterRepository,
  *   validateCredentialsUseCase: ValidateCredentialsUseCase
  * }}
  */
-export const composeUserModule = ({ passwordHasher }) => {
-    const userReader = new UserReaderRepository(UserModel);
-    const userWriter = new UserWriterRepository(UserModel);
+export const composeUserModule = ({ userModel, passwordHasher }) => {
+    if (!userModel) {
+        throw new Error('composeUserModule: userModel is required');
+    }
+
+    const userReader = new UserReaderRepository(userModel);
+    const userWriter = new UserWriterRepository(userModel);
 
     const validateCredentialsUseCase = new ValidateCredentialsUseCase({
         userReader,
