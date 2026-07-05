@@ -6,7 +6,11 @@ import createApp from './app.js';
 import {
     UserModel,
     UserRepository,
-    UserService,
+    CreateUserUseCase,
+    FindUserByEmailUseCase,
+    FindUserByIdUseCase,
+    FindUserByUsernameUseCase,
+    ValidateCredentialsUseCase,
 } from './modules/user/index.js';
 import {
     BcryptPasswordHasher,
@@ -26,17 +30,37 @@ export const composeDependencies = ({ logger }) => {
     const tokenService = new JwtTokenService(config.jwt);
     const saltRounds = config.auth.saltRounds;
 
-    // 1.5. Application services
-    const userService = new UserService(userRepository);
+    // 1.5. Application use cases
+    const createUserUseCase = new CreateUserUseCase({ userRepository });
+    const findUserByEmailUseCase = new FindUserByEmailUseCase({
+        userRepository,
+    });
+    const findUserByIdUseCase = new FindUserByIdUseCase({ userRepository });
+    const findUserByUsernameUseCase = new FindUserByUsernameUseCase({
+        userRepository,
+    });
+    const validateCredentialsUseCase = new ValidateCredentialsUseCase({
+        userRepository,
+        passwordHasher,
+    });
 
     // 2. Shared infrastructure bundle passed into every module
-    const infra = { userService, passwordHasher, tokenService, saltRounds };
+    const infra = {
+        createUserUseCase,
+        findUserByEmailUseCase,
+        findUserByIdUseCase,
+        findUserByUsernameUseCase,
+        validateCredentialsUseCase,
+        passwordHasher,
+        tokenService,
+        saltRounds,
+    };
 
     // 3. Module composition — each module wires its internals
     const authModule = createAuthModule(infra);
 
     // 4. Shared middlewares that cross module boundaries
-    const authenticate = makeAuthenticate(userService, tokenService);
+    const authenticate = makeAuthenticate(findUserByIdUseCase, tokenService);
 
     // 5. Route wiring — all routes versioned under /api/v1
     const v1Router = express.Router();

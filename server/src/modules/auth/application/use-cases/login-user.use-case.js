@@ -1,24 +1,17 @@
-import {
-    AppError,
-    PasswordHasherPort,
-    TokenServicePort,
-} from '../../../../shared/index.js';
+import { AppError, TokenServicePort } from '../../../../shared/index.js';
 import {
     INVALID_CREDENTIALS,
     UNAUTHORIZED,
 } from '../../../../constants/index.js';
-import { UserServicePort } from '../../../user/index.js';
+import { ValidateCredentialsUseCase } from '../../../user/index.js';
 
 export class LoginUserUseCase {
-    constructor({ userService, passwordHasher, tokenService }) {
-        if (!(userService instanceof UserServicePort)) {
+    constructor({ validateCredentialsUseCase, tokenService }) {
+        if (
+            !(validateCredentialsUseCase instanceof ValidateCredentialsUseCase)
+        ) {
             throw new Error(
-                'LoginUserUseCase: userService must implement UserServicePort'
-            );
-        }
-        if (!(passwordHasher instanceof PasswordHasherPort)) {
-            throw new Error(
-                'LoginUserUseCase: passwordHasher must implement PasswordHasherPort'
+                'LoginUserUseCase: validateCredentialsUseCase must implement ValidateCredentialsUseCase'
             );
         }
         if (!(tokenService instanceof TokenServicePort)) {
@@ -26,24 +19,17 @@ export class LoginUserUseCase {
                 'LoginUserUseCase: tokenService must implement TokenServicePort'
             );
         }
-        this.userService = userService;
-        this.passwordHasher = passwordHasher;
+        this.validateCredentialsUseCase = validateCredentialsUseCase;
         this.tokenService = tokenService;
     }
 
     execute = async data => {
-        const user = await this.userService.findByEmailWithPassword(data.email);
+        const user = await this.validateCredentialsUseCase.execute({
+            email: data.email,
+            password: data.password,
+        });
 
         if (!user) {
-            throw new AppError(INVALID_CREDENTIALS, UNAUTHORIZED);
-        }
-
-        const isMatch = await this.passwordHasher.compare(
-            data.password,
-            user.password
-        );
-
-        if (!isMatch) {
             throw new AppError(INVALID_CREDENTIALS, UNAUTHORIZED);
         }
 

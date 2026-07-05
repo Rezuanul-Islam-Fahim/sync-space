@@ -6,13 +6,13 @@ import {
     UNAUTHORIZED,
 } from '../../constants/index.js';
 
-import { UserServicePort } from '../../modules/user/index.js';
+import { FindUserByIdUseCase } from '../../modules/user/index.js';
 import { TokenServicePort } from '../ports/token-service.port.js';
 
-export const makeAuthenticate = (userService, tokenService) => {
-    if (!(userService instanceof UserServicePort)) {
+export const makeAuthenticate = (findUserByIdUseCase, tokenService) => {
+    if (!(findUserByIdUseCase instanceof FindUserByIdUseCase)) {
         throw new Error(
-            'makeAuthenticate: userService must implement UserServicePort'
+            'makeAuthenticate: findUserByIdUseCase must implement FindUserByIdUseCase'
         );
     }
     if (!(tokenService instanceof TokenServicePort)) {
@@ -35,7 +35,7 @@ export const makeAuthenticate = (userService, tokenService) => {
         }
 
         const decodedToken = tokenService.verifyAccessToken(token);
-        const currentUser = await userService.findById(decodedToken.sub);
+        const currentUser = await findUserByIdUseCase.execute(decodedToken.sub);
 
         if (!currentUser) {
             throw new AppError(USER_UNAVAILABLE, UNAUTHORIZED);
