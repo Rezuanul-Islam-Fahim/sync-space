@@ -72,7 +72,6 @@ export const makeErrorHandler = logger => (err, req, res, _next) => {
         statusCode,
         message,
         errors: isOperational ? error.errors : undefined,
-        requestId,
         stack: isDev() ? error.stack : undefined,
     });
 };
