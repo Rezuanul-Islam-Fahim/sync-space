@@ -4,9 +4,21 @@ import {
     USERNAME_ALREADY_TAKEN,
 } from '../../../constants/app-messages.constant.js';
 import { CONFLICT } from '../../../constants/http-status.constant.js';
+import { UserRepositoryPort } from '../../user/ports/user-repository.port.js';
+import { PasswordHasherPort } from '../ports/password-hasher.port.js';
 
 export class RegisterUserUseCase {
     constructor({ userRepository, passwordHasher, saltRounds }) {
+        if (!(userRepository instanceof UserRepositoryPort)) {
+            throw new Error(
+                'RegisterUserUseCase: userRepository must implement UserRepositoryPort'
+            );
+        }
+        if (!(passwordHasher instanceof PasswordHasherPort)) {
+            throw new Error(
+                'RegisterUserUseCase: passwordHasher must implement PasswordHasherPort'
+            );
+        }
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
         this.saltRounds = saltRounds;

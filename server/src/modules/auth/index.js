@@ -1,3 +1,4 @@
-export { default as makeAuthRouter } from './auth.routes.js';
 export { default as AuthController } from './auth.controller.js';
-export { makeAuthUseCases } from './use-cases/index.js';
+export { LoginUserUseCase } from './use-cases/login-user.use-case.js';
+export { RegisterUserUseCase } from './use-cases/register-user.use-case.js';
+export { loginValidation, registerValidation } from './auth.validator.js';

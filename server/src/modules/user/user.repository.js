@@ -1,47 +1,9 @@
-const toRawObject = value => {
-    if (!value) return null;
+import { UserRepositoryPort } from './ports/user-repository.port.js';
+import { UserMapper } from './user.mapper.js';
 
-    return typeof value.toObject === 'function'
-        ? value.toObject({ transform: false })
-        : value;
-};
-
-const mapUserFields = user => ({
-    id: (user._id ?? user.id)?.toString(),
-    email: user.email,
-    username: user.username,
-    displayName: user.displayName,
-    avatar: user.avatar,
-    bio: user.bio,
-    banner: user.banner,
-    bannerColor: user.bannerColor,
-    dateOfBirth: user.dateOfBirth,
-    isVerified: user.isVerified,
-    status: user.status,
-    lastOnline: user.lastOnline,
-    createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
-});
-
-const toUserEntity = value => {
-    const user = toRawObject(value);
-    if (!user) return null;
-
-    return mapUserFields(user);
-};
-
-const toAuthUserEntity = value => {
-    const user = toRawObject(value);
-    if (!user) return null;
-
-    return {
-        ...mapUserFields(user),
-        password: user.password,
-    };
-};
-
-class UserRepository {
+class UserRepository extends UserRepositoryPort {
     constructor(userModel) {
+        super();
         this.userModel = userModel;
     }
 
@@ -49,31 +11,31 @@ class UserRepository {
         const newUser = new this.userModel(userData);
         const savedUser = await newUser.save();
 
-        return toUserEntity(savedUser);
+        return UserMapper.toDomain(savedUser);
     };
 
     findByEmail = async email => {
         const user = await this.userModel.findOne({ email });
 
-        return toUserEntity(user);
+        return UserMapper.toDomain(user);
     };
 
     findAuthByEmail = async email => {
         const user = await this.userModel.findOne({ email });
 
-        return toAuthUserEntity(user);
+        return UserMapper.toDomain(user);
     };
 
     findById = async id => {
         const user = await this.userModel.findOne({ _id: id });
 
-        return toUserEntity(user);
+        return UserMapper.toDomain(user);
     };
 
     findByUsername = async username => {
         const user = await this.userModel.findOne({ username });
 
-        return toUserEntity(user);
+        return UserMapper.toDomain(user);
     };
 }
 

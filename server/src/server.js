@@ -1,43 +1,14 @@
-import createApp from './app.js';
 import { initDB, closeDB } from './infrastructure/database/connection.js';
 import config from './config/index.js';
 import logger from './infrastructure/logger/logger.js';
-import { AuthController, makeAuthUseCases } from './modules/auth/index.js';
-import { UserRepository, User } from './modules/user/index.js';
-import makeRoutes from './routes/index.js';
-import { makeAuthenticate } from './middlewares/auth.middleware.js';
-import BcryptPasswordHasher from './infrastructure/security/bcrypt-password-hasher.service.js';
-import JwtTokenService from './infrastructure/security/jwt-token.service.js';
+import { composeDependencies } from './composition-root.js';
 
 const PORT = config.port;
-
-const createContainer = () => {
-    const userRepository = new UserRepository(User);
-    const passwordHasher = new BcryptPasswordHasher();
-    const tokenService = new JwtTokenService(config.jwt);
-    const saltRounds = config.auth.saltRounds;
-
-    const { loginUserUseCase, registerUserUseCase } = makeAuthUseCases({
-        userRepository,
-        passwordHasher,
-        tokenService,
-        saltRounds,
-    });
-    const authController = new AuthController({
-        loginUserUseCase,
-        registerUserUseCase,
-    });
-    const authenticate = makeAuthenticate(userRepository, tokenService);
-
-    return { authController, authenticate };
-};
 
 const start = async () => {
     await initDB();
 
-    const container = createContainer();
-    const router = makeRoutes(container);
-    const app = createApp({ router });
+    const { app } = composeDependencies();
 
     const server = app.listen(PORT, () => {
         logger.info(`Server started on port: ${PORT}`);

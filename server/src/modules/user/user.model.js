@@ -74,4 +74,4 @@ const transform = (doc, ret) => {
 userSchema.set('toJSON', { transform });
 userSchema.set('toObject', { transform });
 
-export const User = mongoose.model('User', userSchema);
+export const UserModel = mongoose.model('User', userSchema);

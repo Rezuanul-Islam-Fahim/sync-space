@@ -1,6 +1,6 @@
 import logger from '../../logger/logger.js';
 import { closeDB, initDB } from '../connection.js';
-import { User } from '../../../modules/user/index.js';
+import { UserModel } from '../../../modules/user/index.js';
 import { getSeedUsers } from './user.seed.js';
 import { isDev } from '../../../config/index.js';
 
@@ -18,11 +18,11 @@ const runSeeder = async () => {
         await initDB();
 
         logger.info('Clearing existing users...');
-        await User.deleteMany({});
+        await UserModel.deleteMany({});
 
         const seedUsers = await getSeedUsers();
         logger.info(`Inserting ${seedUsers.length} seed users...`);
-        await User.insertMany(seedUsers);
+        await UserModel.insertMany(seedUsers);
 
         logger.info('Database seeded successfully!');
     } catch (err) {

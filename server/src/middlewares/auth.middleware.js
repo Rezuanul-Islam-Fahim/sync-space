@@ -6,8 +6,21 @@ import {
 } from '../constants/app-messages.constant.js';
 import { UNAUTHORIZED } from '../constants/http-status.constant.js';
 
-export const makeAuthenticate = (userRepository, tokenService) =>
-    catchAsync(async (req, _, next) => {
+import { UserRepositoryPort } from '../modules/user/ports/user-repository.port.js';
+import { TokenServicePort } from '../modules/auth/ports/token-service.port.js';
+
+export const makeAuthenticate = (userRepository, tokenService) => {
+    if (!(userRepository instanceof UserRepositoryPort)) {
+        throw new Error(
+            'makeAuthenticate: userRepository must implement UserRepositoryPort'
+        );
+    }
+    if (!(tokenService instanceof TokenServicePort)) {
+        throw new Error(
+            'makeAuthenticate: tokenService must implement TokenServicePort'
+        );
+    }
+    return catchAsync(async (req, _, next) => {
         let token;
 
         if (
@@ -31,3 +44,4 @@ export const makeAuthenticate = (userRepository, tokenService) =>
         req.user = currentUser;
         next();
     });
+};
