@@ -1,4 +1,4 @@
-import { User } from './domain/user.entity.js';
+import { User } from './user.entity.js';
 
 const toRawObject = value => {
     if (!value) return null;

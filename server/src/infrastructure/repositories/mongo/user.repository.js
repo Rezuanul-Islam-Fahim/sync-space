@@ -1,5 +1,5 @@
 import { UserRepositoryPort } from '../../../modules/user/ports/user-repository.port.js';
-import { UserMapper } from '../../../modules/user/user.mapper.js';
+import { UserMapper } from '../../../modules/user/domain/user.mapper.js';
 
 class MongoUserRepository extends UserRepositoryPort {
     constructor(userModel) {

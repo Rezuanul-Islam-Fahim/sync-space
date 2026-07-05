@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import hpp from 'hpp';
 import logger from './infrastructure/logging/logger.js';
 import requestIdAttach from './shared/middlewares/request-id.middleware.js';
-import corsConfig from './config/cors.js';
+import config from './config/index.js';
 import { errorHandler } from './shared/middlewares/error-handler.middleware.js';
 import unknownRoutesHandler from './shared/middlewares/unknown-routes.middleware.js';
 
@@ -17,7 +17,12 @@ const createApp = ({ router }) => {
     app.use(hpp());
     app.use(express.json({ limit: '10kb' }));
     app.use(morgan('combined', { stream: logger.stream }));
-    app.use(cors(corsConfig));
+    app.use(
+        cors({
+            origin: config.corsOrigins,
+            credentials: config.corsOrigins !== '*',
+        })
+    );
 
     app.use('/api', router);
 
