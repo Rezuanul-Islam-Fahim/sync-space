@@ -1,1 +1,4 @@
-export { UserProviderAdapter } from './adapters/user-provider.adapter.js';
+export {
+    UserReaderAdapter,
+    UserWriterAdapter,
+} from './adapters/user-provider.adapter.js';

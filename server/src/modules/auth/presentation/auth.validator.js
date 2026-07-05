@@ -1,10 +1,5 @@
 import { body } from 'express-validator';
 import {
-    REGISTER_ALLOWED_FIELDS,
-    LOGIN_ALLOWED_FIELDS,
-} from '../domain/auth.constant.js';
-import { allowedFieldsValidator } from '../../../shared/index.js';
-import {
     EMAIL_REQUIRED,
     EMAIL_INVALID,
     USERNAME_REQUIRED,
@@ -17,8 +12,6 @@ import {
 } from '../../../shared/constants/index.js';
 
 export const registerValidation = [
-    allowedFieldsValidator(REGISTER_ALLOWED_FIELDS),
-
     body('email')
         .notEmpty()
         .withMessage(EMAIL_REQUIRED)
@@ -56,8 +49,6 @@ export const registerValidation = [
 ];
 
 export const loginValidation = [
-    allowedFieldsValidator(LOGIN_ALLOWED_FIELDS),
-
     body('email')
         .notEmpty()
         .withMessage(EMAIL_REQUIRED)

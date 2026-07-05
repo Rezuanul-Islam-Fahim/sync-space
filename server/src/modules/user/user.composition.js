@@ -1,5 +1,8 @@
 import { UserModel } from './infrastructure/database/user.model.js';
-import UserRepository from './infrastructure/repositories/user.repository.js';
+import {
+    UserReaderRepository,
+    UserWriterRepository,
+} from './infrastructure/repositories/user.repository.js';
 import { ValidateCredentialsUseCase } from './index.js';
 
 /**
@@ -7,20 +10,23 @@ import { ValidateCredentialsUseCase } from './index.js';
  *
  * @param {{ passwordHasher: import('../../shared/ports/password-hasher.port.js').PasswordHasherPort }} deps
  * @returns {{
- *   userRepository: UserRepository,
+ *   userReader: UserReaderRepository,
+ *   userWriter: UserWriterRepository,
  *   validateCredentialsUseCase: ValidateCredentialsUseCase
  * }}
  */
 export const composeUserModule = ({ passwordHasher }) => {
-    const userRepository = new UserRepository(UserModel);
+    const userReader = new UserReaderRepository(UserModel);
+    const userWriter = new UserWriterRepository(UserModel);
 
     const validateCredentialsUseCase = new ValidateCredentialsUseCase({
-        userRepository,
+        userReader,
         passwordHasher,
     });
 
     return {
-        userRepository,
+        userReader,
+        userWriter,
         validateCredentialsUseCase,
     };
 };

@@ -1,8 +1,12 @@
 import jwt from 'jsonwebtoken';
-import { AppError, TokenServicePort } from '../../index.js';
+import {
+    AppError,
+    TokenGeneratorPort,
+    TokenVerifierPort,
+} from '../../index.js';
 import { INVALID_TOKEN } from '../../constants/index.js';
 
-export default class JwtTokenService extends TokenServicePort {
+export class JwtTokenGenerator extends TokenGeneratorPort {
     constructor({ secret, expiresIn, refreshSecret, refreshExpiresIn }) {
         super();
         this.secret = secret;
@@ -23,6 +27,14 @@ export default class JwtTokenService extends TokenServicePort {
 
         return { token, refreshToken };
     };
+}
+
+export class JwtTokenVerifier extends TokenVerifierPort {
+    constructor({ secret, refreshSecret }) {
+        super();
+        this.secret = secret;
+        this.refreshSecret = refreshSecret;
+    }
 
     verifyAccessToken = token => {
         try {

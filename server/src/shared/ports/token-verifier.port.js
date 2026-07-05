@@ -1,8 +1,4 @@
-export class TokenServicePort {
-    generateTokens(_userId, _email) {
-        throw new Error('Method not implemented');
-    }
-
+export class TokenVerifierPort {
     verifyAccessToken(_token) {
         throw new Error('Method not implemented');
     }

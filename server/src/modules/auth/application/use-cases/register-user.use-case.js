@@ -3,14 +3,25 @@ import {
     EMAIL_ALREADY_REGISTERED,
     USERNAME_ALREADY_TAKEN,
 } from '../../../../shared/constants/index.js';
-import { AuthUserProviderPort } from '../ports/auth-user-provider.port.js';
+import { AuthUserReaderPort } from '../ports/auth-user-reader.port.js';
+import { AuthUserWriterPort } from '../ports/auth-user-writer.port.js';
 import { User } from '../../../user/index.js';
 
 export class RegisterUserUseCase {
-    constructor({ authUserProvider, passwordHasher, saltRounds }) {
-        if (!(authUserProvider instanceof AuthUserProviderPort)) {
+    constructor({
+        authUserReader,
+        authUserWriter,
+        passwordHasher,
+        saltRounds,
+    }) {
+        if (!(authUserReader instanceof AuthUserReaderPort)) {
             throw new Error(
-                'RegisterUserUseCase: authUserProvider must implement AuthUserProviderPort'
+                'RegisterUserUseCase: authUserReader must implement AuthUserReaderPort'
+            );
+        }
+        if (!(authUserWriter instanceof AuthUserWriterPort)) {
+            throw new Error(
+                'RegisterUserUseCase: authUserWriter must implement AuthUserWriterPort'
             );
         }
         if (!(passwordHasher instanceof PasswordHasherPort)) {
@@ -18,22 +29,23 @@ export class RegisterUserUseCase {
                 'RegisterUserUseCase: passwordHasher must implement PasswordHasherPort'
             );
         }
-        this.authUserProvider = authUserProvider;
+        this.authUserReader = authUserReader;
+        this.authUserWriter = authUserWriter;
         this.passwordHasher = passwordHasher;
         this.saltRounds = saltRounds;
     }
 
-    execute = async data => {
-        const existingUserByEmail = await this.authUserProvider.findByEmail(
-            data.email
-        );
+    async execute(data) {
+        const existingUserByEmail =
+            await this.authUserReader.findByEmailWithPassword(data.email);
 
         if (existingUserByEmail) {
             throw new AppError(EMAIL_ALREADY_REGISTERED, 'CONFLICT');
         }
 
-        const existingUserByUsername =
-            await this.authUserProvider.findByUsername(data.username);
+        const existingUserByUsername = await this.authUserReader.findByUsername(
+            data.username
+        );
 
         if (existingUserByUsername) {
             throw new AppError(USERNAME_ALREADY_TAKEN, 'CONFLICT');
@@ -52,8 +64,20 @@ export class RegisterUserUseCase {
             dateOfBirth: data.dateOfBirth,
         });
 
-        const newUser = await this.authUserProvider.createUser(userEntity);
-
-        return newUser;
-    };
+        try {
+            const newUser = await this.authUserWriter.createUser(userEntity);
+            return newUser;
+        } catch (error) {
+            if (error.code === 11000 && error.keyValue) {
+                const key = Object.keys(error.keyValue)[0];
+                if (key === 'email') {
+                    throw new AppError(EMAIL_ALREADY_REGISTERED, 'CONFLICT');
+                }
+                if (key === 'username') {
+                    throw new AppError(USERNAME_ALREADY_TAKEN, 'CONFLICT');
+                }
+            }
+            throw error;
+        }
+    }
 }

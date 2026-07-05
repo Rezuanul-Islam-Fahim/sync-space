@@ -1,25 +1,28 @@
-import { AuthUserProviderPort } from '../../application/ports/auth-user-provider.port.js';
+import { AuthUserReaderPort } from '../../application/ports/auth-user-reader.port.js';
+import { AuthUserWriterPort } from '../../application/ports/auth-user-writer.port.js';
 
-export class UserProviderAdapter extends AuthUserProviderPort {
-    constructor({ userRepository, validateCredentialsUseCase }) {
+export class UserReaderAdapter extends AuthUserReaderPort {
+    constructor({ userReader }) {
         super();
-        this.userRepository = userRepository;
-        this.validateCredentialsUseCase = validateCredentialsUseCase;
+        this.userReader = userReader;
     }
 
-    createUser = async userData => {
-        return this.userRepository.createUser(userData);
-    };
-
-    findByEmail = async email => {
-        return this.userRepository.findByEmail(email);
+    findByEmailWithPassword = async email => {
+        return this.userReader.findByEmailWithPassword(email);
     };
 
     findByUsername = async username => {
-        return this.userRepository.findByUsername(username);
+        return this.userReader.findByUsername(username);
     };
+}
 
-    validateCredentials = async (email, password) => {
-        return this.validateCredentialsUseCase.execute({ email, password });
+export class UserWriterAdapter extends AuthUserWriterPort {
+    constructor({ userWriter }) {
+        super();
+        this.userWriter = userWriter;
+    }
+
+    createUser = async userData => {
+        return this.userWriter.createUser(userData);
     };
 }

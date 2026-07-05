@@ -1,11 +1,11 @@
 import { PasswordHasherPort } from '../../../../shared/index.js';
-import { UserRepositoryPort } from '../ports/user-repository.port.js';
+import { UserReaderPort } from '../../index.js';
 
 export class ValidateCredentialsUseCase {
-    constructor({ userRepository, passwordHasher }) {
-        if (!(userRepository instanceof UserRepositoryPort)) {
+    constructor({ userReader, passwordHasher }) {
+        if (!(userReader instanceof UserReaderPort)) {
             throw new Error(
-                'ValidateCredentialsUseCase: userRepository must implement UserRepositoryPort'
+                'ValidateCredentialsUseCase: userReader must implement UserReaderPort'
             );
         }
         if (!(passwordHasher instanceof PasswordHasherPort)) {
@@ -13,26 +13,22 @@ export class ValidateCredentialsUseCase {
                 'ValidateCredentialsUseCase: passwordHasher must implement PasswordHasherPort'
             );
         }
-        this.userRepository = userRepository;
+        this.userReader = userReader;
         this.passwordHasher = passwordHasher;
     }
 
-    execute = async ({ email, password }) => {
-        const user = await this.userRepository.findByEmailWithPassword(email);
+    async execute(data) {
+        const user = await this.userReader.findByEmailWithPassword(data.email);
+
         if (!user) {
             return null;
         }
 
-        const isMatch = await this.passwordHasher.compare(
-            password,
+        const isPasswordMatch = await this.passwordHasher.compare(
+            data.password,
             user.password
         );
 
-        if (!isMatch) {
-            return null;
-        }
-
-        // Prevent password hash from leaving the user module
-        return user.excludePassword();
-    };
+        return isPasswordMatch ? user : null;
+    }
 }

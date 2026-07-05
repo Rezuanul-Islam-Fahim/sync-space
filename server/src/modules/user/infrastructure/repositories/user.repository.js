@@ -1,19 +1,12 @@
-import { UserRepositoryPort } from '../../application/ports/user-repository.port.js';
+import { UserReaderPort } from '../../application/ports/user-reader.port.js';
+import { UserWriterPort } from '../../application/ports/user-writer.port.js';
 import { UserMapper } from '../mappers/user.mapper.js';
 
-class UserRepository extends UserRepositoryPort {
+export class UserReaderRepository extends UserReaderPort {
     constructor(userModel) {
         super();
         this.userModel = userModel;
     }
-
-    createUser = async userData => {
-        const persistenceData = UserMapper.toPersistence(userData);
-        const newUser = new this.userModel(persistenceData);
-        const savedUser = await newUser.save();
-
-        return UserMapper.toDomain(savedUser);
-    };
 
     findByEmail = async email => {
         const user = await this.userModel
@@ -46,4 +39,17 @@ class UserRepository extends UserRepositoryPort {
     };
 }
 
-export default UserRepository;
+export class UserWriterRepository extends UserWriterPort {
+    constructor(userModel) {
+        super();
+        this.userModel = userModel;
+    }
+
+    createUser = async userData => {
+        const persistenceData = UserMapper.toPersistence(userData);
+        const newUser = new this.userModel(persistenceData);
+        const savedUser = await newUser.save();
+
+        return UserMapper.toDomain(savedUser);
+    };
+}

@@ -2,7 +2,7 @@ import AppError from '../errors/app.error.js';
 import catchAsync from '../utils/catch-async.util.js';
 import { TOKEN_NOT_FOUND, USER_UNAVAILABLE } from '../constants/index.js';
 
-import { TokenServicePort } from '../ports/token-service.port.js';
+import { TokenVerifierPort } from '../ports/token-verifier.port.js';
 
 export const makeAuthenticate = (userRepository, tokenService) => {
     if (!userRepository || typeof userRepository.findById !== 'function') {
@@ -10,9 +10,9 @@ export const makeAuthenticate = (userRepository, tokenService) => {
             'makeAuthenticate: userRepository must be an object with a findById method'
         );
     }
-    if (!(tokenService instanceof TokenServicePort)) {
+    if (!(tokenService instanceof TokenVerifierPort)) {
         throw new Error(
-            'makeAuthenticate: tokenService must implement TokenServicePort'
+            'makeAuthenticate: tokenService must implement TokenVerifierPort'
         );
     }
     return catchAsync(async (req, _, next) => {

@@ -5,10 +5,14 @@ import createApp from './app.js';
 // ── Infrastructure & Modules ──────────────────────────────────────────────────
 import { composeUserModule } from './modules/user/index.js';
 import { composeAuthModule } from './modules/auth/index.js';
-import { UserProviderAdapter } from './modules/auth/infrastructure/adapters/user-provider.adapter.js';
+import {
+    UserReaderAdapter,
+    UserWriterAdapter,
+} from './modules/auth/infrastructure/adapters/user-provider.adapter.js';
 import {
     BcryptPasswordHasher,
-    JwtTokenService,
+    JwtTokenGenerator,
+    JwtTokenVerifier,
 } from './shared/infrastructure/security/index.js';
 
 // ── Shared middlewares ────────────────────────────────────────────────────────
@@ -17,28 +21,28 @@ import { makeAuthenticate } from './shared/index.js';
 export const composeDependencies = ({ logger }) => {
     // 1. Shared Infrastructure/Outbound adapters
     const passwordHasher = new BcryptPasswordHasher();
-    const tokenService = new JwtTokenService(config.jwt);
+    const tokenGenerator = new JwtTokenGenerator(config.jwt);
+    const tokenVerifier = new JwtTokenVerifier(config.jwt);
     const saltRounds = config.auth.saltRounds;
 
     // 2. Module Composition
-    const { userRepository, validateCredentialsUseCase } = composeUserModule({
+    const { userReader, userWriter } = composeUserModule({
         passwordHasher,
     });
 
-    const authUserProvider = new UserProviderAdapter({
-        userRepository,
-        validateCredentialsUseCase,
-    });
+    const authUserReader = new UserReaderAdapter({ userReader });
+    const authUserWriter = new UserWriterAdapter({ userWriter });
 
     const authModule = composeAuthModule({
-        authUserProvider,
+        authUserReader,
+        authUserWriter,
         passwordHasher,
-        tokenService,
+        tokenGenerator,
         saltRounds,
     });
 
     // 3. Shared middlewares
-    const authenticate = makeAuthenticate(userRepository, tokenService);
+    const authenticate = makeAuthenticate(userReader, tokenVerifier);
 
     // 4. Route wiring — all routes versioned under /api/v1
     const v1Router = express.Router();

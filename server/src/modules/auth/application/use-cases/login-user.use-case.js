@@ -1,35 +1,56 @@
-import { AppError, TokenServicePort } from '../../../../shared/index.js';
+import {
+    AppError,
+    TokenGeneratorPort,
+    PasswordHasherPort,
+} from '../../../../shared/index.js';
 import { INVALID_CREDENTIALS } from '../../../../shared/constants/index.js';
-import { AuthUserProviderPort } from '../ports/auth-user-provider.port.js';
+import { AuthUserReaderPort } from '../ports/auth-user-reader.port.js';
 
 export class LoginUserUseCase {
-    constructor({ authUserProvider, tokenService }) {
-        if (!(authUserProvider instanceof AuthUserProviderPort)) {
+    constructor({ authUserReader, tokenGenerator, passwordHasher }) {
+        if (!(authUserReader instanceof AuthUserReaderPort)) {
             throw new Error(
-                'LoginUserUseCase: authUserProvider must implement AuthUserProviderPort'
+                'LoginUserUseCase: authUserReader must implement AuthUserReaderPort'
             );
         }
-        if (!(tokenService instanceof TokenServicePort)) {
+        if (!(tokenGenerator instanceof TokenGeneratorPort)) {
             throw new Error(
-                'LoginUserUseCase: tokenService must implement TokenServicePort'
+                'LoginUserUseCase: tokenGenerator must implement TokenGeneratorPort'
             );
         }
-        this.authUserProvider = authUserProvider;
-        this.tokenService = tokenService;
+        if (!(passwordHasher instanceof PasswordHasherPort)) {
+            throw new Error(
+                'LoginUserUseCase: passwordHasher must implement PasswordHasherPort'
+            );
+        }
+        this.authUserReader = authUserReader;
+        this.tokenGenerator = tokenGenerator;
+        this.passwordHasher = passwordHasher;
     }
 
-    execute = async data => {
-        const user = await this.authUserProvider.validateCredentials(
-            data.email,
-            data.password
+    async execute(data) {
+        const user = await this.authUserReader.findByEmailWithPassword(
+            data.email
         );
 
         if (!user) {
             throw new AppError(INVALID_CREDENTIALS, 'UNAUTHORIZED');
         }
 
-        const tokens = this.tokenService.generateTokens(user.id, user.email);
+        const isPasswordMatch = await this.passwordHasher.compare(
+            data.password,
+            user.password
+        );
 
-        return { user, tokens };
-    };
+        if (!isPasswordMatch) {
+            throw new AppError(INVALID_CREDENTIALS, 'UNAUTHORIZED');
+        }
+
+        const tokens = this.tokenGenerator.generateTokens(user.id, user.email);
+
+        return {
+            user: user.excludePassword(),
+            tokens,
+        };
+    }
 }

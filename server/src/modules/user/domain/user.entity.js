@@ -1,3 +1,5 @@
+import { UserStatus, BANNER_DEFAULT_COLOR } from '../user.constant.js';
+
 export class User {
     constructor({
         id,
@@ -8,14 +10,18 @@ export class User {
         avatar = null,
         bio = null,
         banner = null,
-        bannerColor = '#5865F2',
+        bannerColor = BANNER_DEFAULT_COLOR,
         dateOfBirth,
         isVerified = false,
-        status = 'offline',
+        status = UserStatus.OFFLINE,
         lastOnline = null,
         createdAt,
         updatedAt,
     }) {
+        if (status && !Object.values(UserStatus).includes(status)) {
+            throw new Error(`Invalid user status: ${status}`);
+        }
+
         this.id = id;
         this.email = email;
         this.username = username;
