@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
-import { INVALID_TOKEN } from '../../constants/app-messages.js';
-import AppError from '../../common/errors/app-error.js';
-import { UNAUTHORIZED } from '../../constants/http-status.js';
+import { INVALID_TOKEN } from '../../constants/app-messages.constant.js';
+import AppError from '../../common/errors/app.error.js';
+import { UNAUTHORIZED } from '../../constants/http-status.constant.js';
 
 export default class JwtTokenService {
     constructor({ secret, expiresIn, refreshSecret, refreshExpiresIn }) {

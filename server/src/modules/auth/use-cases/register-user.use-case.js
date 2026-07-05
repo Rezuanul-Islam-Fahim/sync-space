@@ -1,9 +1,9 @@
-import AppError from '../../../common/errors/app-error.js';
+import AppError from '../../../common/errors/app.error.js';
 import {
     EMAIL_ALREADY_REGISTERED,
     USERNAME_ALREADY_TAKEN,
-} from '../../../constants/app-messages.js';
-import { CONFLICT } from '../../../constants/http-status.js';
+} from '../../../constants/app-messages.constant.js';
+import { CONFLICT } from '../../../constants/http-status.constant.js';
 
 export class RegisterUserUseCase {
     constructor({ userRepository, passwordHasher, saltRounds }) {

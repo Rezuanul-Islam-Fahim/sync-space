@@ -3,7 +3,7 @@ import {
     REGISTER_ALLOWED_FIELDS,
     LOGIN_ALLOWED_FIELDS,
 } from './auth.constant.js';
-import allowedFieldsValidator from '../../middlewares/allowed-fields-validator.js';
+import allowedFieldsValidator from '../../middlewares/allowed-fields-validator.middleware.js';
 import {
     EMAIL_REQUIRED,
     EMAIL_INVALID,
@@ -14,7 +14,7 @@ import {
     DISPLAY_NAME_INVALID,
     DOB_REQUIRED,
     DOB_INVALID,
-} from '../../constants/app-messages.js';
+} from '../../constants/app-messages.constant.js';
 
 export const registerValidation = [
     allowedFieldsValidator(REGISTER_ALLOWED_FIELDS),

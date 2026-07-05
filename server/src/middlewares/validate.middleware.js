@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator';
-import AppError from '../common/errors/app-error.js';
-import { BAD_REQUEST } from '../constants/http-status.js';
+import AppError from '../common/errors/app.error.js';
+import { BAD_REQUEST } from '../constants/http-status.constant.js';
 
 const validate = (req, res, next) => {
     const errors = validationResult(req);

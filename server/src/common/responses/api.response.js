@@ -1,4 +1,4 @@
-import { DEFAULT_SUCCESS } from '../../constants/app-messages.js';
+import { DEFAULT_SUCCESS } from '../../constants/app-messages.constant.js';
 
 export default class ApiResponse {
     static success({ res, data, statusCode, message = DEFAULT_SUCCESS }) {

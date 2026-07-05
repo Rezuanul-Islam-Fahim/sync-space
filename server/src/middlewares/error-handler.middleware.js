@@ -1,7 +1,7 @@
 import logger from '../infrastructure/logger/logger.js';
-import ApiResponse from '../common/responses/api-response.js';
-import { INTERNAL_SERVER_ERROR } from '../constants/http-status.js';
-import { DEFAULT_ERROR } from '../constants/app-messages.js';
+import ApiResponse from '../common/responses/api.response.js';
+import { INTERNAL_SERVER_ERROR } from '../constants/http-status.constant.js';
+import { DEFAULT_ERROR } from '../constants/app-messages.constant.js';
 import { isDev } from '../config/index.js';
 
 export const errorHandler = (err, req, res, _next) => {

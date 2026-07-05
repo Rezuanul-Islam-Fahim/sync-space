@@ -6,8 +6,8 @@ import { AuthController, makeAuthUseCases } from './modules/auth/index.js';
 import { UserRepository, User } from './modules/user/index.js';
 import makeRoutes from './routes/index.js';
 import { makeAuthenticate } from './middlewares/auth.middleware.js';
-import BcryptPasswordHasher from './infrastructure/security/bcrypt-password-hasher.js';
-import JwtTokenService from './infrastructure/security/jwt-token-service.js';
+import BcryptPasswordHasher from './infrastructure/security/bcrypt-password-hasher.service.js';
+import JwtTokenService from './infrastructure/security/jwt-token.service.js';
 
 const PORT = config.port;
 

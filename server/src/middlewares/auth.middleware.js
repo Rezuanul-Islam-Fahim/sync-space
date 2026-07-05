@@ -1,10 +1,10 @@
-import AppError from '../common/errors/app-error.js';
+import AppError from '../common/errors/app.error.js';
 import catchAsync from '../common/catch-async.js';
 import {
     TOKEN_NOT_FOUND,
     USER_UNAVAILABLE,
-} from '../constants/app-messages.js';
-import { UNAUTHORIZED } from '../constants/http-status.js';
+} from '../constants/app-messages.constant.js';
+import { UNAUTHORIZED } from '../constants/http-status.constant.js';
 
 export const makeAuthenticate = (userRepository, tokenService) =>
     catchAsync(async (req, _, next) => {
