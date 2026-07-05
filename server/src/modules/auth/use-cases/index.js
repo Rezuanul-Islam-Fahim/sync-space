@@ -1,5 +1,5 @@
-import { LoginUserUseCase } from './login-user.usecase.js';
-import { RegisterUserUseCase } from './register-user.usecase.js';
+import { LoginUserUseCase } from './login-user.use-case.js';
+import { RegisterUserUseCase } from './register-user.use-case.js';
 
 export const makeAuthUseCases = ({
     userRepository,
