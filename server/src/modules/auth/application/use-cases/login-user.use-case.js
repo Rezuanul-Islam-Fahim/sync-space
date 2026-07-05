@@ -3,15 +3,13 @@ import {
     INVALID_CREDENTIALS,
     UNAUTHORIZED,
 } from '../../../../constants/index.js';
-import { ValidateCredentialsUseCase } from '../../../user/index.js';
+import { AuthUserProviderPort } from '../ports/auth-user-provider.port.js';
 
 export class LoginUserUseCase {
-    constructor({ validateCredentialsUseCase, tokenService }) {
-        if (
-            !(validateCredentialsUseCase instanceof ValidateCredentialsUseCase)
-        ) {
+    constructor({ authUserProvider, tokenService }) {
+        if (!(authUserProvider instanceof AuthUserProviderPort)) {
             throw new Error(
-                'LoginUserUseCase: validateCredentialsUseCase must implement ValidateCredentialsUseCase'
+                'LoginUserUseCase: authUserProvider must implement AuthUserProviderPort'
             );
         }
         if (!(tokenService instanceof TokenServicePort)) {
@@ -19,15 +17,15 @@ export class LoginUserUseCase {
                 'LoginUserUseCase: tokenService must implement TokenServicePort'
             );
         }
-        this.validateCredentialsUseCase = validateCredentialsUseCase;
+        this.authUserProvider = authUserProvider;
         this.tokenService = tokenService;
     }
 
     execute = async data => {
-        const user = await this.validateCredentialsUseCase.execute({
-            email: data.email,
-            password: data.password,
-        });
+        const user = await this.authUserProvider.validateCredentials(
+            data.email,
+            data.password
+        );
 
         if (!user) {
             throw new AppError(INVALID_CREDENTIALS, UNAUTHORIZED);

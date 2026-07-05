@@ -11,6 +11,7 @@ import {
     FindUserByIdUseCase,
     FindUserByUsernameUseCase,
     ValidateCredentialsUseCase,
+    UserAuthAdapter,
 } from './modules/user/index.js';
 import {
     BcryptPasswordHasher,
@@ -44,20 +45,20 @@ export const composeDependencies = ({ logger }) => {
         passwordHasher,
     });
 
-    // 2. Shared infrastructure bundle passed into every module
-    const infra = {
+    const authUserProvider = new UserAuthAdapter({
         createUserUseCase,
         findUserByEmailUseCase,
-        findUserByIdUseCase,
         findUserByUsernameUseCase,
         validateCredentialsUseCase,
+    });
+
+    // 3. Module composition — each module wires its internals
+    const authModule = createAuthModule({
+        authUserProvider,
         passwordHasher,
         tokenService,
         saltRounds,
-    };
-
-    // 3. Module composition — each module wires its internals
-    const authModule = createAuthModule(infra);
+    });
 
     // 4. Shared middlewares that cross module boundaries
     const authenticate = makeAuthenticate(findUserByIdUseCase, tokenService);

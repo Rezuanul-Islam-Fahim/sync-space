@@ -8,33 +8,29 @@ export {
     loginValidation,
     registerValidation,
 } from './presentation/auth.validator.js';
+export { AuthUserProviderPort } from './application/ports/auth-user-provider.port.js';
 
 // ── Module factory ────────────────────────────────────────────────────────────
 
 /**
  * Composes the auth module and returns its Express router.
  *
- * @param {{ createUserUseCase, findUserByEmailUseCase, findUserByUsernameUseCase, validateCredentialsUseCase, passwordHasher, tokenService, saltRounds }} deps
+ * @param {{ authUserProvider, passwordHasher, tokenService, saltRounds }} deps
  * @returns {{ router: import('express').Router }}
  */
 export const createAuthModule = ({
-    createUserUseCase,
-    findUserByEmailUseCase,
-    findUserByUsernameUseCase,
-    validateCredentialsUseCase,
+    authUserProvider,
     passwordHasher,
     tokenService,
     saltRounds,
 }) => {
     const loginUserUseCase = new LoginUserUseCase({
-        validateCredentialsUseCase,
+        authUserProvider,
         tokenService,
     });
 
     const registerUserUseCase = new RegisterUserUseCase({
-        createUserUseCase,
-        findUserByEmailUseCase,
-        findUserByUsernameUseCase,
+        authUserProvider,
         passwordHasher,
         saltRounds,
     });

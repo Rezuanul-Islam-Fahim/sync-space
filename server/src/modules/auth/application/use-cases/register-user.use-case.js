@@ -4,33 +4,13 @@ import {
     USERNAME_ALREADY_TAKEN,
     CONFLICT,
 } from '../../../../constants/index.js';
-import {
-    CreateUserUseCase,
-    FindUserByEmailUseCase,
-    FindUserByUsernameUseCase,
-} from '../../../user/index.js';
+import { AuthUserProviderPort } from '../ports/auth-user-provider.port.js';
 
 export class RegisterUserUseCase {
-    constructor({
-        createUserUseCase,
-        findUserByEmailUseCase,
-        findUserByUsernameUseCase,
-        passwordHasher,
-        saltRounds,
-    }) {
-        if (!(createUserUseCase instanceof CreateUserUseCase)) {
+    constructor({ authUserProvider, passwordHasher, saltRounds }) {
+        if (!(authUserProvider instanceof AuthUserProviderPort)) {
             throw new Error(
-                'RegisterUserUseCase: createUserUseCase must implement CreateUserUseCase'
-            );
-        }
-        if (!(findUserByEmailUseCase instanceof FindUserByEmailUseCase)) {
-            throw new Error(
-                'RegisterUserUseCase: findUserByEmailUseCase must implement FindUserByEmailUseCase'
-            );
-        }
-        if (!(findUserByUsernameUseCase instanceof FindUserByUsernameUseCase)) {
-            throw new Error(
-                'RegisterUserUseCase: findUserByUsernameUseCase must implement FindUserByUsernameUseCase'
+                'RegisterUserUseCase: authUserProvider must implement AuthUserProviderPort'
             );
         }
         if (!(passwordHasher instanceof PasswordHasherPort)) {
@@ -38,15 +18,13 @@ export class RegisterUserUseCase {
                 'RegisterUserUseCase: passwordHasher must implement PasswordHasherPort'
             );
         }
-        this.createUserUseCase = createUserUseCase;
-        this.findUserByEmailUseCase = findUserByEmailUseCase;
-        this.findUserByUsernameUseCase = findUserByUsernameUseCase;
+        this.authUserProvider = authUserProvider;
         this.passwordHasher = passwordHasher;
         this.saltRounds = saltRounds;
     }
 
     execute = async data => {
-        const existingUserByEmail = await this.findUserByEmailUseCase.execute(
+        const existingUserByEmail = await this.authUserProvider.findByEmail(
             data.email
         );
 
@@ -55,7 +33,7 @@ export class RegisterUserUseCase {
         }
 
         const existingUserByUsername =
-            await this.findUserByUsernameUseCase.execute(data.username);
+            await this.authUserProvider.findByUsername(data.username);
 
         if (existingUserByUsername) {
             throw new AppError(USERNAME_ALREADY_TAKEN, CONFLICT);
@@ -66,7 +44,7 @@ export class RegisterUserUseCase {
             this.saltRounds
         );
 
-        const newUser = await this.createUserUseCase.execute({
+        const newUser = await this.authUserProvider.createUser({
             ...data,
             password: hashedPassword,
         });
