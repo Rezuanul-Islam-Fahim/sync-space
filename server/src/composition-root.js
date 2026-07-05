@@ -4,7 +4,7 @@ import createApp from './app.js';
 
 // ── Infrastructure & Modules ──────────────────────────────────────────────────
 import { composeUserModule } from './modules/user/index.js';
-import { createAuthModule } from './modules/auth/index.js';
+import { composeAuthModule } from './modules/auth/index.js';
 import { UserProviderAdapter } from './modules/auth/infrastructure/adapters/user-provider.adapter.js';
 import {
     BcryptPasswordHasher,
@@ -38,7 +38,7 @@ export const composeDependencies = ({ logger }) => {
         validateCredentialsUseCase,
     });
 
-    const authModule = createAuthModule({
+    const authModule = composeAuthModule({
         authUserProvider,
         passwordHasher,
         tokenService,

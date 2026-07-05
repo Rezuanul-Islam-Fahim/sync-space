@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { AppError, TokenServicePort } from '../../index.js';
-import { INVALID_TOKEN, UNAUTHORIZED } from '../../../constants/index.js';
+import { INVALID_TOKEN, UNAUTHORIZED } from '../../constants/index.js';
 
 export default class JwtTokenService extends TokenServicePort {
     constructor({ secret, expiresIn, refreshSecret, refreshExpiresIn }) {

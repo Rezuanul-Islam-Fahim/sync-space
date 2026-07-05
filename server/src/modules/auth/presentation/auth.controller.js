@@ -10,7 +10,7 @@ import {
     OK,
     USER_CREATED,
     LOGIN_SUCCESSFUL,
-} from '../../../constants/index.js';
+} from '../../../shared/constants/index.js';
 
 class AuthController {
     constructor({ loginUserUseCase, registerUserUseCase }) {

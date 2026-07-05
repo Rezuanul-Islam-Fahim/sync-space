@@ -2,7 +2,7 @@ import { AppError, TokenServicePort } from '../../../../shared/index.js';
 import {
     INVALID_CREDENTIALS,
     UNAUTHORIZED,
-} from '../../../../constants/index.js';
+} from '../../../../shared/constants/index.js';
 import { AuthUserProviderPort } from '../ports/auth-user-provider.port.js';
 
 export class LoginUserUseCase {

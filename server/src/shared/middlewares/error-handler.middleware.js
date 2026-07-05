@@ -7,7 +7,7 @@ import {
     DEFAULT_ERROR,
     DUPLICATE_FIELD_VALUE,
     INVALID_ID,
-} from '../../constants/index.js';
+} from '../constants/index.js';
 import { isDev } from '../../config/index.js';
 
 // ── Mongoose / MongoDB error normalisers ─────────────────────────────────────

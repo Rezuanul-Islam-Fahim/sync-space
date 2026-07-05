@@ -1,10 +1,12 @@
-export { default as catchAsync } from './catch-async.util.js';
+export { default as catchAsync } from './utils/catch-async.util.js';
 export { default as AppError } from './errors/app.error.js';
 export { default as ApiResponse } from './responses/api.response.js';
 export { default as allowedFieldsFilter } from './utils/allowed-fields-filter.util.js';
 export { PasswordHasherPort } from './ports/password-hasher.port.js';
 export { TokenServicePort } from './ports/token-service.port.js';
 export { LoggerPort } from './ports/logger.port.js';
+export { Entity } from './domain/entity.base.js';
+export { ValueObject } from './domain/value-object.base.js';
 export { default as requestIdAttach } from './middlewares/request-id.middleware.js';
 export { default as allowedFieldsValidator } from './middlewares/allowed-fields-validator.middleware.js';
 export { makeAuthenticate } from './middlewares/auth.middleware.js';

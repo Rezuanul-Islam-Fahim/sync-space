@@ -3,7 +3,7 @@ import {
     EMAIL_ALREADY_REGISTERED,
     USERNAME_ALREADY_TAKEN,
     CONFLICT,
-} from '../../../../constants/index.js';
+} from '../../../../shared/constants/index.js';
 import { AuthUserProviderPort } from '../ports/auth-user-provider.port.js';
 import { User } from '../../../user/index.js';
 

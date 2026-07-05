@@ -14,7 +14,7 @@ import {
     DISPLAY_NAME_INVALID,
     DOB_REQUIRED,
     DOB_INVALID,
-} from '../../../constants/index.js';
+} from '../../../shared/constants/index.js';
 
 export const registerValidation = [
     allowedFieldsValidator(REGISTER_ALLOWED_FIELDS),

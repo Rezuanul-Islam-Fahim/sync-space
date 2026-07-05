@@ -1,10 +1,10 @@
 import AppError from '../errors/app.error.js';
-import catchAsync from '../catch-async.util.js';
+import catchAsync from '../utils/catch-async.util.js';
 import {
     TOKEN_NOT_FOUND,
     USER_UNAVAILABLE,
     UNAUTHORIZED,
-} from '../../constants/index.js';
+} from '../constants/index.js';
 
 import { TokenServicePort } from '../ports/token-service.port.js';
 
