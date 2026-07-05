@@ -1,1 +1,1 @@
-export { initDB, closeDB } from './database.connection.js';
+export { initDB, closeDB } from './database-connection.adapter.js';

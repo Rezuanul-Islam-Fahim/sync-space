@@ -1,4 +1,4 @@
-import logger from '../../logging/logger.js';
+import logger from '../../logging/winston-logger.adapter.js';
 import { closeDB, initDB } from '../index.js';
 import { UserModel } from '../../../../modules/user/index.js';
 import { getSeedUsers } from './user.seed.js';
