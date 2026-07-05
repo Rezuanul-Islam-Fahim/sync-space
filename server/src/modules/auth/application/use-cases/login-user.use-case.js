@@ -1,15 +1,15 @@
 import AppError from '../../../../shared/errors/app.error.js';
 import { INVALID_CREDENTIALS } from '../../../../constants/app-messages.constant.js';
 import { UNAUTHORIZED } from '../../../../constants/http-status.constant.js';
-import { UserRepositoryPort } from '../../../user/index.js';
+import { UserServicePort } from '../../../user/index.js';
 import { PasswordHasherPort } from '../../../../shared/ports/password-hasher.port.js';
 import { TokenServicePort } from '../../../../shared/ports/token-service.port.js';
 
 export class LoginUserUseCase {
-    constructor({ userRepository, passwordHasher, tokenService }) {
-        if (!(userRepository instanceof UserRepositoryPort)) {
+    constructor({ userService, passwordHasher, tokenService }) {
+        if (!(userService instanceof UserServicePort)) {
             throw new Error(
-                'LoginUserUseCase: userRepository must implement UserRepositoryPort'
+                'LoginUserUseCase: userService must implement UserServicePort'
             );
         }
         if (!(passwordHasher instanceof PasswordHasherPort)) {
@@ -22,13 +22,13 @@ export class LoginUserUseCase {
                 'LoginUserUseCase: tokenService must implement TokenServicePort'
             );
         }
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.passwordHasher = passwordHasher;
         this.tokenService = tokenService;
     }
 
     execute = async data => {
-        const user = await this.userRepository.findByEmailWithPassword(
+        const user = await this.userService.findByEmailWithPassword(
             data.email
         );
 
@@ -47,8 +47,6 @@ export class LoginUserUseCase {
 
         const tokens = this.tokenService.generateTokens(user.id, user.email);
 
-        const { password: _password, ...safeUser } = user;
-
-        return { user: safeUser, tokens };
+        return { user, tokens };
     };
 }

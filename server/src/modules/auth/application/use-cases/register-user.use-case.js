@@ -4,14 +4,14 @@ import {
     USERNAME_ALREADY_TAKEN,
 } from '../../../../constants/app-messages.constant.js';
 import { CONFLICT } from '../../../../constants/http-status.constant.js';
-import { UserRepositoryPort } from '../../../user/index.js';
+import { UserServicePort } from '../../../user/index.js';
 import { PasswordHasherPort } from '../../../../shared/ports/password-hasher.port.js';
 
 export class RegisterUserUseCase {
-    constructor({ userRepository, passwordHasher, saltRounds }) {
-        if (!(userRepository instanceof UserRepositoryPort)) {
+    constructor({ userService, passwordHasher, saltRounds }) {
+        if (!(userService instanceof UserServicePort)) {
             throw new Error(
-                'RegisterUserUseCase: userRepository must implement UserRepositoryPort'
+                'RegisterUserUseCase: userService must implement UserServicePort'
             );
         }
         if (!(passwordHasher instanceof PasswordHasherPort)) {
@@ -19,13 +19,13 @@ export class RegisterUserUseCase {
                 'RegisterUserUseCase: passwordHasher must implement PasswordHasherPort'
             );
         }
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.passwordHasher = passwordHasher;
         this.saltRounds = saltRounds;
     }
 
     execute = async data => {
-        const existingUserByEmail = await this.userRepository.findByEmail(
+        const existingUserByEmail = await this.userService.findByEmail(
             data.email
         );
 
@@ -33,7 +33,7 @@ export class RegisterUserUseCase {
             throw new AppError(EMAIL_ALREADY_REGISTERED, CONFLICT);
         }
 
-        const existingUserByUsername = await this.userRepository.findByUsername(
+        const existingUserByUsername = await this.userService.findByUsername(
             data.username
         );
 
@@ -46,7 +46,7 @@ export class RegisterUserUseCase {
             this.saltRounds
         );
 
-        const newUser = await this.userRepository.createUser({
+        const newUser = await this.userService.createUser({
             ...data,
             password: hashedPassword,
         });

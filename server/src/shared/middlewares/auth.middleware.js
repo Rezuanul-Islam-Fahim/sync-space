@@ -6,13 +6,13 @@ import {
 } from '../../constants/app-messages.constant.js';
 import { UNAUTHORIZED } from '../../constants/http-status.constant.js';
 
-import { UserRepositoryPort } from '../../modules/user/index.js';
+import { UserServicePort } from '../../modules/user/index.js';
 import { TokenServicePort } from '../ports/token-service.port.js';
 
-export const makeAuthenticate = (userRepository, tokenService) => {
-    if (!(userRepository instanceof UserRepositoryPort)) {
+export const makeAuthenticate = (userService, tokenService) => {
+    if (!(userService instanceof UserServicePort)) {
         throw new Error(
-            'makeAuthenticate: userRepository must implement UserRepositoryPort'
+            'makeAuthenticate: userService must implement UserServicePort'
         );
     }
     if (!(tokenService instanceof TokenServicePort)) {
@@ -35,7 +35,7 @@ export const makeAuthenticate = (userRepository, tokenService) => {
         }
 
         const decodedToken = tokenService.verifyAccessToken(token);
-        const currentUser = await userRepository.findById(decodedToken.sub);
+        const currentUser = await userService.findById(decodedToken.sub);
 
         if (!currentUser) {
             throw new AppError(USER_UNAVAILABLE, UNAUTHORIZED);

@@ -14,23 +14,23 @@ export {
 /**
  * Composes the auth module and returns its Express router.
  *
- * @param {{ userRepository, passwordHasher, tokenService, saltRounds }} deps
+ * @param {{ userService, passwordHasher, tokenService, saltRounds }} deps
  * @returns {{ router: import('express').Router }}
  */
 export const createAuthModule = ({
-    userRepository,
+    userService,
     passwordHasher,
     tokenService,
     saltRounds,
 }) => {
     const loginUserUseCase = new LoginUserUseCase({
-        userRepository,
+        userService,
         passwordHasher,
         tokenService,
     });
 
     const registerUserUseCase = new RegisterUserUseCase({
-        userRepository,
+        userService,
         passwordHasher,
         saltRounds,
     });

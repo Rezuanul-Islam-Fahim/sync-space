@@ -5,6 +5,7 @@ import createApp from './app.js';
 // ── Infrastructure ────────────────────────────────────────────────────────────
 import { UserModel } from './modules/user/infrastructure/database/user.model.js';
 import UserRepository from './modules/user/infrastructure/repositories/user.repository.js';
+import { UserService } from './modules/user/application/services/user.service.js';
 import {
     BcryptPasswordHasher,
     JwtTokenService,
@@ -23,14 +24,17 @@ export const composeDependencies = ({ logger }) => {
     const tokenService = new JwtTokenService(config.jwt);
     const saltRounds = config.auth.saltRounds;
 
-    // 2. Shared infrastructure bundle passed into every module
-    const infra = { userRepository, passwordHasher, tokenService, saltRounds };
+    // 1.5. Application services
+    const userService = new UserService(userRepository);
 
-    // 3. Module composition — each module wires its own internals
+    // 2. Shared infrastructure bundle passed into every module
+    const infra = { userService, passwordHasher, tokenService, saltRounds };
+
+    // 3. Module composition — each module wires its internals
     const authModule = createAuthModule(infra);
 
     // 4. Shared middlewares that cross module boundaries
-    const authenticate = makeAuthenticate(userRepository, tokenService);
+    const authenticate = makeAuthenticate(userService, tokenService);
 
     // 5. Route wiring — all routes versioned under /api/v1
     const v1Router = express.Router();
