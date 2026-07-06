@@ -5,8 +5,8 @@ export { PasswordHasherPort } from './ports/password-hasher.port.js';
 export { TokenGeneratorPort } from './ports/token-generator.port.js';
 export { TokenVerifierPort } from './ports/token-verifier.port.js';
 export { LoggerPort } from './ports/logger.port.js';
-export { Entity } from './domain/entity.base.js';
-export { ValueObject } from './domain/value-object.base.js';
+export { UserByIdPort } from './ports/user-by-id.port.js';
+
 export {
     requestIdAttach,
     makeAuthenticate,

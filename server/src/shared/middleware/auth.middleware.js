@@ -3,11 +3,12 @@ import { catchAsync } from '../util/catch-async.util.js';
 import { TOKEN_NOT_FOUND, USER_UNAVAILABLE } from '../constant/index.js';
 
 import { TokenVerifierPort } from '../ports/token-verifier.port.js';
+import { UserByIdPort } from '../ports/user-by-id.port.js';
 
 export const makeAuthenticate = (userRepository, tokenService) => {
-    if (!userRepository || typeof userRepository.findById !== 'function') {
+    if (!(userRepository instanceof UserByIdPort)) {
         throw new Error(
-            'makeAuthenticate: userRepository must be an object with a findById method'
+            'makeAuthenticate: userRepository must implement UserByIdPort'
         );
     }
     if (!(tokenService instanceof TokenVerifierPort)) {

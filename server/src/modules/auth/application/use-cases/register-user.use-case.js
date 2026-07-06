@@ -10,7 +10,6 @@ import {
 } from '../../domain/auth.constant.js';
 import { AuthUserReaderPort } from '../ports/auth-user-reader.port.js';
 import { AuthUserWriterPort } from '../ports/auth-user-writer.port.js';
-import { User } from '../../../user/index.js';
 
 export class RegisterUserUseCase {
     constructor({ authUserReader, authUserWriter, passwordHasher }) {
@@ -52,16 +51,14 @@ export class RegisterUserUseCase {
 
         const hashedPassword = await this.passwordHasher.hash(data.password);
 
-        const userEntity = new User({
-            email: data.email,
-            username: data.username,
-            password: hashedPassword,
-            displayName: data.displayName,
-            dateOfBirth: data.dateOfBirth,
-        });
-
         try {
-            const newUser = await this.authUserWriter.createUser(userEntity);
+            const newUser = await this.authUserWriter.createUser({
+                email: data.email,
+                username: data.username,
+                password: hashedPassword,
+                displayName: data.displayName,
+                dateOfBirth: data.dateOfBirth,
+            });
             return newUser;
         } catch (error) {
             if (error instanceof DuplicateFieldError) {

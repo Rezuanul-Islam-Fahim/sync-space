@@ -1,6 +1,7 @@
 import { UserReaderPort } from '../../application/ports/user-reader.port.js';
 import { UserWriterPort } from '../../application/ports/user-writer.port.js';
 import { UserMapper } from '../mappers/user.mapper.js';
+import { User } from '../../domain/user.entity.js';
 import { DuplicateFieldError } from '../../../../shared/index.js';
 
 export class UserReaderRepository extends UserReaderPort {
@@ -48,7 +49,8 @@ export class UserWriterRepository extends UserWriterPort {
 
     createUser = async userData => {
         try {
-            const persistenceData = UserMapper.toPersistence(userData);
+            const userEntity = new User(userData);
+            const persistenceData = UserMapper.toPersistence(userEntity);
             const newUser = new this.userModel(persistenceData);
             const savedUser = await newUser.save();
 
