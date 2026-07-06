@@ -3,7 +3,7 @@ import {
     LoginResponseDto,
     RegisterRequestDto,
     RegisterResponseDto,
-} from './auth.dto.js';
+} from './dto/index.js';
 import { ApiResponse, catchAsync } from '../../../shared/index.js';
 import {
     CREATED,
