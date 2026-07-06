@@ -1,4 +1,4 @@
-import config from './src/config/index.js';
+import { config } from './src/config/index.js';
 
 const migrateMongoConfig = {
     mongodb: {

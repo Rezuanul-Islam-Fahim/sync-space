@@ -1,7 +1,7 @@
 import { validationResult } from 'express-validator';
-import AppError from '../error/app.error.js';
+import { AppError } from '../error/app.error.js';
 
-const validate = (req, res, next) => {
+export const validate = (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -16,5 +16,3 @@ const validate = (req, res, next) => {
 
     next();
 };
-
-export default validate;

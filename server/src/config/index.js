@@ -10,7 +10,7 @@ if (error) {
     throw new Error(`Config validation error: ${error.message}`);
 }
 
-const config = {
+export const config = {
     port: envVars.PORT,
     env: envVars.NODE_ENV,
     db: {
@@ -33,5 +33,3 @@ const config = {
 };
 
 export const isDev = () => config.env === 'development';
-
-export default config;

@@ -1,4 +1,4 @@
-const allowedFieldsFilter = (body, allowedFields) => {
+export const allowedFieldsFilter = (body, allowedFields) => {
     if (!body || typeof body !== 'object') {
         return {};
     }
@@ -10,5 +10,3 @@ const allowedFieldsFilter = (body, allowedFields) => {
         return obj;
     }, {});
 };
-
-export default allowedFieldsFilter;

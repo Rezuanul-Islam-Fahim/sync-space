@@ -3,14 +3,14 @@ import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
 import hpp from 'hpp';
-import config from './config/index.js';
+import { config } from './config/index.js';
 import {
     requestIdAttach,
     makeErrorHandler,
     unknownRoutesHandler,
 } from './shared/index.js';
 
-const createApp = ({ router, logger }) => {
+export const createApp = ({ router, logger }) => {
     const app = express();
 
     app.use(requestIdAttach);
@@ -32,5 +32,3 @@ const createApp = ({ router, logger }) => {
 
     return app;
 };
-
-export default createApp;

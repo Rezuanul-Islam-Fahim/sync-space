@@ -1,5 +1,5 @@
 import winston from 'winston';
-import config from '../../../config/index.js';
+import { config } from '../../../config/index.js';
 import path from 'path';
 import { LoggerPort } from '../../ports/logger.port.js';
 
@@ -89,5 +89,4 @@ export class WinstonLoggerAdapter extends LoggerPort {
     }
 }
 
-const logger = new WinstonLoggerAdapter();
-export default logger;
+export const logger = new WinstonLoggerAdapter();

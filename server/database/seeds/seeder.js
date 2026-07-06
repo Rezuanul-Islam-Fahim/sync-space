@@ -1,4 +1,4 @@
-import logger from '../../src/shared/infrastructure/logging/winston-logger.adapter.js';
+import { logger } from '../../src/shared/infrastructure/logging/winston-logger.adapter.js';
 import {
     closeDB,
     initDB,

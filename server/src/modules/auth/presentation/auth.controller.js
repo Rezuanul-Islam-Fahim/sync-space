@@ -12,7 +12,7 @@ import {
     LOGIN_SUCCESSFUL,
 } from '../../../shared/constant/index.js';
 
-class AuthController {
+export class AuthController {
     constructor({ loginUserUseCase, registerUserUseCase }) {
         this.loginUserUseCase = loginUserUseCase;
         this.registerUserUseCase = registerUserUseCase;
@@ -44,5 +44,3 @@ class AuthController {
         });
     });
 }
-
-export default AuthController;

@@ -1,6 +1,6 @@
 import express from 'express';
-import config from './config/index.js';
-import createApp from './app.js';
+import { config } from './config/index.js';
+import { createApp } from './app.js';
 
 // ── Infrastructure & Modules ──────────────────────────────────────────────────
 import { composeUserModule } from './modules/user/index.js';

@@ -1,6 +1,6 @@
 import { initDB, closeDB } from './shared/infrastructure/database/index.js';
-import config from './config/index.js';
-import logger from './shared/infrastructure/logging/winston-logger.adapter.js';
+import { config } from './config/index.js';
+import { logger } from './shared/infrastructure/logging/winston-logger.adapter.js';
 import { composeDependencies } from './composition-root.js';
 
 const PORT = config.port;

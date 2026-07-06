@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { PasswordHasherPort } from '../../index.js';
 
-export default class BcryptPasswordHasher extends PasswordHasherPort {
+export class BcryptPasswordHasher extends PasswordHasherPort {
     constructor({ saltRounds } = {}) {
         super();
         this.saltRounds = saltRounds || 10;

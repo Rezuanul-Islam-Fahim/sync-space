@@ -4,7 +4,7 @@ import {
     INTERNAL_SERVER_ERROR,
 } from '../constant/index.js';
 
-export default class ApiResponse {
+export class ApiResponse {
     static success({ res, data, statusCode = OK, message = DEFAULT_SUCCESS }) {
         return res.status(statusCode).json({ statusCode, data, message });
     }
