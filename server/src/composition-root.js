@@ -16,7 +16,7 @@ import {
     JwtTokenVerifier,
 } from './shared/infrastructure/security/index.js';
 
-// ── Shared middlewares ────────────────────────────────────────────────────────
+// ── Shared middleware ─────────────────────────────────────────────────────────
 import { makeAuthenticate } from './shared/index.js';
 
 export const composeDependencies = ({ logger }) => {
@@ -43,7 +43,7 @@ export const composeDependencies = ({ logger }) => {
         tokenGenerator,
     });
 
-    // 3. Shared middlewares
+    // 3. Shared middleware
     const authenticate = makeAuthenticate(userReader, tokenVerifier);
 
     // 4. Route wiring — all routes versioned under /api/v1

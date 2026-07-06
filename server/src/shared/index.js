@@ -13,4 +13,4 @@ export {
     validate,
     makeErrorHandler,
     unknownRoutesHandler,
-} from './middlewares/index.js';
+} from './middleware/index.js';
