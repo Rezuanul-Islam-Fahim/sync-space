@@ -1,10 +1,18 @@
-import { config } from './src/config/index.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const mongoUri = process.env.MONGODB_URI;
+
+if (!mongoUri) {
+    throw new Error('MONGODB_URI environment variable is not defined.');
+}
 
 const migrateMongoConfig = {
     mongodb: {
-        url: config.db.uri,
-        databaseName: config.db.uri
-            .substring(config.db.uri.lastIndexOf('/') + 1)
+        url: mongoUri,
+        databaseName: mongoUri
+            .substring(mongoUri.lastIndexOf('/') + 1)
             .split('?')[0],
         options: {
             useNewUrlParser: true,
