@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import {
     AppError,
+    ErrorCode,
     TokenGeneratorPort,
     TokenVerifierPort,
 } from '../../index.js';
@@ -40,7 +41,7 @@ export class JwtTokenVerifier extends TokenVerifierPort {
         try {
             return jwt.verify(token, this.secret);
         } catch (error) {
-            throw new AppError(INVALID_TOKEN, 'UNAUTHORIZED');
+            throw new AppError(INVALID_TOKEN, ErrorCode.UNAUTHORIZED);
         }
     };
 
@@ -48,7 +49,7 @@ export class JwtTokenVerifier extends TokenVerifierPort {
         try {
             return jwt.verify(token, this.refreshSecret);
         } catch (error) {
-            throw new AppError(INVALID_TOKEN, 'UNAUTHORIZED');
+            throw new AppError(INVALID_TOKEN, ErrorCode.UNAUTHORIZED);
         }
     };
 }

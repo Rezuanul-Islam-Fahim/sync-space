@@ -1,5 +1,5 @@
 import { ApiResponse } from '../util/api-response.util.js';
-import { AppError } from '../error/app.error.js';
+import { AppError, ErrorCode } from '../error/app.error.js';
 import {
     BAD_REQUEST,
     CONFLICT,
@@ -16,12 +16,11 @@ import {
 import { isDev } from '../../config/index.js';
 
 const errorCodeToHttpStatus = {
-    BAD_REQUEST,
-    UNAUTHORIZED,
-    FORBIDDEN,
-    NOT_FOUND,
-    CONFLICT,
-    INTERNAL_SERVER_ERROR,
+    [ErrorCode.BAD_REQUEST]: BAD_REQUEST,
+    [ErrorCode.UNAUTHORIZED]: UNAUTHORIZED,
+    [ErrorCode.FORBIDDEN]: FORBIDDEN,
+    [ErrorCode.NOT_FOUND]: NOT_FOUND,
+    [ErrorCode.CONFLICT]: CONFLICT,
 };
 
 // ── Mongoose / MongoDB error normalisers ─────────────────────────────────────
@@ -31,15 +30,15 @@ const handleValidationError = err => {
         acc[el.path] = el.message;
         return acc;
     }, {});
-    return new AppError(err.message, 'BAD_REQUEST', errors);
+    return new AppError(err.message, ErrorCode.BAD_REQUEST, errors);
 };
 
 const handleCastError = err =>
-    new AppError(`${INVALID_ID}: ${err.value}`, 'BAD_REQUEST');
+    new AppError(`${INVALID_ID}: ${err.value}`, ErrorCode.BAD_REQUEST);
 
 const handleDuplicateKeyError = err => {
     const field = Object.keys(err.keyValue)[0];
-    return new AppError(formatDuplicateFieldError(field), 'CONFLICT');
+    return new AppError(formatDuplicateFieldError(field), ErrorCode.CONFLICT);
 };
 
 const errorNormalizers = [

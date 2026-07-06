@@ -1,5 +1,6 @@
 import {
     AppError,
+    ErrorCode,
     TokenGeneratorPort,
     PasswordHasherPort,
 } from '../../../../shared/index.js';
@@ -34,7 +35,7 @@ export class LoginUserUseCase {
         );
 
         if (!user) {
-            throw new AppError(INVALID_CREDENTIALS, 'UNAUTHORIZED');
+            throw new AppError(INVALID_CREDENTIALS, ErrorCode.UNAUTHORIZED);
         }
 
         const isPasswordMatch = await this.passwordHasher.compare(
@@ -43,7 +44,7 @@ export class LoginUserUseCase {
         );
 
         if (!isPasswordMatch) {
-            throw new AppError(INVALID_CREDENTIALS, 'UNAUTHORIZED');
+            throw new AppError(INVALID_CREDENTIALS, ErrorCode.UNAUTHORIZED);
         }
 
         const tokens = this.tokenGenerator.generateTokens(user.id, user.email);

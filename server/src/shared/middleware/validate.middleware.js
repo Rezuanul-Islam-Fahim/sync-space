@@ -1,5 +1,5 @@
 import { validationResult } from 'express-validator';
-import { AppError } from '../error/app.error.js';
+import { AppError, ErrorCode } from '../error/app.error.js';
 
 export const validate = (req, res, next) => {
     const errors = validationResult(req);
@@ -9,7 +9,11 @@ export const validate = (req, res, next) => {
             .array()
             .map(obj => `${obj.msg}.`)
             .join(' ');
-        const error = new AppError(messageStr, 'BAD_REQUEST', errors.array());
+        const error = new AppError(
+            messageStr,
+            ErrorCode.BAD_REQUEST,
+            errors.array()
+        );
 
         return next(error);
     }

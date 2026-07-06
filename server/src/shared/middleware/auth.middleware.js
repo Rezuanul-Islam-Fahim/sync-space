@@ -1,4 +1,4 @@
-import { AppError } from '../error/app.error.js';
+import { AppError, ErrorCode } from '../error/app.error.js';
 import { catchAsync } from '../util/catch-async.util.js';
 import { TOKEN_NOT_FOUND, USER_UNAVAILABLE } from '../constant/index.js';
 
@@ -26,14 +26,14 @@ export const makeAuthenticate = (userRepository, tokenService) => {
         }
 
         if (!token) {
-            throw new AppError(TOKEN_NOT_FOUND, 'UNAUTHORIZED');
+            throw new AppError(TOKEN_NOT_FOUND, ErrorCode.UNAUTHORIZED);
         }
 
         const decodedToken = tokenService.verifyAccessToken(token);
         const currentUser = await userRepository.findById(decodedToken.sub);
 
         if (!currentUser) {
-            throw new AppError(USER_UNAVAILABLE, 'UNAUTHORIZED');
+            throw new AppError(USER_UNAVAILABLE, ErrorCode.UNAUTHORIZED);
         }
 
         req.user = currentUser;

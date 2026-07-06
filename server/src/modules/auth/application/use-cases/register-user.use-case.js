@@ -1,4 +1,8 @@
-import { AppError, PasswordHasherPort } from '../../../../shared/index.js';
+import {
+    AppError,
+    ErrorCode,
+    PasswordHasherPort,
+} from '../../../../shared/index.js';
 import {
     EMAIL_ALREADY_REGISTERED,
     USERNAME_ALREADY_TAKEN,
@@ -34,7 +38,7 @@ export class RegisterUserUseCase {
             await this.authUserReader.findByEmailWithPassword(data.email);
 
         if (existingUserByEmail) {
-            throw new AppError(EMAIL_ALREADY_REGISTERED, 'CONFLICT');
+            throw new AppError(EMAIL_ALREADY_REGISTERED, ErrorCode.CONFLICT);
         }
 
         const existingUserByUsername = await this.authUserReader.findByUsername(
@@ -42,7 +46,7 @@ export class RegisterUserUseCase {
         );
 
         if (existingUserByUsername) {
-            throw new AppError(USERNAME_ALREADY_TAKEN, 'CONFLICT');
+            throw new AppError(USERNAME_ALREADY_TAKEN, ErrorCode.CONFLICT);
         }
 
         const hashedPassword = await this.passwordHasher.hash(data.password);
@@ -62,10 +66,16 @@ export class RegisterUserUseCase {
             if (error.code === 11000 && error.keyValue) {
                 const key = Object.keys(error.keyValue)[0];
                 if (key === 'email') {
-                    throw new AppError(EMAIL_ALREADY_REGISTERED, 'CONFLICT');
+                    throw new AppError(
+                        EMAIL_ALREADY_REGISTERED,
+                        ErrorCode.CONFLICT
+                    );
                 }
                 if (key === 'username') {
-                    throw new AppError(USERNAME_ALREADY_TAKEN, 'CONFLICT');
+                    throw new AppError(
+                        USERNAME_ALREADY_TAKEN,
+                        ErrorCode.CONFLICT
+                    );
                 }
             }
             throw error;
