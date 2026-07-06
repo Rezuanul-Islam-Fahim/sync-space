@@ -7,9 +7,9 @@ import { composeUserModule } from './modules/user/index.js';
 import { UserModel } from './modules/user/infrastructure/database/user.model.js';
 import { composeAuthModule } from './modules/auth/index.js';
 import {
-    UserReaderAdapter,
-    UserWriterAdapter,
-} from './modules/auth/infrastructure/adapters/user-provider.adapter.js';
+    AuthUserReaderAdapter,
+    AuthUserWriterAdapter,
+} from './modules/auth/infrastructure/index.js';
 import {
     BcryptPasswordHasher,
     JwtTokenGenerator,
@@ -33,8 +33,8 @@ export const composeDependencies = ({ logger }) => {
         passwordHasher,
     });
 
-    const authUserReader = new UserReaderAdapter({ userReader });
-    const authUserWriter = new UserWriterAdapter({ userWriter });
+    const authUserReader = new AuthUserReaderAdapter({ userReader });
+    const authUserWriter = new AuthUserWriterAdapter({ userWriter });
 
     const authModule = composeAuthModule({
         authUserReader,
