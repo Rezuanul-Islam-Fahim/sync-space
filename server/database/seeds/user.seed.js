@@ -1,11 +1,10 @@
 import { BcryptPasswordHasher } from '../../src/shared/infrastructure/security/index.js';
 import { config } from '../../src/config/index.js';
 
-const passwordHasher = new BcryptPasswordHasher();
-
 export const getSeedUsers = async () => {
     const saltRounds = config.auth.saltRounds || 10;
-    const hashedPassword = await passwordHasher.hash('password123', saltRounds);
+    const passwordHasher = new BcryptPasswordHasher({ saltRounds });
+    const hashedPassword = await passwordHasher.hash('password123');
 
     return [
         {
