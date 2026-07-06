@@ -6,14 +6,14 @@
     "scripts": {
         "start": "node src/server.js",
         "dev": "nodemon src/server.js",
-        "lint": "eslint \"src/**/*.js\"",
-        "lint:fix": "eslint \"src/**/*.js\" --fix",
-        "format": "prettier \"src/**/*.js\" \"*.{js,json,md}\" --write",
-        "format:check": "prettier \"src/**/*.js\" \"*.{js,json,md}\" --check",
+        "lint": "eslint \"src/**/*.js\" \"database/**/*.js\"",
+        "lint:fix": "eslint \"src/**/*.js\" \"database/**/*.js\" --fix",
+        "format": "prettier \"src/**/*.js\" \"database/**/*.js\" \"*.{js,json,md}\" --write",
+        "format:check": "prettier \"src/**/*.js\" \"database/**/*.js\" \"*.{js,json,md}\" --check",
         "db:migrate": "migrate-mongo up",
         "db:migrate:down": "migrate-mongo down",
         "db:migrate:status": "migrate-mongo status",
-        "db:seed": "node src/shared/infrastructure/database/seeds/seeder.js"
+        "db:seed": "node database/seeds/seeder.js"
     },
     "keywords": [],
     "author": "Rezuanul Islam Fahim",

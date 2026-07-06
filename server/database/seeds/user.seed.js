@@ -1,5 +1,5 @@
-import BcryptPasswordHasher from '../../security/bcrypt-password-hasher.adapter.js';
-import config from '../../../../config/index.js';
+import BcryptPasswordHasher from '../../src/shared/infrastructure/security/bcrypt-password-hasher.adapter.js';
+import config from '../../src/config/index.js';
 
 const passwordHasher = new BcryptPasswordHasher();
 

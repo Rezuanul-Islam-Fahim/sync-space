@@ -1,8 +1,11 @@
-import logger from '../../logging/winston-logger.adapter.js';
-import { closeDB, initDB } from '../index.js';
-import { UserModel } from '../../../../modules/user/infrastructure/database/user.model.js';
+import logger from '../../src/shared/infrastructure/logging/winston-logger.adapter.js';
+import {
+    closeDB,
+    initDB,
+} from '../../src/shared/infrastructure/database/index.js';
+import { UserModel } from '../../src/modules/user/infrastructure/database/user.model.js';
 import { getSeedUsers } from './user.seed.js';
-import { isDev } from '../../../../config/index.js';
+import { isDev } from '../../src/config/index.js';
 
 const runSeeder = async () => {
     try {

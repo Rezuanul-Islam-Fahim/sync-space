@@ -11,7 +11,7 @@ const migrateMongoConfig = {
             useUnifiedTopology: true,
         },
     },
-    migrationsDir: 'src/shared/infrastructure/database/migrations',
+    migrationsDir: 'database/migrations',
     changelogCollectionName: 'changelog',
     migrationFileExtension: '.js',
     useFileHash: false,
