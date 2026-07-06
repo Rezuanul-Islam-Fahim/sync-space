@@ -89,4 +89,13 @@ export class WinstonLoggerAdapter extends LoggerPort {
     }
 }
 
+/**
+ * Module-level singleton instance of the WinstonLoggerAdapter.
+ *
+ * IMPORTANT: This singleton is intended primarily for bootstrapping tasks, such as initial database
+ * connection setup, startup/shutdown hooks, and uncaught process level exceptions.
+ * For general application modules and classes, do not import this instance directly. Instead,
+ * inject it through the Dependency Injection (DI) system (e.g. from the composition root) to maintain
+ * testability and ensure the same logger instance flows throughout the system.
+ */
 export const logger = new WinstonLoggerAdapter();

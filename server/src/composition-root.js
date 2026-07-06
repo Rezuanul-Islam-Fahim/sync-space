@@ -18,8 +18,9 @@ import {
 
 // ── Shared middleware ─────────────────────────────────────────────────────────
 import { makeAuthenticate } from './shared/index.js';
+import { logger as defaultLogger } from './shared/infrastructure/logging/winston-logger.adapter.js';
 
-export const composeDependencies = ({ logger }) => {
+export const composeDependencies = ({ logger = defaultLogger } = {}) => {
     // 1. Shared Infrastructure/Outbound adapters
     const passwordHasher = new BcryptPasswordHasher({
         saltRounds: config.auth.saltRounds,
@@ -31,6 +32,7 @@ export const composeDependencies = ({ logger }) => {
     const { userReader, userWriter } = composeUserModule({
         userModel: UserModel,
         passwordHasher,
+        logger,
     });
 
     const authUserReader = new AuthUserReaderAdapter({ userReader });
@@ -41,6 +43,7 @@ export const composeDependencies = ({ logger }) => {
         authUserWriter,
         passwordHasher,
         tokenGenerator,
+        logger,
     });
 
     // 3. Shared middleware
