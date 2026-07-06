@@ -1,6 +1,6 @@
-import AppError from '../errors/app.error.js';
-import catchAsync from '../utils/catch-async.util.js';
-import { TOKEN_NOT_FOUND, USER_UNAVAILABLE } from '../constants/index.js';
+import AppError from '../error/app.error.js';
+import catchAsync from '../util/catch-async.util.js';
+import { TOKEN_NOT_FOUND, USER_UNAVAILABLE } from '../constant/index.js';
 
 import { TokenVerifierPort } from '../ports/token-verifier.port.js';
 

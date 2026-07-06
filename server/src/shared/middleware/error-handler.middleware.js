@@ -1,5 +1,5 @@
 import ApiResponse from '../response/api.response.js';
-import AppError from '../errors/app.error.js';
+import AppError from '../error/app.error.js';
 import {
     BAD_REQUEST,
     CONFLICT,
@@ -8,7 +8,7 @@ import {
     UNAUTHORIZED,
     FORBIDDEN,
     NOT_FOUND,
-} from '../constants/index.js';
+} from '../constant/index.js';
 import {
     INVALID_ID,
     formatDuplicateFieldError,

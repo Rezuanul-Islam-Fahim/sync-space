@@ -4,7 +4,7 @@ import {
     TokenGeneratorPort,
     TokenVerifierPort,
 } from '../../index.js';
-import { INVALID_TOKEN } from '../../constants/index.js';
+import { INVALID_TOKEN } from '../../constant/index.js';
 
 export class JwtTokenGenerator extends TokenGeneratorPort {
     constructor({ secret, expiresIn, refreshSecret, refreshExpiresIn }) {

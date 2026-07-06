@@ -1,5 +1,5 @@
-export { catchAsync, allowedFieldsFilter } from './utils/index.js';
-export { default as AppError } from './errors/app.error.js';
+export { catchAsync, allowedFieldsFilter } from './util/index.js';
+export { default as AppError } from './error/app.error.js';
 export { default as ApiResponse } from './response/api.response.js';
 export { PasswordHasherPort } from './ports/password-hasher.port.js';
 export { TokenGeneratorPort } from './ports/token-generator.port.js';
