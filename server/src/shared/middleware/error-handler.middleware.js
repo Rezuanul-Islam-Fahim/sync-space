@@ -12,7 +12,7 @@ import {
 import {
     INVALID_ID,
     formatDuplicateFieldError,
-} from '../infrastructure/database/database-errors.js';
+} from '../infrastructure/database/database-error.constant.js';
 import { isDev } from '../../config/index.js';
 
 const errorCodeToHttpStatus = {
