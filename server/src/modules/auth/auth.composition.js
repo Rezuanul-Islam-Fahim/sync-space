@@ -6,7 +6,7 @@ import { createAuthRouter } from './presentation/auth.router.js';
 /**
  * Composes the auth module and returns its Express router.
  *
- * @param {{ authUserReader, authUserWriter, passwordHasher, tokenGenerator, logger?: import('../../shared/ports/logger.port.js').LoggerPort }} deps
+ * @param {{ authUserReader, authUserWriter, passwordHasher, tokenGenerator, validateCredentials, logger?: import('../../shared/ports/logger.port.js').LoggerPort }} deps
  * @returns {{ router: import('express').Router }}
  */
 export const composeAuthModule = ({
@@ -14,12 +14,12 @@ export const composeAuthModule = ({
     authUserWriter,
     passwordHasher,
     tokenGenerator,
+    validateCredentials,
     logger: _logger,
 }) => {
     const loginUserUseCase = new LoginUserUseCase({
-        authUserReader,
+        validateCredentials,
         tokenGenerator,
-        passwordHasher,
     });
 
     const registerUserUseCase = new RegisterUserUseCase({

@@ -2,6 +2,7 @@ import {
     AppError,
     ErrorCode,
     PasswordHasherPort,
+    DuplicateFieldError,
 } from '../../../../shared/index.js';
 import {
     EMAIL_ALREADY_REGISTERED,
@@ -63,15 +64,14 @@ export class RegisterUserUseCase {
             const newUser = await this.authUserWriter.createUser(userEntity);
             return newUser;
         } catch (error) {
-            if (error.code === 11000 && error.keyValue) {
-                const key = Object.keys(error.keyValue)[0];
-                if (key === 'email') {
+            if (error instanceof DuplicateFieldError) {
+                if (error.field === 'email') {
                     throw new AppError(
                         EMAIL_ALREADY_REGISTERED,
                         ErrorCode.CONFLICT
                     );
                 }
-                if (key === 'username') {
+                if (error.field === 'username') {
                     throw new AppError(
                         USERNAME_ALREADY_TAKEN,
                         ErrorCode.CONFLICT

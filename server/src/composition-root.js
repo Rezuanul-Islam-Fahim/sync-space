@@ -29,11 +29,12 @@ export const composeDependencies = ({ logger = defaultLogger } = {}) => {
     const tokenVerifier = new JwtTokenVerifier(config.jwt);
 
     // 2. Module Composition
-    const { userReader, userWriter } = composeUserModule({
-        userModel: UserModel,
-        passwordHasher,
-        logger,
-    });
+    const { userReader, userWriter, validateCredentialsUseCase } =
+        composeUserModule({
+            userModel: UserModel,
+            passwordHasher,
+            logger,
+        });
 
     const authUserReader = new AuthUserReaderAdapter({ userReader });
     const authUserWriter = new AuthUserWriterAdapter({ userWriter });
@@ -43,6 +44,7 @@ export const composeDependencies = ({ logger = defaultLogger } = {}) => {
         authUserWriter,
         passwordHasher,
         tokenGenerator,
+        validateCredentials: validateCredentialsUseCase,
         logger,
     });
 
