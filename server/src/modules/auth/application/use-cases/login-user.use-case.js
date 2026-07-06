@@ -32,7 +32,7 @@ export class LoginUserUseCase {
         const tokens = this.tokenGenerator.generateTokens(user.id, user.email);
 
         return {
-            user: user.excludePassword(),
+            user,
             tokens,
         };
     }

@@ -20,7 +20,10 @@ import {
 import { makeAuthenticate } from './shared/index.js';
 import { logger as defaultLogger } from './shared/infrastructure/logging/winston-logger.adapter.js';
 
-export const composeDependencies = ({ logger = defaultLogger } = {}) => {
+export const composeDependencies = ({
+    logger = defaultLogger,
+    customNormalizers = [],
+} = {}) => {
     // 1. Shared Infrastructure/Outbound adapters
     const passwordHasher = new BcryptPasswordHasher({
         saltRounds: config.auth.saltRounds,
@@ -60,7 +63,7 @@ export const composeDependencies = ({ logger = defaultLogger } = {}) => {
     apiRouter.use('/v1', v1Router);
 
     // 5. Express app
-    const app = createApp({ router: apiRouter, logger });
+    const app = createApp({ router: apiRouter, logger, customNormalizers });
 
     return { app, authenticate };
 };

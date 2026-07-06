@@ -52,39 +52,42 @@ const errorNormalizers = [
 
 // ── Main error handler ────────────────────────────────────────────────────────
 
-export const makeErrorHandler = logger => (err, req, res, _next) => {
-    // Normalise known infrastructure errors into operational AppErrors
-    let error = err;
+export const makeErrorHandler = (logger, customNormalizers = []) => {
+    const allNormalizers = [...customNormalizers, ...errorNormalizers];
+    return (err, req, res, _next) => {
+        // Normalise known infrastructure errors into operational AppErrors
+        let error = err;
 
-    for (const normalizer of errorNormalizers) {
-        if (normalizer.canHandle(err)) {
-            error = normalizer.handle(err);
-            break;
+        for (const normalizer of allNormalizers) {
+            if (normalizer.canHandle(err)) {
+                error = normalizer.handle(err);
+                break;
+            }
         }
-    }
 
-    const isOperational = error.isOperational;
-    const statusCode = isOperational
-        ? errorCodeToHttpStatus[error.errorCode] || INTERNAL_SERVER_ERROR
-        : INTERNAL_SERVER_ERROR;
-    const message = isOperational ? error.message : DEFAULT_ERROR;
-    const requestId = req.id;
+        const isOperational = error.isOperational;
+        const statusCode = isOperational
+            ? errorCodeToHttpStatus[error.errorCode] || INTERNAL_SERVER_ERROR
+            : INTERNAL_SERVER_ERROR;
+        const message = isOperational ? error.message : DEFAULT_ERROR;
+        const requestId = req.id;
 
-    logger.error(error.message, {
-        statusCode,
-        stack: error.stack,
-        isOperational,
-        requestId,
-        path: req.originalUrl,
-        method: req.method,
-        ip: req.ip,
-    });
+        logger.error(error.message, {
+            statusCode,
+            stack: error.stack,
+            isOperational,
+            requestId,
+            path: req.originalUrl,
+            method: req.method,
+            ip: req.ip,
+        });
 
-    ApiResponse.error({
-        res,
-        statusCode,
-        message,
-        errors: isOperational ? error.errors : undefined,
-        stack: isDev() ? error.stack : undefined,
-    });
+        ApiResponse.error({
+            res,
+            statusCode,
+            message,
+            errors: isOperational ? error.errors : undefined,
+            stack: isDev() ? error.stack : undefined,
+        });
+    };
 };

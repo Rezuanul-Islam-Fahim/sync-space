@@ -39,10 +39,4 @@ export class User {
         this.updatedAt = updatedAt;
         Object.freeze(this);
     }
-
-    excludePassword() {
-        const props = { ...this };
-        delete props.password;
-        return new User(props);
-    }
 }
