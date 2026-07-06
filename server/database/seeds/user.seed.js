@@ -1,4 +1,4 @@
-import { BcryptPasswordHasher } from '../../src/shared/infrastructure/security/bcrypt-password-hasher.adapter.js';
+import { BcryptPasswordHasher } from '../../src/shared/infrastructure/security/index.js';
 import { config } from '../../src/config/index.js';
 
 const passwordHasher = new BcryptPasswordHasher();
