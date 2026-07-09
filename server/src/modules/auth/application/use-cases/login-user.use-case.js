@@ -4,13 +4,13 @@ import {
     TokenGeneratorPort,
 } from '../../../../shared/index.js';
 import { INVALID_CREDENTIALS } from '../../domain/auth.constant.js';
-import { ValidateCredentialsUseCase } from '../../../user/index.js';
+import { ValidateCredentialsPort } from '../ports/validate-credentials.port.js';
 
 export class LoginUserUseCase {
     constructor({ validateCredentials, tokenGenerator }) {
-        if (!(validateCredentials instanceof ValidateCredentialsUseCase)) {
+        if (!(validateCredentials instanceof ValidateCredentialsPort)) {
             throw new Error(
-                'LoginUserUseCase: validateCredentials must implement ValidateCredentialsUseCase'
+                'LoginUserUseCase: validateCredentials must implement ValidateCredentialsPort'
             );
         }
         if (!(tokenGenerator instanceof TokenGeneratorPort)) {

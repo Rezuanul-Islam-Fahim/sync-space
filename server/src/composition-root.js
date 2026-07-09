@@ -9,6 +9,7 @@ import { composeAuthModule } from './modules/auth/index.js';
 import {
     AuthUserReaderAdapter,
     AuthUserWriterAdapter,
+    CredentialValidatorAdapter,
 } from './modules/auth/infrastructure/index.js';
 import {
     BcryptPasswordHasher,
@@ -41,13 +42,16 @@ export const composeDependencies = ({
 
     const authUserReader = new AuthUserReaderAdapter({ userReader });
     const authUserWriter = new AuthUserWriterAdapter({ userWriter });
+    const credentialValidator = new CredentialValidatorAdapter({
+        validateCredentialsUseCase,
+    });
 
     const authModule = composeAuthModule({
         authUserReader,
         authUserWriter,
         passwordHasher,
         tokenGenerator,
-        validateCredentials: validateCredentialsUseCase,
+        validateCredentials: credentialValidator,
         logger,
     });
 

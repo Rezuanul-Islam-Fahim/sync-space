@@ -1,8 +1,8 @@
-import { UserDto } from '../../../user/index.js';
+import { AuthUserResponseDto } from './auth-user-response.dto.js';
 
 export class LoginResponseDto {
     constructor({ user, tokens }) {
-        this.user = UserDto.from(user);
+        this.user = AuthUserResponseDto.from(user);
         this.tokens = tokens;
     }
 

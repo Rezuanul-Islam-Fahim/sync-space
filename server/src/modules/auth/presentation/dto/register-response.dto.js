@@ -1,3 +1,3 @@
-import { UserDto } from '../../../user/index.js';
+import { AuthUserResponseDto } from './auth-user-response.dto.js';
 
-export { UserDto as RegisterResponseDto };
+export { AuthUserResponseDto as RegisterResponseDto };
