@@ -1,8 +1,8 @@
 export class ValidateCredentialsUseCase {
-    constructor({ userReader, passwordHasher }) {
-        if (typeof userReader?.findByEmailWithPassword !== 'function') {
+    constructor({ authUserReader, passwordHasher }) {
+        if (typeof authUserReader?.findByEmailWithPassword !== 'function') {
             throw new Error(
-                'ValidateCredentialsUseCase: userReader must implement findByEmailWithPassword method'
+                'ValidateCredentialsUseCase: authUserReader must implement findByEmailWithPassword method'
             );
         }
         if (typeof passwordHasher?.compare !== 'function') {
@@ -10,13 +10,14 @@ export class ValidateCredentialsUseCase {
                 'ValidateCredentialsUseCase: passwordHasher must implement compare method'
             );
         }
-        this.userReader = userReader;
+        this.authUserReader = authUserReader;
         this.passwordHasher = passwordHasher;
     }
 
-
     async execute(data) {
-        const user = await this.userReader.findByEmailWithPassword(data.email);
+        const user = await this.authUserReader.findByEmailWithPassword(
+            data.email
+        );
 
         if (!user) {
             return null;

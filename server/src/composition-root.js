@@ -4,12 +4,10 @@ import { createApp } from './app.js';
 
 // ── Infrastructure & Modules ──────────────────────────────────────────────────
 import { composeUserModule } from './modules/user/index.js';
-import { UserModel } from './modules/user/infrastructure/database/user.model.js';
 import { composeAuthModule } from './modules/auth/index.js';
 import {
     AuthUserReaderAdapter,
     AuthUserWriterAdapter,
-    CredentialValidatorAdapter,
 } from './modules/auth/infrastructure/index.js';
 import {
     BcryptPasswordHasher,
@@ -30,25 +28,19 @@ export const composeDependencies = ({ logger = defaultLogger } = {}) => {
     const tokenVerifier = new JwtTokenVerifier(config.jwt);
 
     // 2. Module Composition
-    const { userReader, userWriter, validateCredentialsUseCase } =
-        composeUserModule({
-            userModel: UserModel,
-            passwordHasher,
-            logger,
-        });
+    const { userReader, createUserUseCase } = composeUserModule({
+        passwordHasher,
+        logger,
+    });
 
     const authUserReader = new AuthUserReaderAdapter({ userReader });
-    const authUserWriter = new AuthUserWriterAdapter({ userWriter });
-    const credentialValidator = new CredentialValidatorAdapter({
-        validateCredentialsUseCase,
-    });
+    const authUserWriter = new AuthUserWriterAdapter({ createUserUseCase });
 
     const authModule = composeAuthModule({
         authUserReader,
         authUserWriter,
         passwordHasher,
         tokenGenerator,
-        validateCredentials: credentialValidator,
         logger,
     });
 

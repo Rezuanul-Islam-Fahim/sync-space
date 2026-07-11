@@ -2,38 +2,32 @@ import {
     UserReaderRepository,
     UserWriterRepository,
 } from './infrastructure/repositories/user.repository.js';
-import { ValidateCredentialsUseCase } from './index.js';
+import { UserModel } from './infrastructure/database/user.model.js';
+import { CreateUserUseCase } from './index.js';
 
 /**
  * Composes the user module's dependencies.
  *
- * @param {{ userModel: import('mongoose').Model, passwordHasher: import('../../shared/ports/password-hasher.port.js').PasswordHasherPort, logger?: import('../../shared/ports/logger.port.js').LoggerPort }} deps
+ * @param {{ passwordHasher: import('../../shared/ports/password-hasher.port.js').PasswordHasherPort, logger?: import('../../shared/ports/logger.port.js').LoggerPort }} deps
  * @returns {{
  *   userReader: UserReaderRepository,
  *   userWriter: UserWriterRepository,
- *   validateCredentialsUseCase: ValidateCredentialsUseCase
+ *   createUserUseCase: CreateUserUseCase
  * }}
  */
-export const composeUserModule = ({
-    userModel,
-    passwordHasher,
-    logger: _logger,
-}) => {
-    if (!userModel) {
-        throw new Error('composeUserModule: userModel is required');
-    }
+export const composeUserModule = ({ passwordHasher, logger: _logger }) => {
+    const userReader = new UserReaderRepository(UserModel);
+    const userWriter = new UserWriterRepository(UserModel);
 
-    const userReader = new UserReaderRepository(userModel);
-    const userWriter = new UserWriterRepository(userModel);
-
-    const validateCredentialsUseCase = new ValidateCredentialsUseCase({
+    const createUserUseCase = new CreateUserUseCase({
         userReader,
+        userWriter,
         passwordHasher,
     });
 
     return {
         userReader,
         userWriter,
-        validateCredentialsUseCase,
+        createUserUseCase,
     };
 };

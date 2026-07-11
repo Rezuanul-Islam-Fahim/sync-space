@@ -17,4 +17,3 @@ export class AuthUserReaderAdapter extends AuthUserReaderPort {
         return user ? new AuthUser(user) : null;
     };
 }
-

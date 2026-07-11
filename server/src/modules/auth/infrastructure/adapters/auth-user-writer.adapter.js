@@ -2,14 +2,13 @@ import { AuthUserWriterPort } from '../../application/ports/auth-user-writer.por
 import { AuthUser } from '../../domain/auth-user.entity.js';
 
 export class AuthUserWriterAdapter extends AuthUserWriterPort {
-    constructor({ userWriter }) {
+    constructor({ createUserUseCase }) {
         super();
-        this.userWriter = userWriter;
+        this.createUserUseCase = createUserUseCase;
     }
 
     createUser = async userData => {
-        const user = await this.userWriter.createUser(userData);
+        const user = await this.createUserUseCase.execute(userData);
         return user ? new AuthUser(user) : null;
     };
 }
-

@@ -20,7 +20,6 @@ export const initDB = async ({ logger, dbConfig }) => {
     });
 };
 
-
 export const closeDB = async () => {
     await mongoose.connection.close();
 };
