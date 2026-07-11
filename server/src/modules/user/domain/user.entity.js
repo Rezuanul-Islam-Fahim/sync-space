@@ -18,9 +18,7 @@ export class User {
         createdAt,
         updatedAt,
     }) {
-        if (status && !Object.values(UserStatus).includes(status)) {
-            throw new Error(`Invalid user status: ${status}`);
-        }
+
 
         this.id = id;
         this.email = email;

@@ -2,9 +2,6 @@ import { UserCredentialsDto, UserDto } from '../dto/user.dto.js';
 
 export class GetUserUseCase {
     constructor({ userReader, logger }) {
-        if (!userReader) {
-            throw new Error('GetUserUseCase: userReader is required');
-        }
         this.userReader = userReader;
         this.logger = logger;
     }

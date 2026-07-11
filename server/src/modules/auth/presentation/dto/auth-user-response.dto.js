@@ -17,7 +17,6 @@ export class AuthUserResponseDto {
     }
 
     static from(user) {
-        if (!user) return null;
         return new AuthUserResponseDto(user);
     }
 }

@@ -1,7 +1,6 @@
 import { UserReaderPort } from '../../application/ports/user-reader.port.js';
 import { UserWriterPort } from '../../application/ports/user-writer.port.js';
 import { UserMapper } from '../mappers/user.mapper.js';
-import { User } from '../../domain/user.entity.js';
 
 export class UserReaderRepository extends UserReaderPort {
     constructor(userModel) {
@@ -46,8 +45,7 @@ export class UserWriterRepository extends UserWriterPort {
         this.userModel = userModel;
     }
 
-    createUser = async userData => {
-        const userEntity = new User(userData);
+    createUser = async userEntity => {
         const persistenceData = UserMapper.toPersistence(userEntity);
         const newUser = new this.userModel(persistenceData);
         const savedUser = await newUser.save();

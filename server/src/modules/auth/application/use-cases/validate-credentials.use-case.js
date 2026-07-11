@@ -1,15 +1,5 @@
 export class ValidateCredentialsUseCase {
     constructor({ authUserReader, passwordHasher, logger }) {
-        if (typeof authUserReader?.findByEmailWithPassword !== 'function') {
-            throw new Error(
-                'ValidateCredentialsUseCase: authUserReader must implement findByEmailWithPassword method'
-            );
-        }
-        if (typeof passwordHasher?.compare !== 'function') {
-            throw new Error(
-                'ValidateCredentialsUseCase: passwordHasher must implement compare method'
-            );
-        }
         this.authUserReader = authUserReader;
         this.passwordHasher = passwordHasher;
         this.logger = logger;

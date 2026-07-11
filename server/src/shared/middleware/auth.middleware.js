@@ -3,16 +3,6 @@ import { catchAsync } from '../util/catch-async.util.js';
 import { TOKEN_NOT_FOUND, USER_UNAVAILABLE } from '../constant/index.js';
 
 export const makeAuthenticate = (getUserUseCase, tokenService) => {
-    if (typeof getUserUseCase?.byId !== 'function') {
-        throw new Error(
-            'makeAuthenticate: getUserUseCase must implement byId method'
-        );
-    }
-    if (typeof tokenService?.verifyAccessToken !== 'function') {
-        throw new Error(
-            'makeAuthenticate: tokenService must implement verifyAccessToken method'
-        );
-    }
 
     return catchAsync(async (req, _, next) => {
         let token;

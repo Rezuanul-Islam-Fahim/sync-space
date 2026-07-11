@@ -4,21 +4,10 @@ import {
     USERNAME_ALREADY_TAKEN,
 } from '../../domain/user.constant.js';
 
+import { User } from '../../domain/user.entity.js';
+
 export class CreateUserUseCase {
     constructor({ userReader, userWriter, logger }) {
-        if (
-            typeof userReader?.findByEmail !== 'function' ||
-            typeof userReader?.findByUsername !== 'function'
-        ) {
-            throw new Error(
-                'CreateUserUseCase: userReader must implement findByEmail and findByUsername methods'
-            );
-        }
-        if (typeof userWriter?.createUser !== 'function') {
-            throw new Error(
-                'CreateUserUseCase: userWriter must implement createUser method'
-            );
-        }
         this.userReader = userReader;
         this.userWriter = userWriter;
         this.logger = logger;
@@ -41,13 +30,15 @@ export class CreateUserUseCase {
             throw new AppError(USERNAME_ALREADY_TAKEN, ErrorCode.ALREADY_EXISTS);
         }
 
-        const newUser = await this.userWriter.createUser({
+        const newUserEntity = new User({
             email: data.email,
             username: data.username,
             password: data.password,
             displayName: data.displayName,
             dateOfBirth: data.dateOfBirth,
         });
+
+        const newUser = await this.userWriter.createUser(newUserEntity);
 
         return newUser;
     }

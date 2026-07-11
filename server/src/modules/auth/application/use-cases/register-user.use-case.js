@@ -1,15 +1,5 @@
 export class RegisterUserUseCase {
     constructor({ authUserWriter, passwordHasher, logger }) {
-        if (typeof authUserWriter?.createUser !== 'function') {
-            throw new Error(
-                'RegisterUserUseCase: authUserWriter must implement createUser method'
-            );
-        }
-        if (typeof passwordHasher?.hash !== 'function') {
-            throw new Error(
-                'RegisterUserUseCase: passwordHasher must implement hash method'
-            );
-        }
         this.authUserWriter = authUserWriter;
         this.passwordHasher = passwordHasher;
         this.logger = logger;
