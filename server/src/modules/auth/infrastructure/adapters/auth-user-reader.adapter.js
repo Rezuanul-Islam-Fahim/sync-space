@@ -8,7 +8,7 @@ export class AuthUserReaderAdapter extends AuthUserReaderPort {
     }
 
     findByEmailWithPassword = async email => {
-        const user = await this.getUserUseCase.forAuthByEmail(email);
+        const user = await this.getUserUseCase.byEmailWithCredentials(email);
         return user ? new AuthUser(user) : null;
     };
 

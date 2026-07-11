@@ -4,6 +4,11 @@ import { createApp } from './app.js';
 
 // ── Infrastructure & Modules ──────────────────────────────────────────────────
 import { composeUserModule } from './modules/user/index.js';
+import {
+    UserReaderRepository,
+    UserWriterRepository,
+} from './modules/user/infrastructure/repositories/user.repository.js';
+import { UserModel } from './modules/user/infrastructure/database/user.model.js';
 import { composeAuthModule } from './modules/auth/index.js';
 import {
     AuthUserReaderAdapter,
@@ -28,7 +33,11 @@ export const composeDependencies = ({ logger = defaultLogger } = {}) => {
     const tokenVerifier = new JwtTokenVerifier(config.jwt);
 
     // 2. Module Composition
+    const userReader = new UserReaderRepository(UserModel);
+    const userWriter = new UserWriterRepository(UserModel);
     const { getUserUseCase, createUserUseCase } = composeUserModule({
+        userReader,
+        userWriter,
         logger,
     });
 

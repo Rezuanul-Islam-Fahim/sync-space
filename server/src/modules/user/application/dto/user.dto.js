@@ -31,7 +31,7 @@ export class UserDto extends UserSnapshotDto {
     }
 }
 
-export class UserAuthDto {
+export class UserCredentialsDto {
     constructor(user) {
         this.id = user.id?.toString();
         this.email = user.email;
@@ -41,6 +41,6 @@ export class UserAuthDto {
     }
 
     static from(user) {
-        return new UserAuthDto(user);
+        return new UserCredentialsDto(user);
     }
 }

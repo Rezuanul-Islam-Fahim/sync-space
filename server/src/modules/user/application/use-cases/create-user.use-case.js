@@ -7,11 +7,11 @@ import {
 export class CreateUserUseCase {
     constructor({ userReader, userWriter }) {
         if (
-            typeof userReader?.findByEmailWithPassword !== 'function' ||
+            typeof userReader?.findByEmail !== 'function' ||
             typeof userReader?.findByUsername !== 'function'
         ) {
             throw new Error(
-                'CreateUserUseCase: userReader must implement findByEmailWithPassword and findByUsername methods'
+                'CreateUserUseCase: userReader must implement findByEmail and findByUsername methods'
             );
         }
         if (typeof userWriter?.createUser !== 'function') {
@@ -25,7 +25,7 @@ export class CreateUserUseCase {
 
     async execute(data) {
         const existingUserByEmail =
-            await this.userReader.findByEmailWithPassword(data.email);
+            await this.userReader.findByEmail(data.email);
 
         if (existingUserByEmail) {
             throw new AppError(EMAIL_ALREADY_REGISTERED, ErrorCode.CONFLICT);
