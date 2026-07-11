@@ -13,9 +13,10 @@ import {
 } from '../../../shared/constant/index.js';
 
 export class AuthController {
-    constructor({ loginUserUseCase, registerUserUseCase }) {
+    constructor({ loginUserUseCase, registerUserUseCase, logger }) {
         this.loginUserUseCase = loginUserUseCase;
         this.registerUserUseCase = registerUserUseCase;
+        this.logger = logger;
     }
 
     register = catchAsync(async (req, res) => {

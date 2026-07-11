@@ -2,7 +2,7 @@ import { AppError, ErrorCode } from '../../../../shared/index.js';
 import { INVALID_CREDENTIALS } from '../../domain/auth.constant.js';
 
 export class LoginUserUseCase {
-    constructor({ validateCredentials, tokenGenerator }) {
+    constructor({ validateCredentials, tokenGenerator, logger }) {
         if (typeof validateCredentials?.execute !== 'function') {
             throw new Error(
                 'LoginUserUseCase: validateCredentials must implement execute method'
@@ -15,6 +15,7 @@ export class LoginUserUseCase {
         }
         this.validateCredentials = validateCredentials;
         this.tokenGenerator = tokenGenerator;
+        this.logger = logger;
     }
 
     async execute(data) {

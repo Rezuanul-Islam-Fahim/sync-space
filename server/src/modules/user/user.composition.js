@@ -9,15 +9,16 @@ import { CreateUserUseCase, GetUserUseCase } from './index.js';
  *   getUserUseCase: GetUserUseCase
  * }}
  */
-export const composeUserModule = ({ userReader, userWriter, logger: _logger }) => {
-
+export const composeUserModule = ({ userReader, userWriter, logger }) => {
     const createUserUseCase = new CreateUserUseCase({
         userReader,
         userWriter,
+        logger,
     });
 
     const getUserUseCase = new GetUserUseCase({
         userReader,
+        logger,
     });
 
     return {

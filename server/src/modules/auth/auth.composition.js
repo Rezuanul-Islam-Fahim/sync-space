@@ -15,26 +15,30 @@ export const composeAuthModule = ({
     authUserWriter,
     passwordHasher,
     tokenGenerator,
-    logger: _logger,
+    logger,
 }) => {
     const validateCredentialsUseCase = new ValidateCredentialsUseCase({
         authUserReader,
         passwordHasher,
+        logger,
     });
 
     const loginUserUseCase = new LoginUserUseCase({
         validateCredentials: validateCredentialsUseCase,
         tokenGenerator,
+        logger,
     });
 
     const registerUserUseCase = new RegisterUserUseCase({
         authUserWriter,
         passwordHasher,
+        logger,
     });
 
     const authController = new AuthController({
         loginUserUseCase,
         registerUserUseCase,
+        logger,
     });
 
     const router = createAuthRouter(authController);

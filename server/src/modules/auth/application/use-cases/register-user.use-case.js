@@ -1,5 +1,5 @@
 export class RegisterUserUseCase {
-    constructor({ authUserWriter, passwordHasher }) {
+    constructor({ authUserWriter, passwordHasher, logger }) {
         if (typeof authUserWriter?.createUser !== 'function') {
             throw new Error(
                 'RegisterUserUseCase: authUserWriter must implement createUser method'
@@ -12,10 +12,14 @@ export class RegisterUserUseCase {
         }
         this.authUserWriter = authUserWriter;
         this.passwordHasher = passwordHasher;
+        this.logger = logger;
     }
 
     async execute(data) {
         const hashedPassword = await this.passwordHasher.hash(data.password);
-        return this.authUserWriter.createUser({ ...data, password: hashedPassword });
+        return this.authUserWriter.createUser({
+            ...data,
+            password: hashedPassword,
+        });
     }
 }

@@ -5,7 +5,7 @@ import {
 } from '../../domain/user.constant.js';
 
 export class CreateUserUseCase {
-    constructor({ userReader, userWriter }) {
+    constructor({ userReader, userWriter, logger }) {
         if (
             typeof userReader?.findByEmail !== 'function' ||
             typeof userReader?.findByUsername !== 'function'
@@ -21,11 +21,13 @@ export class CreateUserUseCase {
         }
         this.userReader = userReader;
         this.userWriter = userWriter;
+        this.logger = logger;
     }
 
     async execute(data) {
-        const existingUserByEmail =
-            await this.userReader.findByEmail(data.email);
+        const existingUserByEmail = await this.userReader.findByEmail(
+            data.email
+        );
 
         if (existingUserByEmail) {
             throw new AppError(EMAIL_ALREADY_REGISTERED, ErrorCode.CONFLICT);
