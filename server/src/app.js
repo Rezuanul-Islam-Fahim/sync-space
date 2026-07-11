@@ -10,7 +10,7 @@ import {
     unknownRoutesHandler,
 } from './shared/index.js';
 
-export const createApp = ({ router, logger, customNormalizers = [] }) => {
+export const createApp = ({ router, logger }) => {
     const app = express();
 
     app.use(requestIdAttach);
@@ -29,7 +29,7 @@ export const createApp = ({ router, logger, customNormalizers = [] }) => {
     app.use('/api', router);
 
     app.use(unknownRoutesHandler);
-    app.use(makeErrorHandler(logger, customNormalizers));
+    app.use(makeErrorHandler(logger));
 
     return app;
 };

@@ -52,8 +52,8 @@ const errorNormalizers = [
 
 // ── Main error handler ────────────────────────────────────────────────────────
 
-export const makeErrorHandler = (logger, customNormalizers = []) => {
-    const allNormalizers = [...customNormalizers, ...errorNormalizers];
+export const makeErrorHandler = logger => {
+    const allNormalizers = [...errorNormalizers];
     return (err, req, res, _next) => {
         // Normalise known infrastructure errors into operational AppErrors
         let error = err;
