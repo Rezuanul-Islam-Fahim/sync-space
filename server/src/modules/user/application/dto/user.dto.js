@@ -30,3 +30,17 @@ export class UserDto extends UserSnapshotDto {
         return new UserDto(user);
     }
 }
+
+export class UserAuthDto {
+    constructor(user) {
+        this.id = user.id?.toString();
+        this.email = user.email;
+        this.username = user.username;
+        this.password = user.password;
+        this.isVerified = user.isVerified;
+    }
+
+    static from(user) {
+        return new UserAuthDto(user);
+    }
+}

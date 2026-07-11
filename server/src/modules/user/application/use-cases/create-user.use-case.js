@@ -5,7 +5,7 @@ import {
 } from '../../domain/user.constant.js';
 
 export class CreateUserUseCase {
-    constructor({ userReader, userWriter, passwordHasher }) {
+    constructor({ userReader, userWriter }) {
         if (
             typeof userReader?.findByEmailWithPassword !== 'function' ||
             typeof userReader?.findByUsername !== 'function'
@@ -19,14 +19,8 @@ export class CreateUserUseCase {
                 'CreateUserUseCase: userWriter must implement createUser method'
             );
         }
-        if (typeof passwordHasher?.hash !== 'function') {
-            throw new Error(
-                'CreateUserUseCase: passwordHasher must implement hash method'
-            );
-        }
         this.userReader = userReader;
         this.userWriter = userWriter;
-        this.passwordHasher = passwordHasher;
     }
 
     async execute(data) {
@@ -45,12 +39,10 @@ export class CreateUserUseCase {
             throw new AppError(USERNAME_ALREADY_TAKEN, ErrorCode.CONFLICT);
         }
 
-        const hashedPassword = await this.passwordHasher.hash(data.password);
-
         const newUser = await this.userWriter.createUser({
             email: data.email,
             username: data.username,
-            password: hashedPassword,
+            password: data.password,
             displayName: data.displayName,
             dateOfBirth: data.dateOfBirth,
         });

@@ -2,10 +2,10 @@ import { AppError, ErrorCode } from '../error/app.error.js';
 import { catchAsync } from '../util/catch-async.util.js';
 import { TOKEN_NOT_FOUND, USER_UNAVAILABLE } from '../constant/index.js';
 
-export const makeAuthenticate = (userRepository, tokenService) => {
-    if (typeof userRepository?.findById !== 'function') {
+export const makeAuthenticate = (getUserUseCase, tokenService) => {
+    if (typeof getUserUseCase?.byId !== 'function') {
         throw new Error(
-            'makeAuthenticate: userRepository must implement findById method'
+            'makeAuthenticate: getUserUseCase must implement byId method'
         );
     }
     if (typeof tokenService?.verifyAccessToken !== 'function') {
@@ -29,7 +29,7 @@ export const makeAuthenticate = (userRepository, tokenService) => {
         }
 
         const decodedToken = tokenService.verifyAccessToken(token);
-        const currentUser = await userRepository.findById(decodedToken.sub);
+        const currentUser = await getUserUseCase.byId(decodedToken.sub);
 
         if (!currentUser) {
             throw new AppError(USER_UNAVAILABLE, ErrorCode.UNAUTHORIZED);

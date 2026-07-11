@@ -28,12 +28,11 @@ export const composeDependencies = ({ logger = defaultLogger } = {}) => {
     const tokenVerifier = new JwtTokenVerifier(config.jwt);
 
     // 2. Module Composition
-    const { userReader, createUserUseCase } = composeUserModule({
-        passwordHasher,
+    const { getUserUseCase, createUserUseCase } = composeUserModule({
         logger,
     });
 
-    const authUserReader = new AuthUserReaderAdapter({ userReader });
+    const authUserReader = new AuthUserReaderAdapter({ getUserUseCase });
     const authUserWriter = new AuthUserWriterAdapter({ createUserUseCase });
 
     const authModule = composeAuthModule({
@@ -45,7 +44,7 @@ export const composeDependencies = ({ logger = defaultLogger } = {}) => {
     });
 
     // 3. Shared middleware
-    const authenticate = makeAuthenticate(userReader, tokenVerifier);
+    const authenticate = makeAuthenticate(getUserUseCase, tokenVerifier);
 
     // 4. Route wiring — all routes versioned under /api/v1
     const v1Router = express.Router();

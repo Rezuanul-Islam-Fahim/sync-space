@@ -29,6 +29,7 @@ export const composeAuthModule = ({
 
     const registerUserUseCase = new RegisterUserUseCase({
         authUserWriter,
+        passwordHasher,
     });
 
     const authController = new AuthController({
