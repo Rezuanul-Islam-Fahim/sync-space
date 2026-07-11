@@ -25,14 +25,14 @@ export const makeAuthenticate = (getUserUseCase, tokenService) => {
         }
 
         if (!token) {
-            throw new AppError(TOKEN_NOT_FOUND, ErrorCode.UNAUTHORIZED);
+            throw new AppError(TOKEN_NOT_FOUND, ErrorCode.UNAUTHENTICATED);
         }
 
         const decodedToken = tokenService.verifyAccessToken(token);
         const currentUser = await getUserUseCase.byId(decodedToken.sub);
 
         if (!currentUser) {
-            throw new AppError(USER_UNAVAILABLE, ErrorCode.UNAUTHORIZED);
+            throw new AppError(USER_UNAVAILABLE, ErrorCode.UNAUTHENTICATED);
         }
 
         req.user = currentUser;

@@ -30,7 +30,7 @@ export class CreateUserUseCase {
         );
 
         if (existingUserByEmail) {
-            throw new AppError(EMAIL_ALREADY_REGISTERED, ErrorCode.CONFLICT);
+            throw new AppError(EMAIL_ALREADY_REGISTERED, ErrorCode.ALREADY_EXISTS);
         }
 
         const existingUserByUsername = await this.userReader.findByUsername(
@@ -38,7 +38,7 @@ export class CreateUserUseCase {
         );
 
         if (existingUserByUsername) {
-            throw new AppError(USERNAME_ALREADY_TAKEN, ErrorCode.CONFLICT);
+            throw new AppError(USERNAME_ALREADY_TAKEN, ErrorCode.ALREADY_EXISTS);
         }
 
         const newUser = await this.userWriter.createUser({

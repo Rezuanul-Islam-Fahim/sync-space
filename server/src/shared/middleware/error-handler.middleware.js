@@ -12,11 +12,11 @@ import {
 import { isDev } from '../../config/index.js';
 
 const errorCodeToHttpStatus = {
-    [ErrorCode.BAD_REQUEST]: BAD_REQUEST,
-    [ErrorCode.UNAUTHORIZED]: UNAUTHORIZED,
-    [ErrorCode.FORBIDDEN]: FORBIDDEN,
-    [ErrorCode.NOT_FOUND]: NOT_FOUND,
-    [ErrorCode.CONFLICT]: CONFLICT,
+    [ErrorCode.INVALID_INPUT]: BAD_REQUEST,
+    [ErrorCode.UNAUTHENTICATED]: UNAUTHORIZED,
+    [ErrorCode.PERMISSION_DENIED]: FORBIDDEN,
+    [ErrorCode.RESOURCE_NOT_FOUND]: NOT_FOUND,
+    [ErrorCode.ALREADY_EXISTS]: CONFLICT,
 };
 
 // ── Main error handler ────────────────────────────────────────────────────────
@@ -49,5 +49,13 @@ export const makeErrorHandler = logger => {
             errors: isOperational ? error.errors : undefined,
             stack: isDev() ? error.stack : undefined,
         });
+
+        if (!isOperational) {
+            // Trigger a graceful shutdown for unhandled non-operational errors
+            // Delay exit to allow the logger to finish writing and the response to be sent
+            setTimeout(() => {
+                process.exit(1);
+            }, 1000).unref();
+        }
     };
 };

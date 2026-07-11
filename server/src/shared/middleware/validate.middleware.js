@@ -11,7 +11,7 @@ export const validate = (req, res, next) => {
             .join(' ');
         const error = new AppError(
             messageStr,
-            ErrorCode.BAD_REQUEST,
+            ErrorCode.INVALID_INPUT,
             errors.array()
         );
 

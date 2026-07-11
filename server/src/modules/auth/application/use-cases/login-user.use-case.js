@@ -22,7 +22,7 @@ export class LoginUserUseCase {
         const user = await this.validateCredentials.execute(data);
 
         if (!user) {
-            throw new AppError(INVALID_CREDENTIALS, ErrorCode.UNAUTHORIZED);
+            throw new AppError(INVALID_CREDENTIALS, ErrorCode.UNAUTHENTICATED);
         }
 
         const tokens = this.tokenGenerator.generateTokens(user.id, user.email);

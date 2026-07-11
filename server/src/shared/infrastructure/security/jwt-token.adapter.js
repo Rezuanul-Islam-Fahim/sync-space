@@ -41,7 +41,7 @@ export class JwtTokenVerifier extends TokenVerifierPort {
         try {
             return jwt.verify(token, this.secret);
         } catch (error) {
-            throw new AppError(INVALID_TOKEN, ErrorCode.UNAUTHORIZED);
+            throw new AppError(INVALID_TOKEN, ErrorCode.UNAUTHENTICATED);
         }
     };
 
@@ -49,7 +49,7 @@ export class JwtTokenVerifier extends TokenVerifierPort {
         try {
             return jwt.verify(token, this.refreshSecret);
         } catch (error) {
-            throw new AppError(INVALID_TOKEN, ErrorCode.UNAUTHORIZED);
+            throw new AppError(INVALID_TOKEN, ErrorCode.UNAUTHENTICATED);
         }
     };
 }
