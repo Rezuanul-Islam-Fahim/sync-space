@@ -1,7 +1,6 @@
 import {
     AppError,
     ErrorCode,
-    DuplicateFieldError,
 } from '../../../../shared/index.js';
 import {
     EMAIL_ALREADY_REGISTERED,
@@ -49,31 +48,13 @@ export class RegisterUserUseCase {
 
         const hashedPassword = await this.passwordHasher.hash(data.password);
 
-        try {
-            const newUser = await this.authUserWriter.createUser({
-                email: data.email,
-                username: data.username,
-                password: hashedPassword,
-                displayName: data.displayName,
-                dateOfBirth: data.dateOfBirth,
-            });
-            return newUser;
-        } catch (error) {
-            if (error instanceof DuplicateFieldError) {
-                if (error.field === 'email') {
-                    throw new AppError(
-                        EMAIL_ALREADY_REGISTERED,
-                        ErrorCode.CONFLICT
-                    );
-                }
-                if (error.field === 'username') {
-                    throw new AppError(
-                        USERNAME_ALREADY_TAKEN,
-                        ErrorCode.CONFLICT
-                    );
-                }
-            }
-            throw error;
-        }
+        const newUser = await this.authUserWriter.createUser({
+            email: data.email,
+            username: data.username,
+            password: hashedPassword,
+            displayName: data.displayName,
+            dateOfBirth: data.dateOfBirth,
+        });
+        return newUser;
     }
 }

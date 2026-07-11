@@ -2,7 +2,6 @@ import { UserReaderPort } from '../../application/ports/user-reader.port.js';
 import { UserWriterPort } from '../../application/ports/user-writer.port.js';
 import { UserMapper } from '../mappers/user.mapper.js';
 import { User } from '../../domain/user.entity.js';
-import { DuplicateFieldError } from '../../../../shared/index.js';
 
 export class UserReaderRepository extends UserReaderPort {
     constructor(userModel) {
@@ -48,19 +47,11 @@ export class UserWriterRepository extends UserWriterPort {
     }
 
     createUser = async userData => {
-        try {
-            const userEntity = new User(userData);
-            const persistenceData = UserMapper.toPersistence(userEntity);
-            const newUser = new this.userModel(persistenceData);
-            const savedUser = await newUser.save();
+        const userEntity = new User(userData);
+        const persistenceData = UserMapper.toPersistence(userEntity);
+        const newUser = new this.userModel(persistenceData);
+        const savedUser = await newUser.save();
 
-            return UserMapper.toDomain(savedUser);
-        } catch (error) {
-            if (error.code === 11000 && error.keyValue) {
-                const field = Object.keys(error.keyValue)[0];
-                throw new DuplicateFieldError(field);
-            }
-            throw error;
-        }
+        return UserMapper.toDomain(savedUser);
     };
 }

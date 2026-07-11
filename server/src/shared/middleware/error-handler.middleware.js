@@ -1,5 +1,5 @@
 import { ApiResponse } from '../util/api-response.util.js';
-import { AppError, ErrorCode } from '../error/app.error.js';
+import { ErrorCode } from '../error/app.error.js';
 import {
     BAD_REQUEST,
     CONFLICT,
@@ -9,10 +9,6 @@ import {
     FORBIDDEN,
     NOT_FOUND,
 } from '../constant/index.js';
-import {
-    INVALID_ID,
-    formatDuplicateFieldError,
-} from '../infrastructure/database/database-error.constant.js';
 import { isDev } from '../../config/index.js';
 
 const errorCodeToHttpStatus = {
@@ -23,47 +19,11 @@ const errorCodeToHttpStatus = {
     [ErrorCode.CONFLICT]: CONFLICT,
 };
 
-// ── Mongoose / MongoDB error normalisers ─────────────────────────────────────
-
-const handleValidationError = err => {
-    const errors = Object.values(err.errors).reduce((acc, el) => {
-        acc[el.path] = el.message;
-        return acc;
-    }, {});
-    return new AppError(err.message, ErrorCode.BAD_REQUEST, errors);
-};
-
-const handleCastError = err =>
-    new AppError(`${INVALID_ID}: ${err.value}`, ErrorCode.BAD_REQUEST);
-
-const handleDuplicateKeyError = err => {
-    const field = Object.keys(err.keyValue)[0];
-    return new AppError(formatDuplicateFieldError(field), ErrorCode.CONFLICT);
-};
-
-const errorNormalizers = [
-    {
-        canHandle: err => err.name === 'ValidationError',
-        handle: handleValidationError,
-    },
-    { canHandle: err => err.name === 'CastError', handle: handleCastError },
-    { canHandle: err => err.code === 11000, handle: handleDuplicateKeyError },
-];
-
 // ── Main error handler ────────────────────────────────────────────────────────
 
 export const makeErrorHandler = logger => {
-    const allNormalizers = [...errorNormalizers];
     return (err, req, res, _next) => {
-        // Normalise known infrastructure errors into operational AppErrors
-        let error = err;
-
-        for (const normalizer of allNormalizers) {
-            if (normalizer.canHandle(err)) {
-                error = normalizer.handle(err);
-                break;
-            }
-        }
+        const error = err;
 
         const isOperational = error.isOperational;
         const statusCode = isOperational
