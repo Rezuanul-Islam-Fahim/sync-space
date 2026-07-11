@@ -1,5 +1,4 @@
 import winston from 'winston';
-import { config } from '../../../config/index.js';
 import path from 'path';
 import { LoggerPort } from '../../ports/logger.port.js';
 
@@ -37,7 +36,7 @@ const fileFormat = winston.format.combine(
 export class WinstonLoggerAdapter extends LoggerPort {
     constructor({ logLevel, logDir } = {}) {
         super();
-        const resolvedLogLevel = logLevel || config.logLevel || 'debug';
+        const resolvedLogLevel = logLevel || 'debug';
         const resolvedLogDir = logDir || path.join(process.cwd(), 'logs');
 
         this._logger = winston.createLogger({
@@ -98,4 +97,6 @@ export class WinstonLoggerAdapter extends LoggerPort {
  * inject it through the Dependency Injection (DI) system (e.g. from the composition root) to maintain
  * testability and ensure the same logger instance flows throughout the system.
  */
-export const logger = new WinstonLoggerAdapter();
+export const logger = new WinstonLoggerAdapter({
+    logLevel: process.env.LOG_LEVEL
+});

@@ -1,4 +1,5 @@
 import { ValidateCredentialsPort } from '../../application/ports/validate-credentials.port.js';
+import { AuthUser } from '../../domain/auth-user.entity.js';
 
 export class CredentialValidatorAdapter extends ValidateCredentialsPort {
     constructor({ validateCredentialsUseCase }) {
@@ -7,6 +8,8 @@ export class CredentialValidatorAdapter extends ValidateCredentialsPort {
     }
 
     async execute(data) {
-        return this.validateCredentialsUseCase.execute(data);
+        const user = await this.validateCredentialsUseCase.execute(data);
+        return user ? new AuthUser(user) : null;
     }
 }
+

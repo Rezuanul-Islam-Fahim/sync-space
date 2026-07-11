@@ -1,21 +1,19 @@
-import { PasswordHasherPort } from '../../../../shared/index.js';
-import { UserReaderPort } from '../../index.js';
-
 export class ValidateCredentialsUseCase {
     constructor({ userReader, passwordHasher }) {
-        if (!(userReader instanceof UserReaderPort)) {
+        if (typeof userReader?.findByEmailWithPassword !== 'function') {
             throw new Error(
-                'ValidateCredentialsUseCase: userReader must implement UserReaderPort'
+                'ValidateCredentialsUseCase: userReader must implement findByEmailWithPassword method'
             );
         }
-        if (!(passwordHasher instanceof PasswordHasherPort)) {
+        if (typeof passwordHasher?.compare !== 'function') {
             throw new Error(
-                'ValidateCredentialsUseCase: passwordHasher must implement PasswordHasherPort'
+                'ValidateCredentialsUseCase: passwordHasher must implement compare method'
             );
         }
         this.userReader = userReader;
         this.passwordHasher = passwordHasher;
     }
+
 
     async execute(data) {
         const user = await this.userReader.findByEmailWithPassword(data.email);

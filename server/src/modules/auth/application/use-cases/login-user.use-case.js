@@ -1,26 +1,25 @@
 import {
     AppError,
     ErrorCode,
-    TokenGeneratorPort,
 } from '../../../../shared/index.js';
 import { INVALID_CREDENTIALS } from '../../domain/auth.constant.js';
-import { ValidateCredentialsPort } from '../ports/validate-credentials.port.js';
 
 export class LoginUserUseCase {
     constructor({ validateCredentials, tokenGenerator }) {
-        if (!(validateCredentials instanceof ValidateCredentialsPort)) {
+        if (typeof validateCredentials?.execute !== 'function') {
             throw new Error(
-                'LoginUserUseCase: validateCredentials must implement ValidateCredentialsPort'
+                'LoginUserUseCase: validateCredentials must implement execute method'
             );
         }
-        if (!(tokenGenerator instanceof TokenGeneratorPort)) {
+        if (typeof tokenGenerator?.generateTokens !== 'function') {
             throw new Error(
-                'LoginUserUseCase: tokenGenerator must implement TokenGeneratorPort'
+                'LoginUserUseCase: tokenGenerator must implement generateTokens method'
             );
         }
         this.validateCredentials = validateCredentials;
         this.tokenGenerator = tokenGenerator;
     }
+
 
     async execute(data) {
         const user = await this.validateCredentials.execute(data);

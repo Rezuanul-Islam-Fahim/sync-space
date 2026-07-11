@@ -6,7 +6,7 @@ import { composeDependencies } from './composition-root.js';
 const PORT = config.port;
 
 const start = async () => {
-    await initDB({ logger });
+    await initDB({ logger, dbConfig: config.db });
 
     const { app } = composeDependencies({ logger });
 

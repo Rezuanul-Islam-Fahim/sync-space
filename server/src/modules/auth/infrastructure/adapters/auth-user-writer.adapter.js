@@ -1,4 +1,5 @@
 import { AuthUserWriterPort } from '../../application/ports/auth-user-writer.port.js';
+import { AuthUser } from '../../domain/auth-user.entity.js';
 
 export class AuthUserWriterAdapter extends AuthUserWriterPort {
     constructor({ userWriter }) {
@@ -7,6 +8,8 @@ export class AuthUserWriterAdapter extends AuthUserWriterPort {
     }
 
     createUser = async userData => {
-        return this.userWriter.createUser(userData);
+        const user = await this.userWriter.createUser(userData);
+        return user ? new AuthUser(user) : null;
     };
 }
+

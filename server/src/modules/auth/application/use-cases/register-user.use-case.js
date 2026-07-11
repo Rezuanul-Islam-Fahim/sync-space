@@ -1,37 +1,35 @@
 import {
     AppError,
     ErrorCode,
-    PasswordHasherPort,
     DuplicateFieldError,
 } from '../../../../shared/index.js';
 import {
     EMAIL_ALREADY_REGISTERED,
     USERNAME_ALREADY_TAKEN,
 } from '../../domain/auth.constant.js';
-import { AuthUserReaderPort } from '../ports/auth-user-reader.port.js';
-import { AuthUserWriterPort } from '../ports/auth-user-writer.port.js';
 
 export class RegisterUserUseCase {
     constructor({ authUserReader, authUserWriter, passwordHasher }) {
-        if (!(authUserReader instanceof AuthUserReaderPort)) {
+        if (typeof authUserReader?.findByEmailWithPassword !== 'function' || typeof authUserReader?.findByUsername !== 'function') {
             throw new Error(
-                'RegisterUserUseCase: authUserReader must implement AuthUserReaderPort'
+                'RegisterUserUseCase: authUserReader must implement findByEmailWithPassword and findByUsername methods'
             );
         }
-        if (!(authUserWriter instanceof AuthUserWriterPort)) {
+        if (typeof authUserWriter?.createUser !== 'function') {
             throw new Error(
-                'RegisterUserUseCase: authUserWriter must implement AuthUserWriterPort'
+                'RegisterUserUseCase: authUserWriter must implement createUser method'
             );
         }
-        if (!(passwordHasher instanceof PasswordHasherPort)) {
+        if (typeof passwordHasher?.hash !== 'function') {
             throw new Error(
-                'RegisterUserUseCase: passwordHasher must implement PasswordHasherPort'
+                'RegisterUserUseCase: passwordHasher must implement hash method'
             );
         }
         this.authUserReader = authUserReader;
         this.authUserWriter = authUserWriter;
         this.passwordHasher = passwordHasher;
     }
+
 
     async execute(data) {
         const existingUserByEmail =
