@@ -3,7 +3,6 @@ import { catchAsync } from '../util/catch-async.util.js';
 import { TOKEN_NOT_FOUND, USER_UNAVAILABLE } from '../constant/index.js';
 
 export const makeAuthenticate = (getUserUseCase, tokenService) => {
-
     return catchAsync(async (req, _, next) => {
         let token;
 

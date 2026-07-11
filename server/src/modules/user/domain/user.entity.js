@@ -18,8 +18,6 @@ export class User {
         createdAt,
         updatedAt,
     }) {
-
-
         this.id = id;
         this.email = email;
         this.username = username;

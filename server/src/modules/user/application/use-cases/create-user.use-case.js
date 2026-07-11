@@ -19,7 +19,10 @@ export class CreateUserUseCase {
         );
 
         if (existingUserByEmail) {
-            throw new AppError(EMAIL_ALREADY_REGISTERED, ErrorCode.ALREADY_EXISTS);
+            throw new AppError(
+                EMAIL_ALREADY_REGISTERED,
+                ErrorCode.ALREADY_EXISTS
+            );
         }
 
         const existingUserByUsername = await this.userReader.findByUsername(
@@ -27,7 +30,10 @@ export class CreateUserUseCase {
         );
 
         if (existingUserByUsername) {
-            throw new AppError(USERNAME_ALREADY_TAKEN, ErrorCode.ALREADY_EXISTS);
+            throw new AppError(
+                USERNAME_ALREADY_TAKEN,
+                ErrorCode.ALREADY_EXISTS
+            );
         }
 
         const newUserEntity = new User({
