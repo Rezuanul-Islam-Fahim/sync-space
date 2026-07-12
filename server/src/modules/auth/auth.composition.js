@@ -14,6 +14,7 @@ export const composeAuthModule = ({
     authUserWriter,
     passwordHasher,
     tokenGenerator,
+    getUserUseCase,
     logger,
 }) => {
     const loginUserUseCase = new LoginUserUseCase({
@@ -33,6 +34,7 @@ export const composeAuthModule = ({
     const authController = new AuthController({
         loginUserUseCase,
         registerUserUseCase,
+        getUserUseCase,
         logger,
     });
 

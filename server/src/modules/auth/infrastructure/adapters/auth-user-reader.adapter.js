@@ -8,23 +8,12 @@ export class AuthUserReaderAdapter extends AuthUserReaderPort {
     }
 
     findByEmail = async email => {
-        const user = await this.userModel
-            .findOne({ email })
-            .select('-password')
-            .lean();
-        return AuthUserMapper.toDomain(user);
-    };
-
-    findByEmailWithPassword = async email => {
         const user = await this.userModel.findOne({ email }).lean();
         return AuthUserMapper.toDomain(user);
     };
 
     findByUsername = async username => {
-        const user = await this.userModel
-            .findOne({ username })
-            .select('-password')
-            .lean();
+        const user = await this.userModel.findOne({ username }).lean();
         return AuthUserMapper.toDomain(user);
     };
 }

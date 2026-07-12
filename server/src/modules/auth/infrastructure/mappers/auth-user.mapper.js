@@ -18,20 +18,12 @@ export class AuthUserMapper {
             username: document.username,
             password: document.password,
             isVerified: document.isVerified,
-            displayName: document.displayName,
-            dateOfBirth: document.dateOfBirth,
-            avatar: document.avatar,
-            bio: document.bio,
-            banner: document.banner,
-            bannerColor: document.bannerColor,
-            status: document.status,
-            lastOnline: document.lastOnline,
             createdAt: document.createdAt,
             updatedAt: document.updatedAt,
         });
     }
 
-    static toPersistence(domainUser) {
+    static toPersistence(domainUser, additionalProfileData = {}) {
         if (!domainUser) return null;
 
         return {
@@ -39,14 +31,7 @@ export class AuthUserMapper {
             username: domainUser.username,
             password: domainUser.password,
             isVerified: domainUser.isVerified,
-            displayName: domainUser.displayName,
-            dateOfBirth: domainUser.dateOfBirth,
-            avatar: domainUser.avatar,
-            bio: domainUser.bio,
-            banner: domainUser.banner,
-            bannerColor: domainUser.bannerColor,
-            status: domainUser.status,
-            lastOnline: domainUser.lastOnline,
+            ...additionalProfileData,
         };
     }
 }

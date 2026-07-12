@@ -13,9 +13,10 @@ import {
 } from '../../../shared/constant/index.js';
 
 export class AuthController {
-    constructor({ loginUserUseCase, registerUserUseCase, logger }) {
+    constructor({ loginUserUseCase, registerUserUseCase, getUserUseCase, logger }) {
         this.loginUserUseCase = loginUserUseCase;
         this.registerUserUseCase = registerUserUseCase;
+        this.getUserUseCase = getUserUseCase;
         this.logger = logger;
     }
 
@@ -35,7 +36,12 @@ export class AuthController {
     login = catchAsync(async (req, res) => {
         const requestDto = LoginRequestDto.from(req.body);
         const loginData = await this.loginUserUseCase.execute(requestDto);
-        const responseDto = LoginResponseDto.from(loginData);
+        const userProfile = await this.getUserUseCase.byId(loginData.userId);
+        
+        const responseDto = LoginResponseDto.from({
+            user: userProfile,
+            tokens: loginData.tokens
+        });
 
         ApiResponse.success({
             res,

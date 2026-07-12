@@ -32,27 +32,14 @@ export class RegisterUserUseCase {
             );
         }
 
-        const hashedPassword = await this.passwordHasher.hash(data.password);
-        const authUser = new AuthUser({
-            ...data,
-            password: hashedPassword,
-        });
-        const savedUser = await this.authUserWriter.createUser(authUser);
-        return new AuthUser({
-            id: savedUser.id,
-            email: savedUser.email,
-            username: savedUser.username,
-            isVerified: savedUser.isVerified,
-            displayName: savedUser.displayName,
-            dateOfBirth: savedUser.dateOfBirth,
-            avatar: savedUser.avatar,
-            bio: savedUser.bio,
-            banner: savedUser.banner,
-            bannerColor: savedUser.bannerColor,
-            status: savedUser.status,
-            lastOnline: savedUser.lastOnline,
-            createdAt: savedUser.createdAt,
-            updatedAt: savedUser.updatedAt,
-        });
+        const authUser = await AuthUser.create(data, this.passwordHasher);
+        
+        const profileData = {
+            displayName: data.displayName,
+            dateOfBirth: data.dateOfBirth
+        };
+
+        const savedUser = await this.authUserWriter.createUser(authUser, profileData);
+        return savedUser;
     }
 }
