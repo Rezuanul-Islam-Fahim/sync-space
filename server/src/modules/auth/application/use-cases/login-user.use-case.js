@@ -1,4 +1,5 @@
 import { AppError, ErrorCode } from '../../../../shared/index.js';
+import { AuthUser } from '../../domain/auth-user.entity.js';
 import { INVALID_CREDENTIALS } from '../../domain/auth.constant.js';
 
 export class LoginUserUseCase {
@@ -29,8 +30,25 @@ export class LoginUserUseCase {
 
         const tokens = this.tokenGenerator.generateTokens(user.id, user.email);
 
+        const safeUser = new AuthUser({
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            isVerified: user.isVerified,
+            displayName: user.displayName,
+            dateOfBirth: user.dateOfBirth,
+            avatar: user.avatar,
+            bio: user.bio,
+            banner: user.banner,
+            bannerColor: user.bannerColor,
+            status: user.status,
+            lastOnline: user.lastOnline,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+        });
+
         return {
-            user,
+            user: safeUser,
             tokens,
         };
     }

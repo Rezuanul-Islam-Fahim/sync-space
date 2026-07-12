@@ -4,7 +4,7 @@ import { createApp } from './app.js';
 
 // ── Infrastructure & Modules ──────────────────────────────────────────────────
 import { composeUserModule } from './modules/user/index.js';
-import { UserReaderRepository } from './modules/user/infrastructure/repositories/user.repository.js';
+import { UserReaderRepository } from './modules/user/infrastructure/repositories/user-reader.repository.js';
 import { UserModel } from './shared/infrastructure/database/user.model.js';
 import { composeAuthModule } from './modules/auth/index.js';
 import {
@@ -31,7 +31,7 @@ export const composeDependencies = ({ logger = defaultLogger } = {}) => {
 
     // 2. Module Composition
     const userReader = new UserReaderRepository({ userModel: UserModel });
-    const { getUserUseCase: _getUserUseCase } = composeUserModule({
+    const { getUserUseCase } = composeUserModule({
         userReader,
         logger,
     });
@@ -61,5 +61,5 @@ export const composeDependencies = ({ logger = defaultLogger } = {}) => {
     // 5. Express app
     const app = createApp({ router: apiRouter, logger });
 
-    return { app, authenticate };
+    return { app, authenticate, getUserUseCase };
 };

@@ -3,7 +3,7 @@ import { AuthUser } from '../../domain/auth-user.entity.js';
 import {
     EMAIL_ALREADY_REGISTERED,
     USERNAME_ALREADY_TAKEN,
-} from '../../domain/auth.constant.js';
+} from '../../../../shared/constant/index.js';
 
 export class RegisterUserUseCase {
     constructor({ authUserReader, authUserWriter, passwordHasher, logger }) {
@@ -37,6 +37,22 @@ export class RegisterUserUseCase {
             ...data,
             password: hashedPassword,
         });
-        return this.authUserWriter.createUser(authUser);
+        const savedUser = await this.authUserWriter.createUser(authUser);
+        return new AuthUser({
+            id: savedUser.id,
+            email: savedUser.email,
+            username: savedUser.username,
+            isVerified: savedUser.isVerified,
+            displayName: savedUser.displayName,
+            dateOfBirth: savedUser.dateOfBirth,
+            avatar: savedUser.avatar,
+            bio: savedUser.bio,
+            banner: savedUser.banner,
+            bannerColor: savedUser.bannerColor,
+            status: savedUser.status,
+            lastOnline: savedUser.lastOnline,
+            createdAt: savedUser.createdAt,
+            updatedAt: savedUser.updatedAt,
+        });
     }
 }

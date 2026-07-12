@@ -3,9 +3,9 @@ import {
     closeDB,
     initDB,
 } from '../../src/shared/infrastructure/database/index.js';
-import { UserModel } from '../../src/modules/user/infrastructure/database/user.model.js';
+import { UserModel } from '../../src/shared/infrastructure/database/user.model.js';
 import { getSeedUsers } from './user.seed.js';
-import { isDev } from '../../src/config/index.js';
+import { isDev, config } from '../../src/config/index.js';
 
 const runSeeder = async () => {
     try {
@@ -18,7 +18,7 @@ const runSeeder = async () => {
 
         logger.info('Starting database seeding...');
 
-        await initDB({ logger });
+        await initDB({ logger, dbConfig: config.db });
 
         logger.info('Clearing existing users...');
         await UserModel.deleteMany({});

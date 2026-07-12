@@ -20,6 +20,14 @@ export class AuthUserMapper {
             isVerified: document.isVerified,
             displayName: document.displayName,
             dateOfBirth: document.dateOfBirth,
+            avatar: document.avatar,
+            bio: document.bio,
+            banner: document.banner,
+            bannerColor: document.bannerColor,
+            status: document.status,
+            lastOnline: document.lastOnline,
+            createdAt: document.createdAt,
+            updatedAt: document.updatedAt,
         });
     }
 
@@ -33,6 +41,12 @@ export class AuthUserMapper {
             isVerified: domainUser.isVerified,
             displayName: domainUser.displayName,
             dateOfBirth: domainUser.dateOfBirth,
+            avatar: domainUser.avatar,
+            bio: domainUser.bio,
+            banner: domainUser.banner,
+            bannerColor: domainUser.bannerColor,
+            status: domainUser.status,
+            lastOnline: domainUser.lastOnline,
         };
     }
 }
