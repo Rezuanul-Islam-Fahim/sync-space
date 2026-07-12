@@ -30,6 +30,7 @@ export const composeAuthModule = ({
     });
 
     const registerUserUseCase = new RegisterUserUseCase({
+        authUserReader,
         authUserWriter,
         passwordHasher,
         logger,

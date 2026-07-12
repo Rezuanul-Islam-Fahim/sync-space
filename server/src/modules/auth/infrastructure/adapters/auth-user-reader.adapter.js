@@ -1,5 +1,5 @@
 import { AuthUserReaderPort } from '../../application/ports/auth-user-reader.port.js';
-import { AuthUser } from '../../domain/auth-user.entity.js';
+import { AuthUserMapper } from '../mappers/auth-user.mapper.js';
 
 export class AuthUserReaderAdapter extends AuthUserReaderPort {
     constructor({ userModel }) {
@@ -12,12 +12,12 @@ export class AuthUserReaderAdapter extends AuthUserReaderPort {
             .findOne({ email })
             .select('-password')
             .lean();
-        return user ? new AuthUser(user) : null;
+        return AuthUserMapper.toDomain(user);
     };
 
     findByEmailWithPassword = async email => {
         const user = await this.userModel.findOne({ email }).lean();
-        return user ? new AuthUser(user) : null;
+        return AuthUserMapper.toDomain(user);
     };
 
     findByUsername = async username => {
@@ -25,6 +25,6 @@ export class AuthUserReaderAdapter extends AuthUserReaderPort {
             .findOne({ username })
             .select('-password')
             .lean();
-        return user ? new AuthUser(user) : null;
+        return AuthUserMapper.toDomain(user);
     };
 }
