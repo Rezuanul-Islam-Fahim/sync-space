@@ -6,4 +6,3 @@
  * This barrel re-export is retained for backward compatibility.
  */
 export { UserReaderRepository } from './user-reader.repository.js';
-export { UserWriterRepository } from './user-writer.repository.js';
