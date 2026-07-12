@@ -35,14 +35,14 @@ export const composeDependencies = ({ logger = defaultLogger } = {}) => {
     // 2. Module Composition
     const userReader = new UserReaderRepository(UserModel);
     const userWriter = new UserWriterRepository(UserModel);
-    const { getUserUseCase, createUserUseCase } = composeUserModule({
+    const { getUserUseCase } = composeUserModule({
         userReader,
         userWriter,
         logger,
     });
 
-    const authUserReader = new AuthUserReaderAdapter({ getUserUseCase });
-    const authUserWriter = new AuthUserWriterAdapter({ createUserUseCase });
+    const authUserReader = new AuthUserReaderAdapter({ userModel: UserModel });
+    const authUserWriter = new AuthUserWriterAdapter({ userModel: UserModel });
 
     const authModule = composeAuthModule({
         authUserReader,

@@ -65,7 +65,7 @@ const userSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-userSchema.index({ status: 1, lastOnline: -1 });
+userSchema.index({ status: 1, lastOnline: -1 }, { sparse: true });
 
 const transform = (doc, ret) => {
     delete ret.__v;

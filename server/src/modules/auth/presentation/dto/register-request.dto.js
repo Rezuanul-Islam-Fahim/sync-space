@@ -1,6 +1,3 @@
-import { REGISTER_ALLOWED_FIELDS } from '../../domain/auth.constant.js';
-import { allowedFieldsFilter } from '../../../../shared/index.js';
-
 export class RegisterRequestDto {
     constructor(data) {
         this.email = data.email;
@@ -11,8 +8,6 @@ export class RegisterRequestDto {
     }
 
     static from(body) {
-        return new RegisterRequestDto(
-            allowedFieldsFilter(body, REGISTER_ALLOWED_FIELDS)
-        );
+        return new RegisterRequestDto(body);
     }
 }

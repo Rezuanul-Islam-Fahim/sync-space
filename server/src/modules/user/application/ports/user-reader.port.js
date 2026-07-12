@@ -1,4 +1,4 @@
-import { UserByIdPort } from './user-by-id.port.js';
+import { UserByIdPort } from '../../../../shared/ports/user-by-id.port.js';
 
 /**
  * Full user-read port.  Extends `UserByIdPort` so that any `UserReaderPort`

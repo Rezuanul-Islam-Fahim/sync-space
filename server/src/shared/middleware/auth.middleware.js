@@ -1,6 +1,11 @@
 import { AppError, ErrorCode } from '../error/app.error.js';
+import { TokenVerificationError } from '../error/token-verification.error.js';
 import { catchAsync } from '../util/catch-async.util.js';
-import { TOKEN_NOT_FOUND, USER_UNAVAILABLE } from '../constant/index.js';
+import {
+    TOKEN_NOT_FOUND,
+    USER_UNAVAILABLE,
+    INVALID_TOKEN,
+} from '../constant/index.js';
 
 export const makeAuthenticate = (getUserUseCase, tokenService) => {
     return catchAsync(async (req, _, next) => {
@@ -17,7 +22,16 @@ export const makeAuthenticate = (getUserUseCase, tokenService) => {
             throw new AppError(TOKEN_NOT_FOUND, ErrorCode.UNAUTHENTICATED);
         }
 
-        const decodedToken = tokenService.verifyAccessToken(token);
+        let decodedToken;
+        try {
+            decodedToken = tokenService.verifyAccessToken(token);
+        } catch (error) {
+            if (error instanceof TokenVerificationError) {
+                throw new AppError(INVALID_TOKEN, ErrorCode.UNAUTHENTICATED);
+            }
+            throw error;
+        }
+
         const currentUser = await getUserUseCase.byId(decodedToken.sub);
 
         if (!currentUser) {

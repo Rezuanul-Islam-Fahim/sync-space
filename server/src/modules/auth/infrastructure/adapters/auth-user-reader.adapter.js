@@ -2,18 +2,29 @@ import { AuthUserReaderPort } from '../../application/ports/auth-user-reader.por
 import { AuthUser } from '../../domain/auth-user.entity.js';
 
 export class AuthUserReaderAdapter extends AuthUserReaderPort {
-    constructor({ getUserUseCase }) {
+    constructor({ userModel }) {
         super();
-        this.getUserUseCase = getUserUseCase;
+        this.userModel = userModel;
     }
 
+    findByEmail = async email => {
+        const user = await this.userModel
+            .findOne({ email })
+            .select('-password')
+            .lean();
+        return user ? new AuthUser(user) : null;
+    };
+
     findByEmailWithPassword = async email => {
-        const user = await this.getUserUseCase.byEmailWithCredentials(email);
+        const user = await this.userModel.findOne({ email }).lean();
         return user ? new AuthUser(user) : null;
     };
 
     findByUsername = async username => {
-        const user = await this.getUserUseCase.byUsername(username);
+        const user = await this.userModel
+            .findOne({ username })
+            .select('-password')
+            .lean();
         return user ? new AuthUser(user) : null;
     };
 }

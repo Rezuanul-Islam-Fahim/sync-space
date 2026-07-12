@@ -1,3 +1,11 @@
-import { AuthUserResponseDto } from './auth-user-response.dto.js';
+export class RegisterResponseDto {
+    constructor(user) {
+        this.id = user.id?.toString();
+        this.email = user.email;
+        this.username = user.username;
+    }
 
-export { AuthUserResponseDto as RegisterResponseDto };
+    static from(user) {
+        return new RegisterResponseDto(user);
+    }
+}
