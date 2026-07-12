@@ -2,7 +2,7 @@ import { UserReaderPort } from '../../application/ports/user-reader.port.js';
 import { UserMapper } from '../mappers/user.mapper.js';
 
 export class UserReaderRepository extends UserReaderPort {
-    constructor(userModel) {
+    constructor({ userModel }) {
         super();
         this.userModel = userModel;
     }
@@ -10,14 +10,17 @@ export class UserReaderRepository extends UserReaderPort {
     findByEmail = async email => {
         const user = await this.userModel
             .findOne({ email })
-            .select('-password');
+            .select('-password')
+            .lean();
 
         return UserMapper.toDomain(user);
     };
 
-
     findById = async id => {
-        const user = await this.userModel.findById(id).select('-password');
+        const user = await this.userModel
+            .findById(id)
+            .select('-password')
+            .lean();
 
         return UserMapper.toDomain(user);
     };
@@ -25,7 +28,8 @@ export class UserReaderRepository extends UserReaderPort {
     findByUsername = async username => {
         const user = await this.userModel
             .findOne({ username })
-            .select('-password');
+            .select('-password')
+            .lean();
 
         return UserMapper.toDomain(user);
     };

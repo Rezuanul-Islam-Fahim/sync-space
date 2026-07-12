@@ -1,7 +1,6 @@
 import { AuthController } from './presentation/auth.controller.js';
 import { LoginUserUseCase } from './application/use-cases/login-user.use-case.js';
 import { RegisterUserUseCase } from './application/use-cases/register-user.use-case.js';
-import { ValidateCredentialsUseCase } from './application/use-cases/validate-credentials.use-case.js';
 import { createAuthRouter } from './presentation/auth.router.js';
 
 /**
@@ -17,14 +16,9 @@ export const composeAuthModule = ({
     tokenGenerator,
     logger,
 }) => {
-    const validateCredentialsUseCase = new ValidateCredentialsUseCase({
+    const loginUserUseCase = new LoginUserUseCase({
         authUserReader,
         passwordHasher,
-        logger,
-    });
-
-    const loginUserUseCase = new LoginUserUseCase({
-        validateCredentials: validateCredentialsUseCase,
         tokenGenerator,
         logger,
     });

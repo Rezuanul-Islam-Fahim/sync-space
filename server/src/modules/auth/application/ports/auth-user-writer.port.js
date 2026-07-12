@@ -1,5 +1,5 @@
 export class AuthUserWriterPort {
-    createUser(_userData) {
+    createUser(_authUser) {
         throw new Error('Method not implemented');
     }
 }

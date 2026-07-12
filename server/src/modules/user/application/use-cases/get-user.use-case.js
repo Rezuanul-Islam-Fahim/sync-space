@@ -4,7 +4,6 @@ export class GetUserUseCase {
         this.logger = logger;
     }
 
-
     async byUsername(username) {
         return this.userReader.findByUsername(username);
     }

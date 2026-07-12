@@ -1,4 +1,5 @@
 import { AppError, ErrorCode } from '../../../../shared/index.js';
+import { AuthUser } from '../../domain/auth-user.entity.js';
 import {
     EMAIL_ALREADY_REGISTERED,
     USERNAME_ALREADY_TAKEN,
@@ -32,9 +33,10 @@ export class RegisterUserUseCase {
         }
 
         const hashedPassword = await this.passwordHasher.hash(data.password);
-        return this.authUserWriter.createUser({
+        const authUser = new AuthUser({
             ...data,
             password: hashedPassword,
         });
+        return this.authUserWriter.createUser(authUser);
     }
 }

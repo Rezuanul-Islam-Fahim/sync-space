@@ -18,6 +18,8 @@ export class AuthUserMapper {
             username: document.username,
             password: document.password,
             isVerified: document.isVerified,
+            displayName: document.displayName,
+            dateOfBirth: document.dateOfBirth,
         });
     }
 
@@ -29,6 +31,8 @@ export class AuthUserMapper {
             username: domainUser.username,
             password: domainUser.password,
             isVerified: domainUser.isVerified,
+            displayName: domainUser.displayName,
+            dateOfBirth: domainUser.dateOfBirth,
         };
     }
 }

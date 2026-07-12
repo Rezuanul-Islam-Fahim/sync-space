@@ -30,7 +30,7 @@ export const composeDependencies = ({ logger = defaultLogger } = {}) => {
     const tokenVerifier = new JwtTokenVerifier(config.jwt);
 
     // 2. Module Composition
-    const userReader = new UserReaderRepository(UserModel);
+    const userReader = new UserReaderRepository({ userModel: UserModel });
     const { getUserUseCase: _getUserUseCase } = composeUserModule({
         userReader,
         logger,

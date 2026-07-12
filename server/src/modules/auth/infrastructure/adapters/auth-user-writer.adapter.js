@@ -7,8 +7,9 @@ export class AuthUserWriterAdapter extends AuthUserWriterPort {
         this.userModel = userModel;
     }
 
-    createUser = async userData => {
-        const newUser = new this.userModel(userData);
+    createUser = async authUser => {
+        const persistenceData = AuthUserMapper.toPersistence(authUser);
+        const newUser = new this.userModel(persistenceData);
         const savedUser = await newUser.save();
         return AuthUserMapper.toDomain(savedUser);
     };
