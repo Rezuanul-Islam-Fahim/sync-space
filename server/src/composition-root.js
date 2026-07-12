@@ -44,7 +44,6 @@ export const composeDependencies = ({ logger = defaultLogger } = {}) => {
         authUserWriter,
         passwordHasher,
         tokenGenerator,
-        getUserUseCase,
         logger,
     });
 

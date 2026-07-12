@@ -3,7 +3,7 @@ import { AuthUser } from '../../domain/auth-user.entity.js';
 import {
     EMAIL_ALREADY_REGISTERED,
     USERNAME_ALREADY_TAKEN,
-} from '../../../../shared/constant/index.js';
+} from '../../domain/auth.constant.js';
 
 export class RegisterUserUseCase {
     constructor({ authUserReader, authUserWriter, passwordHasher, logger }) {
