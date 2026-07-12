@@ -14,14 +14,14 @@ const start = async () => {
         logger.info(`Server started on port: ${PORT}`);
     });
 
-    const shutdown = signal => {
+    const shutdown = (signal, exitCode = 0) => {
         logger.info(`\n'${signal}' received. Shutting down gracefully...`);
 
         // Stop accepting new connections
         server.close(async () => {
             try {
                 await closeDB();
-                process.exit(0);
+                process.exit(exitCode);
             } catch (err) {
                 logger.error('Error during shutdown:', err);
                 process.exit(1);
@@ -34,15 +34,19 @@ const start = async () => {
         }, 30000);
     };
 
-    process.on('SIGTERM', shutdown);
-    process.on('SIGINT', shutdown);
+    process.on('SIGTERM', () => shutdown('SIGTERM', 0));
+    process.on('SIGINT', () => shutdown('SIGINT', 0));
     process.on('unhandledRejection', reason => {
         logger.error('Unhandled Rejection: ', reason);
-        shutdown('unhandledRejection');
+        shutdown('unhandledRejection', 1);
     });
     process.on('uncaughtException', err => {
         logger.error('Uncaught Exception: ', err);
-        shutdown('uncaughtException');
+        shutdown('uncaughtException', 1);
+    });
+    process.on('criticalError', err => {
+        logger.error('Critical non-operational error: ', err);
+        shutdown('criticalError', 1);
     });
 };
 

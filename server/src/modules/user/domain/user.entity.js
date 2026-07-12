@@ -16,6 +16,7 @@ export class User {
         dateOfBirth,
         status = UserStatus.OFFLINE,
         lastOnline = null,
+        isVerified = false,
         createdAt,
         updatedAt,
     }) {
@@ -30,6 +31,7 @@ export class User {
         this.dateOfBirth = dateOfBirth;
         this.status = status;
         this.lastOnline = lastOnline;
+        this.isVerified = isVerified;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         Object.freeze(this);

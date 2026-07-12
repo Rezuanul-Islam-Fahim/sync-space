@@ -52,10 +52,7 @@ export const makeErrorHandler = logger => {
 
         if (!isOperational) {
             // Trigger a graceful shutdown for unhandled non-operational errors
-            // Delay exit to allow the logger to finish writing and the response to be sent
-            setTimeout(() => {
-                process.exit(1);
-            }, 1000).unref();
+            process.emit('criticalError', error);
         }
     };
 };
