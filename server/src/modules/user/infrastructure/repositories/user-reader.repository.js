@@ -15,11 +15,6 @@ export class UserReaderRepository extends UserReaderPort {
         return UserMapper.toDomain(user);
     };
 
-    findByEmailWithPassword = async email => {
-        const user = await this.userModel.findOne({ email });
-
-        return UserMapper.toDomain(user);
-    };
 
     findById = async id => {
         const user = await this.userModel.findById(id).select('-password');

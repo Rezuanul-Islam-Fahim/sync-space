@@ -1,4 +1,4 @@
-import { GetUserUseCase } from './index.js';
+import { GetUserUseCase } from './application/use-cases/get-user.use-case.js';
 
 /**
  * Composes the user module's dependencies.

@@ -10,9 +10,6 @@ export class UserReaderPort extends UserByIdPort {
         throw new Error('Method not implemented');
     }
 
-    findByEmailWithPassword(_email) {
-        throw new Error('Method not implemented');
-    }
 
     // findById is inherited from UserByIdPort
 

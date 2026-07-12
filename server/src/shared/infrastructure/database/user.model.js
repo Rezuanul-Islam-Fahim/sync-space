@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import {
     USER_STATUS,
     BANNER_DEFAULT_COLOR,
-} from '../../../modules/user/domain/user.constant.js';
+} from '../../constant/user.constant.js';
 
 const userSchema = new mongoose.Schema(
     {
