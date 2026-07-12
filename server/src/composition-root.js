@@ -31,7 +31,7 @@ export const composeDependencies = ({ logger = defaultLogger } = {}) => {
 
     // 2. Module Composition
     const userReader = new UserReaderRepository(UserModel);
-    const { getUserUseCase } = composeUserModule({
+    const { getUserUseCase: _getUserUseCase } = composeUserModule({
         userReader,
         logger,
     });
@@ -48,7 +48,7 @@ export const composeDependencies = ({ logger = defaultLogger } = {}) => {
     });
 
     // 3. Shared middleware
-    const authenticate = makeAuthenticate(getUserUseCase, tokenVerifier);
+    const authenticate = makeAuthenticate(userReader, tokenVerifier);
 
     // 4. Route wiring — all routes versioned under /api/v1
     const v1Router = express.Router();
