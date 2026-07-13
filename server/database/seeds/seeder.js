@@ -3,7 +3,7 @@ import {
     closeDB,
     initDB,
 } from '../../src/shared/infrastructure/database/index.js';
-import { UserModel } from '../../src/shared/infrastructure/database/user.model.js';
+import { UserModel } from '../../src/modules/user/infrastructure/database/user.model.js';
 import { getSeedUsers } from './user.seed.js';
 import { isDev, config } from '../../src/config/index.js';
 
