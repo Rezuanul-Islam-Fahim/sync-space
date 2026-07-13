@@ -5,14 +5,8 @@ import {
     AuthUserResponseDto,
 } from './dto/index.js';
 import { ApiResponse, catchAsync } from '../../../shared/index.js';
-import {
-    CREATED,
-    OK,
-} from '../../../shared/constant/index.js';
-import {
-    USER_CREATED,
-    LOGIN_SUCCESSFUL,
-} from './auth.messages.js';
+import { CREATED, OK } from '../../../shared/constant/index.js';
+import { USER_CREATED, LOGIN_SUCCESSFUL } from './auth.messages.js';
 
 export class AuthController {
     constructor({ loginUserUseCase, registerUserUseCase, logger }) {
@@ -37,7 +31,7 @@ export class AuthController {
     login = catchAsync(async (req, res) => {
         const requestDto = LoginRequestDto.from(req.body);
         const loginData = await this.loginUserUseCase.execute(requestDto);
-        
+
         const responseDto = LoginResponseDto.from(loginData);
 
         ApiResponse.success({

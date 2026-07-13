@@ -9,7 +9,7 @@ import {
     DISPLAY_NAME_INVALID,
     DOB_REQUIRED,
     DOB_INVALID,
-} from './auth.validator.constants.js';
+} from './auth.messages.js';
 
 export const registerValidation = [
     body('email')

@@ -37,8 +37,12 @@ export const composeDependencies = ({ logger = defaultLogger } = {}) => {
         logger,
     });
 
-    const authUserReader = new AuthUserReaderAdapter({ userModel: AuthUserModel });
-    const authUserWriter = new AuthUserWriterAdapter({ userModel: AuthUserModel });
+    const authUserReader = new AuthUserReaderAdapter({
+        userModel: AuthUserModel,
+    });
+    const authUserWriter = new AuthUserWriterAdapter({
+        userModel: AuthUserModel,
+    });
 
     const authModule = composeAuthModule({
         authUserReader,

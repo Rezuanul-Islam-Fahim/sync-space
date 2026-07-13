@@ -1,4 +1,4 @@
-export { catchAsync, allowedFieldsFilter, ApiResponse } from './util/index.js';
+export { catchAsync, ApiResponse } from './util/index.js';
 export { AppError, ErrorCode } from './error/app.error.js';
 export { TokenVerificationError } from './error/token-verification.error.js';
 export { PasswordHasherPort } from './ports/password-hasher.port.js';

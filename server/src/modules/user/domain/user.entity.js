@@ -1,7 +1,4 @@
-import {
-    UserStatus,
-    BANNER_DEFAULT_COLOR,
-} from './user.constant.js';
+import { UserStatus, BANNER_DEFAULT_COLOR } from './user.constant.js';
 
 export class User {
     constructor({

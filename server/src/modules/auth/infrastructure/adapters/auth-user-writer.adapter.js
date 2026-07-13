@@ -8,7 +8,10 @@ export class AuthUserWriterAdapter extends AuthUserWriterPort {
     }
 
     createUser = async (authUser, additionalProfileData = {}) => {
-        const persistenceData = AuthUserMapper.toPersistence(authUser, additionalProfileData);
+        const persistenceData = AuthUserMapper.toPersistence(
+            authUser,
+            additionalProfileData
+        );
         const newUser = new this.userModel(persistenceData);
         const savedUser = await newUser.save();
         return AuthUserMapper.toDomain(savedUser);

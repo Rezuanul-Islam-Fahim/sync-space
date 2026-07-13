@@ -23,6 +23,14 @@ const authUserSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        displayName: {
+            type: String,
+            default: null,
+        },
+        dateOfBirth: {
+            type: Date,
+            required: true,
+        },
     },
     { timestamps: true }
 );
@@ -35,4 +43,8 @@ const transform = (doc, ret) => {
 authUserSchema.set('toJSON', { transform });
 authUserSchema.set('toObject', { transform });
 
-export const AuthUserModel = mongoose.model('AuthUser', authUserSchema, 'users');
+export const AuthUserModel = mongoose.model(
+    'AuthUser',
+    authUserSchema,
+    'users'
+);
