@@ -33,14 +33,20 @@ export class RegisterUserUseCase {
         }
 
         const hashedPassword = await this.passwordHasher.hash(data.password);
+
+        // Build the entity with ALL fields required at registration time.
+        // The entity is the sole authority on what gets persisted — no raw DTO
+        // data is passed further down the chain (Issue 2 & 4).
         const authUser = new AuthUser({
             email: data.email,
             username: data.username,
             password: hashedPassword,
+            displayName: data.displayName ?? null,
+            dateOfBirth: data.dateOfBirth,
             isVerified: false,
         });
 
-        const savedUser = await this.authUserWriter.createUser(authUser, data);
+        const savedUser = await this.authUserWriter.createUser(authUser);
         return savedUser;
     }
 }

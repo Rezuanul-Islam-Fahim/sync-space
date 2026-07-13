@@ -1,11 +1,20 @@
 import { initDB, closeDB } from './shared/infrastructure/database/index.js';
 import { config } from './config/index.js';
-import { logger } from './shared/infrastructure/logging/winston-logger.adapter.js';
+import {
+    WinstonLoggerAdapter,
+    logger as bootstrapLogger,
+} from './shared/infrastructure/logging/winston-logger.adapter.js';
 import { composeDependencies } from './composition-root.js';
 
 const PORT = config.port;
 
 const start = async () => {
+    // Create the application logger from the Joi-validated config value so that
+    // LOG_LEVEL defaults and coercions are applied before the logger is used
+    // (Issue 7 & 18).  bootstrapLogger (module-level singleton) is reserved
+    // solely for the outer start().catch() boundary below.
+    const logger = new WinstonLoggerAdapter({ logLevel: config.logLevel });
+
     await initDB({ logger, dbConfig: config.db });
 
     const { app } = composeDependencies({ logger });
@@ -51,6 +60,8 @@ const start = async () => {
 };
 
 start().catch(err => {
-    logger.error('Failed to start:', err);
+    // bootstrapLogger is the pre-config singleton — the only safe logger
+    // available if start() itself fails before the validated logger is created.
+    bootstrapLogger.error('Failed to start:', err);
     process.exit(1);
 });

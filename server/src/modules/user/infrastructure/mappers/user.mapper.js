@@ -19,6 +19,7 @@ export class UserMapper {
             dateOfBirth: document.dateOfBirth,
             status: document.status,
             lastOnline: document.lastOnline,
+            isVerified: document.isVerified,
             createdAt: document.createdAt,
             updatedAt: document.updatedAt,
         });
@@ -38,6 +39,7 @@ export class UserMapper {
             dateOfBirth: domainUser.dateOfBirth,
             status: domainUser.status,
             lastOnline: domainUser.lastOnline,
+            isVerified: domainUser.isVerified,
         };
     }
 }

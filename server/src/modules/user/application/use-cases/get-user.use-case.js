@@ -13,7 +13,13 @@ export class GetUserUseCase {
         } else if (by === 'username') {
             user = await this.userReader.findByUsername(value);
         } else {
-            throw new Error(`Invalid search criteria: ${by}`);
+            // Throw an operational AppError so the error handler returns a
+            // 400 response instead of treating this as a critical error and
+            // triggering a graceful shutdown (Issue 10).
+            throw new AppError(
+                `Invalid search criteria: "${by}"`,
+                ErrorCode.INVALID_INPUT
+            );
         }
 
         if (!user) {

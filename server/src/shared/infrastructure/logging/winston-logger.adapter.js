@@ -89,13 +89,18 @@ export class WinstonLoggerAdapter extends LoggerPort {
 }
 
 /**
- * Module-level singleton instance of the WinstonLoggerAdapter.
+ * Pre-config bootstrap logger — intentionally reads LOG_LEVEL directly from
+ * process.env BEFORE Joi validation runs.
  *
- * IMPORTANT: This singleton is intended primarily for bootstrapping tasks, such as initial database
- * connection setup, startup/shutdown hooks, and uncaught process level exceptions.
- * For general application modules and classes, do not import this instance directly. Instead,
- * inject it through the Dependency Injection (DI) system (e.g. from the composition root) to maintain
- * testability and ensure the same logger instance flows throughout the system.
+ * PURPOSE: Used ONLY for the `start().catch()` boundary in server.js, where
+ * the application logger (created from the validated config.logLevel) hasn't
+ * been instantiated yet.  If startup fails before config loads, this singleton
+ * is the only logger available.
+ *
+ * DO NOT import this singleton in any application module or class. Instead,
+ * inject the validated logger through the DI system (composition root) to
+ * maintain testability and ensure a consistent logger instance throughout the
+ * application (Issue 17 & 18).
  */
 export const logger = new WinstonLoggerAdapter({
     logLevel: process.env.LOG_LEVEL,

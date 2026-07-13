@@ -1,6 +1,6 @@
 export class AuthUserResponseDto {
     constructor(user) {
-        this.id = user.id?.toString() || user.userId?.toString();
+        this.id = user.id?.toString();
         this.email = user.email;
         this.username = user.username;
         this.isVerified = user.isVerified;

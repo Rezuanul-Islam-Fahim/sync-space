@@ -10,6 +10,10 @@ if (error) {
     throw new Error(`Config validation error: ${error.message}`);
 }
 
+// Parse CORS origins once and derive corsCredentials from the same result
+// (previously parseCorsOrigins was called twice — Issue 12).
+const corsOrigins = parseCorsOrigins(envVars.CORS_ORIGINS);
+
 export const config = {
     port: envVars.PORT,
     env: envVars.NODE_ENV,
@@ -23,8 +27,8 @@ export const config = {
     auth: {
         saltRounds: envVars.BCRYPT_SALT_ROUNDS,
     },
-    corsOrigins: parseCorsOrigins(envVars.CORS_ORIGINS),
-    corsCredentials: parseCorsOrigins(envVars.CORS_ORIGINS) !== '*',
+    corsOrigins,
+    corsCredentials: corsOrigins !== '*',
     jwt: {
         secret: envVars.JWT_SECRET,
         expiresIn: envVars.JWT_EXPIRES_IN,

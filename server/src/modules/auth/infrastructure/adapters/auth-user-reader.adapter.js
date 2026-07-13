@@ -7,6 +7,10 @@ export class AuthUserReaderAdapter extends AuthUserReaderPort {
         this.userModel = userModel;
     }
 
+    /**
+     * Credential reads intentionally omit `.select('-password')` so that the
+     * hashed password is available for comparison during authentication flows.
+     */
     findByEmail = async email => {
         const user = await this.userModel.findOne({ email }).lean();
         return AuthUserMapper.toDomain(user);
@@ -14,6 +18,13 @@ export class AuthUserReaderAdapter extends AuthUserReaderPort {
 
     findByUsername = async username => {
         const user = await this.userModel.findOne({ username }).lean();
+        return AuthUserMapper.toDomain(user);
+    };
+
+    // Implements UserByIdPort (inherited via AuthUserReaderPort) — includes
+    // password so auth-layer callers have the full credential document.
+    findById = async id => {
+        const user = await this.userModel.findById(id).lean();
         return AuthUserMapper.toDomain(user);
     };
 }
