@@ -1,8 +1,4 @@
 import mongoose from 'mongoose';
-import {
-    USER_STATUS,
-    BANNER_DEFAULT_COLOR,
-} from '../../../../shared/constant/user.constant.js';
 
 const userSchema = new mongoose.Schema(
     {
@@ -37,7 +33,7 @@ const userSchema = new mongoose.Schema(
         },
         bannerColor: {
             type: String,
-            default: BANNER_DEFAULT_COLOR,
+            default: '#5865F2',
         },
         dateOfBirth: {
             type: Date,
@@ -45,7 +41,7 @@ const userSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: USER_STATUS,
+            enum: ['online', 'offline', 'idle', 'dnd'],
             default: 'offline',
         },
         lastOnline: {
