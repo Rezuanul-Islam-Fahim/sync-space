@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import {
     USER_STATUS,
     BANNER_DEFAULT_COLOR,
-} from '../../../modules/user/domain/user.constant.js';
+} from '../../../../shared/constant/user.constant.js';
 
 const userSchema = new mongoose.Schema(
     {
@@ -17,11 +17,6 @@ const userSchema = new mongoose.Schema(
             unique: true,
             minLength: 3,
             maxLength: 30,
-        },
-        password: {
-            type: String,
-            required: true,
-            minLength: 6,
         },
         displayName: {
             type: String,
@@ -48,10 +43,6 @@ const userSchema = new mongoose.Schema(
             type: Date,
             required: true,
         },
-        isVerified: {
-            type: Boolean,
-            default: false,
-        },
         status: {
             type: String,
             enum: USER_STATUS,
@@ -69,11 +60,10 @@ userSchema.index({ status: 1, lastOnline: -1 }, { sparse: true });
 
 const transform = (doc, ret) => {
     delete ret.__v;
-
     return ret;
 };
 
 userSchema.set('toJSON', { transform });
 userSchema.set('toObject', { transform });
 
-export const UserModel = mongoose.model('User', userSchema);
+export const UserModel = mongoose.model('User', userSchema, 'users');

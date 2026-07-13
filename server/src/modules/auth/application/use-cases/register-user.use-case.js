@@ -32,14 +32,15 @@ export class RegisterUserUseCase {
             );
         }
 
-        const authUser = await AuthUser.create(data, this.passwordHasher);
-        
-        const profileData = {
-            displayName: data.displayName,
-            dateOfBirth: data.dateOfBirth
-        };
+        const hashedPassword = await this.passwordHasher.hash(data.password);
+        const authUser = new AuthUser({
+            email: data.email,
+            username: data.username,
+            password: hashedPassword,
+            isVerified: false,
+        });
 
-        const savedUser = await this.authUserWriter.createUser(authUser, profileData);
+        const savedUser = await this.authUserWriter.createUser(authUser, data);
         return savedUser;
     }
 }

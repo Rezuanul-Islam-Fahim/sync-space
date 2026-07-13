@@ -22,7 +22,7 @@ export const createApp = ({ router, logger }) => {
     app.use(
         cors({
             origin: config.corsOrigins,
-            credentials: config.corsOrigins !== '*',
+            credentials: config.corsCredentials,
         })
     );
 

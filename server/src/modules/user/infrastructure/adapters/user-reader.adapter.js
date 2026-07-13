@@ -1,7 +1,7 @@
 import { UserReaderPort } from '../../application/ports/user-reader.port.js';
 import { UserMapper } from '../mappers/user.mapper.js';
 
-export class UserReaderRepository extends UserReaderPort {
+export class UserReaderAdapter extends UserReaderPort {
     constructor({ userModel }) {
         super();
         this.userModel = userModel;

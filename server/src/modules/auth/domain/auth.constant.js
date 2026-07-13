@@ -11,8 +11,6 @@ export const LOGIN_ALLOWED_FIELDS = ['email', 'password'];
 // Auth & Service messages
 export const INVALID_CREDENTIALS = 'Invalid Email or Password';
 
-export const USER_CREATED = 'New user created successfully';
-export const LOGIN_SUCCESSFUL = 'Login successful';
 export const EMAIL_ALREADY_REGISTERED = 'User with this email is already registered';
 export const USERNAME_ALREADY_TAKEN = 'Username is already taken';
 

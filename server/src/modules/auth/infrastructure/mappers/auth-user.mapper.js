@@ -1,10 +1,5 @@
 import { AuthUser } from '../../domain/auth-user.entity.js';
-
-const toRawObject = value => {
-    if (!value) return null;
-
-    return typeof value.toObject === 'function' ? value.toObject() : value;
-};
+import { toRawObject } from '../../../../shared/util/mongoose-to-raw.util.js';
 
 export class AuthUserMapper {
     static toDomain(raw) {

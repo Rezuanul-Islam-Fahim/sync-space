@@ -24,6 +24,7 @@ export const config = {
         saltRounds: envVars.BCRYPT_SALT_ROUNDS,
     },
     corsOrigins: parseCorsOrigins(envVars.CORS_ORIGINS),
+    corsCredentials: parseCorsOrigins(envVars.CORS_ORIGINS) !== '*',
     jwt: {
         secret: envVars.JWT_SECRET,
         expiresIn: envVars.JWT_EXPIRES_IN,

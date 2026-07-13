@@ -4,13 +4,14 @@ import { createApp } from './app.js';
 
 // ── Infrastructure & Modules ──────────────────────────────────────────────────
 import { composeUserModule } from './modules/user/index.js';
-import { UserReaderRepository } from './modules/user/infrastructure/repositories/user-reader.repository.js';
-import { UserModel } from './shared/infrastructure/database/user.model.js';
+import { UserReaderAdapter } from './modules/user/infrastructure/adapters/user-reader.adapter.js';
+import { UserModel } from './modules/user/infrastructure/database/user.model.js';
 import { composeAuthModule } from './modules/auth/index.js';
 import {
     AuthUserReaderAdapter,
     AuthUserWriterAdapter,
 } from './modules/auth/infrastructure/index.js';
+import { AuthUserModel } from './modules/auth/infrastructure/database/auth-user.model.js';
 import {
     BcryptPasswordHasher,
     JwtTokenGenerator,
@@ -30,14 +31,14 @@ export const composeDependencies = ({ logger = defaultLogger } = {}) => {
     const tokenVerifier = new JwtTokenVerifier(config.jwt);
 
     // 2. Module Composition
-    const userReader = new UserReaderRepository({ userModel: UserModel });
-    const { getUserUseCase } = composeUserModule({
+    const userReader = new UserReaderAdapter({ userModel: UserModel });
+    composeUserModule({
         userReader,
         logger,
     });
 
-    const authUserReader = new AuthUserReaderAdapter({ userModel: UserModel });
-    const authUserWriter = new AuthUserWriterAdapter({ userModel: UserModel });
+    const authUserReader = new AuthUserReaderAdapter({ userModel: AuthUserModel });
+    const authUserWriter = new AuthUserWriterAdapter({ userModel: AuthUserModel });
 
     const authModule = composeAuthModule({
         authUserReader,
@@ -61,5 +62,5 @@ export const composeDependencies = ({ logger = defaultLogger } = {}) => {
     // 5. Express app
     const app = createApp({ router: apiRouter, logger });
 
-    return { app, authenticate, getUserUseCase };
+    return { app, authenticate };
 };

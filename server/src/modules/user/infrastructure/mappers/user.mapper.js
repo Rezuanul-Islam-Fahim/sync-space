@@ -1,10 +1,5 @@
 import { User } from '../../domain/user.entity.js';
-
-const toRawObject = value => {
-    if (!value) return null;
-
-    return typeof value.toObject === 'function' ? value.toObject() : value;
-};
+import { toRawObject } from '../../../../shared/util/mongoose-to-raw.util.js';
 
 export class UserMapper {
     static toDomain(raw) {

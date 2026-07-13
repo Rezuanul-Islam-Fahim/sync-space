@@ -16,9 +16,9 @@ export class LoginUserUseCase {
             throw new AppError(INVALID_CREDENTIALS, ErrorCode.UNAUTHENTICATED);
         }
 
-        const isPasswordMatch = await user.verifyPassword(
+        const isPasswordMatch = await this.passwordHasher.compare(
             data.password,
-            this.passwordHasher
+            user.password
         );
 
         if (!isPasswordMatch) {
