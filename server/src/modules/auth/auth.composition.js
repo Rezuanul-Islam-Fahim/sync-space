@@ -20,7 +20,7 @@ import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-write
  *   onUserRegistered?: (savedUser: import('./domain/auth-user.entity.js').AuthUser, requestData: any) => Promise<void>,
  *   logger?: import('../../shared/ports/logger.port.js').LoggerPort
  * }} deps
- * @returns {{ router: import('express').Router }}
+ * @returns {{ router: import('express').Router, authService: { registerUser: Function, deleteAuthUser: Function } }}
  */
 export const composeAuthModule = ({ logger }) => {
     const tokenGenerator = new JwtTokenGenerator(config.jwt);
@@ -65,7 +65,9 @@ export const composeAuthModule = ({ logger }) => {
 
     return {
         router,
-        registerUserUseCase,
-        deleteAuthUserUseCase,
+        authService: {
+            registerUser: (data) => registerUserUseCase.execute(data),
+            deleteAuthUser: (id) => deleteAuthUserUseCase.execute(id),
+        },
     };
 };

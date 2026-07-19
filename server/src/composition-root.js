@@ -24,9 +24,8 @@ export const composeDependencies = ({ logger }) => {
 
     // ── Composite API layer ───────────────────────────────────────────────────
     const registrationController = new RegistrationController({
-        registerUserUseCase: authModule.registerUserUseCase,
-        deleteAuthUserUseCase: authModule.deleteAuthUserUseCase,
-        createUserUseCase: userModule.createUserUseCase,
+        authService: authModule.authService,
+        userService: userModule.userService,
         logger,
     });
 

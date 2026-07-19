@@ -1,34 +1,25 @@
 import { catchAsync, ApiResponse } from '../../shared/util/index.js';
 import { CREATED } from '../../shared/constant/index.js';
-import {
-    RegisterRequestDto,
-    AuthUserResponseDto,
-} from '../../modules/auth/presentation/dto/index.js';
+import { RegistrationResponseDto } from './dto/registration-response.dto.js';
 import { USER_CREATED } from '../../modules/auth/presentation/auth.messages.js';
 
 export class RegistrationController {
-    constructor({
-        registerUserUseCase,
-        deleteAuthUserUseCase,
-        createUserUseCase,
-        logger,
-    }) {
-        this.registerUserUseCase = registerUserUseCase;
-        this.deleteAuthUserUseCase = deleteAuthUserUseCase;
-        this.createUserUseCase = createUserUseCase;
+    constructor({ authService, userService, logger }) {
+        this.authService = authService;
+        this.userService = userService;
         this.logger = logger;
     }
 
     register = catchAsync(async (req, res) => {
-        const requestDto = RegisterRequestDto.from(req.body);
-
         // 1. Create Auth Credentials
-        const savedAuthUser =
-            await this.registerUserUseCase.execute(requestDto);
+        const savedAuthUser = await this.authService.registerUser({
+            email: req.body.email,
+            password: req.body.password,
+        });
 
         try {
             // 2. Create User Profile
-            await this.createUserUseCase.execute({
+            await this.userService.createUser({
                 id: savedAuthUser.id,
                 email: savedAuthUser.email,
                 username: req.body.username,
@@ -37,11 +28,11 @@ export class RegistrationController {
             });
         } catch (err) {
             // Compensating action: rollback credential creation
-            await this.deleteAuthUserUseCase.execute(savedAuthUser.id);
+            await this.authService.deleteAuthUser(savedAuthUser.id);
             throw err;
         }
 
-        const responseDto = AuthUserResponseDto.from(savedAuthUser);
+        const responseDto = RegistrationResponseDto.from(savedAuthUser);
 
         ApiResponse.success({
             res,
