@@ -4,6 +4,7 @@ import { LoginUserUseCase } from './application/use-cases/login-user.use-case.js
 import { RegisterUserUseCase } from './application/use-cases/register-user.use-case.js';
 import { createAuthRouter } from './presentation/auth.router.js';
 import { BcryptPasswordHasher } from './infrastructure/security/bcrypt-password-hasher.adapter.js';
+import { UserRegistrationOrchestrator } from '../../shared/application/orchestrators/user-registration.orchestrator.js';
 
 /**
  * Composes the auth module and returns its Express router.
@@ -11,7 +12,7 @@ import { BcryptPasswordHasher } from './infrastructure/security/bcrypt-password-
  * @param {{
  *   authUserReader: import('./application/ports/auth-user-reader.port.js').AuthUserReaderPort,
  *   authUserWriter: import('./application/ports/auth-user-writer.port.js').AuthUserWriterPort,
- *   profileCreatorPort: import('./application/ports/profile-creator.port.js').ProfileCreatorPort,
+ *   createUserUseCase: import('../../../shared/application/orchestrators/user-registration.orchestrator.js').UserRegistrationOrchestrator, // actually import CreateUserUseCase but typing is fine for now
  *   tokenGenerator,
  *   logger?: import('../../shared/ports/logger.port.js').LoggerPort
  * }} deps
@@ -20,7 +21,7 @@ import { BcryptPasswordHasher } from './infrastructure/security/bcrypt-password-
 export const composeAuthModule = ({
     authUserReader,
     authUserWriter,
-    profileCreatorPort,
+    createUserUseCase,
     tokenGenerator,
     logger,
 }) => {
@@ -39,13 +40,19 @@ export const composeAuthModule = ({
         authUserReader,
         authUserWriter,
         passwordHasher,
-        profileCreatorPort,
+        logger,
+    });
+
+    const userRegistrationOrchestrator = new UserRegistrationOrchestrator({
+        registerUserUseCase,
+        createUserUseCase,
+        authUserWriter,
         logger,
     });
 
     const authController = new AuthController({
         loginUserUseCase,
-        registerUserUseCase,
+        userRegistrationOrchestrator,
         logger,
     });
 

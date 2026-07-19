@@ -4,8 +4,8 @@ import { createApp } from './app.js';
 import {
     composeUserModule,
     UserReaderAdapter,
+    UserWriterAdapter,
     UserModel,
-    ProfileCreatorAdapter,
 } from './modules/user/index.js';
 import {
     composeAuthModule,
@@ -30,7 +30,8 @@ export const composeDependencies = ({ logger }) => {
 
     // ── User bounded context ──────────────────────────────────────────────────
     const userReader = new UserReaderAdapter({ userModel: UserModel });
-    composeUserModule({ userReader, logger });
+    const userWriter = new UserWriterAdapter({ userModel: UserModel });
+    const userModule = composeUserModule({ userReader, userWriter, logger });
 
     // ── Auth bounded context ──────────────────────────────────────────────────
     const authUserReader = new AuthUserReaderAdapter({
@@ -40,16 +41,10 @@ export const composeDependencies = ({ logger }) => {
         authUserModel: AuthUserModel,
     });
 
-    // Cross-context adapter: satisfies ProfileCreatorPort using UserModel.
-    // Only the port interface is imported from auth; the adapter lives in user.
-    const profileCreatorPort = new ProfileCreatorAdapter({
-        userModel: UserModel,
-    });
-
     const authModule = composeAuthModule({
         authUserReader,
         authUserWriter,
-        profileCreatorPort,
+        createUserUseCase: userModule.createUserUseCase,
         tokenGenerator,
         logger,
     });

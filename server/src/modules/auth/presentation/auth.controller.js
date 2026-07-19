@@ -9,15 +9,16 @@ import { CREATED, OK } from '../../../shared/constant/index.js';
 import { USER_CREATED, LOGIN_SUCCESSFUL } from './auth.messages.js';
 
 export class AuthController {
-    constructor({ loginUserUseCase, registerUserUseCase, logger }) {
+    constructor({ loginUserUseCase, userRegistrationOrchestrator, logger }) {
         this.loginUserUseCase = loginUserUseCase;
-        this.registerUserUseCase = registerUserUseCase;
+        this.userRegistrationOrchestrator = userRegistrationOrchestrator;
         this.logger = logger;
     }
 
     register = catchAsync(async (req, res) => {
         const requestDto = RegisterRequestDto.from(req.body);
-        const userData = await this.registerUserUseCase.execute(requestDto);
+        const userData =
+            await this.userRegistrationOrchestrator.execute(requestDto);
         const responseDto = AuthUserResponseDto.from(userData);
 
         ApiResponse.success({
