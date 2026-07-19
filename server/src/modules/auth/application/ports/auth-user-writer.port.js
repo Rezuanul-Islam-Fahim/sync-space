@@ -8,4 +8,8 @@ export class AuthUserWriterPort {
     createUser(_authUser) {
         throw new Error('Method not implemented');
     }
+
+    deleteById(_id) {
+        throw new Error('Method not implemented');
+    }
 }

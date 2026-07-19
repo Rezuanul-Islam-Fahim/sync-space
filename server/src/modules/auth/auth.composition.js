@@ -8,12 +8,19 @@ import { BcryptPasswordHasher } from './infrastructure/security/bcrypt-password-
 /**
  * Composes the auth module and returns its Express router.
  *
- * @param {{ authUserReader, authUserWriter, passwordHasher, tokenGenerator, logger?: import('../../shared/ports/logger.port.js').LoggerPort }} deps
+ * @param {{
+ *   authUserReader: import('./application/ports/auth-user-reader.port.js').AuthUserReaderPort,
+ *   authUserWriter: import('./application/ports/auth-user-writer.port.js').AuthUserWriterPort,
+ *   profileCreatorPort: import('./application/ports/profile-creator.port.js').ProfileCreatorPort,
+ *   tokenGenerator,
+ *   logger?: import('../../shared/ports/logger.port.js').LoggerPort
+ * }} deps
  * @returns {{ router: import('express').Router }}
  */
 export const composeAuthModule = ({
     authUserReader,
     authUserWriter,
+    profileCreatorPort,
     tokenGenerator,
     logger,
 }) => {
@@ -32,6 +39,7 @@ export const composeAuthModule = ({
         authUserReader,
         authUserWriter,
         passwordHasher,
+        profileCreatorPort,
         logger,
     });
 

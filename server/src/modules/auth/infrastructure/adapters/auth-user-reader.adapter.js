@@ -1,30 +1,25 @@
 import { AuthUserReaderPort } from '../../application/ports/auth-user-reader.port.js';
 import { AuthUserMapper } from '../mappers/auth-user.mapper.js';
 
+/**
+ * Reads credential documents from the `credentials` collection via
+ * `AuthUserModel`.  Lives inside the auth module so that the user module
+ * carries zero knowledge of credential storage.
+ */
 export class AuthUserReaderAdapter extends AuthUserReaderPort {
-    constructor({ userModel }) {
+    constructor({ authUserModel }) {
         super();
-        this.userModel = userModel;
+        this.authUserModel = authUserModel;
     }
 
-    /**
-     * Credential reads intentionally omit `.select('-password')` so that the
-     * hashed password is available for comparison during authentication flows.
-     */
     findByEmail = async email => {
-        const user = await this.userModel.findOne({ email }).lean();
-        return AuthUserMapper.toDomain(user);
+        const doc = await this.authUserModel.findOne({ email }).lean();
+        return AuthUserMapper.toDomain(doc);
     };
 
-    findByUsername = async username => {
-        const user = await this.userModel.findOne({ username }).lean();
-        return AuthUserMapper.toDomain(user);
-    };
-
-    // Implements UserByIdPort (inherited via AuthUserReaderPort) — includes
-    // password so auth-layer callers have the full credential document.
+    // Implements UserByIdPort (inherited via AuthUserReaderPort)
     findById = async id => {
-        const user = await this.userModel.findById(id).lean();
-        return AuthUserMapper.toDomain(user);
+        const doc = await this.authUserModel.findById(id).lean();
+        return AuthUserMapper.toDomain(doc);
     };
 }

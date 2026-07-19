@@ -1,5 +1,12 @@
 import { UserStatus, BANNER_DEFAULT_COLOR } from './user.constant.js';
 
+/**
+ * User profile domain entity.
+ *
+ * Represents the user bounded context's view of a user — profile data only.
+ * Credential information (password, isVerified) is absent; it is owned by the
+ * auth bounded context.
+ */
 export class User {
     constructor({
         id,
@@ -13,7 +20,6 @@ export class User {
         dateOfBirth,
         status = UserStatus.OFFLINE,
         lastOnline = null,
-        isVerified = false,
         createdAt,
         updatedAt,
     }) {
@@ -28,7 +34,6 @@ export class User {
         this.dateOfBirth = dateOfBirth;
         this.status = status;
         this.lastOnline = lastOnline;
-        this.isVerified = isVerified;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         Object.freeze(this);

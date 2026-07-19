@@ -1,21 +1,23 @@
+/**
+ * Auth-bounded-context domain entity.
+ *
+ * Only carries the fields required to authenticate a principal: credential
+ * data (email, hashed password) and verification status.  Profile data
+ * (username, displayName, dateOfBirth, …) is owned by the user bounded context
+ * and is not represented here.
+ */
 export class AuthUser {
     constructor({
         id,
         email,
-        username,
         password,
-        displayName = null,
-        dateOfBirth,
         isVerified = false,
         createdAt = null,
         updatedAt = null,
     } = {}) {
         this.id = id;
         this.email = email;
-        this.username = username;
         this.password = password;
-        this.displayName = displayName;
-        this.dateOfBirth = dateOfBirth;
         this.isVerified = isVerified;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

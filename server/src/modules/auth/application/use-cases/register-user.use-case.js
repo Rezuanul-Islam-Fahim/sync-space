@@ -6,10 +6,17 @@ import {
 } from '../../domain/auth.constant.js';
 
 export class RegisterUserUseCase {
-    constructor({ authUserReader, authUserWriter, passwordHasher, logger }) {
+    constructor({
+        authUserReader,
+        authUserWriter,
+        passwordHasher,
+        profileCreatorPort,
+        logger,
+    }) {
         this.authUserReader = authUserReader;
         this.authUserWriter = authUserWriter;
         this.passwordHasher = passwordHasher;
+        this.profileCreatorPort = profileCreatorPort;
         this.logger = logger;
     }
 
@@ -22,31 +29,47 @@ export class RegisterUserUseCase {
             );
         }
 
-        const existingUsername = await this.authUserReader.findByUsername(
-            data.username
-        );
-        if (existingUsername) {
-            throw new AppError(
-                USERNAME_ALREADY_TAKEN,
-                ErrorCode.ALREADY_EXISTS
-            );
-        }
-
+        // Username uniqueness is checked via the profile creator port's
+        // underlying store; a duplicate will surface as a persistence error.
+        // If you need an explicit pre-check, inject a UsernameCheckerPort.
         const hashedPassword = await this.passwordHasher.hash(data.password);
 
-        // Build the entity with ALL fields required at registration time.
-        // The entity is the sole authority on what gets persisted — no raw DTO
-        // data is passed further down the chain.
+        // Build the auth credential entity — profile fields are intentionally
+        // excluded; they are managed by the user bounded context.
         const authUser = new AuthUser({
             email: data.email,
-            username: data.username,
             password: hashedPassword,
-            displayName: data.displayName ?? null,
-            dateOfBirth: data.dateOfBirth,
             isVerified: false,
         });
 
         const savedUser = await this.authUserWriter.createUser(authUser);
+
+        try {
+            // Synchronously propagate the new principal into the user bounded
+            // context so that the profile record is always created in the same
+            // registration transaction flow.
+            await this.profileCreatorPort.createProfile({
+                userId: savedUser.id,
+                registrationData: {
+                    email: savedUser.email,
+                    username: data.username,
+                    displayName: data.displayName ?? null,
+                    dateOfBirth: data.dateOfBirth,
+                },
+            });
+        } catch (profileErr) {
+            // Compensating action: delete the orphaned credential
+            await this.authUserWriter.deleteById(savedUser.id);
+
+            if (profileErr.errorCode === ErrorCode.ALREADY_EXISTS) {
+                throw new AppError(
+                    USERNAME_ALREADY_TAKEN,
+                    ErrorCode.ALREADY_EXISTS
+                );
+            }
+            throw profileErr;
+        }
+
         return savedUser;
     }
 }

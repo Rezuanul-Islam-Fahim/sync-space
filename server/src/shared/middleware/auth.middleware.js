@@ -7,7 +7,7 @@ import {
     INVALID_TOKEN,
 } from '../constant/index.js';
 
-export const makeAuthenticate = (userByIdPort, tokenService) => {
+export const makeAuthenticate = (getUserUseCase, tokenService) => {
     return catchAsync(async (req, _, next) => {
         let token;
 
@@ -32,10 +32,20 @@ export const makeAuthenticate = (userByIdPort, tokenService) => {
             throw error;
         }
 
-        const currentUser = await userByIdPort.findById(decodedToken.sub);
-
-        if (!currentUser) {
-            throw new AppError(USER_UNAVAILABLE, ErrorCode.UNAUTHENTICATED);
+        let currentUser;
+        try {
+            currentUser = await getUserUseCase.execute({
+                by: 'id',
+                value: decodedToken.sub,
+            });
+        } catch (error) {
+            if (
+                error instanceof AppError &&
+                error.errorCode === ErrorCode.RESOURCE_NOT_FOUND
+            ) {
+                throw new AppError(USER_UNAVAILABLE, ErrorCode.UNAUTHENTICATED);
+            }
+            throw error;
         }
 
         req.user = currentUser;

@@ -5,15 +5,15 @@ import {
     composeUserModule,
     UserReaderAdapter,
     UserModel,
+    ProfileCreatorAdapter,
 } from './modules/user/index.js';
 import {
     composeAuthModule,
+    AuthUserModel,
     AuthUserReaderAdapter,
     AuthUserWriterAdapter,
-    JwtTokenGenerator,
-    JwtTokenVerifier,
 } from './modules/auth/index.js';
-import { makeAuthenticate } from './shared/middleware/index.js';
+import { JwtTokenGenerator } from './modules/auth/infrastructure/security/jwt-token.adapter.js';
 
 /**
  * Wires all dependencies and returns the composed Express app.
@@ -27,23 +27,36 @@ import { makeAuthenticate } from './shared/middleware/index.js';
  */
 export const composeDependencies = ({ logger }) => {
     const tokenGenerator = new JwtTokenGenerator(config.jwt);
-    const tokenVerifier = new JwtTokenVerifier(config.jwt);
 
+    // ── User bounded context ──────────────────────────────────────────────────
     const userReader = new UserReaderAdapter({ userModel: UserModel });
-    const { _getUserUseCase } = composeUserModule({ userReader, logger });
+    composeUserModule({ userReader, logger });
 
-    const authUserReader = new AuthUserReaderAdapter({ userModel: UserModel });
-    const authUserWriter = new AuthUserWriterAdapter({ userModel: UserModel });
+    // ── Auth bounded context ──────────────────────────────────────────────────
+    const authUserReader = new AuthUserReaderAdapter({
+        authUserModel: AuthUserModel,
+    });
+    const authUserWriter = new AuthUserWriterAdapter({
+        authUserModel: AuthUserModel,
+    });
+
+    // Cross-context adapter: satisfies ProfileCreatorPort using UserModel.
+    // Only the port interface is imported from auth; the adapter lives in user.
+    const profileCreatorPort = new ProfileCreatorAdapter({
+        userModel: UserModel,
+    });
 
     const authModule = composeAuthModule({
         authUserReader,
         authUserWriter,
+        profileCreatorPort,
         tokenGenerator,
         logger,
     });
 
-    const _authenticate = makeAuthenticate(userReader, tokenVerifier);
+    // ── Middleware ────────────────────────────────────────────────────────────
 
+    // ── Routing ───────────────────────────────────────────────────────────────
     const v1Router = express.Router();
     v1Router.use('/auth', authModule.router);
 

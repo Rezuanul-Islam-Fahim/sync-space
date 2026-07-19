@@ -1,14 +1,22 @@
 import mongoose from 'mongoose';
 
 /**
- * Unified user schema — single source of truth for the `users` collection.
+ * User profile schema — stored in the `users` collection.
  *
- * Note: UserReaderAdapter always queries with `.select('-password')` to exclude
- * the credential field from profile reads.  AuthUserReaderAdapter reads the full
- * document (password included) as required for credential verification.
+ * Owned entirely by the user bounded context.  Credential fields (password,
+ * isVerified) are absent; they live in the `credentials` collection managed
+ * by the auth module.
+ *
+ * The `_id` here is set explicitly to the ObjectId produced by the auth module
+ * when the `AuthUser` credential record is created, acting as the shared
+ * identity across both bounded contexts.
  */
 const userSchema = new mongoose.Schema(
     {
+        _id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+        },
         email: {
             type: String,
             required: true,
@@ -20,15 +28,6 @@ const userSchema = new mongoose.Schema(
             unique: true,
             minLength: 3,
             maxLength: 30,
-        },
-        password: {
-            type: String,
-            required: true,
-            minLength: 6,
-        },
-        isVerified: {
-            type: Boolean,
-            default: false,
         },
         displayName: {
             type: String,
