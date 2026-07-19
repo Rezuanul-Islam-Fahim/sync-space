@@ -1,5 +1,5 @@
 import { AppError, ErrorCode, TokenVerificationError } from '../error/index.js';
-import { catchAsync } from '../util/catch-async.util.js';
+import { catchAsync } from '../util/index.js';
 import {
     TOKEN_NOT_FOUND,
     USER_UNAVAILABLE,

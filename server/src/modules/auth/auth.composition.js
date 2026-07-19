@@ -1,4 +1,5 @@
 import { config } from '../../config/index.js';
+import { AuthFacade } from './application/auth.facade.js';
 import { AuthController } from './presentation/auth.controller.js';
 import { LoginUserUseCase } from './application/use-cases/login-user.use-case.js';
 import { RegisterUserUseCase } from './application/use-cases/register-user.use-case.js';
@@ -20,7 +21,7 @@ import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-write
  *   onUserRegistered?: (savedUser: import('./domain/auth-user.entity.js').AuthUser, requestData: any) => Promise<void>,
  *   logger?: import('../../shared/ports/logger.port.js').LoggerPort
  * }} deps
- * @returns {{ router: import('express').Router, authService: { registerUser: Function, deleteAuthUser: Function } }}
+ * @returns {{ router: import('express').Router, authService: import('./application/auth.facade.js').AuthFacade }}
  */
 export const composeAuthModule = ({ logger }) => {
     const tokenGenerator = new JwtTokenGenerator(config.jwt);
@@ -63,11 +64,13 @@ export const composeAuthModule = ({ logger }) => {
         authController,
     });
 
+    const authService = new AuthFacade({
+        registerUserUseCase,
+        deleteAuthUserUseCase,
+    });
+
     return {
         router,
-        authService: {
-            registerUser: (data) => registerUserUseCase.execute(data),
-            deleteAuthUser: (id) => deleteAuthUserUseCase.execute(id),
-        },
+        authService,
     };
 };

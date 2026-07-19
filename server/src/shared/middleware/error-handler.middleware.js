@@ -1,5 +1,5 @@
-import { ApiResponse } from '../util/api-response.util.js';
-import { ErrorCode } from '../error/app.error.js';
+import { ApiResponse } from '../util/index.js';
+import { ErrorCode } from '../error/index.js';
 import {
     BAD_REQUEST,
     CONFLICT,

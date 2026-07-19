@@ -1,5 +1,7 @@
 import { AuthUserWriterPort } from '../../application/ports/auth-user-writer.port.js';
 import { AuthUserMapper } from '../mappers/auth-user.mapper.js';
+import { AppError, ErrorCode } from '../../../../shared/error/index.js';
+import { EMAIL_ALREADY_REGISTERED } from '../../domain/auth.constant.js';
 
 /**
  * Writes credential documents to the `credentials` collection via
@@ -13,10 +15,21 @@ export class AuthUserWriterAdapter extends AuthUserWriterPort {
     }
 
     createUser = async authUser => {
-        const persistenceData = AuthUserMapper.toPersistence(authUser);
-        const newDoc = new this.authUserModel(persistenceData);
-        const savedDoc = await newDoc.save();
-        return AuthUserMapper.toDomain(savedDoc);
+        try {
+            const persistenceData = AuthUserMapper.toPersistence(authUser);
+            const newDoc = new this.authUserModel(persistenceData);
+            const savedDoc = await newDoc.save();
+            return AuthUserMapper.toDomain(savedDoc);
+        } catch (err) {
+            if (err.code === 11000) {
+                // MongoDB duplicate key error
+                throw new AppError(
+                    EMAIL_ALREADY_REGISTERED,
+                    ErrorCode.ALREADY_EXISTS
+                );
+            }
+            throw err;
+        }
     };
 
     deleteById = async id => {

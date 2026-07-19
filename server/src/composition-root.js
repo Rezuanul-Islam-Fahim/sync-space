@@ -2,8 +2,11 @@ import express from 'express';
 import { createApp } from './app.js';
 import { composeUserModule } from './modules/user/index.js';
 import { composeAuthModule } from './modules/auth/index.js';
-import { RegistrationController } from './api/composite/registration.controller.js';
-import { createRegistrationRouter } from './api/composite/registration.router.js';
+import {
+    RegistrationController,
+    RegisterUserProfileUseCase,
+    createRegistrationRouter,
+} from './api/composite/index.js';
 
 /**
  * Wires all dependencies and returns the composed Express app.
@@ -23,9 +26,14 @@ export const composeDependencies = ({ logger }) => {
     const authModule = composeAuthModule({ logger });
 
     // ── Composite API layer ───────────────────────────────────────────────────
-    const registrationController = new RegistrationController({
+    const registerUserProfileUseCase = new RegisterUserProfileUseCase({
         authService: authModule.authService,
         userService: userModule.userService,
+        logger,
+    });
+
+    const registrationController = new RegistrationController({
+        registerUserProfileUseCase,
         logger,
     });
 

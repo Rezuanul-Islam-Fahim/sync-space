@@ -1,3 +1,4 @@
+import { UserFacade } from './application/user.facade.js';
 import { GetUserUseCase } from './application/use-cases/get-user.use-case.js';
 import { CreateUserUseCase } from './application/use-cases/create-user.use-case.js';
 import { UserModel } from './infrastructure/database/user.model.js';
@@ -9,7 +10,7 @@ import { UserWriterAdapter } from './infrastructure/adapters/user-writer.adapter
  *
  * @param {{ userReader: import('./application/ports/user-reader.port.js').UserReaderPort, userWriter: import('./application/ports/user-writer.port.js').UserWriterPort, logger?: import('../../shared/ports/logger.port.js').LoggerPort }} deps
  * @returns {{
- *   userService: { getUser: Function, createUser: Function }
+ *   userService: import('./application/user.facade.js').UserFacade
  * }}
  */
 export const composeUserModule = ({ logger }) => {
@@ -25,10 +26,12 @@ export const composeUserModule = ({ logger }) => {
         logger,
     });
 
+    const userService = new UserFacade({
+        getUserUseCase,
+        createUserUseCase,
+    });
+
     return {
-        userService: {
-            getUser: (id) => getUserUseCase.execute(id),
-            createUser: (data) => createUserUseCase.execute(data),
-        }
+        userService,
     };
 };
