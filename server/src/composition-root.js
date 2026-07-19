@@ -1,21 +1,9 @@
 import express from 'express';
-import { config } from './config/index.js';
 import { createApp } from './app.js';
-import {
-    composeUserModule,
-    UserReaderAdapter,
-    UserWriterAdapter,
-    UserModel,
-} from './modules/user/index.js';
-import {
-    composeAuthModule,
-    AuthUserModel,
-    AuthUserReaderAdapter,
-    AuthUserWriterAdapter,
-} from './modules/auth/index.js';
-import { JwtTokenGenerator } from './modules/auth/infrastructure/security/jwt-token.adapter.js';
-
-import { userProfileValidation } from './modules/user/presentation/user.validator.js';
+import { composeUserModule } from './modules/user/index.js';
+import { composeAuthModule } from './modules/auth/index.js';
+import { RegistrationController } from './api/composite/registration.controller.js';
+import { createRegistrationRouter } from './api/composite/registration.router.js';
 
 /**
  * Wires all dependencies and returns the composed Express app.
@@ -28,43 +16,29 @@ import { userProfileValidation } from './modules/user/presentation/user.validato
  * @param {{ logger: import('./shared/ports/logger.port.js').LoggerPort }} deps
  */
 export const composeDependencies = ({ logger }) => {
-    const tokenGenerator = new JwtTokenGenerator(config.jwt);
-
     // ── User bounded context ──────────────────────────────────────────────────
-    const userReader = new UserReaderAdapter({ userModel: UserModel });
-    const userWriter = new UserWriterAdapter({ userModel: UserModel });
-    const userModule = composeUserModule({ userReader, userWriter, logger });
+    const userModule = composeUserModule({ logger });
 
     // ── Auth bounded context ──────────────────────────────────────────────────
-    const authUserReader = new AuthUserReaderAdapter({
-        authUserModel: AuthUserModel,
-    });
-    const authUserWriter = new AuthUserWriterAdapter({
-        authUserModel: AuthUserModel,
+    const authModule = composeAuthModule({ logger });
+
+    // ── Composite API layer ───────────────────────────────────────────────────
+    const registrationController = new RegistrationController({
+        registerUserUseCase: authModule.registerUserUseCase,
+        deleteAuthUserUseCase: authModule.deleteAuthUserUseCase,
+        createUserUseCase: userModule.createUserUseCase,
+        logger,
     });
 
-    const authModule = composeAuthModule({
-        authUserReader,
-        authUserWriter,
-        tokenGenerator,
-        extraRegisterValidators: userProfileValidation,
-        onUserRegistered: async (savedAuthUser, data) => {
-            // Step 2: Create user profile in User module
-            await userModule.createUserUseCase.execute({
-                id: savedAuthUser.id,
-                email: savedAuthUser.email,
-                username: data.username,
-                displayName: data.displayName ?? null,
-                dateOfBirth: data.dateOfBirth,
-            });
-        },
-        logger,
+    const registrationRouter = createRegistrationRouter({
+        registrationController,
     });
 
     // ── Middleware ────────────────────────────────────────────────────────────
 
     // ── Routing ───────────────────────────────────────────────────────────────
     const v1Router = express.Router();
+    v1Router.use('/auth/register', registrationRouter);
     v1Router.use('/auth', authModule.router);
 
     const apiRouter = express.Router();
