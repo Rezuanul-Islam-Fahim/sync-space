@@ -1,4 +1,4 @@
-import { AppError, ErrorCode } from '../../../../shared/error/app.error.js';
+import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 
 export class GetUserUseCase {
     constructor({ userReader, logger }) {

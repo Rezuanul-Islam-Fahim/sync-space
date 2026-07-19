@@ -1,4 +1,4 @@
-import { UserByIdPort } from '../../../../shared/ports/user-by-id.port.js';
+import { UserByIdPort } from '../../../../shared/ports/index.js';
 
 /**
  * Auth module's inbound read port.

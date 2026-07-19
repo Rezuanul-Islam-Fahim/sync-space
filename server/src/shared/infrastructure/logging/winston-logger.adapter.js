@@ -1,6 +1,6 @@
 import winston from 'winston';
 import path from 'path';
-import { LoggerPort } from '../../ports/logger.port.js';
+import { LoggerPort } from '../../ports/index.js';
 
 const levels = {
     error: 0,

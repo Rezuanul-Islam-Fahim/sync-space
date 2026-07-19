@@ -1,4 +1,4 @@
-import { AppError, ErrorCode } from '../error/app.error.js';
+import { AppError, ErrorCode } from '../error/index.js';
 
 export const unknownRoutesHandler = (req, res, next) => {
     next(

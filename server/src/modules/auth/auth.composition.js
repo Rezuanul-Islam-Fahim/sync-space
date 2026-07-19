@@ -4,7 +4,6 @@ import { LoginUserUseCase } from './application/use-cases/login-user.use-case.js
 import { RegisterUserUseCase } from './application/use-cases/register-user.use-case.js';
 import { createAuthRouter } from './presentation/auth.router.js';
 import { BcryptPasswordHasher } from './infrastructure/security/bcrypt-password-hasher.adapter.js';
-import { UserRegistrationOrchestrator } from '../../shared/application/orchestrators/user-registration.orchestrator.js';
 
 /**
  * Composes the auth module and returns its Express router.
@@ -12,8 +11,8 @@ import { UserRegistrationOrchestrator } from '../../shared/application/orchestra
  * @param {{
  *   authUserReader: import('./application/ports/auth-user-reader.port.js').AuthUserReaderPort,
  *   authUserWriter: import('./application/ports/auth-user-writer.port.js').AuthUserWriterPort,
- *   createUserUseCase: import('../../../shared/application/orchestrators/user-registration.orchestrator.js').UserRegistrationOrchestrator, // actually import CreateUserUseCase but typing is fine for now
  *   tokenGenerator,
+ *   onUserRegistered?: (savedUser: import('./domain/auth-user.entity.js').AuthUser, requestData: any) => Promise<void>,
  *   logger?: import('../../shared/ports/logger.port.js').LoggerPort
  * }} deps
  * @returns {{ router: import('express').Router }}
@@ -21,8 +20,9 @@ import { UserRegistrationOrchestrator } from '../../shared/application/orchestra
 export const composeAuthModule = ({
     authUserReader,
     authUserWriter,
-    createUserUseCase,
     tokenGenerator,
+    onUserRegistered,
+    extraRegisterValidators = [],
     logger,
 }) => {
     const passwordHasher = new BcryptPasswordHasher({
@@ -40,23 +40,20 @@ export const composeAuthModule = ({
         authUserReader,
         authUserWriter,
         passwordHasher,
-        logger,
-    });
-
-    const userRegistrationOrchestrator = new UserRegistrationOrchestrator({
-        registerUserUseCase,
-        createUserUseCase,
-        authUserWriter,
+        onUserRegistered,
         logger,
     });
 
     const authController = new AuthController({
         loginUserUseCase,
-        userRegistrationOrchestrator,
+        registerUserUseCase,
         logger,
     });
 
-    const router = createAuthRouter(authController);
+    const router = createAuthRouter({
+        authController,
+        extraRegisterValidators,
+    });
 
     return { router };
 };

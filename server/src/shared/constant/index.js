@@ -1,13 +1,11 @@
 export {
     OK,
     CREATED,
-    NO_CONTENT,
     BAD_REQUEST,
     UNAUTHORIZED,
     FORBIDDEN,
     NOT_FOUND,
     CONFLICT,
-    UNPROCESSABLE_ENTITY,
     INTERNAL_SERVER_ERROR,
 } from './http-status.constant.js';
 

@@ -15,6 +15,8 @@ import {
 } from './modules/auth/index.js';
 import { JwtTokenGenerator } from './modules/auth/infrastructure/security/jwt-token.adapter.js';
 
+import { userProfileValidation } from './modules/user/presentation/user.validator.js';
+
 /**
  * Wires all dependencies and returns the composed Express app.
  *
@@ -44,8 +46,18 @@ export const composeDependencies = ({ logger }) => {
     const authModule = composeAuthModule({
         authUserReader,
         authUserWriter,
-        createUserUseCase: userModule.createUserUseCase,
         tokenGenerator,
+        extraRegisterValidators: userProfileValidation,
+        onUserRegistered: async (savedAuthUser, data) => {
+            // Step 2: Create user profile in User module
+            await userModule.createUserUseCase.execute({
+                id: savedAuthUser.id,
+                email: savedAuthUser.email,
+                username: data.username,
+                displayName: data.displayName ?? null,
+                dateOfBirth: data.dateOfBirth,
+            });
+        },
         logger,
     });
 

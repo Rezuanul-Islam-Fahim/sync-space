@@ -28,6 +28,7 @@ export class UserMapper {
         if (!domainUser) return null;
 
         return {
+            _id: domainUser.id,
             email: domainUser.email,
             username: domainUser.username,
             displayName: domainUser.displayName,

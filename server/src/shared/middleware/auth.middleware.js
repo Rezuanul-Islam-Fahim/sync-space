@@ -1,5 +1,4 @@
-import { AppError, ErrorCode } from '../error/app.error.js';
-import { TokenVerificationError } from '../error/token-verification.error.js';
+import { AppError, ErrorCode, TokenVerificationError } from '../error/index.js';
 import { catchAsync } from '../util/catch-async.util.js';
 import {
     TOKEN_NOT_FOUND,

@@ -3,10 +3,17 @@ import { AuthUser } from '../../domain/auth-user.entity.js';
 import { EMAIL_ALREADY_REGISTERED } from '../../domain/auth.constant.js';
 
 export class RegisterUserUseCase {
-    constructor({ authUserReader, authUserWriter, passwordHasher, logger }) {
+    constructor({
+        authUserReader,
+        authUserWriter,
+        passwordHasher,
+        onUserRegistered,
+        logger,
+    }) {
         this.authUserReader = authUserReader;
         this.authUserWriter = authUserWriter;
         this.passwordHasher = passwordHasher;
+        this.onUserRegistered = onUserRegistered;
         this.logger = logger;
     }
 
@@ -28,6 +35,16 @@ export class RegisterUserUseCase {
         });
 
         const savedUser = await this.authUserWriter.createUser(authUser);
+
+        if (this.onUserRegistered) {
+            try {
+                await this.onUserRegistered(savedUser, data);
+            } catch (err) {
+                // Compensating action: rollback credential creation
+                await this.authUserWriter.deleteById(savedUser.id);
+                throw err;
+            }
+        }
 
         return savedUser;
     }
