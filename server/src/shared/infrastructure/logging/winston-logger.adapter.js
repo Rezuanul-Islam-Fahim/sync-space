@@ -36,6 +36,7 @@ const fileFormat = winston.format.combine(
 export class WinstonLoggerAdapter extends LoggerPort {
     constructor({ logLevel, logDir } = {}) {
         super();
+
         const resolvedLogLevel = logLevel || 'debug';
         const resolvedLogDir = logDir || path.join(process.cwd(), 'logs');
 
@@ -94,13 +95,13 @@ export class WinstonLoggerAdapter extends LoggerPort {
  *
  * PURPOSE: Used ONLY for the `start().catch()` boundary in server.js, where
  * the application logger (created from the validated config.logLevel) hasn't
- * been instantiated yet.  If startup fails before config loads, this singleton
+ * been instantiated yet. If startup fails before config loads, this singleton
  * is the only logger available.
  *
  * DO NOT import this singleton in any application module or class. Instead,
  * inject the validated logger through the DI system (composition root) to
  * maintain testability and ensure a consistent logger instance throughout the
- * application (Issue 17 & 18).
+ * application.
  */
 export const logger = new WinstonLoggerAdapter({
     logLevel: process.env.LOG_LEVEL,

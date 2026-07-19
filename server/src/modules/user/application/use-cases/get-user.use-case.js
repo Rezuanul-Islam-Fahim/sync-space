@@ -1,4 +1,4 @@
-import { AppError, ErrorCode } from '../../../../shared/index.js';
+import { AppError, ErrorCode } from '../../../../shared/error/app.error.js';
 
 export class GetUserUseCase {
     constructor({ userReader, logger }) {
@@ -15,7 +15,7 @@ export class GetUserUseCase {
         } else {
             // Throw an operational AppError so the error handler returns a
             // 400 response instead of treating this as a critical error and
-            // triggering a graceful shutdown (Issue 10).
+            // triggering a graceful shutdown.
             throw new AppError(
                 `Invalid search criteria: "${by}"`,
                 ErrorCode.INVALID_INPUT

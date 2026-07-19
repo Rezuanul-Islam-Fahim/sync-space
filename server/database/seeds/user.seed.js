@@ -1,4 +1,4 @@
-import { BcryptPasswordHasher } from '../../src/shared/infrastructure/security/index.js';
+import { BcryptPasswordHasher } from '../../src/shared/infrastructure/index.js';
 import { config } from '../../src/config/index.js';
 
 export const getSeedUsers = async () => {

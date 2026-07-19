@@ -10,8 +10,6 @@ if (error) {
     throw new Error(`Config validation error: ${error.message}`);
 }
 
-// Parse CORS origins once and derive corsCredentials from the same result
-// (previously parseCorsOrigins was called twice — Issue 12).
 const corsOrigins = parseCorsOrigins(envVars.CORS_ORIGINS);
 
 export const config = {

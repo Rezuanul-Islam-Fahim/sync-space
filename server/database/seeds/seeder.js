@@ -1,8 +1,8 @@
-import { logger } from '../../src/shared/infrastructure/logging/winston-logger.adapter.js';
 import {
+    logger,
     closeDB,
     initDB,
-} from '../../src/shared/infrastructure/database/index.js';
+} from '../../src/shared/infrastructure/index.js';
 import { UserModel } from '../../src/modules/user/infrastructure/database/user.model.js';
 import { getSeedUsers } from './user.seed.js';
 import { isDev, config } from '../../src/config/index.js';

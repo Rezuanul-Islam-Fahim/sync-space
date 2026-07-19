@@ -1,4 +1,4 @@
-import { AppError, ErrorCode } from '../../../../shared/index.js';
+import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 import { AuthUser } from '../../domain/auth-user.entity.js';
 import {
     EMAIL_ALREADY_REGISTERED,
@@ -36,7 +36,7 @@ export class RegisterUserUseCase {
 
         // Build the entity with ALL fields required at registration time.
         // The entity is the sole authority on what gets persisted — no raw DTO
-        // data is passed further down the chain (Issue 2 & 4).
+        // data is passed further down the chain.
         const authUser = new AuthUser({
             email: data.email,
             username: data.username,

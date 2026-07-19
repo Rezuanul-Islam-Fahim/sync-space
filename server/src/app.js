@@ -8,7 +8,7 @@ import {
     requestIdAttach,
     makeErrorHandler,
     unknownRoutesHandler,
-} from './shared/index.js';
+} from './shared/middleware/index.js';
 
 export const createApp = ({ router, logger }) => {
     const app = express();

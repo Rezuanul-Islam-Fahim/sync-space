@@ -3,18 +3,12 @@ import mongoose from 'mongoose';
 /**
  * Unified user schema — single source of truth for the `users` collection.
  *
- * Previously, AuthUserModel and UserModel each defined their own incompatible
- * schemas over the same collection, causing silent field omissions and schema
- * conflicts.  All auth and profile fields now live here; every adapter that
- * touches `users` receives an instance of this model via DI (Issue 1 – option a).
- *
  * Note: UserReaderAdapter always queries with `.select('-password')` to exclude
  * the credential field from profile reads.  AuthUserReaderAdapter reads the full
  * document (password included) as required for credential verification.
  */
 const userSchema = new mongoose.Schema(
     {
-        // ── Credentials ────────────────────────────────────────────────────
         email: {
             type: String,
             required: true,
@@ -36,8 +30,6 @@ const userSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
-
-        // ── Profile ────────────────────────────────────────────────────────
         displayName: {
             type: String,
             default: null,
@@ -63,8 +55,6 @@ const userSchema = new mongoose.Schema(
             type: Date,
             required: true,
         },
-
-        // ── Presence ───────────────────────────────────────────────────────
         status: {
             type: String,
             enum: ['online', 'offline', 'idle', 'dnd'],

@@ -5,7 +5,7 @@ export const envSchema = Joi.object({
         .valid('development', 'production')
         .default('development'),
     PORT: Joi.number().integer().default(3000),
-    MONGODB_URI: Joi.string().required().description('Mongo DB url'),
+    MONGODB_URI: Joi.string().required().description('MongoDB url'),
     LOG_LEVEL: Joi.string()
         .valid('error', 'warn', 'info', 'http', 'debug')
         .default('debug'),

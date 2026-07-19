@@ -4,7 +4,7 @@ import {
     RegisterRequestDto,
     AuthUserResponseDto,
 } from './dto/index.js';
-import { ApiResponse, catchAsync } from '../../../shared/index.js';
+import { ApiResponse, catchAsync } from '../../../shared/util/index.js';
 import { CREATED, OK } from '../../../shared/constant/index.js';
 import { USER_CREATED, LOGIN_SUCCESSFUL } from './auth.messages.js';
 

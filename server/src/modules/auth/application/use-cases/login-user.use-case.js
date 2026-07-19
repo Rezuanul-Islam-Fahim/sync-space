@@ -1,4 +1,4 @@
-import { AppError, ErrorCode } from '../../../../shared/index.js';
+import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 import { INVALID_CREDENTIALS } from '../../domain/auth.constant.js';
 
 export class LoginUserUseCase {
