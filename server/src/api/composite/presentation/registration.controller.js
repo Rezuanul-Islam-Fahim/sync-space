@@ -1,6 +1,6 @@
 import { catchAsync, ApiResponse } from '../../../shared/util/index.js';
 import { CREATED } from '../../../shared/constant/index.js';
-import { RegistrationResponseDto } from '../dto/registration-response.dto.js';
+import { RegistrationResponseDto } from './dto/registration-response.dto.js';
 import { USER_CREATED } from '../../../modules/auth/index.js';
 
 export class RegistrationController {
