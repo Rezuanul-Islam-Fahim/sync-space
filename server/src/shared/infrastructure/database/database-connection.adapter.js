@@ -6,7 +6,7 @@ export const initDB = async ({ logger, dbConfig }) => {
     });
 
     mongoose.connection.on('error', err => {
-        logger.error('Mongoose connection error: ', err);
+        logger.error('Mongoose connection error:', err);
     });
 
     mongoose.connection.on('disconnected', () => {

@@ -29,7 +29,7 @@ const runSeeder = async () => {
 
         logger.info('Database seeded successfully!');
     } catch (err) {
-        logger.error('Error seeding database: ', err);
+        logger.error('Error seeding database:', err);
         process.exit(1);
     } finally {
         await closeDB();

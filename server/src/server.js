@@ -33,7 +33,7 @@ const start = async () => {
                 await closeDB();
                 process.exit(exitCode);
             } catch (err) {
-                logger.error('Error during shutdown: ', err);
+                logger.error('Error during shutdown:', err);
                 process.exit(1);
             }
         });
@@ -47,15 +47,15 @@ const start = async () => {
     process.on('SIGTERM', () => shutdown('SIGTERM', 0));
     process.on('SIGINT', () => shutdown('SIGINT', 0));
     process.on('unhandledRejection', reason => {
-        logger.error('Unhandled Rejection: ', reason);
+        logger.error('Unhandled Rejection:', reason);
         shutdown('unhandledRejection', 1);
     });
     process.on('uncaughtException', err => {
-        logger.error('Uncaught Exception: ', err);
+        logger.error('Uncaught Exception:', err);
         shutdown('uncaughtException', 1);
     });
     process.on('criticalError', err => {
-        logger.error('Critical non-operational error: ', err);
+        logger.error('Critical non-operational error:', err);
         shutdown('criticalError', 1);
     });
 };
@@ -63,6 +63,6 @@ const start = async () => {
 start().catch(err => {
     // bootstrapLogger is the pre-config singleton — the only safe logger
     // available if start() itself fails before the validated logger is created.
-    bootstrapLogger.error('Failed to start: ', err);
+    bootstrapLogger.error('Failed to start:', err);
     process.exit(1);
 });
