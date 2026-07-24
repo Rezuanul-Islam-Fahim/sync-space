@@ -12,6 +12,8 @@ export class GetUserUseCase {
             user = await this.userReader.findById(value);
         } else if (by === 'username') {
             user = await this.userReader.findByUsername(value);
+        } else if (by === 'email') {
+            user = await this.userReader.findByEmail(value);
         } else {
             // Throw an operational AppError so the error handler returns a
             // 400 response instead of treating this as a critical error and
