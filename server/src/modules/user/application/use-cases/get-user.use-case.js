@@ -6,7 +6,7 @@ export class GetUserUseCase {
         this.logger = logger;
     }
 
-    async execute({ by, value }) {
+    async execute(by, value) {
         let user;
         if (by === 'id') {
             user = await this.userReader.findById(value);
