@@ -1,5 +1,6 @@
 import { catchAsync, ApiResponse } from '../../../shared/util/index.js';
 import { CREATED } from '../../../shared/constant/index.js';
+import { RegistrationRequestDto } from './dto/registration-request.dto.js';
 import { RegistrationResponseDto } from './dto/registration-response.dto.js';
 import { USER_CREATED } from '../../../modules/auth/index.js';
 
@@ -10,9 +11,9 @@ export class RegistrationController {
     }
 
     register = catchAsync(async (req, res) => {
-        const savedAuthUser = await this.registerUserProfileUseCase.execute(
-            req.body
-        );
+        const requestDto = RegistrationRequestDto.from(req.body);
+        const savedAuthUser =
+            await this.registerUserProfileUseCase.execute(requestDto);
 
         const responseDto = RegistrationResponseDto.from(savedAuthUser);
 

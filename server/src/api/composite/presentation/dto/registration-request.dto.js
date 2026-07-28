@@ -1,4 +1,4 @@
-export class RegisterRequestDto {
+export class RegistrationRequestDto {
     constructor(data) {
         this.email = data.email;
         this.username = data.username;
@@ -8,6 +8,6 @@ export class RegisterRequestDto {
     }
 
     static from(body) {
-        return new RegisterRequestDto(body);
+        return new RegistrationRequestDto(body);
     }
 }
