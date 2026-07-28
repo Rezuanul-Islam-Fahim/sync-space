@@ -4,11 +4,11 @@ export class UserFacade {
         this.createUserUseCase = createUserUseCase;
     }
 
-    getUser = id => {
+    getUser(id) {
         return this.getUserUseCase.execute('id', id);
-    };
+    }
 
-    createUser = data => {
+    createUser(data) {
         return this.createUserUseCase.execute(data);
-    };
+    }
 }

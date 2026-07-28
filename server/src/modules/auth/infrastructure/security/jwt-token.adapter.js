@@ -12,7 +12,7 @@ export class JwtTokenGenerator extends TokenGeneratorPort {
         this.refreshExpiresIn = refreshExpiresIn;
     }
 
-    generateTokens = (userId, email) => {
+    generateTokens(userId, email) {
         const payload = { sub: userId, email };
         const token = jwt.sign(payload, this.secret, {
             expiresIn: this.expiresIn,
@@ -23,7 +23,7 @@ export class JwtTokenGenerator extends TokenGeneratorPort {
         });
 
         return { token, refreshToken };
-    };
+    }
 }
 
 export class JwtTokenVerifier extends TokenVerifierPort {
@@ -33,19 +33,19 @@ export class JwtTokenVerifier extends TokenVerifierPort {
         this.refreshSecret = refreshSecret;
     }
 
-    verifyAccessToken = token => {
+    verifyAccessToken(token) {
         try {
             return jwt.verify(token, this.secret);
         } catch (error) {
             throw new TokenVerificationError(error.message);
         }
-    };
+    }
 
-    verifyRefreshToken = token => {
+    verifyRefreshToken(token) {
         try {
             return jwt.verify(token, this.refreshSecret);
         } catch (error) {
             throw new TokenVerificationError(error.message);
         }
-    };
+    }
 }

@@ -12,14 +12,14 @@ export class AuthUserReaderAdapter extends AuthUserReaderPort {
         this.authUserModel = authUserModel;
     }
 
-    findByEmail = async email => {
+    async findByEmail(email) {
         const doc = await this.authUserModel.findOne({ email }).lean();
         return AuthUserMapper.toDomain(doc);
-    };
+    }
 
     // Implements UserByIdPort (inherited via AuthUserReaderPort)
-    findById = async id => {
+    async findById(id) {
         const doc = await this.authUserModel.findById(id).lean();
         return AuthUserMapper.toDomain(doc);
-    };
+    }
 }

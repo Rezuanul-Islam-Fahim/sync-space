@@ -7,18 +7,18 @@ export class UserReaderAdapter extends UserReaderPort {
         this.userModel = userModel;
     }
 
-    findByEmail = async email => {
+    async findByEmail(email) {
         const user = await this.userModel.findOne({ email }).lean();
         return UserMapper.toDomain(user);
-    };
+    }
 
-    findById = async id => {
+    async findById(id) {
         const user = await this.userModel.findById(id).lean();
         return UserMapper.toDomain(user);
-    };
+    }
 
-    findByUsername = async username => {
+    async findByUsername(username) {
         const user = await this.userModel.findOne({ username }).lean();
         return UserMapper.toDomain(user);
-    };
+    }
 }

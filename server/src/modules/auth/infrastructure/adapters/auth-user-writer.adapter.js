@@ -14,7 +14,7 @@ export class AuthUserWriterAdapter extends AuthUserWriterPort {
         this.authUserModel = authUserModel;
     }
 
-    createUser = async authUser => {
+    async createUser(authUser) {
         try {
             const persistenceData = AuthUserMapper.toPersistence(authUser);
             const newDoc = new this.authUserModel(persistenceData);
@@ -30,9 +30,9 @@ export class AuthUserWriterAdapter extends AuthUserWriterPort {
             }
             throw err;
         }
-    };
+    }
 
-    deleteById = async id => {
+    async deleteById(id) {
         await this.authUserModel.findByIdAndDelete(id);
-    };
+    }
 }

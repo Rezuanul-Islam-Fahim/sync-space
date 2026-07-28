@@ -8,7 +8,7 @@ export class UserWriterAdapter extends UserWriterPort {
         this.userModel = userModel;
     }
 
-    createUser = async user => {
+    async createUser(user) {
         try {
             const persistenceData = UserMapper.toPersistence(user);
             const profile = new this.userModel(persistenceData);
@@ -24,5 +24,5 @@ export class UserWriterAdapter extends UserWriterPort {
             }
             throw err;
         }
-    };
+    }
 }

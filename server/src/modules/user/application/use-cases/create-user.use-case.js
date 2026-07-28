@@ -6,7 +6,7 @@ export class CreateUserUseCase {
         this.logger = logger;
     }
 
-    execute = async data => {
+    async execute(data) {
         const userData = new User({
             id: data.id,
             email: data.email,
@@ -17,5 +17,5 @@ export class CreateUserUseCase {
 
         const createdUser = await this.userWriter.createUser(userData);
         return createdUser;
-    };
+    }
 }
