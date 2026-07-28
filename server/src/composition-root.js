@@ -41,8 +41,6 @@ export const composeDependencies = ({ logger }) => {
         registrationController,
     });
 
-    // ── Middleware ────────────────────────────────────────────────────────────
-
     // ── Routing ───────────────────────────────────────────────────────────────
     const v1Router = express.Router();
     v1Router.use('/auth/register', registrationRouter);

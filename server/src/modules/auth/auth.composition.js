@@ -12,15 +12,9 @@ import { AuthUserReaderAdapter } from './infrastructure/adapters/auth-user-reade
 import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-writer.adapter.js';
 
 /**
- * Composes the auth module and returns its Express router.
+ * Composes the auth module and returns its Express router and auth service facade.
  *
- * @param {{
- *   authUserReader: import('./application/ports/auth-user-reader.port.js').AuthUserReaderPort,
- *   authUserWriter: import('./application/ports/auth-user-writer.port.js').AuthUserWriterPort,
- *   tokenGenerator,
- *   onUserRegistered?: (savedUser: import('./domain/auth-user.entity.js').AuthUser, requestData: any) => Promise<void>,
- *   logger?: import('../../shared/ports/logger.port.js').LoggerPort
- * }} deps
+ * @param {{ logger?: import('../../shared/ports/logger.port.js').LoggerPort }} deps
  * @returns {{ router: import('express').Router, authService: import('./application/auth.facade.js').AuthFacade }}
  */
 export const composeAuthModule = ({ logger }) => {

@@ -23,5 +23,5 @@ export const envSchema = Joi.object({
         .description('JWT refresh secret key'),
     JWT_REFRESH_EXPIRES_IN: Joi.string()
         .default('7d')
-        .description('Jwt refresh token expiration time'),
+        .description('JWT refresh token expiration time'),
 }).unknown();
