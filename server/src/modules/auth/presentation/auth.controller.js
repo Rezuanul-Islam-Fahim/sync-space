@@ -1,3 +1,4 @@
+import { matchedData } from 'express-validator';
 import { LoginRequestDto } from './dtos/login-request.dto.js';
 import { LoginResponseDto } from './dtos/login-response.dto.js';
 import { ApiResponse, catchAsync } from '../../../shared/util/index.js';
@@ -11,7 +12,8 @@ export class AuthController {
     }
 
     login = catchAsync(async (req, res) => {
-        const requestDto = LoginRequestDto.from(req.body);
+        const validatedData = matchedData(req);
+        const requestDto = LoginRequestDto.from(validatedData);
         const loginData = await this.loginUserUseCase.execute(requestDto);
 
         const responseDto = LoginResponseDto.from(loginData);

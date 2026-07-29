@@ -1,3 +1,4 @@
+import { matchedData } from 'express-validator';
 import { catchAsync, ApiResponse } from '../../../shared/util/index.js';
 import { CREATED } from '../../../shared/constant/index.js';
 import { RegistrationRequestDto } from './dtos/registration-request.dto.js';
@@ -11,7 +12,8 @@ export class RegistrationController {
     }
 
     register = catchAsync(async (req, res) => {
-        const requestDto = RegistrationRequestDto.from(req.body);
+        const validatedData = matchedData(req);
+        const requestDto = RegistrationRequestDto.from(validatedData);
         const savedAuthUser =
             await this.registerUserProfileUseCase.execute(requestDto);
 
