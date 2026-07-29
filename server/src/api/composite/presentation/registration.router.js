@@ -7,7 +7,7 @@ export const createRegistrationRouter = ({ registrationController }) => {
 
     router.post(
         '/',
-        ...compositeRegistrationValidation,
+        compositeRegistrationValidation,
         validate,
         registrationController.register
     );

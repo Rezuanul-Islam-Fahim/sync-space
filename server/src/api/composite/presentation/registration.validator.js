@@ -1,49 +1,7 @@
-import { body } from 'express-validator';
-import {
-    EMAIL_REQUIRED,
-    EMAIL_INVALID,
-    PASSWORD_REQUIRED,
-    PASSWORD_LENGTH_ERROR,
-    USERNAME_REQUIRED,
-    USERNAME_LENGTH_ERROR,
-    DISPLAY_NAME_INVALID,
-    DOB_REQUIRED,
-    DOB_INVALID,
-} from './registration.messages.js';
+import { authRegisterValidation } from '../../../modules/auth/index.js';
+import { userProfileValidation } from '../../../modules/user/index.js';
 
 export const compositeRegistrationValidation = [
-    body('email')
-        .notEmpty()
-        .withMessage(EMAIL_REQUIRED)
-        .bail()
-        .isEmail()
-        .withMessage(EMAIL_INVALID)
-        .normalizeEmail(),
-
-    body('password')
-        .notEmpty()
-        .withMessage(PASSWORD_REQUIRED)
-        .bail()
-        .isLength({ min: 6 })
-        .withMessage(PASSWORD_LENGTH_ERROR),
-
-    body('username')
-        .notEmpty()
-        .withMessage(USERNAME_REQUIRED)
-        .bail()
-        .trim()
-        .isLength({ min: 3, max: 30 })
-        .withMessage(USERNAME_LENGTH_ERROR),
-
-    body('displayName')
-        .optional({ values: 'null' })
-        .isString()
-        .withMessage(DISPLAY_NAME_INVALID),
-
-    body('dateOfBirth')
-        .notEmpty()
-        .withMessage(DOB_REQUIRED)
-        .bail()
-        .isISO8601()
-        .withMessage(DOB_INVALID),
+    ...authRegisterValidation,
+    ...userProfileValidation,
 ];
