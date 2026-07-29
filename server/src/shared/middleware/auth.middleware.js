@@ -33,10 +33,10 @@ export const makeAuthenticate = (getUserUseCase, tokenService) => {
 
         let currentUser;
         try {
-            currentUser = await getUserUseCase.execute({
-                by: 'id',
-                value: decodedToken.sub,
-            });
+            currentUser = await getUserUseCase.execute(
+                'authId',
+                decodedToken.sub
+            );
         } catch (error) {
             if (
                 error instanceof AppError &&
