@@ -21,6 +21,4 @@ export const passwordValidation = body('password')
     .isLength({ min: 6 })
     .withMessage(PASSWORD_LENGTH_ERROR);
 
-export const registerValidation = [emailValidation, passwordValidation];
-
 export const loginValidation = [emailValidation, passwordValidation];
