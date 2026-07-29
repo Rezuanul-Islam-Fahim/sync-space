@@ -10,4 +10,8 @@ export class UserByIdPort {
     findById(_id) {
         throw new Error('Method not implemented');
     }
+
+    findByAuthId(_authId) {
+        throw new Error('Method not implemented');
+    }
 }

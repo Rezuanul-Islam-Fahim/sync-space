@@ -6,7 +6,16 @@ import {
     INVALID_TOKEN,
 } from '../constant/index.js';
 
-export const makeAuthenticate = (getUserUseCase, tokenService) => {
+/**
+ * Middleware factory for authenticating HTTP requests.
+ *
+ * Operates purely on shared Port abstractions (`UserByIdPort` and `TokenVerifierPort`)
+ * to keep shared infrastructure decoupled from specific domain use cases.
+ *
+ * @param {import('../ports/user-by-id.port.js').UserByIdPort} userReader
+ * @param {import('../ports/token-verifier.port.js').TokenVerifierPort} tokenVerifier
+ */
+export const makeAuthenticate = (userReader, tokenVerifier) => {
     return catchAsync(async (req, _, next) => {
         let token;
 
@@ -23,7 +32,7 @@ export const makeAuthenticate = (getUserUseCase, tokenService) => {
 
         let decodedToken;
         try {
-            decodedToken = tokenService.verifyAccessToken(token);
+            decodedToken = tokenVerifier.verifyAccessToken(token);
         } catch (error) {
             if (error instanceof TokenVerificationError) {
                 throw new AppError(INVALID_TOKEN, ErrorCode.UNAUTHENTICATED);
@@ -31,20 +40,9 @@ export const makeAuthenticate = (getUserUseCase, tokenService) => {
             throw error;
         }
 
-        let currentUser;
-        try {
-            currentUser = await getUserUseCase.execute(
-                'authId',
-                decodedToken.sub
-            );
-        } catch (error) {
-            if (
-                error instanceof AppError &&
-                error.errorCode === ErrorCode.RESOURCE_NOT_FOUND
-            ) {
-                throw new AppError(USER_UNAVAILABLE, ErrorCode.UNAUTHENTICATED);
-            }
-            throw error;
+        const currentUser = await userReader.findByAuthId(decodedToken.sub);
+        if (!currentUser) {
+            throw new AppError(USER_UNAVAILABLE, ErrorCode.UNAUTHENTICATED);
         }
 
         req.user = currentUser;
