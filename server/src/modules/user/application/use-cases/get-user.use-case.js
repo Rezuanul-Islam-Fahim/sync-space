@@ -1,4 +1,8 @@
 import { AppError, ErrorCode } from '../../../../shared/error/index.js';
+import {
+    INVALID_SEARCH_CRITERIA,
+    USER_NOT_FOUND,
+} from '../../presentation/user.messages.js';
 
 export class GetUserUseCase {
     constructor({ userReader, logger }) {
@@ -19,13 +23,13 @@ export class GetUserUseCase {
             // 400 response instead of treating this as a critical error and
             // triggering a graceful shutdown.
             throw new AppError(
-                `Invalid search criteria: "${by}"`,
+                INVALID_SEARCH_CRITERIA(by),
                 ErrorCode.INVALID_INPUT
             );
         }
 
         if (!user) {
-            throw new AppError('User not found', ErrorCode.RESOURCE_NOT_FOUND);
+            throw new AppError(USER_NOT_FOUND, ErrorCode.RESOURCE_NOT_FOUND);
         }
 
         return user;

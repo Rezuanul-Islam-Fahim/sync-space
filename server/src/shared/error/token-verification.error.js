@@ -1,3 +1,5 @@
+import { TOKEN_VERIFICATION_FAILED } from '../constant/index.js';
+
 /**
  * Thrown by token-verification infrastructure adapters when a token is
  * invalid, expired, or cannot be verified.
@@ -8,7 +10,7 @@
  * `AppError` — keeping infrastructure isolated from application error types.
  */
 export class TokenVerificationError extends Error {
-    constructor(message = 'Token verification failed') {
+    constructor(message = TOKEN_VERIFICATION_FAILED) {
         super(message);
         this.name = 'TokenVerificationError';
     }

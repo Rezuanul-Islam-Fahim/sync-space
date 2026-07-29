@@ -1,6 +1,7 @@
 import { UserWriterPort } from '../../application/ports/user-writer.port.js';
 import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 import { UserMapper } from '../mappers/user.mapper.js';
+import { PROFILE_ALREADY_EXISTS } from '../../presentation/user.messages.js';
 
 export class UserWriterAdapter extends UserWriterPort {
     constructor({ userModel }) {
@@ -18,7 +19,7 @@ export class UserWriterAdapter extends UserWriterPort {
             if (err.code === 11000) {
                 // MongoDB duplicate key error
                 throw new AppError(
-                    'Profile already exists',
+                    PROFILE_ALREADY_EXISTS,
                     ErrorCode.ALREADY_EXISTS
                 );
             }
