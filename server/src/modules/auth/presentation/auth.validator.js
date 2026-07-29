@@ -6,36 +6,21 @@ import {
     PASSWORD_LENGTH_ERROR,
 } from './auth.messages.js';
 
-export const registerValidation = [
-    body('email')
-        .notEmpty()
-        .withMessage(EMAIL_REQUIRED)
-        .bail()
-        .isEmail()
-        .withMessage(EMAIL_INVALID)
-        .normalizeEmail(),
+export const emailValidation = body('email')
+    .notEmpty()
+    .withMessage(EMAIL_REQUIRED)
+    .bail()
+    .isEmail()
+    .withMessage(EMAIL_INVALID)
+    .normalizeEmail();
 
-    body('password')
-        .notEmpty()
-        .withMessage(PASSWORD_REQUIRED)
-        .bail()
-        .isLength({ min: 6 })
-        .withMessage(PASSWORD_LENGTH_ERROR),
-];
+export const passwordValidation = body('password')
+    .notEmpty()
+    .withMessage(PASSWORD_REQUIRED)
+    .bail()
+    .isLength({ min: 6 })
+    .withMessage(PASSWORD_LENGTH_ERROR);
 
-export const loginValidation = [
-    body('email')
-        .notEmpty()
-        .withMessage(EMAIL_REQUIRED)
-        .bail()
-        .isEmail()
-        .withMessage(EMAIL_INVALID)
-        .normalizeEmail(),
+export const registerValidation = [emailValidation, passwordValidation];
 
-    body('password')
-        .notEmpty()
-        .withMessage(PASSWORD_REQUIRED)
-        .bail()
-        .isLength({ min: 6 })
-        .withMessage(PASSWORD_LENGTH_ERROR),
-];
+export const loginValidation = [emailValidation, passwordValidation];
