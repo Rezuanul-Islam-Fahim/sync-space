@@ -2,11 +2,7 @@ import express from 'express';
 import { createApp } from './app.js';
 import { composeUserModule } from './modules/user/index.js';
 import { composeAuthModule } from './modules/auth/index.js';
-import { RegisterUserProfileUseCase } from './application/orchestrators/index.js';
-import {
-    RegistrationController,
-    createRegistrationRouter,
-} from './presentation/registration/index.js';
+import { composeRegistrationModule } from './modules/registration/index.js';
 
 /**
  * Wires all dependencies and returns the composed Express app.
@@ -25,25 +21,16 @@ export const composeDependencies = ({ logger }) => {
     // ── Auth bounded context ──────────────────────────────────────────────────
     const authModule = composeAuthModule({ logger });
 
-    // ── Composite API layer ───────────────────────────────────────────────────
-    const registerUserProfileUseCase = new RegisterUserProfileUseCase({
+    // ── Registration bounded context / Composite layer ────────────────────────
+    const registrationModule = composeRegistrationModule({
         authService: authModule.authService,
         userService: userModule.userService,
         logger,
     });
 
-    const registrationController = new RegistrationController({
-        registerUserProfileUseCase,
-        logger,
-    });
-
-    const registrationRouter = createRegistrationRouter({
-        registrationController,
-    });
-
     // ── Routing ───────────────────────────────────────────────────────────────
     const v1Router = express.Router();
-    v1Router.use('/auth/register', registrationRouter);
+    v1Router.use('/auth/register', registrationModule.router);
     v1Router.use('/auth', authModule.router);
 
     const apiRouter = express.Router();
