@@ -1,4 +1,9 @@
 import mongoose from 'mongoose';
+import {
+    USER_STATUS,
+    UserStatus,
+    BANNER_DEFAULT_COLOR,
+} from '../../domain/user.constant.js';
 
 /**
  * User profile schema — stored in the `users` collection.
@@ -49,7 +54,7 @@ const userSchema = new mongoose.Schema(
         },
         bannerColor: {
             type: String,
-            default: '#5865F2',
+            default: BANNER_DEFAULT_COLOR,
         },
         dateOfBirth: {
             type: Date,
@@ -57,8 +62,8 @@ const userSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ['online', 'offline', 'idle', 'dnd'],
-            default: 'offline',
+            enum: USER_STATUS,
+            default: UserStatus.OFFLINE,
         },
         lastOnline: {
             type: Date,
