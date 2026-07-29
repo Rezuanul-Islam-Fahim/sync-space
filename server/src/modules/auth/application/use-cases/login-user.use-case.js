@@ -1,5 +1,5 @@
 import { AppError, ErrorCode } from '../../../../shared/error/index.js';
-import { INVALID_CREDENTIALS } from '../../domain/auth.constant.js';
+import { INVALID_CREDENTIALS } from '../../domain/auth-user.constant.js';
 
 export class LoginUserUseCase {
     constructor({ authUserReader, passwordHasher, tokenGenerator, logger }) {

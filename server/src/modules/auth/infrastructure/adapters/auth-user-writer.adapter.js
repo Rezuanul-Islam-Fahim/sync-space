@@ -1,7 +1,7 @@
 import { AuthUserWriterPort } from '../../application/ports/auth-user-writer.port.js';
 import { AuthUserMapper } from '../mappers/auth-user.mapper.js';
 import { AppError, ErrorCode } from '../../../../shared/error/index.js';
-import { EMAIL_ALREADY_REGISTERED } from '../../domain/auth.constant.js';
+import { EMAIL_ALREADY_REGISTERED } from '../../domain/auth-user.constant.js';
 
 /**
  * Writes credential documents to the `credentials` collection via

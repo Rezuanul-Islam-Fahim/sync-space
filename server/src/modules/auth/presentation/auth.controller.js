@@ -1,5 +1,5 @@
-import { LoginRequestDto } from './dto/login-request.dto.js';
-import { LoginResponseDto } from './dto/login-response.dto.js';
+import { LoginRequestDto } from './dtos/login-request.dto.js';
+import { LoginResponseDto } from './dtos/login-response.dto.js';
 import { ApiResponse, catchAsync } from '../../../shared/util/index.js';
 import { OK } from '../../../shared/constant/index.js';
 import { LOGIN_SUCCESSFUL } from './auth.messages.js';
