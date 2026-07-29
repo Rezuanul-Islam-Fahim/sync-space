@@ -3,8 +3,8 @@ import {
     closeDB,
     WinstonLoggerAdapter,
     logger as bootstrapLogger,
-} from './shared/infrastructure/index.js';
-import { config } from './config/index.js';
+} from '../shared/infrastructure/index.js';
+import { config } from '../config/index.js';
 import { composeDependencies } from './composition-root.js';
 
 const start = async () => {

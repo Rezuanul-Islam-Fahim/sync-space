@@ -1,8 +1,8 @@
 import express from 'express';
 import { createApp } from './app.js';
-import { composeUserModule } from './modules/user/index.js';
-import { composeAuthModule } from './modules/auth/index.js';
-import { composeRegistrationModule } from './orchestration/registration/index.js';
+import { composeUserModule } from '../modules/user/index.js';
+import { composeAuthModule } from '../modules/auth/index.js';
+import { composeRegistrationModule } from '../api/registration/index.js';
 
 /**
  * Wires all dependencies and returns the composed Express app.
@@ -12,7 +12,7 @@ import { composeRegistrationModule } from './orchestration/registration/index.js
  * server.js).  No concrete logger is imported here to keep this file
  * infrastructure-agnostic and testable.
  *
- * @param {{ logger: import('./shared/ports/logger.port.js').LoggerPort }} deps
+ * @param {{ logger: import('../shared/ports/logger.port.js').LoggerPort }} deps
  */
 export const composeDependencies = ({ logger }) => {
     // ── User bounded context ──────────────────────────────────────────────────

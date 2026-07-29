@@ -2,10 +2,10 @@
     "name": "server",
     "version": "1.0.0",
     "description": "Backend server for a Sync Space built with the MERN stack.",
-    "main": "src/server.js",
+    "main": "src/bootstrap/server.js",
     "scripts": {
-        "start": "node src/server.js",
-        "dev": "nodemon src/server.js",
+        "start": "node src/bootstrap/server.js",
+        "dev": "nodemon src/bootstrap/server.js",
         "lint": "eslint \"src/**/*.js\" \"database/**/*.js\"",
         "lint:fix": "eslint \"src/**/*.js\" \"database/**/*.js\" --fix",
         "format": "prettier \"src/**/*.js\" \"database/**/*.js\" \"*.{js,json,md}\" --write",
