@@ -10,6 +10,7 @@ import { UserStatus, BANNER_DEFAULT_COLOR } from './user.constant.js';
 export class User {
     constructor({
         id,
+        authId,
         email,
         username,
         displayName = null,
@@ -24,6 +25,7 @@ export class User {
         updatedAt,
     }) {
         this.id = id;
+        this.authId = authId;
         this.email = email;
         this.username = username;
         this.displayName = displayName;

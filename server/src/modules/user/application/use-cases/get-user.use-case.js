@@ -14,6 +14,8 @@ export class GetUserUseCase {
         let user;
         if (by === 'id') {
             user = await this.userReader.findById(value);
+        } else if (by === 'authId') {
+            user = await this.userReader.findByAuthId(value);
         } else if (by === 'username') {
             user = await this.userReader.findByUsername(value);
         } else if (by === 'email') {

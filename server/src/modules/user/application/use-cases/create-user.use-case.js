@@ -8,7 +8,7 @@ export class CreateUserUseCase {
 
     async execute(data) {
         const userData = new User({
-            id: data.id,
+            authId: data.authId,
             email: data.email,
             username: data.username,
             displayName: data.displayName ?? null,

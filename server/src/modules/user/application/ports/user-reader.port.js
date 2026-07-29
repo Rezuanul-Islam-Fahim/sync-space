@@ -6,6 +6,10 @@ import { UserByIdPort } from '../../../../shared/ports/index.js';
  * authenticate middleware (Interface Segregation Principle).
  */
 export class UserReaderPort extends UserByIdPort {
+    findByAuthId(_authId) {
+        throw new Error('Method not implemented');
+    }
+
     findByEmail(_email) {
         throw new Error('Method not implemented');
     }
