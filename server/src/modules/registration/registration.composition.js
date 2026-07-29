@@ -6,8 +6,8 @@ import { createRegistrationRouter } from './presentation/registration.router.js'
  * Composes the registration module dependencies and returns the router and use-case.
  *
  * @param {{
- *   authService: import('../../modules/auth/application/auth.facade.js').AuthFacade,
- *   userService: import('../../modules/user/application/user.facade.js').UserFacade,
+ *   authService: import('../auth/application/auth.facade.js').AuthFacade,
+ *   userService: import('../user/application/user.facade.js').UserFacade,
  *   logger?: import('../../shared/ports/logger.port.js').LoggerPort
  * }} deps
  */
