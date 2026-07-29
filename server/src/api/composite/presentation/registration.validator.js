@@ -4,14 +4,12 @@ import {
     EMAIL_INVALID,
     PASSWORD_REQUIRED,
     PASSWORD_LENGTH_ERROR,
-} from '../../../modules/auth/index.js';
-import {
     USERNAME_REQUIRED,
     USERNAME_LENGTH_ERROR,
     DISPLAY_NAME_INVALID,
     DOB_REQUIRED,
     DOB_INVALID,
-} from '../../../modules/user/index.js';
+} from './registration.messages.js';
 
 export const compositeRegistrationValidation = [
     body('email')
