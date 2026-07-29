@@ -2,7 +2,7 @@ import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 import {
     INVALID_SEARCH_CRITERIA,
     USER_NOT_FOUND,
-} from '../../presentation/user.messages.js';
+} from '../../domain/user.constant.js';
 
 export class GetUserUseCase {
     constructor({ userReader, logger }) {

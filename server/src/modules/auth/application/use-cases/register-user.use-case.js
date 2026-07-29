@@ -1,6 +1,6 @@
 import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 import { AuthUser } from '../../domain/auth-user.entity.js';
-import { EMAIL_ALREADY_REGISTERED } from '../../presentation/auth.messages.js';
+import { EMAIL_ALREADY_REGISTERED } from '../../domain/auth.constant.js';
 
 export class RegisterUserUseCase {
     constructor({ authUserReader, authUserWriter, passwordHasher, logger }) {

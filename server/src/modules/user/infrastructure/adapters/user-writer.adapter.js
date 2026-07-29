@@ -1,7 +1,7 @@
 import { UserWriterPort } from '../../application/ports/user-writer.port.js';
 import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 import { UserMapper } from '../mappers/user.mapper.js';
-import { PROFILE_ALREADY_EXISTS } from '../../presentation/user.messages.js';
+import { PROFILE_ALREADY_EXISTS } from '../../domain/user.constant.js';
 
 export class UserWriterAdapter extends UserWriterPort {
     constructor({ userModel }) {
