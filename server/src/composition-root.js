@@ -2,11 +2,11 @@ import express from 'express';
 import { createApp } from './app.js';
 import { composeUserModule } from './modules/user/index.js';
 import { composeAuthModule } from './modules/auth/index.js';
+import { RegisterUserProfileUseCase } from './application/orchestrators/index.js';
 import {
     RegistrationController,
-    RegisterUserProfileUseCase,
     createRegistrationRouter,
-} from './api/composite/index.js';
+} from './presentation/registration/index.js';
 
 /**
  * Wires all dependencies and returns the composed Express app.
