@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { TokenGeneratorPort } from '../../application/ports/token-generator.port.js';
-import { TokenVerifierPort } from '../../../../shared/ports/index.js';
-import { TokenVerificationError } from '../../../../shared/error/index.js';
+import { TokenVerifierPort } from '../../application/ports/token-verifier.port.js';
+import { TokenVerificationError } from '../../domain/errors/token-verification.error.js';
 
 export class JwtTokenGenerator extends TokenGeneratorPort {
     constructor({ secret, expiresIn, refreshSecret, refreshExpiresIn }) {

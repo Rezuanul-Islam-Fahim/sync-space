@@ -6,7 +6,10 @@ import { RegisterUserUseCase } from './application/use-cases/register-user.use-c
 import { DeleteAuthUserUseCase } from './application/use-cases/delete-auth-user.use-case.js';
 import { createAuthRouter } from './presentation/auth.router.js';
 import { BcryptPasswordHasher } from './infrastructure/security/bcrypt-password-hasher.adapter.js';
-import { JwtTokenGenerator } from './infrastructure/security/jwt-token.adapter.js';
+import {
+    JwtTokenGenerator,
+    JwtTokenVerifier,
+} from './infrastructure/security/jwt-token.adapter.js';
 import { AuthUserModel } from './infrastructure/database/auth-user.model.js';
 import { AuthUserReaderAdapter } from './infrastructure/adapters/auth-user-reader.adapter.js';
 import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-writer.adapter.js';
@@ -15,10 +18,15 @@ import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-write
  * Composes the auth module and returns its Express router and auth service facade.
  *
  * @param {{ logger?: import('../../shared/ports/logger.port.js').LoggerPort }} deps
- * @returns {{ router: import('express').Router, authService: import('./application/auth.facade.js').AuthFacade }}
+ * @returns {{
+ *   router: import('express').Router,
+ *   authService: import('./application/auth.facade.js').AuthFacade,
+ *   tokenVerifier: import('./infrastructure/security/jwt-token.adapter.js').JwtTokenVerifier
+ * }}
  */
 export const composeAuthModule = ({ logger }) => {
     const tokenGenerator = new JwtTokenGenerator(config.jwt);
+    const tokenVerifier = new JwtTokenVerifier(config.jwt);
     const authUserReader = new AuthUserReaderAdapter({
         authUserModel: AuthUserModel,
     });
@@ -61,6 +69,7 @@ export const composeAuthModule = ({ logger }) => {
     const authService = new AuthFacade({
         registerUserUseCase,
         deleteAuthUserUseCase,
+        tokenVerifier,
     });
 
     return {

@@ -1,7 +1,8 @@
 export class AuthFacade {
-    constructor({ registerUserUseCase, deleteAuthUserUseCase }) {
+    constructor({ registerUserUseCase, deleteAuthUserUseCase, tokenVerifier }) {
         this.registerUserUseCase = registerUserUseCase;
         this.deleteAuthUserUseCase = deleteAuthUserUseCase;
+        this.tokenVerifier = tokenVerifier;
     }
 
     registerUser(data) {
@@ -10,5 +11,9 @@ export class AuthFacade {
 
     deleteAuthUser(id) {
         return this.deleteAuthUserUseCase.execute(id);
+    }
+
+    verifyAccessToken(token) {
+        return this.tokenVerifier.verifyAccessToken(token);
     }
 }

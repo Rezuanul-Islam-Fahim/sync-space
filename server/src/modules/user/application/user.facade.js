@@ -8,6 +8,10 @@ export class UserFacade {
         return this.getUserUseCase.execute('id', id);
     }
 
+    getUserByAuthId(authId) {
+        return this.getUserUseCase.execute('authId', authId);
+    }
+
     createUser(data) {
         return this.createUserUseCase.execute(data);
     }

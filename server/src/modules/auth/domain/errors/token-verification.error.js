@@ -1,4 +1,4 @@
-import { TOKEN_VERIFICATION_FAILED } from '../constant/index.js';
+import { TOKEN_VERIFICATION_FAILED } from '../auth-user.constant.js';
 
 /**
  * Thrown by token-verification infrastructure adapters when a token is

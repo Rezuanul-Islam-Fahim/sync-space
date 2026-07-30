@@ -1,16 +1,18 @@
-import { UserByIdPort } from '../../../../shared/ports/index.js';
-
 /**
- * Full user-read port.  Extends `UserByIdPort` so that any `UserReaderPort`
- * implementation automatically satisfies the narrower port used by the
- * authenticate middleware (Interface Segregation Principle).
+ * Full user-read port.
  */
-export class UserReaderPort extends UserByIdPort {
+export class UserReaderPort {
     findByEmail(_email) {
         throw new Error('Method not implemented');
     }
 
-    // findById and findByAuthId are inherited from UserByIdPort
+    findById(_id) {
+        throw new Error('Method not implemented');
+    }
+
+    findByAuthId(_authId) {
+        throw new Error('Method not implemented');
+    }
 
     findByUsername(_username) {
         throw new Error('Method not implemented');

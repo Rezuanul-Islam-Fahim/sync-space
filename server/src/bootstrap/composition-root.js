@@ -1,7 +1,7 @@
 import express from 'express';
 import { createApp } from './app.js';
 import { composeUserModule } from '../modules/user/index.js';
-import { composeAuthModule } from '../modules/auth/index.js';
+import { composeAuthModule, makeAuthenticate } from '../modules/auth/index.js';
 import { composeRegistrationModule } from '../orchestration/registration/index.js';
 
 /**
@@ -20,6 +20,10 @@ export const composeDependencies = ({ logger }) => {
 
     // ── Auth bounded context ──────────────────────────────────────────────────
     const authModule = composeAuthModule({ logger });
+
+    // ── Middleware ────────────────────────────────────────────────────────────
+    // eslint-disable-next-line no-unused-vars
+    const authenticate = makeAuthenticate(authModule.authService);
 
     // ── Registration bounded context / Composite layer ────────────────────────
     const registrationModule = composeRegistrationModule({
