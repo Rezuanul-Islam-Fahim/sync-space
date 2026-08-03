@@ -8,7 +8,7 @@ import { UserWriterAdapter } from './infrastructure/adapters/user-writer.adapter
 /**
  * Composes the user module's dependencies.
  *
- * @param {{ logger?: import('../../shared/ports/logger.port.js').LoggerPort }} deps
+ * @param {{ logger?: import('../../shared/ports/index.js').LoggerPort }} deps
  * @returns {{
  *   userService: import('./application/user.facade.js').UserFacade
  * }}

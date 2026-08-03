@@ -13,7 +13,7 @@ import { composeRegistrationModule } from '../orchestration/registration/index.j
  * server.js).  No concrete logger is imported here to keep this file
  * infrastructure-agnostic and testable.
  *
- * @param {{ logger: import('../shared/ports/logger.port.js').LoggerPort }} deps
+ * @param {{ logger: import('../shared/ports/index.js').LoggerPort }} deps
  */
 export const composeDependencies = ({ logger }) => {
     // ── User bounded context ──────────────────────────────────────────────────

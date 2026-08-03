@@ -6,9 +6,9 @@ import { createRegistrationRouter } from './presentation/registration.router.js'
  * Composes the registration module dependencies and returns the Express router.
  *
  * @param {{
- *   authService: import('../../modules/auth/application/auth.facade.js').AuthFacade,
- *   userService: import('../../modules/user/application/user.facade.js').UserFacade,
- *   logger?: import('../../shared/ports/logger.port.js').LoggerPort
+ *   authService: import('../../modules/auth/index.js').AuthFacade,
+ *   userService: import('../../modules/user/index.js').UserFacade,
+ *   logger?: import('../../shared/ports/index.js').LoggerPort
  * }} deps
  * @returns {{ router: import('express').Router }}
  */

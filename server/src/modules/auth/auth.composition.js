@@ -17,7 +17,7 @@ import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-write
 /**
  * Composes the auth module and returns its Express router and auth service facade.
  *
- * @param {{ logger?: import('../../shared/ports/logger.port.js').LoggerPort }} deps
+ * @param {{ logger?: import('../../shared/ports/index.js').LoggerPort }} deps
  * @returns {{
  *   router: import('express').Router,
  *   authService: import('./application/auth.facade.js').AuthFacade
