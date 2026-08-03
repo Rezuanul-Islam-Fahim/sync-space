@@ -3,13 +3,14 @@ import { RegistrationController } from './presentation/registration.controller.j
 import { createRegistrationRouter } from './presentation/registration.router.js';
 
 /**
- * Composes the registration module dependencies and returns the router and use-case.
+ * Composes the registration module dependencies and returns the Express router.
  *
  * @param {{
  *   authService: import('../../modules/auth/application/auth.facade.js').AuthFacade,
  *   userService: import('../../modules/user/application/user.facade.js').UserFacade,
  *   logger?: import('../../shared/ports/logger.port.js').LoggerPort
  * }} deps
+ * @returns {{ router: import('express').Router }}
  */
 export const composeRegistrationModule = ({
     authService,

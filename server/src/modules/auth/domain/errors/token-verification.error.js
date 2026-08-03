@@ -5,7 +5,7 @@ import { TOKEN_VERIFICATION_FAILED } from '../auth-user.constant.js';
  * invalid, expired, or cannot be verified.
  *
  * This is an infrastructure-layer error whose contract is defined by the
- * `TokenVerifierPort`.  Application-layer consumers (e.g. middleware) are
+ * `TokenVerifierPort`. Presentation/application-layer consumers (e.g. middleware) are
  * responsible for catching it and translating it into the appropriate
  * `AppError` — keeping infrastructure isolated from application error types.
  */

@@ -20,8 +20,7 @@ import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-write
  * @param {{ logger?: import('../../shared/ports/logger.port.js').LoggerPort }} deps
  * @returns {{
  *   router: import('express').Router,
- *   authService: import('./application/auth.facade.js').AuthFacade,
- *   tokenVerifier: import('./infrastructure/security/jwt-token.adapter.js').JwtTokenVerifier
+ *   authService: import('./application/auth.facade.js').AuthFacade
  * }}
  */
 export const composeAuthModule = ({ logger }) => {

@@ -1,8 +1,6 @@
 /**
- * Auth module's inbound read port.
- *
- * Extends the shared user reader contract so auth infrastructure can look up
- * users by email and id without depending on the concrete model layer.
+ * Auth module's read port for querying authentication credentials by email and ID
+ * without depending on the concrete model layer.
  */
 export class AuthUserReaderPort {
     findByEmail(_email) {
