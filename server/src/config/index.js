@@ -2,37 +2,45 @@ import dotenv from 'dotenv';
 import { envSchema } from './env.schema.js';
 import { parseCorsOrigins } from './cors.config.js';
 
-dotenv.config();
+let cachedConfig;
 
-const { error, value: envVars } = envSchema.validate(process.env);
+export const getConfig = () => {
+    if (cachedConfig) {
+        return cachedConfig;
+    }
 
-if (error) {
-    throw new Error(`Config validation error: ${error.message}`);
-}
+    dotenv.config();
 
-const corsOrigins = parseCorsOrigins(envVars.CORS_ORIGINS);
+    const { error, value: envVars } = envSchema.validate(process.env);
 
-export const config = {
-    port: envVars.PORT,
-    env: envVars.NODE_ENV,
-    db: {
-        uri: envVars.MONGODB_URI,
-        maxPoolSize: envVars.MONGODB_MAX_POOL_SIZE,
-        serverSelectionTimeoutMS: envVars.MONGODB_SELECTION_TIMEOUT_MS,
-        socketTimeoutMS: envVars.MONGODB_SOCKET_TIMEOUT_MS,
-    },
-    logLevel: envVars.LOG_LEVEL,
-    auth: {
-        saltRounds: envVars.BCRYPT_SALT_ROUNDS,
-    },
-    corsOrigins,
-    corsCredentials: corsOrigins !== '*',
-    jwt: {
-        secret: envVars.JWT_SECRET,
-        expiresIn: envVars.JWT_EXPIRES_IN,
-        refreshSecret: envVars.JWT_REFRESH_SECRET,
-        refreshExpiresIn: envVars.JWT_REFRESH_EXPIRES_IN,
-    },
+    if (error) {
+        throw new Error(`Config validation error: ${error.message}`);
+    }
+
+    const corsOrigins = parseCorsOrigins(envVars.CORS_ORIGINS);
+
+    cachedConfig = {
+        port: envVars.PORT,
+        env: envVars.NODE_ENV,
+        db: {
+            uri: envVars.MONGODB_URI,
+            maxPoolSize: envVars.MONGODB_MAX_POOL_SIZE,
+            serverSelectionTimeoutMS: envVars.MONGODB_SELECTION_TIMEOUT_MS,
+            socketTimeoutMS: envVars.MONGODB_SOCKET_TIMEOUT_MS,
+        },
+        logLevel: envVars.LOG_LEVEL,
+        auth: {
+            saltRounds: envVars.BCRYPT_SALT_ROUNDS,
+        },
+        corsOrigins,
+        corsCredentials: corsOrigins !== '*',
+        jwt: {
+            secret: envVars.JWT_SECRET,
+            expiresIn: envVars.JWT_EXPIRES_IN,
+            refreshSecret: envVars.JWT_REFRESH_SECRET,
+            refreshExpiresIn: envVars.JWT_REFRESH_EXPIRES_IN,
+        },
+    };
+
+    return cachedConfig;
 };
-
-export const isDev = () => config.env === 'development';

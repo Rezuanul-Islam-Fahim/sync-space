@@ -1,6 +1,6 @@
 import express from 'express';
 import { createApp } from './app.js';
-import { config } from '../config/index.js';
+import { getConfig } from '../config/index.js';
 import { composeUserModule } from '../modules/user/index.js';
 import { composeAuthModule, makeAuthenticate } from '../modules/auth/index.js';
 import { composeRegistrationModule } from '../orchestration/registration/index.js';
@@ -16,6 +16,8 @@ import { composeRegistrationModule } from '../orchestration/registration/index.j
  * @param {{ logger: import('../shared/ports/index.js').LoggerPort }} deps
  */
 export const composeDependencies = ({ logger }) => {
+    const config = getConfig();
+
     // ── User bounded context ──────────────────────────────────────────────────
     const userModule = composeUserModule({ logger });
 
@@ -46,6 +48,7 @@ export const composeDependencies = ({ logger }) => {
         logger,
         corsOrigins: config.corsOrigins,
         corsCredentials: config.corsCredentials,
+        exposeStack: config.env === 'development',
     });
 
     return app;

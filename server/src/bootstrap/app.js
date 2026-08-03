@@ -9,7 +9,13 @@ import {
     unknownRoutesHandler,
 } from '../shared/middleware/index.js';
 
-export const createApp = ({ router, logger, corsOrigins, corsCredentials }) => {
+export const createApp = ({
+    router,
+    logger,
+    corsOrigins,
+    corsCredentials,
+    exposeStack = false,
+}) => {
     const app = express();
 
     app.use(requestIdAttach);
@@ -28,7 +34,7 @@ export const createApp = ({ router, logger, corsOrigins, corsCredentials }) => {
     app.use('/api', router);
 
     app.use(unknownRoutesHandler);
-    app.use(makeErrorHandler(logger));
+    app.use(makeErrorHandler({ logger, exposeStack }));
 
     return app;
 };

@@ -9,7 +9,6 @@ import {
     FORBIDDEN,
     NOT_FOUND,
 } from '../constants/index.js';
-import { isDev } from '../../config/index.js';
 
 const errorCodeToHttpStatus = {
     [ErrorCode.INVALID_INPUT]: BAD_REQUEST,
@@ -21,7 +20,7 @@ const errorCodeToHttpStatus = {
 
 // ── Main error handler ────────────────────────────────────────────────────────
 
-export const makeErrorHandler = logger => {
+export const makeErrorHandler = ({ logger, exposeStack = false }) => {
     return (err, req, res, _next) => {
         const error = err;
 
@@ -47,12 +46,7 @@ export const makeErrorHandler = logger => {
             statusCode,
             message,
             errors: isOperational ? error.errors : undefined,
-            stack: isDev() ? error.stack : undefined,
+            stack: exposeStack ? error.stack : undefined,
         });
-
-        if (!isOperational) {
-            // Trigger a graceful shutdown for unhandled non-operational errors
-            process.emit('criticalError', error);
-        }
     };
 };

@@ -1,4 +1,4 @@
-import { config } from '../../config/index.js';
+import { getConfig } from '../../config/index.js';
 import { AuthFacade } from './application/auth.facade.js';
 import { AuthController } from './presentation/auth.controller.js';
 import { LoginUserUseCase } from './application/use-cases/login-user.usecase.js';
@@ -24,6 +24,8 @@ import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-write
  * }}
  */
 export const composeAuthModule = ({ logger }) => {
+    const config = getConfig();
+
     const tokenGenerator = new JwtTokenGenerator(config.jwt);
     const tokenVerifier = new JwtTokenVerifier(config.jwt);
     const authUserReader = new AuthUserReaderAdapter({

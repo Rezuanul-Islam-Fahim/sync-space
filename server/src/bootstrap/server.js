@@ -4,10 +4,11 @@ import {
     WinstonLoggerAdapter,
     logger as bootstrapLogger,
 } from '../shared/infrastructure/index.js';
-import { config } from '../config/index.js';
+import { getConfig } from '../config/index.js';
 import { composeDependencies } from './composition-root.js';
 
 const start = async () => {
+    const config = getConfig();
     const PORT = config.port;
 
     // Create the application logger from the Joi-validated config value so that
@@ -53,10 +54,6 @@ const start = async () => {
     process.on('uncaughtException', err => {
         logger.error('Uncaught Exception:', err);
         shutdown('uncaughtException', 1);
-    });
-    process.on('criticalError', err => {
-        logger.error('Critical non-operational error:', err);
-        shutdown('criticalError', 1);
     });
 };
 
