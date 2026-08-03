@@ -8,7 +8,7 @@ import {
     UNAUTHORIZED,
     FORBIDDEN,
     NOT_FOUND,
-} from '../constant/index.js';
+} from '../constants/index.js';
 import { isDev } from '../../config/index.js';
 
 const errorCodeToHttpStatus = {

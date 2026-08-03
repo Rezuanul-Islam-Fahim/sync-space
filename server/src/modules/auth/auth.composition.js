@@ -1,9 +1,9 @@
 import { config } from '../../config/index.js';
 import { AuthFacade } from './application/auth.facade.js';
 import { AuthController } from './presentation/auth.controller.js';
-import { LoginUserUseCase } from './application/use-cases/login-user.use-case.js';
-import { RegisterUserUseCase } from './application/use-cases/register-user.use-case.js';
-import { DeleteAuthUserUseCase } from './application/use-cases/delete-auth-user.use-case.js';
+import { LoginUserUseCase } from './application/use-cases/login-user.usecase.js';
+import { RegisterUserUseCase } from './application/use-cases/register-user.usecase.js';
+import { DeleteAuthUserUseCase } from './application/use-cases/delete-auth-user.usecase.js';
 import { createAuthRouter } from './presentation/auth.router.js';
 import { BcryptPasswordHasher } from './infrastructure/security/bcrypt-password-hasher.adapter.js';
 import {

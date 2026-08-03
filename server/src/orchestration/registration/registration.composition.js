@@ -1,4 +1,4 @@
-import { RegisterUserProfileUseCase } from './application/use-cases/register-user-profile.use-case.js';
+import { RegisterUserProfileUseCase } from './application/use-cases/register-user-profile.usecase.js';
 import { RegistrationController } from './presentation/registration.controller.js';
 import { createRegistrationRouter } from './presentation/registration.router.js';
 

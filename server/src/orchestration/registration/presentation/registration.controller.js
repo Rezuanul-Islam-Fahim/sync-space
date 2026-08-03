@@ -1,6 +1,6 @@
 import { matchedData } from 'express-validator';
 import { catchAsync, ApiResponse } from '../../../shared/util/index.js';
-import { CREATED } from '../../../shared/constant/index.js';
+import { CREATED } from '../../../shared/constants/index.js';
 import { RegistrationRequestDto } from './dtos/registration-request.dto.js';
 import { RegistrationResponseDto } from './dtos/registration-response.dto.js';
 import { USER_CREATED } from './registration.messages.js';

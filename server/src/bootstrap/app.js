@@ -3,14 +3,13 @@ import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
 import hpp from 'hpp';
-import { config } from '../config/index.js';
 import {
     requestIdAttach,
     makeErrorHandler,
     unknownRoutesHandler,
 } from '../shared/middleware/index.js';
 
-export const createApp = ({ router, logger }) => {
+export const createApp = ({ router, logger, corsOrigins, corsCredentials }) => {
     const app = express();
 
     app.use(requestIdAttach);
@@ -21,8 +20,8 @@ export const createApp = ({ router, logger }) => {
     app.use(morgan('combined', { stream: logger.stream }));
     app.use(
         cors({
-            origin: config.corsOrigins,
-            credentials: config.corsCredentials,
+            origin: corsOrigins,
+            credentials: corsCredentials,
         })
     );
 

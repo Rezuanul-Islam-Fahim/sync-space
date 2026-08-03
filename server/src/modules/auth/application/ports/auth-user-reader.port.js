@@ -1,16 +1,15 @@
-import { UserByIdPort } from '../../../../shared/ports/index.js';
-
 /**
  * Auth module's inbound read port.
  *
- * Extends `UserByIdPort` so that any `AuthUserReaderPort` implementation
- * automatically satisfies the narrow cross-cutting port used by infrastructure
- * that only needs to look up a user by id (e.g. token-verification helpers).
+ * Extends the shared user reader contract so auth infrastructure can look up
+ * users by email and id without depending on the concrete model layer.
  */
-export class AuthUserReaderPort extends UserByIdPort {
+export class AuthUserReaderPort {
     findByEmail(_email) {
         throw new Error('Method not implemented');
     }
 
-    // findById is inherited from UserByIdPort
+    findById(_id) {
+        throw new Error('Method not implemented');
+    }
 }

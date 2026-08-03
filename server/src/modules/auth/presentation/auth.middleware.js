@@ -1,5 +1,5 @@
-import { AppError, ErrorCode } from '../../../../shared/error/index.js';
-import { catchAsync } from '../../../../shared/util/index.js';
+import { AppError, ErrorCode } from '../../../shared/error/index.js';
+import { catchAsync } from '../../../shared/util/index.js';
 import { TokenVerificationError } from '../domain/errors/token-verification.error.js';
 import {
     INVALID_TOKEN,

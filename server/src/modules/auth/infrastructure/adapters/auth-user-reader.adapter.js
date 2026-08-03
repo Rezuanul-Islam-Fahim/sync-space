@@ -17,7 +17,6 @@ export class AuthUserReaderAdapter extends AuthUserReaderPort {
         return AuthUserMapper.toDomain(doc);
     }
 
-    // Implements UserByIdPort (inherited via AuthUserReaderPort)
     async findById(id) {
         const doc = await this.authUserModel.findById(id).lean();
         return AuthUserMapper.toDomain(doc);

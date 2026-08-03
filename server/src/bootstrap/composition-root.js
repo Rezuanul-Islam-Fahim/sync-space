@@ -1,5 +1,6 @@
 import express from 'express';
 import { createApp } from './app.js';
+import { config } from '../config/index.js';
 import { composeUserModule } from '../modules/user/index.js';
 import { composeAuthModule, makeAuthenticate } from '../modules/auth/index.js';
 import { composeRegistrationModule } from '../orchestration/registration/index.js';
@@ -40,7 +41,12 @@ export const composeDependencies = ({ logger }) => {
     const apiRouter = express.Router();
     apiRouter.use('/v1', v1Router);
 
-    const app = createApp({ router: apiRouter, logger });
+    const app = createApp({
+        router: apiRouter,
+        logger,
+        corsOrigins: config.corsOrigins,
+        corsCredentials: config.corsCredentials,
+    });
 
     return app;
 };
