@@ -26,9 +26,9 @@ export const makeAuthenticate = authService => {
             throw new AppError(TOKEN_NOT_FOUND, ErrorCode.UNAUTHENTICATED);
         }
 
-        let decodedToken;
+        let principal;
         try {
-            decodedToken = authService.verifyAccessToken(token);
+            principal = authService.verifyAccessToken(token);
         } catch (error) {
             if (error instanceof TokenVerificationError) {
                 throw new AppError(INVALID_TOKEN, ErrorCode.UNAUTHENTICATED);
@@ -36,8 +36,9 @@ export const makeAuthenticate = authService => {
             throw error;
         }
 
-        // Attach the authenticated principal (AuthUser) details to the request.
-        req.user = { id: decodedToken.sub, email: decodedToken.email };
+        // Attach the authenticated principal details to the request. The
+        // principal is an intent-revealing object created by the AuthFacade.
+        req.user = { id: principal.id, email: principal.email };
         next();
     });
 };

@@ -2,7 +2,7 @@ import express from 'express';
 import { createApp } from './app.js';
 import { getConfig } from '../config/index.js';
 import { composeUserModule } from '../modules/user/index.js';
-import { composeAuthModule, makeAuthenticate } from '../modules/auth/index.js';
+import { composeAuthModule } from '../modules/auth/index.js';
 import { composeRegistrationModule } from '../orchestration/registration/index.js';
 
 /**
@@ -22,11 +22,11 @@ export const composeDependencies = ({ logger }) => {
     const userModule = composeUserModule({ logger });
 
     // ── Auth bounded context ──────────────────────────────────────────────────
-    const authModule = composeAuthModule({ logger });
+    const authModule = composeAuthModule({ logger, config });
 
     // ── Middleware ────────────────────────────────────────────────────────────
-    // eslint-disable-next-line no-unused-vars
-    const authenticate = makeAuthenticate(authModule.authService);
+    // Authentication middleware factory is exported from the auth module
+    // but not applied globally here; routes should explicitly opt in.
 
     // ── Registration bounded context / Composite layer ────────────────────────
     const registrationModule = composeRegistrationModule({

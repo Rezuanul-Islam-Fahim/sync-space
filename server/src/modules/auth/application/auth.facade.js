@@ -14,6 +14,9 @@ export class AuthFacade {
     }
 
     verifyAccessToken(token) {
-        return this.tokenVerifier.verifyAccessToken(token);
+        // Map the token payload to an intent-revealing principal object so
+        // callers do not rely on JWT internals (e.g., `sub` claim).
+        const decoded = this.tokenVerifier.verifyAccessToken(token);
+        return { id: decoded.sub, email: decoded.email };
     }
 }

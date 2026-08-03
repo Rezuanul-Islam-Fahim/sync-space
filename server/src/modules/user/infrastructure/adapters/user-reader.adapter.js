@@ -7,32 +7,23 @@ export class UserReaderAdapter extends UserReaderPort {
         this.userModel = userModel;
     }
 
-    async findOne(criteria) {
-        if (!criteria || Object.keys(criteria).length === 0) return null;
-
-        const query = { ...criteria };
-        if (query.id) {
-            query._id = query.id;
-            delete query.id;
-        }
-
-        const user = await this.userModel.findOne(query).lean();
+    async findByAuthId(authId) {
+        const user = await this.userModel.findOne({ authId }).lean();
         return UserMapper.toDomain(user);
     }
 
-    async findByAuthId(authId) {
-        return this.findOne({ authId });
-    }
-
     async findByEmail(email) {
-        return this.findOne({ email });
+        const user = await this.userModel.findOne({ email }).lean();
+        return UserMapper.toDomain(user);
     }
 
     async findById(id) {
-        return this.findOne({ id });
+        const user = await this.userModel.findOne({ _id: id }).lean();
+        return UserMapper.toDomain(user);
     }
 
     async findByUsername(username) {
-        return this.findOne({ username });
+        const user = await this.userModel.findOne({ username }).lean();
+        return UserMapper.toDomain(user);
     }
 }
