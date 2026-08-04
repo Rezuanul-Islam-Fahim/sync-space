@@ -1,4 +1,5 @@
 import { body } from 'express-validator';
+import { PASSWORD_MIN_LENGTH } from '../../../shared/constants/index.js';
 import {
     EMAIL_REQUIRED,
     EMAIL_INVALID,
@@ -6,7 +7,7 @@ import {
     PASSWORD_LENGTH_ERROR,
 } from './auth.messages.js';
 
-export const emailValidation = body('email')
+const emailValidation = body('email')
     .notEmpty()
     .withMessage(EMAIL_REQUIRED)
     .bail()
@@ -14,11 +15,11 @@ export const emailValidation = body('email')
     .withMessage(EMAIL_INVALID)
     .normalizeEmail();
 
-export const passwordValidation = body('password')
+const passwordValidation = body('password')
     .notEmpty()
     .withMessage(PASSWORD_REQUIRED)
     .bail()
-    .isLength({ min: 6 })
+    .isLength({ min: PASSWORD_MIN_LENGTH })
     .withMessage(PASSWORD_LENGTH_ERROR);
 
 export const loginValidation = [emailValidation, passwordValidation];

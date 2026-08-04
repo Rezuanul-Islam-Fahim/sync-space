@@ -1,4 +1,5 @@
 import { body } from 'express-validator';
+import { PASSWORD_MIN_LENGTH } from '../../../shared/constants/index.js';
 import {
     EMAIL_REQUIRED,
     EMAIL_INVALID,
@@ -24,7 +25,7 @@ export const registrationValidation = [
         .notEmpty()
         .withMessage(PASSWORD_REQUIRED)
         .bail()
-        .isLength({ min: 6 })
+        .isLength({ min: PASSWORD_MIN_LENGTH })
         .withMessage(PASSWORD_LENGTH_ERROR),
 
     body('username')
