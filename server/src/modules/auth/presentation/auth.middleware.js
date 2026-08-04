@@ -1,5 +1,4 @@
 import { AppError, ErrorCode } from '../../../shared/error/index.js';
-import { catchAsync } from '../../../shared/util/index.js';
 import { TokenVerificationError } from '../domain/errors/token-verification.error.js';
 import {
     INVALID_TOKEN,
@@ -12,33 +11,36 @@ import {
  * @param {import('../application/auth.facade.js').AuthFacade} authService
  */
 export const makeAuthenticate = authService => {
-    return catchAsync(async (req, _, next) => {
-        let token;
-
-        if (
-            req.headers.authorization &&
-            req.headers.authorization.startsWith('Bearer')
-        ) {
-            token = req.headers.authorization.split(' ')[1];
-        }
-
-        if (!token) {
-            throw new AppError(TOKEN_NOT_FOUND, ErrorCode.UNAUTHENTICATED);
-        }
-
-        let principal;
+    return (req, _, next) => {
         try {
-            principal = authService.verifyAccessToken(token);
+            let token;
+
+            if (
+                req.headers.authorization &&
+                req.headers.authorization.startsWith('Bearer')
+            ) {
+                token = req.headers.authorization.split(' ')[1];
+            }
+
+            if (!token) {
+                return next(
+                    new AppError(TOKEN_NOT_FOUND, ErrorCode.UNAUTHENTICATED)
+                );
+            }
+
+            const principal = authService.verifyAccessToken(token);
+
+            // Attach the authenticated principal details to the request. The
+            // principal is an intent-revealing object created by the AuthFacade.
+            req.user = { id: principal.id, email: principal.email };
+            next();
         } catch (error) {
             if (error instanceof TokenVerificationError) {
-                throw new AppError(INVALID_TOKEN, ErrorCode.UNAUTHENTICATED);
+                return next(
+                    new AppError(INVALID_TOKEN, ErrorCode.UNAUTHENTICATED)
+                );
             }
-            throw error;
+            next(error);
         }
-
-        // Attach the authenticated principal details to the request. The
-        // principal is an intent-revealing object created by the AuthFacade.
-        req.user = { id: principal.id, email: principal.email };
-        next();
-    });
+    };
 };
