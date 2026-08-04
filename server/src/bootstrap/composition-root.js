@@ -1,6 +1,5 @@
 import express from 'express';
 import { createApp } from './app.js';
-import { getConfig } from '../config/index.js';
 import { composeUserModule } from '../modules/user/index.js';
 import { composeAuthModule } from '../modules/auth/index.js';
 import { composeRegistrationModule } from '../orchestration/registration/index.js';
@@ -8,16 +7,12 @@ import { composeRegistrationModule } from '../orchestration/registration/index.j
 /**
  * Wires all dependencies and returns the composed Express app.
  *
- * logger is required — callers must pass a fully-initialised LoggerPort
- * instance (typically created from the Joi-validated config.logLevel in
- * server.js).  No concrete logger is imported here to keep this file
- * infrastructure-agnostic and testable.
- *
- * @param {{ logger: import('../shared/ports/index.js').LoggerPort }} deps
+ * @param {{
+ *   logger: import('../shared/ports/index.js').LoggerPort,
+ *   config: object
+ * }} deps
  */
-export const composeDependencies = ({ logger }) => {
-    const config = getConfig();
-
+export const composeDependencies = ({ logger, config }) => {
     // ── User bounded context ──────────────────────────────────────────────────
     const userModule = composeUserModule({ logger });
 

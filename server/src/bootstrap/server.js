@@ -19,7 +19,7 @@ const start = async () => {
 
     await initDB({ logger, dbConfig: config.db });
 
-    const app = composeDependencies({ logger });
+    const app = composeDependencies({ logger, config });
 
     const server = app.listen(PORT, () => {
         logger.info(`Server started on port: ${PORT}`);
