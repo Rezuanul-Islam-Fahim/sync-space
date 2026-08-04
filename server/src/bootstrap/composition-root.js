@@ -1,5 +1,5 @@
-import express from 'express';
 import { createApp } from './app.js';
+import { createApiRouter } from './routes.js';
 import { composeUserModule } from '../modules/user/index.js';
 import { composeAuthModule } from '../modules/auth/index.js';
 import { composeRegistrationModule } from '../orchestration/registration/index.js';
@@ -31,12 +31,7 @@ export const composeDependencies = ({ logger, config }) => {
     });
 
     // ── Routing ───────────────────────────────────────────────────────────────
-    const v1Router = express.Router();
-    v1Router.use('/auth/register', registrationModule.router);
-    v1Router.use('/auth', authModule.router);
-
-    const apiRouter = express.Router();
-    apiRouter.use('/v1', v1Router);
+    const apiRouter = createApiRouter({ registrationModule, authModule });
 
     const app = createApp({
         router: apiRouter,
