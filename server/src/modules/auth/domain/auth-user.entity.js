@@ -17,10 +17,17 @@ export class AuthUser {
     } = {}) {
         this.id = id;
         this.email = email;
-        this.password = password;
         this.isVerified = isVerified;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+
+        // Hide `password` from enumeration (JSON.stringify, Object.keys, console/logger iteration)
+        Object.defineProperty(this, 'password', {
+            value: password,
+            enumerable: false,
+            writable: false,
+            configurable: false,
+        });
 
         Object.freeze(this);
     }
