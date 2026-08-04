@@ -27,6 +27,11 @@ export class LoginUserUseCase {
 
         const tokens = this.tokenGenerator.generateTokens(user.id, user.email);
 
+        this.logger?.info?.('User login successful', {
+            authUserId: user.id,
+            email: user.email,
+        });
+
         return {
             user,
             tokens,

@@ -6,5 +6,8 @@ export class DeleteAuthUserUseCase {
 
     async execute(id) {
         await this.authUserWriter.deleteById(id);
+        this.logger?.info?.('Auth user credentials deleted', {
+            authUserId: id,
+        });
     }
 }

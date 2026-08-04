@@ -14,6 +14,11 @@ export class AuthController {
     login = catchAsync(async (req, res) => {
         const validatedData = matchedData(req);
         const requestDto = LoginRequestDto.from(validatedData);
+
+        this.logger?.debug?.('Login request received', {
+            email: requestDto.email,
+        });
+
         const loginData = await this.authService.loginUser(requestDto);
 
         const responseDto = LoginResponseDto.from(loginData);

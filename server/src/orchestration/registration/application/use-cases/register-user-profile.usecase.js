@@ -22,10 +22,33 @@ export class RegisterUserProfileUseCase {
                 dateOfBirth: data.dateOfBirth,
             });
         } catch (err) {
-            // Compensating action: rollback credential creation
-            await this.authService.deleteAuthUser(savedAuthUser.id);
+            this.logger?.warn?.('Initiating saga rollback for auth user', {
+                authUserId: savedAuthUser.id,
+                error: err.message,
+            });
+
+            try {
+                // Compensating action: rollback credential creation
+                await this.authService.deleteAuthUser(savedAuthUser.id);
+            } catch (rollbackErr) {
+                this.logger?.error?.(
+                    'CRITICAL: Saga rollback failed. Orphaned credential record.',
+                    {
+                        authUserId: savedAuthUser.id,
+                        error: rollbackErr.message,
+                    }
+                );
+            }
             throw err;
         }
+
+        this.logger?.info?.(
+            'User profile registration saga completed successfully',
+            {
+                authUserId: savedAuthUser.id,
+                email: savedAuthUser.email,
+            }
+        );
 
         return savedAuthUser;
     }

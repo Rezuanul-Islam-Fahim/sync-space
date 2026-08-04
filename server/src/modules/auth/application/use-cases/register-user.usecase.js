@@ -29,6 +29,11 @@ export class RegisterUserUseCase {
 
         const savedUser = await this.authUserWriter.createUser(authUser);
 
+        this.logger?.info?.('Auth credentials registered successfully', {
+            authUserId: savedUser.id,
+            email: savedUser.email,
+        });
+
         return savedUser;
     }
 }

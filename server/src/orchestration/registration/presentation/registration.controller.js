@@ -14,6 +14,11 @@ export class RegistrationController {
     register = catchAsync(async (req, res) => {
         const validatedData = matchedData(req);
         const requestDto = RegistrationRequestDto.from(validatedData);
+
+        this.logger?.debug?.('Registration request received', {
+            email: requestDto.email,
+        });
+
         const savedAuthUser =
             await this.registerUserProfileUseCase.execute(requestDto);
 

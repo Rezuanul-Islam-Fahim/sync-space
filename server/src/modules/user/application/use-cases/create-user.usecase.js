@@ -16,6 +16,11 @@ export class CreateUserUseCase {
         });
 
         const createdUser = await this.userWriter.createUser(userData);
+        this.logger?.info?.('User profile created successfully', {
+            userId: createdUser.id,
+            authId: createdUser.authId,
+            username: createdUser.username,
+        });
         return createdUser;
     }
 }
