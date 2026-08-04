@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
 import { envSchema } from './env.schema.js';
-import { parseCorsOrigins } from './cors.config.js';
 
 let cachedConfig;
 
@@ -31,7 +30,7 @@ export const getConfig = ({ reload = false } = {}) => {
         throw new Error(`Config validation error: ${error.message}`);
     }
 
-    const corsOrigins = parseCorsOrigins(envVars.CORS_ORIGINS);
+    const corsOrigins = envVars.CORS_ORIGINS;
 
     cachedConfig = {
         port: envVars.PORT,

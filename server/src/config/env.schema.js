@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { corsOriginsValidator } from './cors.config.js';
 
 export const envSchema = Joi.object({
     NODE_ENV: Joi.string()
@@ -16,7 +17,9 @@ export const envSchema = Joi.object({
     MONGODB_MAX_POOL_SIZE: Joi.number().integer().min(1).default(10),
     MONGODB_SELECTION_TIMEOUT_MS: Joi.number().integer().min(0).default(5000),
     MONGODB_SOCKET_TIMEOUT_MS: Joi.number().integer().min(0).default(45000),
-    CORS_ORIGINS: Joi.string().trim().default('*'),
+    CORS_ORIGINS: Joi.string()
+        .default('*')
+        .custom(corsOriginsValidator, 'CORS origins validation and parsing'),
     JWT_SECRET: Joi.string().required().description('JWT secret key'),
     JWT_EXPIRES_IN: Joi.string()
         .default('15m')

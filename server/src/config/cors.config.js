@@ -1,24 +1,45 @@
 import Joi from 'joi';
 
-export const parseCorsOrigins = originsStr => {
-    const { error, value: parsedCorsOrigins } = Joi.array()
-        .items(Joi.alternatives(Joi.string().valid('*'), Joi.string().uri()))
-        .default([])
-        .validate(originsStr.split(',').map(e => e.trim()));
-
-    if (error) {
-        throw new Error(`Cors Origin validation error: ${error.message}`);
+/**
+ * Custom Joi validator for parsing and validating the CORS_ORIGINS environment variable.
+ *
+ * @param {string} value
+ * @param {import('joi').CustomHelpers} helpers
+ * @returns {string | string[]}
+ */
+export const corsOriginsValidator = (value, helpers) => {
+    if (typeof value !== 'string') {
+        return helpers.error('any.invalid');
     }
 
-    if (parsedCorsOrigins.includes('*') && parsedCorsOrigins.length > 1) {
-        throw new Error(
-            'Cors Origin validation error: "*" can not be combined with other origins'
+    const trimmed = value.trim();
+    if (!trimmed) {
+        return helpers.error('string.empty');
+    }
+
+    const items = trimmed
+        .split(',')
+        .map(item => item.trim())
+        .filter(Boolean);
+
+    if (items.includes('*') && items.length > 1) {
+        return helpers.message(
+            'CORS_ORIGINS: "*" cannot be combined with other origins'
         );
     }
 
-    if (parsedCorsOrigins.length === 1 && parsedCorsOrigins[0] === '*') {
+    if (items.length === 1 && items[0] === '*') {
         return '*';
     }
 
-    return parsedCorsOrigins;
+    for (const item of items) {
+        const { error } = Joi.string().uri().validate(item);
+        if (error) {
+            return helpers.message(
+                `CORS_ORIGINS contains an invalid origin URI: "${item}"`
+            );
+        }
+    }
+
+    return items;
 };
