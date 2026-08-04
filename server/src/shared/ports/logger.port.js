@@ -50,4 +50,13 @@ export class LoggerPort {
     get stream() {
         throw new Error('LoggerPort: getter stream must be implemented');
     }
+
+    /**
+     * Flushes buffered log entries to underlying transports.
+     *
+     * @returns {Promise<void>}
+     */
+    async flush() {
+        throw new Error('LoggerPort: method flush must be implemented');
+    }
 }

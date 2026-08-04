@@ -87,6 +87,21 @@ export class WinstonLoggerAdapter extends LoggerPort {
             },
         };
     }
+
+    async flush() {
+        return new Promise(resolve => {
+            let finished = false;
+            const done = () => {
+                if (!finished) {
+                    finished = true;
+                    resolve();
+                }
+            };
+            this._logger.on('finish', done);
+            this._logger.end();
+            setTimeout(done, 1000);
+        });
+    }
 }
 
 /**
