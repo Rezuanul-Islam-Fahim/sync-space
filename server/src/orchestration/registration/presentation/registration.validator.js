@@ -1,5 +1,8 @@
 import { body } from 'express-validator';
-import { PASSWORD_MIN_LENGTH } from '../../../shared/constants/index.js';
+import {
+    createEmailValidator,
+    createPasswordValidator,
+} from '../../../shared/util/index.js';
 import {
     EMAIL_REQUIRED,
     EMAIL_INVALID,
@@ -13,20 +16,8 @@ import {
 } from './registration.messages.js';
 
 export const registrationValidation = [
-    body('email')
-        .notEmpty()
-        .withMessage(EMAIL_REQUIRED)
-        .bail()
-        .isEmail()
-        .withMessage(EMAIL_INVALID)
-        .normalizeEmail(),
-
-    body('password')
-        .notEmpty()
-        .withMessage(PASSWORD_REQUIRED)
-        .bail()
-        .isLength({ min: PASSWORD_MIN_LENGTH })
-        .withMessage(PASSWORD_LENGTH_ERROR),
+    createEmailValidator({ EMAIL_REQUIRED, EMAIL_INVALID }),
+    createPasswordValidator({ PASSWORD_REQUIRED, PASSWORD_LENGTH_ERROR }),
 
     body('username')
         .notEmpty()
