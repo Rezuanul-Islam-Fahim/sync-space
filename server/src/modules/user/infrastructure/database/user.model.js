@@ -4,6 +4,11 @@ import {
     UserStatus,
     BANNER_DEFAULT_COLOR,
 } from '../../domain/user.constant.js';
+import {
+    USERNAME_MIN_LENGTH,
+    USERNAME_MAX_LENGTH,
+    BIO_MAX_LENGTH,
+} from '../../../../shared/constants/index.js';
 
 /**
  * User profile schema — stored in the `users` collection.
@@ -34,8 +39,8 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
             unique: true,
-            minLength: 3,
-            maxLength: 30,
+            minLength: USERNAME_MIN_LENGTH,
+            maxLength: USERNAME_MAX_LENGTH,
         },
         displayName: {
             type: String,
@@ -47,7 +52,7 @@ const userSchema = new mongoose.Schema(
         },
         bio: {
             type: String,
-            maxLength: 190,
+            maxLength: BIO_MAX_LENGTH,
             default: null,
         },
         banner: {

@@ -4,6 +4,10 @@ import {
     createPasswordValidator,
 } from '../../../shared/util/index.js';
 import {
+    USERNAME_MIN_LENGTH,
+    USERNAME_MAX_LENGTH,
+} from '../../../shared/constants/index.js';
+import {
     EMAIL_REQUIRED,
     EMAIL_INVALID,
     PASSWORD_REQUIRED,
@@ -24,7 +28,7 @@ export const registrationValidation = [
         .withMessage(USERNAME_REQUIRED)
         .bail()
         .trim()
-        .isLength({ min: 3, max: 30 })
+        .isLength({ min: USERNAME_MIN_LENGTH, max: USERNAME_MAX_LENGTH })
         .withMessage(USERNAME_LENGTH_ERROR),
 
     body('displayName')
