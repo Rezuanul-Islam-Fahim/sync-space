@@ -56,19 +56,20 @@ export const composeAuthModule = ({ logger, config }) => {
         logger,
     });
 
-    const authController = new AuthController({
+    const authService = new AuthFacade({
         loginUserUseCase,
+        registerUserUseCase,
+        deleteAuthUserUseCase,
+        tokenVerifier,
+    });
+
+    const authController = new AuthController({
+        authService,
         logger,
     });
 
     const router = createAuthRouter({
         authController,
-    });
-
-    const authService = new AuthFacade({
-        registerUserUseCase,
-        deleteAuthUserUseCase,
-        tokenVerifier,
     });
 
     return {

@@ -6,15 +6,15 @@ import { OK } from '../../../shared/constants/index.js';
 import { LOGIN_SUCCESSFUL } from './auth.messages.js';
 
 export class AuthController {
-    constructor({ loginUserUseCase, logger }) {
-        this.loginUserUseCase = loginUserUseCase;
+    constructor({ authService, logger }) {
+        this.authService = authService;
         this.logger = logger;
     }
 
     login = catchAsync(async (req, res) => {
         const validatedData = matchedData(req);
         const requestDto = LoginRequestDto.from(validatedData);
-        const loginData = await this.loginUserUseCase.execute(requestDto);
+        const loginData = await this.authService.loginUser(requestDto);
 
         const responseDto = LoginResponseDto.from(loginData);
 
