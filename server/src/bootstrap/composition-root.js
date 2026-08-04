@@ -38,6 +38,7 @@ export const composeDependencies = ({ logger, config }) => {
         logger,
         corsOrigins: config.corsOrigins,
         corsCredentials: config.corsCredentials,
+        bodyLimit: config.bodyLimit,
         exposeStack: config.env === 'development',
     });
 

@@ -10,6 +10,9 @@ export const envSchema = Joi.object({
         .valid('error', 'warn', 'info', 'http', 'debug')
         .default('debug'),
     BCRYPT_SALT_ROUNDS: Joi.number().integer().min(4).max(31).default(10),
+    BODY_LIMIT: Joi.string()
+        .default('10kb')
+        .description('Request body size limit'),
     MONGODB_MAX_POOL_SIZE: Joi.number().integer().min(1).default(10),
     MONGODB_SELECTION_TIMEOUT_MS: Joi.number().integer().min(0).default(5000),
     MONGODB_SOCKET_TIMEOUT_MS: Joi.number().integer().min(0).default(45000),

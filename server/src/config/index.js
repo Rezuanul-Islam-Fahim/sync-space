@@ -43,6 +43,7 @@ export const getConfig = ({ reload = false } = {}) => {
             socketTimeoutMS: envVars.MONGODB_SOCKET_TIMEOUT_MS,
         },
         logLevel: envVars.LOG_LEVEL,
+        bodyLimit: envVars.BODY_LIMIT,
         auth: {
             saltRounds: envVars.BCRYPT_SALT_ROUNDS,
         },

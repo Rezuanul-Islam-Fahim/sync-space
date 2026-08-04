@@ -14,6 +14,7 @@ export const createApp = ({
     logger,
     corsOrigins,
     corsCredentials,
+    bodyLimit = '10kb',
     exposeStack = false,
 }) => {
     const app = express();
@@ -21,8 +22,8 @@ export const createApp = ({
     app.use(requestIdAttach);
     app.use(helmet());
     app.use(hpp());
-    app.use(express.json({ limit: '10kb' }));
-    app.use(express.urlencoded({ extended: false, limit: '10kb' }));
+    app.use(express.json({ limit: bodyLimit }));
+    app.use(express.urlencoded({ extended: false, limit: bodyLimit }));
     app.use(morgan('combined', { stream: logger.stream }));
     app.use(
         cors({
