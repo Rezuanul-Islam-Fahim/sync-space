@@ -4,8 +4,22 @@ import { parseCorsOrigins } from './cors.config.js';
 
 let cachedConfig;
 
-export const getConfig = () => {
-    if (cachedConfig) {
+/**
+ * Resets the cached configuration instance.
+ * Intended for test isolation when process.env changes between tests.
+ */
+export const resetConfig = () => {
+    cachedConfig = undefined;
+};
+
+/**
+ * Retrieves the application configuration.
+ *
+ * @param {{ reload?: boolean }} [options]
+ * @returns {object}
+ */
+export const getConfig = ({ reload = false } = {}) => {
+    if (cachedConfig && !reload) {
         return cachedConfig;
     }
 
