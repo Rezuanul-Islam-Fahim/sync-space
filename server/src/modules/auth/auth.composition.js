@@ -10,10 +10,7 @@ import {
     JwtTokenGenerator,
     JwtTokenVerifier,
 } from './infrastructure/security/jwt-token.adapter.js';
-import {
-    AuthUserModel,
-    getAuthUserModel,
-} from './infrastructure/database/auth-user.model.js';
+import { getAuthUserModel } from './infrastructure/database/auth-user.model.js';
 import { AuthUserReaderAdapter } from './infrastructure/adapters/auth-user-reader.adapter.js';
 import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-writer.adapter.js';
 
@@ -37,8 +34,13 @@ export const composeAuthModule = ({
     authConfig,
     jwtConfig,
     connection,
-    authUserModel = connection ? getAuthUserModel(connection) : AuthUserModel,
+    authUserModel = connection ? getAuthUserModel(connection) : null,
 }) => {
+    if (!authUserModel) {
+        throw new Error(
+            'Either a database connection or authUserModel must be provided to composeAuthModule.'
+        );
+    }
     const tokenGenerator = new JwtTokenGenerator(jwtConfig);
     const tokenVerifier = new JwtTokenVerifier(jwtConfig);
     const authUserReader = new AuthUserReaderAdapter({

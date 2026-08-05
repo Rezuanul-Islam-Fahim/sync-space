@@ -84,10 +84,13 @@ const transform = (doc, ret) => {
 userSchema.set('toJSON', { transform });
 userSchema.set('toObject', { transform });
 
-export const getUserModel = (connection = mongoose) => {
+export const getUserModel = connection => {
+    if (!connection) {
+        throw new Error(
+            'Database connection instance is required to resolve getUserModel.'
+        );
+    }
     return (
         connection.models?.User || connection.model('User', userSchema, 'users')
     );
 };
-
-export const UserModel = getUserModel(mongoose);

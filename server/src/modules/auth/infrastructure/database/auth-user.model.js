@@ -35,11 +35,14 @@ const transform = (doc, ret) => {
 authUserSchema.set('toJSON', { transform });
 authUserSchema.set('toObject', { transform });
 
-export const getAuthUserModel = (connection = mongoose) => {
+export const getAuthUserModel = connection => {
+    if (!connection) {
+        throw new Error(
+            'Database connection instance is required to resolve getAuthUserModel.'
+        );
+    }
     return (
         connection.models?.AuthUser ||
         connection.model('AuthUser', authUserSchema, 'credentials')
     );
 };
-
-export const AuthUserModel = getAuthUserModel(mongoose);

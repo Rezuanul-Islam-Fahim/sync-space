@@ -1,9 +1,6 @@
 import { UserFacade } from './application/user.facade.js';
 import { CreateUserUseCase } from './application/use-cases/create-user.usecase.js';
-import {
-    UserModel,
-    getUserModel,
-} from './infrastructure/database/user.model.js';
+import { getUserModel } from './infrastructure/database/user.model.js';
 import { UserWriterAdapter } from './infrastructure/adapters/user-writer.adapter.js';
 import { UserReaderAdapter } from './infrastructure/adapters/user-reader.adapter.js';
 
@@ -23,8 +20,13 @@ import { UserReaderAdapter } from './infrastructure/adapters/user-reader.adapter
 export const composeUserModule = ({
     logger,
     connection,
-    userModel = connection ? getUserModel(connection) : UserModel,
+    userModel = connection ? getUserModel(connection) : null,
 }) => {
+    if (!userModel) {
+        throw new Error(
+            'Either a database connection or userModel must be provided to composeUserModule.'
+        );
+    }
     const userWriter = new UserWriterAdapter({ userModel });
     const userReader = new UserReaderAdapter({ userModel });
 
