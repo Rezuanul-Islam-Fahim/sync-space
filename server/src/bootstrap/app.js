@@ -9,7 +9,8 @@ import {
     unknownRoutesHandler,
 } from '../shared/middleware/index.js';
 
-morgan.token('id', req => req.id || req.headers['x-request-id'] || '-');
+morgan.token('id', req => req.id || '-');
+
 const morganFormat =
     ':remote-addr - :remote-user [:date[clf]] [reqId: :id] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"';
 
