@@ -1,1 +1,6 @@
-export { LoggerPort } from './logger.port.js';
+export {
+    LoggerPort,
+    StreamableLoggerPort,
+    FlushableLoggerPort,
+    AppLoggerPort,
+} from './logger.port.js';

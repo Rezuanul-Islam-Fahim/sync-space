@@ -1,3 +1,7 @@
+/**
+ * Base Logger Port — Defines core application logging contract.
+ * Focuses purely on logging messages at various severity levels (ISP).
+ */
 export class LoggerPort {
     /**
      * @param {string} _message
@@ -43,12 +47,47 @@ export class LoggerPort {
     debug(_message, _meta) {
         throw new Error('LoggerPort: method debug must be implemented');
     }
+}
 
+/**
+ * Streamable Logger Port — For loggers providing an HTTP middleware stream interface.
+ */
+export class StreamableLoggerPort extends LoggerPort {
     /**
      * @returns {{ write: (message: string) => void }}
      */
     get stream() {
-        throw new Error('LoggerPort: getter stream must be implemented');
+        throw new Error(
+            'StreamableLoggerPort: getter stream must be implemented'
+        );
+    }
+}
+
+/**
+ * Flushable Logger Port — For loggers supporting async buffer flushing during shutdown.
+ */
+export class FlushableLoggerPort extends LoggerPort {
+    /**
+     * Flushes buffered log entries to underlying transports.
+     *
+     * @returns {Promise<void>}
+     */
+    async flush() {
+        throw new Error(
+            'FlushableLoggerPort: method flush must be implemented'
+        );
+    }
+}
+
+/**
+ * Full Application Logger Port — Combines logging, streaming, and flushing capabilities.
+ */
+export class AppLoggerPort extends LoggerPort {
+    /**
+     * @returns {{ write: (message: string) => void }}
+     */
+    get stream() {
+        throw new Error('AppLoggerPort: getter stream must be implemented');
     }
 
     /**
@@ -57,6 +96,6 @@ export class LoggerPort {
      * @returns {Promise<void>}
      */
     async flush() {
-        throw new Error('LoggerPort: method flush must be implemented');
+        throw new Error('AppLoggerPort: method flush must be implemented');
     }
 }
