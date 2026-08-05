@@ -30,7 +30,9 @@ export const sendSuccessResponse = ({
  *   res: import('express').Response,
  *   statusCode?: number,
  *   message: string,
+ *   errorCode?: string,
  *   errors?: any,
+ *   requestId?: string,
  *   stack?: string
  * }} options
  */
@@ -38,13 +40,17 @@ export const sendErrorResponse = ({
     res,
     statusCode = INTERNAL_SERVER_ERROR,
     message,
+    errorCode,
     errors,
+    requestId,
     stack,
 }) => {
     return res.status(statusCode).json({
         statusCode,
         message,
+        errorCode,
         errors,
+        requestId,
         stack,
     });
 };
