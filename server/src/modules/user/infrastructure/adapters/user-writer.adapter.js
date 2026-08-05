@@ -1,7 +1,32 @@
 import { UserWriterPort } from '../../application/ports/user-writer.port.js';
 import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 import { UserMapper } from '../mappers/user.mapper.js';
-import { PROFILE_ALREADY_EXISTS } from '../../domain/user.constant.js';
+import {
+    PROFILE_ALREADY_EXISTS,
+    USERNAME_ALREADY_TAKEN,
+    EMAIL_ALREADY_REGISTERED,
+} from '../../domain/user.constant.js';
+
+const parseDuplicateKeyError = err => {
+    const keyPattern = err.keyPattern || {};
+    const keyValue = err.keyValue || {};
+    const message = err.message || '';
+
+    if (
+        keyPattern.username ||
+        keyValue.username ||
+        message.includes('username')
+    ) {
+        return USERNAME_ALREADY_TAKEN;
+    }
+    if (keyPattern.email || keyValue.email || message.includes('email')) {
+        return EMAIL_ALREADY_REGISTERED;
+    }
+    if (keyPattern.authId || keyValue.authId || message.includes('authId')) {
+        return PROFILE_ALREADY_EXISTS;
+    }
+    return PROFILE_ALREADY_EXISTS;
+};
 
 export class UserWriterAdapter extends UserWriterPort {
     constructor({ userModel }) {
@@ -17,11 +42,8 @@ export class UserWriterAdapter extends UserWriterPort {
             return UserMapper.toDomain(savedDoc);
         } catch (err) {
             if (err.code === 11000) {
-                // MongoDB duplicate key error
-                throw new AppError(
-                    PROFILE_ALREADY_EXISTS,
-                    ErrorCode.ALREADY_EXISTS
-                );
+                const errorMessage = parseDuplicateKeyError(err);
+                throw new AppError(errorMessage, ErrorCode.ALREADY_EXISTS);
             }
             throw err;
         }
