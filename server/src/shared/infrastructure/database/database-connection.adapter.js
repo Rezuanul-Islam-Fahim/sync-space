@@ -1,72 +1,81 @@
 import mongoose from 'mongoose';
 
-let isListenersAttached = false;
-
-/**
- * Attaches event listeners to Mongoose connection exactly once.
- *
- * @param {import('../../ports/index.js').LoggerPort} logger
- */
-const attachConnectionListeners = logger => {
-    if (isListenersAttached) return;
-
-    mongoose.connection.on('connected', () => {
-        logger?.info?.('Mongoose connected to DB.');
-    });
-
-    mongoose.connection.on('error', err => {
-        logger?.error?.('Mongoose connection error:', err);
-    });
-
-    mongoose.connection.on('disconnected', () => {
-        logger?.warn?.('Mongoose disconnected.');
-    });
-
-    isListenersAttached = true;
-};
-
-/**
- * Initializes MongoDB connection and attaches event listeners.
- *
- * @param {{
- *   logger: import('../../ports/index.js').LoggerPort,
- *   dbConfig: {
- *     uri: string,
- *     maxPoolSize?: number,
- *     serverSelectionTimeoutMS?: number,
- *     socketTimeoutMS?: number
- *   }
- * }} params
- */
-export const initDB = async ({ logger, dbConfig }) => {
-    if (mongoose.connection.readyState === 1) {
-        logger?.info?.('Mongoose is already connected.');
-        return;
+export class DatabaseConnectionAdapter {
+    /**
+     * @param {{
+     *   logger: import('../../ports/index.js').LoggerPort,
+     *   dbConfig: {
+     *     uri: string,
+     *     maxPoolSize?: number,
+     *     serverSelectionTimeoutMS?: number,
+     *     socketTimeoutMS?: number
+     *   }
+     * }} params
+     */
+    constructor({ logger, dbConfig }) {
+        this.logger = logger;
+        this.dbConfig = dbConfig;
+        this.connection = mongoose.connection;
+        this.isListenersAttached = false;
     }
 
-    attachConnectionListeners(logger);
+    /**
+     * Attaches event listeners to connection instance.
+     */
+    attachListeners() {
+        if (this.isListenersAttached) return;
 
-    await mongoose.connect(dbConfig.uri, {
-        maxPoolSize: dbConfig.maxPoolSize,
-        serverSelectionTimeoutMS: dbConfig.serverSelectionTimeoutMS,
-        socketTimeoutMS: dbConfig.socketTimeoutMS,
-    });
-};
+        this.connection.on('connected', () => {
+            this.logger?.info?.('Mongoose connected to DB.');
+        });
 
-/**
- * Closes the active MongoDB connection.
- */
-export const closeDB = async () => {
-    if (mongoose.connection.readyState !== 0) {
-        await mongoose.connection.close();
+        this.connection.on('error', err => {
+            this.logger?.error?.('Mongoose connection error:', err);
+        });
+
+        this.connection.on('disconnected', () => {
+            this.logger?.warn?.('Mongoose disconnected.');
+        });
+
+        this.isListenersAttached = true;
     }
-};
 
-/**
- * Resets database listener state and removes connection listeners.
- * Useful for test suite isolation.
- */
-export const resetDBConnection = () => {
-    isListenersAttached = false;
-    mongoose.connection.removeAllListeners();
-};
+    /**
+     * Connects to MongoDB database using configuration.
+     *
+     * @returns {Promise<import('mongoose').Connection>}
+     */
+    async connect() {
+        if (this.connection.readyState === 1) {
+            this.logger?.info?.('Mongoose is already connected.');
+            return this.connection;
+        }
+
+        this.attachListeners();
+
+        await mongoose.connect(this.dbConfig.uri, {
+            maxPoolSize: this.dbConfig.maxPoolSize,
+            serverSelectionTimeoutMS: this.dbConfig.serverSelectionTimeoutMS,
+            socketTimeoutMS: this.dbConfig.socketTimeoutMS,
+        });
+
+        return this.connection;
+    }
+
+    /**
+     * Closes the database connection.
+     */
+    async disconnect() {
+        if (this.connection.readyState !== 0) {
+            await this.connection.close();
+        }
+    }
+
+    /**
+     * Resets listeners and connection state.
+     */
+    reset() {
+        this.isListenersAttached = false;
+        this.connection.removeAllListeners();
+    }
+}

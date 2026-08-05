@@ -14,10 +14,6 @@ const migrateMongoConfig = {
         databaseName: mongoUri
             .substring(mongoUri.lastIndexOf('/') + 1)
             .split('?')[0],
-        options: {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        },
     },
     migrationsDir: 'database/migrations',
     changelogCollectionName: 'changelog',

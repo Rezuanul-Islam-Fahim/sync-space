@@ -1,6 +1,5 @@
 import {
-    initDB,
-    closeDB,
+    DatabaseConnectionAdapter,
     WinstonLoggerAdapter,
     logger as bootstrapLogger,
 } from '../shared/infrastructure/index.js';
@@ -17,7 +16,12 @@ const start = async () => {
     // solely for the outer start().catch() boundary below.
     const logger = new WinstonLoggerAdapter({ logLevel: config.logLevel });
 
-    await initDB({ logger, dbConfig: config.db });
+    const dbConnection = new DatabaseConnectionAdapter({
+        logger,
+        dbConfig: config.db,
+    });
+
+    await dbConnection.connect();
 
     const app = composeDependencies({ logger, config });
 
@@ -31,7 +35,7 @@ const start = async () => {
         // Stop accepting new connections
         server.close(async () => {
             try {
-                await closeDB();
+                await dbConnection.disconnect();
                 await logger.flush?.();
                 process.exit(exitCode);
             } catch (err) {

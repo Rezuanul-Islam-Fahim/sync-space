@@ -1,15 +1,20 @@
 import {
     logger,
-    closeDB,
-    initDB,
+    DatabaseConnectionAdapter,
 } from '../../src/shared/infrastructure/index.js';
 import { UserModel } from '../../src/modules/user/infrastructure/database/user.model.js';
 import { getSeedUsers } from './user.seed.js';
-import { isDev, config } from '../../src/config/index.js';
+import { getConfig } from '../../src/config/index.js';
 
 const runSeeder = async () => {
+    const config = getConfig();
+    const dbConnection = new DatabaseConnectionAdapter({
+        logger,
+        dbConfig: config.db,
+    });
+
     try {
-        if (!isDev()) {
+        if (config.env === 'production') {
             logger.error(
                 'CRITICAL: Seeding aborted! Database seeding is not permitted in production environment.'
             );
@@ -18,7 +23,7 @@ const runSeeder = async () => {
 
         logger.info('Starting database seeding...');
 
-        await initDB({ logger, dbConfig: config.db });
+        await dbConnection.connect();
 
         logger.info('Clearing existing users...');
         await UserModel.deleteMany({});
@@ -32,7 +37,7 @@ const runSeeder = async () => {
         logger.error('Error seeding database:', err);
         process.exit(1);
     } finally {
-        await closeDB();
+        await dbConnection.disconnect();
         logger.info('DB connection closed.');
         process.exit(0);
     }
