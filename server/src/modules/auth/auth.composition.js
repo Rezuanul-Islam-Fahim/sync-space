@@ -17,15 +17,19 @@ import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-write
 /**
  * Composes the auth module and returns its Express router and auth service facade.
  *
- * @param {{ logger?: import('../../shared/ports/index.js').LoggerPort }} deps
+ * @param {{
+ *   logger?: import('../../shared/ports/index.js').LoggerPort,
+ *   authConfig: { saltRounds: number },
+ *   jwtConfig: { secret: string, expiresIn: string, refreshSecret: string, refreshExpiresIn: string }
+ * }} deps
  * @returns {{
  *   router: import('express').Router,
  *   authService: import('./application/auth.facade.js').AuthFacade
  * }}
  */
-export const composeAuthModule = ({ logger, config }) => {
-    const tokenGenerator = new JwtTokenGenerator(config.jwt);
-    const tokenVerifier = new JwtTokenVerifier(config.jwt);
+export const composeAuthModule = ({ logger, authConfig, jwtConfig }) => {
+    const tokenGenerator = new JwtTokenGenerator(jwtConfig);
+    const tokenVerifier = new JwtTokenVerifier(jwtConfig);
     const authUserReader = new AuthUserReaderAdapter({
         authUserModel: AuthUserModel,
     });
@@ -34,7 +38,7 @@ export const composeAuthModule = ({ logger, config }) => {
     });
 
     const passwordHasher = new BcryptPasswordHasher({
-        saltRounds: config.auth.saltRounds,
+        saltRounds: authConfig.saltRounds,
     });
 
     const loginUserUseCase = new LoginUserUseCase({

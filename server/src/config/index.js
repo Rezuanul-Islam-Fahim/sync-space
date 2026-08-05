@@ -32,29 +32,29 @@ export const getConfig = ({ reload = false } = {}) => {
 
     const corsOrigins = envVars.CORS_ORIGINS;
 
-    cachedConfig = {
+    cachedConfig = Object.freeze({
         port: envVars.PORT,
         env: envVars.NODE_ENV,
-        db: {
+        db: Object.freeze({
             uri: envVars.MONGODB_URI,
             maxPoolSize: envVars.MONGODB_MAX_POOL_SIZE,
             serverSelectionTimeoutMS: envVars.MONGODB_SELECTION_TIMEOUT_MS,
             socketTimeoutMS: envVars.MONGODB_SOCKET_TIMEOUT_MS,
-        },
+        }),
         logLevel: envVars.LOG_LEVEL,
         bodyLimit: envVars.BODY_LIMIT,
-        auth: {
+        auth: Object.freeze({
             saltRounds: envVars.BCRYPT_SALT_ROUNDS,
-        },
+        }),
         corsOrigins,
         corsCredentials: corsOrigins !== '*',
-        jwt: {
+        jwt: Object.freeze({
             secret: envVars.JWT_SECRET,
             expiresIn: envVars.JWT_EXPIRES_IN,
             refreshSecret: envVars.JWT_REFRESH_SECRET,
             refreshExpiresIn: envVars.JWT_REFRESH_EXPIRES_IN,
-        },
-    };
+        }),
+    });
 
     return cachedConfig;
 };

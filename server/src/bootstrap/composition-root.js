@@ -17,7 +17,11 @@ export const composeDependencies = ({ logger, config }) => {
     const userModule = composeUserModule({ logger });
 
     // ── Auth bounded context ──────────────────────────────────────────────────
-    const authModule = composeAuthModule({ logger, config });
+    const authModule = composeAuthModule({
+        logger,
+        authConfig: config.auth,
+        jwtConfig: config.jwt,
+    });
 
     // ── Middleware ────────────────────────────────────────────────────────────
     // Authentication middleware factory is exported from the auth module
