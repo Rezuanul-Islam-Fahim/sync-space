@@ -47,4 +47,15 @@ export class LoggerPort {
     debug(_message, _meta) {
         throw new Error('LoggerPort: method debug must be implemented');
     }
+
+    /**
+     * Flushes buffered log entries to underlying transports during shutdown.
+     * Default implementation is a no-op for loggers that do not buffer output.
+     *
+     * @param {number} [_timeoutMs]
+     * @returns {Promise<void>}
+     */
+    async flush(_timeoutMs) {
+        return Promise.resolve();
+    }
 }
