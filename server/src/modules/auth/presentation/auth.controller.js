@@ -1,7 +1,7 @@
 import { matchedData } from 'express-validator';
 import { LoginRequestDto } from './dtos/login-request.dto.js';
 import { LoginResponseDto } from './dtos/login-response.dto.js';
-import { ApiResponse, catchAsync } from '../../../shared/util/index.js';
+import { sendSuccessResponse, catchAsync } from '../../../shared/util/index.js';
 import { OK } from '../../../shared/constants/index.js';
 import { LOGIN_SUCCESSFUL } from './auth.messages.js';
 
@@ -23,7 +23,7 @@ export class AuthController {
 
         const responseDto = LoginResponseDto.from(loginData);
 
-        ApiResponse.success({
+        sendSuccessResponse({
             res,
             data: responseDto,
             statusCode: OK,

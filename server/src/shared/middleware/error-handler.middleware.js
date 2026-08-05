@@ -1,4 +1,4 @@
-import { ApiResponse } from '../util/index.js';
+import { sendErrorResponse } from '../util/index.js';
 import { getHttpStatusForErrorCode } from '../error/index.js';
 import { INTERNAL_SERVER_ERROR, DEFAULT_ERROR } from '../constants/index.js';
 
@@ -25,7 +25,7 @@ export const makeErrorHandler = ({ logger, exposeStack = false }) => {
             ip: req.ip,
         });
 
-        ApiResponse.error({
+        sendErrorResponse({
             res,
             statusCode,
             message,

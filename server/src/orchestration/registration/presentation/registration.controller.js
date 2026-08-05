@@ -1,5 +1,5 @@
 import { matchedData } from 'express-validator';
-import { catchAsync, ApiResponse } from '../../../shared/util/index.js';
+import { catchAsync, sendSuccessResponse } from '../../../shared/util/index.js';
 import { CREATED } from '../../../shared/constants/index.js';
 import { RegistrationRequestDto } from './dtos/registration-request.dto.js';
 import { RegistrationResponseDto } from './dtos/registration-response.dto.js';
@@ -24,7 +24,7 @@ export class RegistrationController {
 
         const responseDto = RegistrationResponseDto.from(registrationResult);
 
-        ApiResponse.success({
+        sendSuccessResponse({
             res,
             data: responseDto,
             statusCode: CREATED,
