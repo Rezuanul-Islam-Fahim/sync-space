@@ -19,16 +19,24 @@ export const makeErrorHandler = ({ logger, exposeStack = false }) => {
         const message = isOperational ? error.message : DEFAULT_ERROR;
         const requestId = req.id;
 
-        logger.error(error.message, {
+        const logPayload = {
             statusCode,
             errorCode,
-            stack: error.stack,
             isOperational,
             requestId,
             path: req.originalUrl,
             method: req.method,
             ip: req.ip,
-        });
+        };
+
+        if (isOperational) {
+            logger.warn(error.message, logPayload);
+        } else {
+            logger.error(error.message, {
+                ...logPayload,
+                stack: error.stack,
+            });
+        }
 
         sendErrorResponse({
             res,
