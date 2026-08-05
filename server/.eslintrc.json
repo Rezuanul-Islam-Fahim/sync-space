@@ -11,12 +11,7 @@
         "sourceType": "module"
     },
     "rules": {
-        "no-console": [
-            "warn",
-            {
-                "allow": ["warn", "error"]
-            }
-        ],
+        "no-console": "error",
         "no-unused-vars": [
             "error",
             {
