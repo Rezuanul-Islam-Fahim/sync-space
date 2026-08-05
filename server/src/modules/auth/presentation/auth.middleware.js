@@ -7,7 +7,7 @@ import { TOKEN_NOT_FOUND } from '../domain/auth-user.constant.js';
  * @param {import('../application/auth.facade.js').AuthFacade} authService
  */
 export const makeAuthenticate = authService => {
-    return (req, _, next) => {
+    return async (req, _, next) => {
         let token;
 
         if (
@@ -23,7 +23,7 @@ export const makeAuthenticate = authService => {
             );
         }
 
-        const principal = authService.verifyAccessToken(token);
+        const principal = await authService.verifyAccessToken(token);
 
         // Attach the authenticated principal details to the request. The
         // principal is an intent-revealing object created by the AuthFacade.

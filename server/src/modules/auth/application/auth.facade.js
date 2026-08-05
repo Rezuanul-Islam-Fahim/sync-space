@@ -61,12 +61,12 @@ export class AuthFacade {
      * Verifies access token and maps payload to an intent-revealing principal object.
      *
      * @param {string} token
-     * @returns {{ id: string, email: string }}
+     * @returns {Promise<{ id: string, email: string }>}
      * @throws {AppError} if token is invalid or verification fails
      */
-    verifyAccessToken(token) {
+    async verifyAccessToken(token) {
         try {
-            const decoded = this.tokenVerifier.verifyAccessToken(token);
+            const decoded = await this.tokenVerifier.verifyAccessToken(token);
             return { id: decoded.sub, email: decoded.email };
         } catch (error) {
             if (error instanceof TokenVerificationError) {

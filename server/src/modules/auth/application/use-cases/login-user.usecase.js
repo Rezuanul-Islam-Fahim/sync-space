@@ -25,7 +25,10 @@ export class LoginUserUseCase {
             throw new AppError(INVALID_CREDENTIALS, ErrorCode.UNAUTHENTICATED);
         }
 
-        const tokens = this.tokenGenerator.generateTokens(user.id, user.email);
+        const tokens = await this.tokenGenerator.generateTokens(
+            user.id,
+            user.email
+        );
 
         this.logger?.info?.('User login successful', {
             authUserId: user.id,
