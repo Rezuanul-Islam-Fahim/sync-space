@@ -61,36 +61,3 @@ export class AppError extends Error {
         Error.captureStackTrace(this, this.constructor);
     }
 }
-
-/**
- * Operational Error Subclasses for clean domain & use-case semantics
- */
-export class BadRequestError extends AppError {
-    constructor(message, errors) {
-        super(message, ErrorCode.INVALID_INPUT, errors, BAD_REQUEST);
-    }
-}
-
-export class UnauthorizedError extends AppError {
-    constructor(message, errors) {
-        super(message, ErrorCode.UNAUTHENTICATED, errors, UNAUTHORIZED);
-    }
-}
-
-export class ForbiddenError extends AppError {
-    constructor(message, errors) {
-        super(message, ErrorCode.PERMISSION_DENIED, errors, FORBIDDEN);
-    }
-}
-
-export class NotFoundError extends AppError {
-    constructor(message, errors) {
-        super(message, ErrorCode.RESOURCE_NOT_FOUND, errors, NOT_FOUND);
-    }
-}
-
-export class ConflictError extends AppError {
-    constructor(message, errors) {
-        super(message, ErrorCode.ALREADY_EXISTS, errors, CONFLICT);
-    }
-}
