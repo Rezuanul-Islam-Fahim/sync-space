@@ -29,7 +29,13 @@ export const createApp = ({
     app.use(hpp());
     app.use(express.json({ limit: bodyLimit }));
     app.use(express.urlencoded({ extended: false, limit: bodyLimit }));
-    app.use(morgan(morganFormat, { stream: logger.stream }));
+    app.use(
+        morgan(morganFormat, {
+            stream: {
+                write: message => logger.http(message.trim()),
+            },
+        })
+    );
     app.use(
         cors({
             origin: corsOrigins,

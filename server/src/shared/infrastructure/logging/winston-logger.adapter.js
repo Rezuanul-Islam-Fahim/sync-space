@@ -1,6 +1,6 @@
 import winston from 'winston';
 import path from 'path';
-import { AppLoggerPort } from '../../ports/index.js';
+import { LoggerPort } from '../../ports/index.js';
 
 const levels = {
     error: 0,
@@ -34,7 +34,7 @@ const fileFormat = winston.format.combine(
     winston.format.json()
 );
 
-export class WinstonLoggerAdapter extends AppLoggerPort {
+export class WinstonLoggerAdapter extends LoggerPort {
     constructor({ logLevel, logDir } = {}) {
         super();
 
@@ -79,14 +79,6 @@ export class WinstonLoggerAdapter extends AppLoggerPort {
 
     debug(message, meta) {
         this._logger.debug(message, meta);
-    }
-
-    get stream() {
-        return {
-            write: message => {
-                this.http(message.trim());
-            },
-        };
     }
 
     /**

@@ -32,18 +32,18 @@ const start = async () => {
         server.close(async () => {
             try {
                 await closeDB();
-                await logger.flush();
+                await logger.flush?.();
                 process.exit(exitCode);
             } catch (err) {
                 logger.error('Error during shutdown:', err);
-                await logger.flush();
+                await logger.flush?.();
                 process.exit(1);
             }
         });
 
         setTimeout(async () => {
             logger.error('Forced shutdown due to timeout.');
-            await logger.flush();
+            await logger.flush?.();
             process.exit(1);
         }, 30000);
     };
@@ -64,6 +64,6 @@ start().catch(async err => {
     // bootstrapLogger is the pre-config singleton — the only safe logger
     // available if start() itself fails before the validated logger is created.
     bootstrapLogger.error('Failed to start:', err);
-    await bootstrapLogger.flush();
+    await bootstrapLogger.flush?.();
     process.exit(1);
 });
