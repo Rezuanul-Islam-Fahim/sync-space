@@ -1,4 +1,3 @@
-import dotenv from 'dotenv';
 import { envSchema } from './env.schema.js';
 
 let cachedConfig;
@@ -21,8 +20,6 @@ export const getConfig = ({ reload = false } = {}) => {
     if (cachedConfig && !reload) {
         return cachedConfig;
     }
-
-    dotenv.config();
 
     const { error, value: envVars } = envSchema.validate(process.env);
 
