@@ -1,7 +1,8 @@
-import { PASSWORD_MIN_LENGTH } from '../../../shared/constants/index.js';
+export {
+    EMAIL_REQUIRED,
+    EMAIL_INVALID,
+    PASSWORD_REQUIRED,
+    PASSWORD_LENGTH_ERROR,
+} from '../../../shared/constants/index.js';
 
 export const LOGIN_SUCCESSFUL = 'Login successful';
-export const EMAIL_REQUIRED = 'Email is required';
-export const EMAIL_INVALID = 'Email must be valid';
-export const PASSWORD_REQUIRED = 'Password is required';
-export const PASSWORD_LENGTH_ERROR = `Password must be at least ${PASSWORD_MIN_LENGTH} characters`;
