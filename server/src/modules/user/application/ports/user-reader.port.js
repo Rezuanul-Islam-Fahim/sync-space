@@ -3,14 +3,6 @@
  */
 export class UserReaderPort {
     /**
-     * @param {object} _criteria
-     * @returns {Promise<import('../../domain/user.entity.js').User | null>}
-     */
-    findOne(_criteria) {
-        throw new Error('Method not implemented');
-    }
-
-    /**
      * @param {string} _email
      * @returns {Promise<import('../../domain/user.entity.js').User | null>}
      */
