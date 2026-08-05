@@ -140,6 +140,6 @@ export class WinstonLoggerAdapter extends LoggerPort {
  * to maintain testability and ensure a consistent logger instance throughout the
  * application.
  */
-export const logger = new WinstonLoggerAdapter({
+export const bootstrapLogger = new WinstonLoggerAdapter({
     logLevel: process.env.LOG_LEVEL,
 });

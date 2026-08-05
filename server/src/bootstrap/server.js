@@ -1,7 +1,7 @@
 import {
     DatabaseConnectionAdapter,
     WinstonLoggerAdapter,
-    logger as bootstrapLogger,
+    bootstrapLogger,
 } from '../shared/infrastructure/index.js';
 import { getConfig } from '../config/index.js';
 import { composeDependencies } from './composition-root.js';

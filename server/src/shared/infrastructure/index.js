@@ -3,5 +3,5 @@ export { DatabaseConnectionAdapter } from './database/database-connection.adapte
 export { toRawObject } from './database/to-raw-object.util.js';
 export {
     WinstonLoggerAdapter,
-    logger,
+    bootstrapLogger,
 } from './logging/winston-logger.adapter.js';
