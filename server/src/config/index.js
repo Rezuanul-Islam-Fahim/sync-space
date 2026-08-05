@@ -27,7 +27,10 @@ export const getConfig = ({ reload = false } = {}) => {
         throw new Error(`Config validation error: ${error.message}`);
     }
 
-    const corsOrigins = envVars.CORS_ORIGINS;
+    const rawCorsOrigins = envVars.CORS_ORIGINS;
+    const corsOrigins = Array.isArray(rawCorsOrigins)
+        ? Object.freeze([...rawCorsOrigins])
+        : rawCorsOrigins;
 
     cachedConfig = Object.freeze({
         port: envVars.PORT,
@@ -45,6 +48,7 @@ export const getConfig = ({ reload = false } = {}) => {
         }),
         corsOrigins,
         corsCredentials: corsOrigins !== '*',
+
         jwt: Object.freeze({
             secret: envVars.JWT_SECRET,
             expiresIn: envVars.JWT_EXPIRES_IN,
