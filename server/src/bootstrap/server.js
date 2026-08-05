@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import './env-loader.js';
 import {
     DatabaseConnectionAdapter,
     WinstonLoggerAdapter,
@@ -6,8 +6,6 @@ import {
 } from '../shared/infrastructure/index.js';
 import { getConfig } from '../config/index.js';
 import { composeDependencies } from './composition-root.js';
-
-dotenv.config();
 
 const start = async () => {
     const config = getConfig();
