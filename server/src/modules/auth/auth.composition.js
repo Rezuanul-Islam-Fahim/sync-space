@@ -10,7 +10,10 @@ import {
     JwtTokenGenerator,
     JwtTokenVerifier,
 } from './infrastructure/security/jwt-token.adapter.js';
-import { AuthUserModel } from './infrastructure/database/auth-user.model.js';
+import {
+    AuthUserModel,
+    getAuthUserModel,
+} from './infrastructure/database/auth-user.model.js';
 import { AuthUserReaderAdapter } from './infrastructure/adapters/auth-user-reader.adapter.js';
 import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-writer.adapter.js';
 
@@ -21,6 +24,7 @@ import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-write
  *   logger?: import('../../shared/ports/index.js').LoggerPort,
  *   authConfig: { saltRounds: number },
  *   jwtConfig: { secret: string, expiresIn: string, refreshSecret: string, refreshExpiresIn: string },
+ *   connection?: import('mongoose').Connection,
  *   authUserModel?: any
  * }} deps
  * @returns {{
@@ -32,7 +36,8 @@ export const composeAuthModule = ({
     logger,
     authConfig,
     jwtConfig,
-    authUserModel = AuthUserModel,
+    connection,
+    authUserModel = connection ? getAuthUserModel(connection) : AuthUserModel,
 }) => {
     const tokenGenerator = new JwtTokenGenerator(jwtConfig);
     const tokenVerifier = new JwtTokenVerifier(jwtConfig);

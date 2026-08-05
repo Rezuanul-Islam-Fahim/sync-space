@@ -9,18 +9,20 @@ import { composeRegistrationModule } from '../orchestration/registration/index.j
  *
  * @param {{
  *   logger: import('../shared/ports/index.js').LoggerPort,
- *   config: object
+ *   config: object,
+ *   connection?: import('mongoose').Connection
  * }} deps
  */
-export const composeDependencies = ({ logger, config }) => {
+export const composeDependencies = ({ logger, config, connection }) => {
     // ── User bounded context ──────────────────────────────────────────────────
-    const userModule = composeUserModule({ logger });
+    const userModule = composeUserModule({ logger, connection });
 
     // ── Auth bounded context ──────────────────────────────────────────────────
     const authModule = composeAuthModule({
         logger,
         authConfig: config.auth,
         jwtConfig: config.jwt,
+        connection,
     });
 
     // ── Middleware ────────────────────────────────────────────────────────────

@@ -35,8 +35,11 @@ const transform = (doc, ret) => {
 authUserSchema.set('toJSON', { transform });
 authUserSchema.set('toObject', { transform });
 
-export const AuthUserModel = mongoose.model(
-    'AuthUser',
-    authUserSchema,
-    'credentials'
-);
+export const getAuthUserModel = (connection = mongoose) => {
+    return (
+        connection.models?.AuthUser ||
+        connection.model('AuthUser', authUserSchema, 'credentials')
+    );
+};
+
+export const AuthUserModel = getAuthUserModel(mongoose);

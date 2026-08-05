@@ -84,4 +84,10 @@ const transform = (doc, ret) => {
 userSchema.set('toJSON', { transform });
 userSchema.set('toObject', { transform });
 
-export const UserModel = mongoose.model('User', userSchema, 'users');
+export const getUserModel = (connection = mongoose) => {
+    return (
+        connection.models?.User || connection.model('User', userSchema, 'users')
+    );
+};
+
+export const UserModel = getUserModel(mongoose);

@@ -21,9 +21,9 @@ const start = async () => {
         dbConfig: config.db,
     });
 
-    await dbConnection.connect();
+    const connection = await dbConnection.connect();
 
-    const app = composeDependencies({ logger, config });
+    const app = composeDependencies({ logger, config, connection });
 
     const server = app.listen(PORT, () => {
         logger.info(`Server started on port: ${PORT}`);

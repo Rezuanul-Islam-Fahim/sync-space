@@ -1,6 +1,9 @@
 import { UserFacade } from './application/user.facade.js';
 import { CreateUserUseCase } from './application/use-cases/create-user.usecase.js';
-import { UserModel } from './infrastructure/database/user.model.js';
+import {
+    UserModel,
+    getUserModel,
+} from './infrastructure/database/user.model.js';
 import { UserWriterAdapter } from './infrastructure/adapters/user-writer.adapter.js';
 import { UserReaderAdapter } from './infrastructure/adapters/user-reader.adapter.js';
 
@@ -9,6 +12,7 @@ import { UserReaderAdapter } from './infrastructure/adapters/user-reader.adapter
  *
  * @param {{
  *   logger?: import('../../shared/ports/index.js').LoggerPort,
+ *   connection?: import('mongoose').Connection,
  *   userModel?: any
  * }} deps
  * @returns {{
@@ -16,7 +20,11 @@ import { UserReaderAdapter } from './infrastructure/adapters/user-reader.adapter
  *   userService: import('./application/user.facade.js').UserFacade
  * }}
  */
-export const composeUserModule = ({ logger, userModel = UserModel }) => {
+export const composeUserModule = ({
+    logger,
+    connection,
+    userModel = connection ? getUserModel(connection) : UserModel,
+}) => {
     const userWriter = new UserWriterAdapter({ userModel });
     const userReader = new UserReaderAdapter({ userModel });
 
