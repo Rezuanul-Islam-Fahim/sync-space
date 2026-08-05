@@ -27,7 +27,7 @@ export class UserMapper {
     static toPersistence(domainUser) {
         if (!domainUser) return null;
 
-        return {
+        const persistenceData = {
             authId: domainUser.authId,
             username: domainUser.username,
             displayName: domainUser.displayName,
@@ -39,5 +39,11 @@ export class UserMapper {
             status: domainUser.status,
             lastOnline: domainUser.lastOnline,
         };
+
+        if (domainUser.id) {
+            persistenceData._id = domainUser.id;
+        }
+
+        return persistenceData;
     }
 }

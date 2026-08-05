@@ -20,11 +20,17 @@ export class AuthUserMapper {
     static toPersistence(domainUser) {
         if (!domainUser) return null;
 
-        // Maps only the fields stored in the `credentials` collection.
-        return {
+        // Maps fields stored in the `credentials` collection.
+        const persistenceData = {
             email: domainUser.email,
             password: domainUser.password,
             isVerified: domainUser.isVerified,
         };
+
+        if (domainUser.id) {
+            persistenceData._id = domainUser.id;
+        }
+
+        return persistenceData;
     }
 }
