@@ -11,7 +11,9 @@ import {
 
 morgan.token('id', req => req.id || '-');
 
-const morganFormat =
+const devMorganFormat =
+    ':method :url :status :response-time ms - :res[content-length] [reqId: :id]';
+const prodMorganFormat =
     ':remote-addr - :remote-user [:date[clf]] [reqId: :id] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"';
 
 export const createApp = ({
@@ -21,6 +23,7 @@ export const createApp = ({
     corsCredentials,
     bodyLimit = '10kb',
     trustProxy = false,
+    env = 'development',
     exposeStack = false,
 }) => {
     const app = express();
@@ -34,8 +37,12 @@ export const createApp = ({
     app.use(hpp());
     app.use(express.json({ limit: bodyLimit }));
     app.use(express.urlencoded({ extended: false, limit: bodyLimit }));
+
+    const selectedMorganFormat =
+        env === 'development' ? devMorganFormat : prodMorganFormat;
+
     app.use(
-        morgan(morganFormat, {
+        morgan(selectedMorganFormat, {
             stream: {
                 write: message => logger.http(message.trim()),
             },
