@@ -29,7 +29,12 @@ const start = async () => {
         logger.info(`Server started on port: ${PORT}`);
     });
 
+    let isShuttingDown = false;
+
     const shutdown = (signal, exitCode = 0) => {
+        if (isShuttingDown) return;
+        isShuttingDown = true;
+
         logger.info(`\n'${signal}' received. Shutting down gracefully...`);
 
         // Stop accepting new connections
@@ -45,11 +50,23 @@ const start = async () => {
             }
         });
 
-        setTimeout(async () => {
+        // Close idle HTTP keep-alive connections so server.close() doesn't hang
+        if (typeof server.closeIdleConnections === 'function') {
+            server.closeIdleConnections();
+        }
+
+        const forceTimeout = setTimeout(async () => {
             logger.error('Forced shutdown due to timeout.');
+            if (typeof server.closeAllConnections === 'function') {
+                server.closeAllConnections();
+            }
             await logger.flush?.();
             process.exit(1);
-        }, 30000);
+        }, 10000);
+
+        if (typeof forceTimeout.unref === 'function') {
+            forceTimeout.unref();
+        }
     };
 
     process.on('SIGTERM', () => shutdown('SIGTERM', 0));
