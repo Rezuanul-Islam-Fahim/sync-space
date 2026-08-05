@@ -1,4 +1,4 @@
-export { AppError, ErrorCode, getHttpStatusForErrorCode } from './app.error.js';
+export { AppError, ErrorCode } from './app.error.js';
 
 export { BadRequestError } from './bad-request.error.js';
 export { UnauthorizedError } from './unauthorized.error.js';

@@ -1,6 +1,34 @@
 import { sendErrorResponse } from '../util/index.js';
-import { getHttpStatusForErrorCode, ErrorCode } from '../error/index.js';
-import { INTERNAL_SERVER_ERROR, DEFAULT_ERROR } from '../constants/index.js';
+import { ErrorCode } from '../error/index.js';
+import {
+    BAD_REQUEST,
+    UNAUTHORIZED,
+    FORBIDDEN,
+    NOT_FOUND,
+    CONFLICT,
+    INTERNAL_SERVER_ERROR,
+    DEFAULT_ERROR,
+} from '../constants/index.js';
+
+// Dynamic registry mapping error code strings to HTTP status codes
+const errorCodeRegistry = new Map([
+    [ErrorCode.INVALID_INPUT, BAD_REQUEST],
+    [ErrorCode.UNAUTHENTICATED, UNAUTHORIZED],
+    [ErrorCode.PERMISSION_DENIED, FORBIDDEN],
+    [ErrorCode.RESOURCE_NOT_FOUND, NOT_FOUND],
+    [ErrorCode.ALREADY_EXISTS, CONFLICT],
+    [ErrorCode.INTERNAL_ERROR, INTERNAL_SERVER_ERROR],
+]);
+
+/**
+ * Resolves the HTTP status code for a given error code.
+ *
+ * @param {string} code
+ * @returns {number}
+ */
+export const getHttpStatusForErrorCode = code => {
+    return errorCodeRegistry.get(code) || INTERNAL_SERVER_ERROR;
+};
 
 // ── Main error handler ────────────────────────────────────────────────────────
 
