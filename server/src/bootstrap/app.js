@@ -20,9 +20,14 @@ export const createApp = ({
     corsOrigins,
     corsCredentials,
     bodyLimit = '10kb',
+    trustProxy = false,
     exposeStack = false,
 }) => {
     const app = express();
+
+    if (trustProxy) {
+        app.set('trust proxy', trustProxy);
+    }
 
     app.use(requestIdAttach);
     app.use(helmet());

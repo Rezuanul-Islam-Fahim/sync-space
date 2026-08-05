@@ -20,6 +20,9 @@ export const envSchema = Joi.object({
     CORS_ORIGINS: Joi.string()
         .default('*')
         .custom(corsOriginsValidator, 'CORS origins validation and parsing'),
+    TRUST_PROXY: Joi.boolean()
+        .default(false)
+        .description('Trust proxy headers (X-Forwarded-For)'),
     JWT_SECRET: Joi.string().required().description('JWT secret key'),
     JWT_EXPIRES_IN: Joi.string()
         .default('15m')

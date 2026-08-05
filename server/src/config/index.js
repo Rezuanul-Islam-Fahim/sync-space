@@ -48,7 +48,7 @@ export const getConfig = ({ reload = false } = {}) => {
         }),
         corsOrigins,
         corsCredentials: corsOrigins !== '*',
-
+        trustProxy: envVars.TRUST_PROXY,
         jwt: Object.freeze({
             secret: envVars.JWT_SECRET,
             expiresIn: envVars.JWT_EXPIRES_IN,
