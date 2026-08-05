@@ -54,6 +54,7 @@ export class AppError extends Error {
         statusCode = undefined
     ) {
         super(message);
+        this.name = this.constructor.name;
         this.errorCode = errorCode;
         this.errors = errors;
         this.statusCode = statusCode || getHttpStatusForErrorCode(errorCode);
