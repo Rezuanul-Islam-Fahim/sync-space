@@ -35,16 +35,6 @@ export class UserFacade {
     }
 
     /**
-     * Finds a user by email.
-     *
-     * @param {string} email
-     * @returns {Promise<import('../domain/user.entity.js').User | null>}
-     */
-    findByEmail(email) {
-        return this.userReader.findByEmail(email);
-    }
-
-    /**
      * Finds a user by profile ID.
      *
      * @param {string} id

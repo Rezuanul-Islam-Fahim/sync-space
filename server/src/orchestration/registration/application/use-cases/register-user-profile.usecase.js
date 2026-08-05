@@ -17,7 +17,6 @@ export class RegisterUserProfileUseCase {
             // 2. Create User Profile
             savedUserProfile = await this.userService.createUser({
                 authId: savedAuthUser.id,
-                email: savedAuthUser.email,
                 username: data.username,
                 displayName: data.displayName ?? null,
                 dateOfBirth: data.dateOfBirth,

@@ -11,6 +11,4 @@ export const BANNER_DEFAULT_COLOR = '#5865F2';
 export const USER_NOT_FOUND = 'User not found';
 export const PROFILE_ALREADY_EXISTS = 'Profile already exists';
 export const USERNAME_ALREADY_TAKEN = 'Username is already taken';
-export const EMAIL_ALREADY_REGISTERED =
-    'User with this email is already registered';
 export const INVALID_SEARCH_CRITERIA = by => `Invalid search criteria: "${by}"`;

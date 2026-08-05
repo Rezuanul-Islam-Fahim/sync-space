@@ -4,7 +4,6 @@ import { UserMapper } from '../mappers/user.mapper.js';
 import {
     PROFILE_ALREADY_EXISTS,
     USERNAME_ALREADY_TAKEN,
-    EMAIL_ALREADY_REGISTERED,
 } from '../../domain/user.constant.js';
 
 const parseDuplicateKeyError = err => {
@@ -18,9 +17,6 @@ const parseDuplicateKeyError = err => {
         message.includes('username')
     ) {
         return USERNAME_ALREADY_TAKEN;
-    }
-    if (keyPattern.email || keyValue.email || message.includes('email')) {
-        return EMAIL_ALREADY_REGISTERED;
     }
     if (keyPattern.authId || keyValue.authId || message.includes('authId')) {
         return PROFILE_ALREADY_EXISTS;

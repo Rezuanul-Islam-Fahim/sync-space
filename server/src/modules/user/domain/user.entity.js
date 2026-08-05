@@ -11,7 +11,6 @@ export class User {
     constructor({
         id,
         authId,
-        email,
         username,
         displayName = null,
         avatar = null,
@@ -26,7 +25,6 @@ export class User {
     }) {
         this.id = id;
         this.authId = authId;
-        this.email = email;
         this.username = username;
         this.displayName = displayName;
         this.avatar = avatar;

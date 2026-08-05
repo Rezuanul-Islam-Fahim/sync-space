@@ -10,7 +10,6 @@ export class UserMapper {
         return new User({
             id: (document._id ?? document.id)?.toString(),
             authId: document.authId?.toString(),
-            email: document.email,
             username: document.username,
             displayName: document.displayName,
             avatar: document.avatar,
@@ -30,7 +29,6 @@ export class UserMapper {
 
         return {
             authId: domainUser.authId,
-            email: domainUser.email,
             username: domainUser.username,
             displayName: domainUser.displayName,
             avatar: domainUser.avatar,
