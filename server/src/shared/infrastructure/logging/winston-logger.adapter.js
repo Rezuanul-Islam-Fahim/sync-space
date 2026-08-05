@@ -89,18 +89,48 @@ export class WinstonLoggerAdapter extends AppLoggerPort {
         };
     }
 
-    async flush() {
+    /**
+     * Flushes buffered log entries to underlying transports during graceful shutdown.
+     *
+     * @param {number} [timeoutMs=2000] - Maximum fallback wait time in milliseconds
+     * @returns {Promise<void>}
+     */
+    async flush(timeoutMs = 2000) {
         return new Promise(resolve => {
-            let finished = false;
-            const done = () => {
-                if (!finished) {
-                    finished = true;
-                    resolve();
+            let timerId = null;
+
+            const cleanup = () => {
+                if (timerId) {
+                    clearTimeout(timerId);
+                    timerId = null;
                 }
+                this._logger.removeListener('finish', onFinish);
+                this._logger.removeListener('error', onError);
             };
-            this._logger.on('finish', done);
+
+            const onFinish = () => {
+                cleanup();
+                resolve();
+            };
+
+            const onError = () => {
+                cleanup();
+                resolve();
+            };
+
+            this._logger.once('finish', onFinish);
+            this._logger.once('error', onError);
+
+            timerId = setTimeout(() => {
+                cleanup();
+                resolve();
+            }, timeoutMs);
+
+            if (timerId && typeof timerId.unref === 'function') {
+                timerId.unref();
+            }
+
             this._logger.end();
-            setTimeout(done, 1000);
         });
     }
 }
