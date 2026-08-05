@@ -6,8 +6,8 @@ import { RegistrationResponseDto } from './dtos/registration-response.dto.js';
 import { USER_CREATED } from './registration.messages.js';
 
 export class RegistrationController {
-    constructor({ registerUserProfileUseCase, logger }) {
-        this.registerUserProfileUseCase = registerUserProfileUseCase;
+    constructor({ registrationService, logger }) {
+        this.registrationService = registrationService;
         this.logger = logger;
     }
 
@@ -20,7 +20,7 @@ export class RegistrationController {
         });
 
         const registrationResult =
-            await this.registerUserProfileUseCase.execute(requestDto);
+            await this.registrationService.registerUser(requestDto);
 
         const responseDto = RegistrationResponseDto.from(registrationResult);
 

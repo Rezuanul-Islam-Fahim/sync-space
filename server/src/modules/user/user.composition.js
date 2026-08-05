@@ -11,6 +11,7 @@ import { UserWriterAdapter } from './infrastructure/adapters/user-writer.adapter
  *   userModel?: any
  * }} deps
  * @returns {{
+ *   router: import('express').Router | null,
  *   userService: import('./application/user.facade.js').UserFacade
  * }}
  */
@@ -26,6 +27,7 @@ export const composeUserModule = ({ logger, userModel = UserModel }) => {
     });
 
     return {
+        router: null,
         userService,
     };
 };
