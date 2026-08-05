@@ -6,13 +6,16 @@ import { UserWriterAdapter } from './infrastructure/adapters/user-writer.adapter
 /**
  * Composes the user module's dependencies.
  *
- * @param {{ logger?: import('../../shared/ports/index.js').LoggerPort }} deps
+ * @param {{
+ *   logger?: import('../../shared/ports/index.js').LoggerPort,
+ *   userModel?: any
+ * }} deps
  * @returns {{
  *   userService: import('./application/user.facade.js').UserFacade
  * }}
  */
-export const composeUserModule = ({ logger }) => {
-    const userWriter = new UserWriterAdapter({ userModel: UserModel });
+export const composeUserModule = ({ logger, userModel = UserModel }) => {
+    const userWriter = new UserWriterAdapter({ userModel });
     const createUserUseCase = new CreateUserUseCase({
         userWriter,
         logger,

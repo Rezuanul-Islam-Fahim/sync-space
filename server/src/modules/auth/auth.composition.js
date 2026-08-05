@@ -20,21 +20,27 @@ import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-write
  * @param {{
  *   logger?: import('../../shared/ports/index.js').LoggerPort,
  *   authConfig: { saltRounds: number },
- *   jwtConfig: { secret: string, expiresIn: string, refreshSecret: string, refreshExpiresIn: string }
+ *   jwtConfig: { secret: string, expiresIn: string, refreshSecret: string, refreshExpiresIn: string },
+ *   authUserModel?: any
  * }} deps
  * @returns {{
  *   router: import('express').Router,
  *   authService: import('./application/auth.facade.js').AuthFacade
  * }}
  */
-export const composeAuthModule = ({ logger, authConfig, jwtConfig }) => {
+export const composeAuthModule = ({
+    logger,
+    authConfig,
+    jwtConfig,
+    authUserModel = AuthUserModel,
+}) => {
     const tokenGenerator = new JwtTokenGenerator(jwtConfig);
     const tokenVerifier = new JwtTokenVerifier(jwtConfig);
     const authUserReader = new AuthUserReaderAdapter({
-        authUserModel: AuthUserModel,
+        authUserModel,
     });
     const authUserWriter = new AuthUserWriterAdapter({
-        authUserModel: AuthUserModel,
+        authUserModel,
     });
 
     const passwordHasher = new BcryptPasswordHasher({
