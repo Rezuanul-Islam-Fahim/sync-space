@@ -4,10 +4,9 @@ import { TOKEN_VERIFICATION_FAILED } from '../auth-user.constant.js';
  * Thrown by token-verification infrastructure adapters when a token is
  * invalid, expired, or cannot be verified.
  *
- * This is an infrastructure-layer error whose contract is defined by the
- * `TokenVerifierPort`. Presentation/application-layer consumers (e.g. middleware) are
- * responsible for catching it and translating it into the appropriate
- * `AppError` — keeping infrastructure isolated from application error types.
+ * This error is handled and translated at the application layer boundary
+ * (`AuthFacade`) into an appropriate `AppError` — keeping presentation layer
+ * (middleware) decoupled from module internal error hierarchies.
  */
 export class TokenVerificationError extends Error {
     constructor(message = TOKEN_VERIFICATION_FAILED) {

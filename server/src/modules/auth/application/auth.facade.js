@@ -1,3 +1,7 @@
+import { AppError, ErrorCode } from '../../../shared/error/index.js';
+import { INVALID_TOKEN } from '../domain/auth-user.constant.js';
+import { TokenVerificationError } from '../domain/errors/token-verification.error.js';
+
 /**
  * Public API Facade for the Auth Bounded Context.
  * Acts as the single entry point for cross-module authentication & credential operations.
@@ -58,9 +62,17 @@ export class AuthFacade {
      *
      * @param {string} token
      * @returns {{ id: string, email: string }}
+     * @throws {AppError} if token is invalid or verification fails
      */
     verifyAccessToken(token) {
-        const decoded = this.tokenVerifier.verifyAccessToken(token);
-        return { id: decoded.sub, email: decoded.email };
+        try {
+            const decoded = this.tokenVerifier.verifyAccessToken(token);
+            return { id: decoded.sub, email: decoded.email };
+        } catch (error) {
+            if (error instanceof TokenVerificationError) {
+                throw new AppError(INVALID_TOKEN, ErrorCode.UNAUTHENTICATED);
+            }
+            throw error;
+        }
     }
 }
