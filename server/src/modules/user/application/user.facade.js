@@ -6,7 +6,7 @@ export class UserFacade {
     /**
      * @param {{
      *   createUserUseCase: import('./use-cases/create-user.usecase.js').CreateUserUseCase,
-     *   userReader?: import('./ports/user-reader.port.js').UserReaderPort
+     *   userReader: import('./ports/user-reader.port.js').UserReaderPort
      * }} deps
      */
     constructor({ createUserUseCase, userReader }) {
@@ -31,7 +31,7 @@ export class UserFacade {
      * @returns {Promise<import('../domain/user.entity.js').User | null>}
      */
     findByUsername(username) {
-        return this.userReader?.findByUsername(username);
+        return this.userReader.findByUsername(username);
     }
 
     /**
@@ -41,7 +41,7 @@ export class UserFacade {
      * @returns {Promise<import('../domain/user.entity.js').User | null>}
      */
     findByEmail(email) {
-        return this.userReader?.findByEmail(email);
+        return this.userReader.findByEmail(email);
     }
 
     /**
@@ -51,6 +51,16 @@ export class UserFacade {
      * @returns {Promise<import('../domain/user.entity.js').User | null>}
      */
     findById(id) {
-        return this.userReader?.findById(id);
+        return this.userReader.findById(id);
+    }
+
+    /**
+     * Finds a user by auth credential ID.
+     *
+     * @param {string} authId
+     * @returns {Promise<import('../domain/user.entity.js').User | null>}
+     */
+    findByAuthId(authId) {
+        return this.userReader.findByAuthId(authId);
     }
 }

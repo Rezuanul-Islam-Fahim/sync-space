@@ -2,6 +2,7 @@ import { UserFacade } from './application/user.facade.js';
 import { CreateUserUseCase } from './application/use-cases/create-user.usecase.js';
 import { UserModel } from './infrastructure/database/user.model.js';
 import { UserWriterAdapter } from './infrastructure/adapters/user-writer.adapter.js';
+import { UserReaderAdapter } from './infrastructure/adapters/user-reader.adapter.js';
 
 /**
  * Composes the user module's dependencies.
@@ -17,6 +18,8 @@ import { UserWriterAdapter } from './infrastructure/adapters/user-writer.adapter
  */
 export const composeUserModule = ({ logger, userModel = UserModel }) => {
     const userWriter = new UserWriterAdapter({ userModel });
+    const userReader = new UserReaderAdapter({ userModel });
+
     const createUserUseCase = new CreateUserUseCase({
         userWriter,
         logger,
@@ -24,6 +27,7 @@ export const composeUserModule = ({ logger, userModel = UserModel }) => {
 
     const userService = new UserFacade({
         createUserUseCase,
+        userReader,
     });
 
     return {
