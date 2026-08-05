@@ -1,5 +1,8 @@
 import { UserFacade } from './application/user.facade.js';
 import { CreateUserUseCase } from './application/use-cases/create-user.usecase.js';
+import { GetUserByUsernameUseCase } from './application/use-cases/get-user-by-username.usecase.js';
+import { GetUserByIdUseCase } from './application/use-cases/get-user-by-id.usecase.js';
+import { GetUserByAuthIdUseCase } from './application/use-cases/get-user-by-auth-id.usecase.js';
 import { getUserModel } from './infrastructure/database/user.model.js';
 import { UserWriterAdapter } from './infrastructure/adapters/user-writer.adapter.js';
 import { UserReaderAdapter } from './infrastructure/adapters/user-reader.adapter.js';
@@ -35,9 +38,26 @@ export const composeUserModule = ({
         logger,
     });
 
+    const getUserByUsernameUseCase = new GetUserByUsernameUseCase({
+        userReader,
+        logger,
+    });
+
+    const getUserByIdUseCase = new GetUserByIdUseCase({
+        userReader,
+        logger,
+    });
+
+    const getUserByAuthIdUseCase = new GetUserByAuthIdUseCase({
+        userReader,
+        logger,
+    });
+
     const userService = new UserFacade({
         createUserUseCase,
-        userReader,
+        getUserByUsernameUseCase,
+        getUserByIdUseCase,
+        getUserByAuthIdUseCase,
     });
 
     return {

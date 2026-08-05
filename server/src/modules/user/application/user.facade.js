@@ -6,12 +6,21 @@ export class UserFacade {
     /**
      * @param {{
      *   createUserUseCase: import('./use-cases/create-user.usecase.js').CreateUserUseCase,
-     *   userReader: import('./ports/user-reader.port.js').UserReaderPort
+     *   getUserByUsernameUseCase: import('./use-cases/get-user-by-username.usecase.js').GetUserByUsernameUseCase,
+     *   getUserByIdUseCase: import('./use-cases/get-user-by-id.usecase.js').GetUserByIdUseCase,
+     *   getUserByAuthIdUseCase: import('./use-cases/get-user-by-auth-id.usecase.js').GetUserByAuthIdUseCase
      * }} deps
      */
-    constructor({ createUserUseCase, userReader }) {
+    constructor({
+        createUserUseCase,
+        getUserByUsernameUseCase,
+        getUserByIdUseCase,
+        getUserByAuthIdUseCase,
+    }) {
         this.createUserUseCase = createUserUseCase;
-        this.userReader = userReader;
+        this.getUserByUsernameUseCase = getUserByUsernameUseCase;
+        this.getUserByIdUseCase = getUserByIdUseCase;
+        this.getUserByAuthIdUseCase = getUserByAuthIdUseCase;
     }
 
     /**
@@ -31,7 +40,7 @@ export class UserFacade {
      * @returns {Promise<import('../domain/user.entity.js').User | null>}
      */
     findByUsername(username) {
-        return this.userReader.findByUsername(username);
+        return this.getUserByUsernameUseCase.execute(username);
     }
 
     /**
@@ -41,7 +50,7 @@ export class UserFacade {
      * @returns {Promise<import('../domain/user.entity.js').User | null>}
      */
     findById(id) {
-        return this.userReader.findById(id);
+        return this.getUserByIdUseCase.execute(id);
     }
 
     /**
@@ -51,6 +60,6 @@ export class UserFacade {
      * @returns {Promise<import('../domain/user.entity.js').User | null>}
      */
     findByAuthId(authId) {
-        return this.userReader.findByAuthId(authId);
+        return this.getUserByAuthIdUseCase.execute(authId);
     }
 }
