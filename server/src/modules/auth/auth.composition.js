@@ -45,7 +45,6 @@ export const composeAuthModule = ({ logger, config }) => {
     });
 
     const registerUserUseCase = new RegisterUserUseCase({
-        authUserReader,
         authUserWriter,
         passwordHasher,
         logger,

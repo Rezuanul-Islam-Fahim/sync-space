@@ -1,24 +1,13 @@
-import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 import { AuthUser } from '../../domain/auth-user.entity.js';
-import { EMAIL_ALREADY_REGISTERED } from '../../domain/auth-user.constant.js';
 
 export class RegisterUserUseCase {
-    constructor({ authUserReader, authUserWriter, passwordHasher, logger }) {
-        this.authUserReader = authUserReader;
+    constructor({ authUserWriter, passwordHasher, logger }) {
         this.authUserWriter = authUserWriter;
         this.passwordHasher = passwordHasher;
         this.logger = logger;
     }
 
     async execute(data) {
-        const existingEmail = await this.authUserReader.findByEmail(data.email);
-        if (existingEmail) {
-            throw new AppError(
-                EMAIL_ALREADY_REGISTERED,
-                ErrorCode.ALREADY_EXISTS
-            );
-        }
-
         const hashedPassword = await this.passwordHasher.hash(data.password);
 
         const authUser = new AuthUser({
