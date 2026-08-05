@@ -19,10 +19,10 @@ export class RegistrationController {
             email: requestDto.email,
         });
 
-        const savedAuthUser =
+        const registrationResult =
             await this.registerUserProfileUseCase.execute(requestDto);
 
-        const responseDto = RegistrationResponseDto.from(savedAuthUser);
+        const responseDto = RegistrationResponseDto.from(registrationResult);
 
         ApiResponse.success({
             res,

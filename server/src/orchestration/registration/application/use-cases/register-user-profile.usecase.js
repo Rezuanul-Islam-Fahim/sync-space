@@ -12,9 +12,10 @@ export class RegisterUserProfileUseCase {
             password: data.password,
         });
 
+        let savedUserProfile;
         try {
             // 2. Create User Profile
-            await this.userService.createUser({
+            savedUserProfile = await this.userService.createUser({
                 authId: savedAuthUser.id,
                 email: savedAuthUser.email,
                 username: data.username,
@@ -46,10 +47,14 @@ export class RegisterUserProfileUseCase {
             'User profile registration saga completed successfully',
             {
                 authUserId: savedAuthUser.id,
+                userId: savedUserProfile.id,
                 email: savedAuthUser.email,
             }
         );
 
-        return savedAuthUser;
+        return {
+            authUser: savedAuthUser,
+            userProfile: savedUserProfile,
+        };
     }
 }
