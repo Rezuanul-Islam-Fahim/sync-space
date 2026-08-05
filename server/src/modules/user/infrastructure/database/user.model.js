@@ -25,9 +25,10 @@ import {
 const userSchema = new mongoose.Schema(
     {
         authId: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: String,
             required: true,
             unique: true,
+            index: true,
         },
         email: {
             type: String,
