@@ -81,9 +81,18 @@ const start = async () => {
         logger.error('Unhandled Rejection:', reason);
         shutdown('unhandledRejection', 1);
     });
-    process.on('uncaughtException', err => {
-        logger.error('Uncaught Exception:', err);
-        shutdown('uncaughtException', 1);
+    process.on('uncaughtException', async err => {
+        logger.error('Uncaught Exception — exiting process immediately:', err);
+        try {
+            await logger.flush?.();
+        } catch (flushErr) {
+            bootstrapLogger.error(
+                'Error flushing logger on uncaughtException:',
+                flushErr
+            );
+        } finally {
+            process.exit(1);
+        }
     });
 };
 
