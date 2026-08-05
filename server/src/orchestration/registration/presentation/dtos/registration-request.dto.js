@@ -4,14 +4,7 @@ export class RegistrationRequestDto {
         this.username = data.username;
         this.displayName = data.displayName;
         this.dateOfBirth = data.dateOfBirth;
-
-        // Hide `password` from enumeration (JSON.stringify, Object.keys, console/logger iteration)
-        Object.defineProperty(this, 'password', {
-            value: data.password,
-            enumerable: false,
-            writable: false,
-            configurable: false,
-        });
+        this.password = data.password;
 
         Object.freeze(this);
     }
