@@ -25,12 +25,12 @@ export const envSchema = Joi.object({
         .description('Trust proxy headers (X-Forwarded-For)'),
     JWT_SECRET: Joi.string().required().description('JWT secret key'),
     JWT_EXPIRES_IN: Joi.string()
-        .default('15m')
+        .required()
         .description('JWT token expiration time'),
     JWT_REFRESH_SECRET: Joi.string()
         .required()
         .description('JWT refresh secret key'),
     JWT_REFRESH_EXPIRES_IN: Joi.string()
-        .default('7d')
+        .required()
         .description('JWT refresh token expiration time'),
 }).unknown();
