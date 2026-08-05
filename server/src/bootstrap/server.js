@@ -59,12 +59,17 @@ const start = async () => {
         }
 
         const forceTimeout = setTimeout(async () => {
-            logger.error('Forced shutdown due to timeout.');
-            if (typeof server.closeAllConnections === 'function') {
-                server.closeAllConnections();
+            try {
+                logger.error('Forced shutdown due to timeout.');
+                if (typeof server.closeAllConnections === 'function') {
+                    server.closeAllConnections();
+                }
+                await logger.flush?.();
+            } catch (err) {
+                bootstrapLogger.error('Error during forced shutdown:', err);
+            } finally {
+                process.exit(1);
             }
-            await logger.flush?.();
-            process.exit(1);
         }, 10000);
 
         if (typeof forceTimeout.unref === 'function') {
