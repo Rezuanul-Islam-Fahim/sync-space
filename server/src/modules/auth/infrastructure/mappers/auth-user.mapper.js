@@ -1,5 +1,5 @@
 import { AuthUser } from '../../domain/auth-user.entity.js';
-import { toRawObject } from '../../../../shared/util/index.js';
+import { toRawObject } from '../../../../shared/infrastructure/index.js';
 
 export class AuthUserMapper {
     static toDomain(raw) {

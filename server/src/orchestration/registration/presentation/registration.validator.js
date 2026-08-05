@@ -2,11 +2,12 @@ import { body } from 'express-validator';
 import {
     createEmailValidator,
     createPasswordValidator,
-} from '../../../shared/util/index.js';
+} from '../../../shared/middleware/index.js';
 import {
     USERNAME_MIN_LENGTH,
     USERNAME_MAX_LENGTH,
 } from '../../../shared/constants/index.js';
+
 import {
     EMAIL_REQUIRED,
     EMAIL_INVALID,

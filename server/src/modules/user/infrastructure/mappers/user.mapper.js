@@ -1,5 +1,5 @@
 import { User } from '../../domain/user.entity.js';
-import { toRawObject } from '../../../../shared/util/index.js';
+import { toRawObject } from '../../../../shared/infrastructure/index.js';
 
 export class UserMapper {
     static toDomain(raw) {

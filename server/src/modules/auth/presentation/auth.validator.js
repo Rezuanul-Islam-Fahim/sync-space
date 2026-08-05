@@ -1,7 +1,8 @@
 import {
     createEmailValidator,
     createPasswordValidator,
-} from '../../../shared/util/index.js';
+} from '../../../shared/middleware/index.js';
+
 import {
     EMAIL_REQUIRED,
     EMAIL_INVALID,
