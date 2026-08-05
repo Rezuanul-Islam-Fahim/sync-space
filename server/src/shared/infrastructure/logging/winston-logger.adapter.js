@@ -23,9 +23,10 @@ winston.addColors(colors);
 const consoleFormat = winston.format.combine(
     winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
     winston.format.colorize({ all: true }),
-    winston.format.printf(
-        info => `${info.timestamp} (${info.level}) ${info.message}`
-    )
+    winston.format.printf(info => {
+        const reqIdStr = info.requestId ? ` [reqId: ${info.requestId}]` : '';
+        return `${info.timestamp} (${info.level})${reqIdStr} ${info.message}`;
+    })
 );
 
 const fileFormat = winston.format.combine(

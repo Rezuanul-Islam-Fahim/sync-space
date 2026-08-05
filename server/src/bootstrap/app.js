@@ -9,6 +9,10 @@ import {
     unknownRoutesHandler,
 } from '../shared/middleware/index.js';
 
+morgan.token('id', req => req.id || req.headers['x-request-id'] || '-');
+const morganFormat =
+    ':remote-addr - :remote-user [:date[clf]] [reqId: :id] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"';
+
 export const createApp = ({
     router,
     logger,
@@ -24,7 +28,7 @@ export const createApp = ({
     app.use(hpp());
     app.use(express.json({ limit: bodyLimit }));
     app.use(express.urlencoded({ extended: false, limit: bodyLimit }));
-    app.use(morgan('combined', { stream: logger.stream }));
+    app.use(morgan(morganFormat, { stream: logger.stream }));
     app.use(
         cors({
             origin: corsOrigins,
