@@ -24,6 +24,10 @@ export const envSchema = Joi.object({
     TRUST_PROXY: Joi.boolean()
         .default(false)
         .description('Trust proxy headers (X-Forwarded-For)'),
+    JWT_ALGORITHM: Joi.string()
+        .valid('HS256', 'HS384', 'HS512', 'RS256', 'ES256')
+        .default('HS256')
+        .description('JWT signing algorithm'),
     JWT_SECRET: Joi.string()
         .min(32)
         .required()

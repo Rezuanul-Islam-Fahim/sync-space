@@ -8,12 +8,19 @@ const signAsync = promisify(jwt.sign);
 const verifyAsync = promisify(jwt.verify);
 
 export class JwtTokenGenerator extends TokenGeneratorPort {
-    constructor({ secret, expiresIn, refreshSecret, refreshExpiresIn }) {
+    constructor({
+        secret,
+        expiresIn,
+        refreshSecret,
+        refreshExpiresIn,
+        algorithm = 'HS256',
+    }) {
         super();
         this.secret = secret;
         this.expiresIn = expiresIn;
         this.refreshSecret = refreshSecret;
         this.refreshExpiresIn = refreshExpiresIn;
+        this.algorithm = algorithm;
     }
 
     async generateTokens(userId, email) {
@@ -21,9 +28,11 @@ export class JwtTokenGenerator extends TokenGeneratorPort {
 
         const [token, refreshToken] = await Promise.all([
             signAsync(payload, this.secret, {
+                algorithm: this.algorithm,
                 expiresIn: this.expiresIn,
             }),
             signAsync(payload, this.refreshSecret, {
+                algorithm: this.algorithm,
                 expiresIn: this.refreshExpiresIn,
             }),
         ]);
@@ -33,15 +42,18 @@ export class JwtTokenGenerator extends TokenGeneratorPort {
 }
 
 export class JwtTokenVerifier extends TokenVerifierPort {
-    constructor({ secret, refreshSecret }) {
+    constructor({ secret, refreshSecret, algorithm = 'HS256' }) {
         super();
         this.secret = secret;
         this.refreshSecret = refreshSecret;
+        this.algorithm = algorithm;
     }
 
     async verifyAccessToken(token) {
         try {
-            return await verifyAsync(token, this.secret);
+            return await verifyAsync(token, this.secret, {
+                algorithms: [this.algorithm],
+            });
         } catch (error) {
             throw new TokenVerificationError(error.message);
         }
@@ -49,7 +61,9 @@ export class JwtTokenVerifier extends TokenVerifierPort {
 
     async verifyRefreshToken(token) {
         try {
-            return await verifyAsync(token, this.refreshSecret);
+            return await verifyAsync(token, this.refreshSecret, {
+                algorithms: [this.algorithm],
+            });
         } catch (error) {
             throw new TokenVerificationError(error.message);
         }

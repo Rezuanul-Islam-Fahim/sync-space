@@ -20,7 +20,7 @@ import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-write
  * @param {{
  *   logger?: import('../../shared/ports/index.js').LoggerPort,
  *   authConfig: { saltRounds: number },
- *   jwtConfig: { secret: string, expiresIn: string, refreshSecret: string, refreshExpiresIn: string },
+ *   jwtConfig: { algorithm?: string, secret: string, expiresIn: string, refreshSecret: string, refreshExpiresIn: string },
  *   connection?: import('mongoose').Connection,
  *   authUserModel?: any
  * }} deps
