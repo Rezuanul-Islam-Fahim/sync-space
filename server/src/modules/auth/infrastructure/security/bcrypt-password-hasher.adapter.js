@@ -1,16 +1,21 @@
 import bcrypt from 'bcrypt';
-import { PasswordHasherPort } from '../../application/ports/password-hasher.port.js';
+import {
+    PasswordHasherPort,
+    PasswordComparerPort,
+} from '../../application/ports/password-hasher.port.js';
 
 export class BcryptPasswordHasher extends PasswordHasherPort {
-    constructor({ saltRounds } = {}) {
+    constructor({ saltRounds = 10 } = {}) {
         super();
-        this.saltRounds = saltRounds || 10;
+        this.saltRounds = saltRounds;
     }
 
     async hash(password) {
         return await bcrypt.hash(password, this.saltRounds);
     }
+}
 
+export class BcryptPasswordComparer extends PasswordComparerPort {
     async compare(password, hashedPassword) {
         return await bcrypt.compare(password, hashedPassword);
     }

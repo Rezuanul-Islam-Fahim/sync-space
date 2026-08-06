@@ -2,9 +2,9 @@ import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 import { INVALID_CREDENTIALS } from '../../domain/auth-user.constant.js';
 
 export class LoginUserUseCase {
-    constructor({ authUserReader, passwordHasher, tokenGenerator, logger }) {
+    constructor({ authUserReader, passwordComparer, tokenGenerator, logger }) {
         this.authUserReader = authUserReader;
-        this.passwordHasher = passwordHasher;
+        this.passwordComparer = passwordComparer;
         this.tokenGenerator = tokenGenerator;
         this.logger = logger;
     }
@@ -16,7 +16,7 @@ export class LoginUserUseCase {
             throw new AppError(INVALID_CREDENTIALS, ErrorCode.UNAUTHENTICATED);
         }
 
-        const isPasswordMatch = await this.passwordHasher.compare(
+        const isPasswordMatch = await this.passwordComparer.compare(
             data.password,
             user.password
         );

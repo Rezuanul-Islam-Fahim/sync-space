@@ -6,7 +6,10 @@ import { RegisterUserUseCase } from './application/use-cases/register-user.useca
 import { DeleteAuthUserUseCase } from './application/use-cases/delete-auth-user.usecase.js';
 import { VerifyAccessTokenUseCase } from './application/use-cases/verify-access-token.usecase.js';
 import { createAuthRouter } from './presentation/auth.router.js';
-import { BcryptPasswordHasher } from './infrastructure/security/bcrypt-password-hasher.adapter.js';
+import {
+    BcryptPasswordHasher,
+    BcryptPasswordComparer,
+} from './infrastructure/security/bcrypt-password-hasher.adapter.js';
 import {
     JwtTokenGenerator,
     JwtTokenVerifier,
@@ -54,10 +57,11 @@ export const composeAuthModule = ({
     const passwordHasher = new BcryptPasswordHasher({
         saltRounds: authConfig.saltRounds,
     });
+    const passwordComparer = new BcryptPasswordComparer();
 
     const loginUserUseCase = new LoginUserUseCase({
         authUserReader,
-        passwordHasher,
+        passwordComparer,
         tokenGenerator,
         logger,
     });
