@@ -4,6 +4,7 @@ import { AuthController } from './presentation/auth.controller.js';
 import { LoginUserUseCase } from './application/use-cases/login-user.usecase.js';
 import { RegisterUserUseCase } from './application/use-cases/register-user.usecase.js';
 import { DeleteAuthUserUseCase } from './application/use-cases/delete-auth-user.usecase.js';
+import { VerifyAccessTokenUseCase } from './application/use-cases/verify-access-token.usecase.js';
 import { createAuthRouter } from './presentation/auth.router.js';
 import { BcryptPasswordHasher } from './infrastructure/security/bcrypt-password-hasher.adapter.js';
 import {
@@ -72,11 +73,16 @@ export const composeAuthModule = ({
         logger,
     });
 
+    const verifyAccessTokenUseCase = new VerifyAccessTokenUseCase({
+        tokenVerifier,
+        logger,
+    });
+
     const authService = new AuthFacade({
         loginUserUseCase,
         registerUserUseCase,
         deleteAuthUserUseCase,
-        tokenVerifier,
+        verifyAccessTokenUseCase,
     });
 
     const authController = new AuthController({
