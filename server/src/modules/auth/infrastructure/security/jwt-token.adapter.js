@@ -2,7 +2,10 @@ import { promisify } from 'util';
 import jwt from 'jsonwebtoken';
 import { TokenGeneratorPort } from '../../application/ports/token-generator.port.js';
 import { TokenVerifierPort } from '../../application/ports/token-verifier.port.js';
-import { TokenVerificationError } from '../../domain/errors/token-verification.error.js';
+import {
+    TokenExpiredError,
+    TokenInvalidError,
+} from '../../domain/errors/token-verification.error.js';
 
 const signAsync = promisify(jwt.sign);
 const verifyAsync = promisify(jwt.verify);
@@ -55,7 +58,10 @@ export class JwtTokenVerifier extends TokenVerifierPort {
                 algorithms: [this.algorithm],
             });
         } catch (error) {
-            throw new TokenVerificationError(error.message);
+            if (error.name === 'TokenExpiredError') {
+                throw new TokenExpiredError(error.message, error);
+            }
+            throw new TokenInvalidError(error.message, error);
         }
     }
 
@@ -65,7 +71,10 @@ export class JwtTokenVerifier extends TokenVerifierPort {
                 algorithms: [this.algorithm],
             });
         } catch (error) {
-            throw new TokenVerificationError(error.message);
+            if (error.name === 'TokenExpiredError') {
+                throw new TokenExpiredError(error.message, error);
+            }
+            throw new TokenInvalidError(error.message, error);
         }
     }
 }
