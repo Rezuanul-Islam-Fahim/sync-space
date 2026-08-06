@@ -26,6 +26,7 @@ import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-write
  *   authConfig: { saltRounds: number },
  *   jwtConfig: { algorithm?: string, secret: string, expiresIn: string, refreshSecret: string, refreshExpiresIn: string },
  *   dbConnection?: import('mongoose').Connection,
+ *   autoIndex?: boolean,
  *   authUserModel?: any
  * }} deps
  * @returns {{
@@ -38,7 +39,10 @@ export const composeAuthModule = ({
     authConfig,
     jwtConfig,
     dbConnection,
-    authUserModel = dbConnection ? getAuthUserModel(dbConnection) : null,
+    autoIndex,
+    authUserModel = dbConnection
+        ? getAuthUserModel(dbConnection, { autoIndex })
+        : null,
 }) => {
     if (!authUserModel) {
         throw new Error(

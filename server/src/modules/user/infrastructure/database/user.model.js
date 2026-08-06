@@ -73,7 +73,6 @@ const userSchema = new mongoose.Schema(
     },
     {
         timestamps: true,
-        autoIndex: process.env.NODE_ENV !== 'production',
     }
 );
 
@@ -87,11 +86,14 @@ const transform = (doc, ret) => {
 userSchema.set('toJSON', { transform });
 userSchema.set('toObject', { transform });
 
-export const getUserModel = connection => {
+export const getUserModel = (connection, { autoIndex } = {}) => {
     if (!connection) {
         throw new Error(
             'Database connection instance is required to resolve getUserModel.'
         );
+    }
+    if (autoIndex !== undefined) {
+        userSchema.set('autoIndex', autoIndex);
     }
     return (
         connection.models?.User || connection.model('User', userSchema, 'users')

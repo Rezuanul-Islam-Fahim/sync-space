@@ -40,6 +40,7 @@ export const getConfig = ({ reload = false } = {}) => {
             maxPoolSize: envVars.MONGODB_MAX_POOL_SIZE,
             serverSelectionTimeoutMS: envVars.MONGODB_SELECTION_TIMEOUT_MS,
             socketTimeoutMS: envVars.MONGODB_SOCKET_TIMEOUT_MS,
+            autoIndex: envVars.NODE_ENV !== 'production',
         }),
         logLevel: envVars.LOG_LEVEL,
         bodyLimit: envVars.BODY_LIMIT,

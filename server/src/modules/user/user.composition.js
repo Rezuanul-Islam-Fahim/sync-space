@@ -13,6 +13,7 @@ import { UserReaderAdapter } from './infrastructure/adapters/user-reader.adapter
  * @param {{
  *   logger?: import('../../shared/ports/index.js').LoggerPort,
  *   dbConnection?: import('mongoose').Connection,
+ *   autoIndex?: boolean,
  *   userModel?: any
  * }} deps
  * @returns {{
@@ -23,7 +24,8 @@ import { UserReaderAdapter } from './infrastructure/adapters/user-reader.adapter
 export const composeUserModule = ({
     logger,
     dbConnection,
-    userModel = dbConnection ? getUserModel(dbConnection) : null,
+    autoIndex,
+    userModel = dbConnection ? getUserModel(dbConnection, { autoIndex }) : null,
 }) => {
     if (!userModel) {
         throw new Error(

@@ -18,6 +18,7 @@ export const composeDependencies = ({ logger, config, connection }) => {
     const userModule = composeUserModule({
         logger,
         dbConnection: connection,
+        autoIndex: config.db?.autoIndex,
     });
 
     // ── Auth bounded context ──────────────────────────────────────────────────
@@ -26,6 +27,7 @@ export const composeDependencies = ({ logger, config, connection }) => {
         authConfig: config.auth,
         jwtConfig: config.jwt,
         dbConnection: connection,
+        autoIndex: config.db?.autoIndex,
     });
 
     // ── Middleware ────────────────────────────────────────────────────────────
