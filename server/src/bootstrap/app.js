@@ -42,9 +42,9 @@ export const createApp = ({
 
     app.use(requestIdAttach);
     app.use(helmet());
-    app.use(hpp());
     app.use(express.json({ limit: bodyLimit }));
     app.use(express.urlencoded({ extended: false, limit: bodyLimit }));
+    app.use(hpp());
 
     const selectedMorganFormat =
         env === 'development' ? devMorganFormat : prodMorganFormat;
