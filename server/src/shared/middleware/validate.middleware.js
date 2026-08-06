@@ -16,7 +16,9 @@ export const validate = (req, res, next) => {
             message: err.msg,
         }));
 
-        const messageStr = errorArray.map(obj => `${obj.msg}.`).join(' ');
+        const messageStr = errorArray
+            .map(obj => `${String(obj.msg).replace(/\.+$/, '')}.`)
+            .join(' ');
 
         const error = new BadRequestError(messageStr, formattedErrors);
 
