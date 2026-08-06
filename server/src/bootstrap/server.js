@@ -81,18 +81,23 @@ const start = async () => {
         logger.error('Unhandled Rejection:', reason);
         shutdown('unhandledRejection', 1);
     });
-    process.on('uncaughtException', async err => {
+    process.on('uncaughtException', err => {
         logger.error('Uncaught Exception — exiting process immediately:', err);
-        try {
-            await logger.flush?.();
-        } catch (flushErr) {
-            bootstrapLogger.error(
-                'Error flushing logger on uncaughtException:',
-                flushErr
-            );
-        } finally {
-            process.exit(1);
+        const timer = setTimeout(() => process.exit(1), 1000);
+        if (typeof timer.unref === 'function') {
+            timer.unref();
         }
+
+        Promise.resolve(logger.flush?.())
+            .catch(flushErr => {
+                bootstrapLogger.error(
+                    'Error flushing logger on uncaughtException:',
+                    flushErr
+                );
+            })
+            .finally(() => {
+                process.exit(1);
+            });
     });
 };
 
