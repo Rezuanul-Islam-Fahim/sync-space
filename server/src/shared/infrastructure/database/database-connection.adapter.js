@@ -17,6 +17,15 @@ export class DatabaseConnectionAdapter {
         this.dbConfig = dbConfig;
         this.connection = null;
         this.isListenersAttached = false;
+        this.onConnected = () => {
+            this.logger?.info?.('Mongoose connected to DB.');
+        };
+        this.onError = err => {
+            this.logger?.error?.('Mongoose connection error:', err);
+        };
+        this.onDisconnected = () => {
+            this.logger?.warn?.('Mongoose disconnected.');
+        };
     }
 
     /**
@@ -25,17 +34,9 @@ export class DatabaseConnectionAdapter {
     attachListeners() {
         if (!this.connection || this.isListenersAttached) return;
 
-        this.connection.on('connected', () => {
-            this.logger?.info?.('Mongoose connected to DB.');
-        });
-
-        this.connection.on('error', err => {
-            this.logger?.error?.('Mongoose connection error:', err);
-        });
-
-        this.connection.on('disconnected', () => {
-            this.logger?.warn?.('Mongoose disconnected.');
-        });
+        this.connection.on('connected', this.onConnected);
+        this.connection.on('error', this.onError);
+        this.connection.on('disconnected', this.onDisconnected);
 
         this.isListenersAttached = true;
     }
@@ -88,10 +89,12 @@ export class DatabaseConnectionAdapter {
      * Resets listeners and connection state.
      */
     reset() {
-        this.isListenersAttached = false;
-        if (this.connection) {
-            this.connection.removeAllListeners();
+        if (this.connection && this.isListenersAttached) {
+            this.connection.removeListener('connected', this.onConnected);
+            this.connection.removeListener('error', this.onError);
+            this.connection.removeListener('disconnected', this.onDisconnected);
         }
+        this.isListenersAttached = false;
         this.connection = null;
     }
 }
