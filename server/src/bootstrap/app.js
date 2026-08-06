@@ -42,6 +42,12 @@ export const createApp = ({
 
     app.use(requestIdAttach);
     app.use(helmet());
+    app.use(
+        cors({
+            origin: corsOrigins,
+            credentials: corsCredentials,
+        })
+    );
     app.use(express.json({ limit: bodyLimit }));
     app.use(express.urlencoded({ extended: false, limit: bodyLimit }));
     app.use(hpp());
@@ -54,12 +60,6 @@ export const createApp = ({
             stream: {
                 write: message => logger.http(message.trim()),
             },
-        })
-    );
-    app.use(
-        cors({
-            origin: corsOrigins,
-            credentials: corsCredentials,
         })
     );
 
