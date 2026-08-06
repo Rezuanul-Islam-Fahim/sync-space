@@ -15,14 +15,17 @@ import { composeRegistrationModule } from '../orchestration/registration/index.j
  */
 export const composeDependencies = ({ logger, config, connection }) => {
     // ── User bounded context ──────────────────────────────────────────────────
-    const userModule = composeUserModule({ logger, connection });
+    const userModule = composeUserModule({
+        logger,
+        dbConnection: connection,
+    });
 
     // ── Auth bounded context ──────────────────────────────────────────────────
     const authModule = composeAuthModule({
         logger,
         authConfig: config.auth,
         jwtConfig: config.jwt,
-        connection,
+        dbConnection: connection,
     });
 
     // ── Middleware ────────────────────────────────────────────────────────────

@@ -10,9 +10,14 @@ export const toRawObject = (value, options = { getters: true }) => {
     if (value === null || value === undefined) return null;
     if (typeof value !== 'object') return value;
 
-    if (typeof value.toObject === 'function') {
-        return value.toObject(options);
+    const raw =
+        typeof value.toObject === 'function'
+            ? value.toObject(options)
+            : { ...value };
+
+    if (raw && typeof raw === 'object' && '__v' in raw) {
+        delete raw.__v;
     }
 
-    return value;
+    return raw;
 };

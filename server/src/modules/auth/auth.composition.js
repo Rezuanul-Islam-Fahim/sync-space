@@ -25,7 +25,7 @@ import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-write
  *   logger?: import('../../shared/ports/index.js').LoggerPort,
  *   authConfig: { saltRounds: number },
  *   jwtConfig: { algorithm?: string, secret: string, expiresIn: string, refreshSecret: string, refreshExpiresIn: string },
- *   connection?: import('mongoose').Connection,
+ *   dbConnection?: import('mongoose').Connection,
  *   authUserModel?: any
  * }} deps
  * @returns {{
@@ -37,12 +37,12 @@ export const composeAuthModule = ({
     logger,
     authConfig,
     jwtConfig,
-    connection,
-    authUserModel = connection ? getAuthUserModel(connection) : null,
+    dbConnection,
+    authUserModel = dbConnection ? getAuthUserModel(dbConnection) : null,
 }) => {
     if (!authUserModel) {
         throw new Error(
-            'Either a database connection or authUserModel must be provided to composeAuthModule.'
+            'Either dbConnection or authUserModel must be provided to composeAuthModule.'
         );
     }
     const tokenGenerator = new JwtTokenGenerator(jwtConfig);

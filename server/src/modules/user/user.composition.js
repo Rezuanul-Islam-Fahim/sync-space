@@ -12,7 +12,7 @@ import { UserReaderAdapter } from './infrastructure/adapters/user-reader.adapter
  *
  * @param {{
  *   logger?: import('../../shared/ports/index.js').LoggerPort,
- *   connection?: import('mongoose').Connection,
+ *   dbConnection?: import('mongoose').Connection,
  *   userModel?: any
  * }} deps
  * @returns {{
@@ -22,12 +22,12 @@ import { UserReaderAdapter } from './infrastructure/adapters/user-reader.adapter
  */
 export const composeUserModule = ({
     logger,
-    connection,
-    userModel = connection ? getUserModel(connection) : null,
+    dbConnection,
+    userModel = dbConnection ? getUserModel(dbConnection) : null,
 }) => {
     if (!userModel) {
         throw new Error(
-            'Either a database connection or userModel must be provided to composeUserModule.'
+            'Either dbConnection or userModel must be provided to composeUserModule.'
         );
     }
     const userWriter = new UserWriterAdapter({ userModel });
