@@ -1,3 +1,5 @@
+import { AuthUserDto } from './dtos/auth-user.dto.js';
+
 /**
  * Public API Facade for the Auth Bounded Context.
  * Acts as the single entry point for cross-module authentication & credential operations.
@@ -27,20 +29,25 @@ export class AuthFacade {
      * Authenticates user credentials and issues access tokens.
      *
      * @param {object} credentials
-     * @returns {Promise<object>}
+     * @returns {Promise<{ user: AuthUserDto, tokens: object }>}
      */
-    loginUser(credentials) {
-        return this.loginUserUseCase.execute(credentials);
+    async loginUser(credentials) {
+        const result = await this.loginUserUseCase.execute(credentials);
+        return {
+            user: AuthUserDto.fromEntity(result.user),
+            tokens: result.tokens,
+        };
     }
 
     /**
      * Registers new user authentication credentials.
      *
      * @param {object} credentials
-     * @returns {Promise<import('../domain/auth-user.entity.js').AuthUser>}
+     * @returns {Promise<AuthUserDto>}
      */
-    registerUser(credentials) {
-        return this.registerUserUseCase.execute(credentials);
+    async registerUser(credentials) {
+        const authUser = await this.registerUserUseCase.execute(credentials);
+        return AuthUserDto.fromEntity(authUser);
     }
 
     /**
