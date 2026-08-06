@@ -18,13 +18,13 @@ export class DatabaseConnectionAdapter {
         this.connection = null;
         this.isListenersAttached = false;
         this.onConnected = () => {
-            this.logger?.info?.('Mongoose connected to DB.');
+            this.logger?.info('Mongoose connected to DB.');
         };
         this.onError = err => {
-            this.logger?.error?.('Mongoose connection error:', err);
+            this.logger?.error('Mongoose connection error:', err);
         };
         this.onDisconnected = () => {
-            this.logger?.warn?.('Mongoose disconnected.');
+            this.logger?.warn('Mongoose disconnected.');
         };
     }
 

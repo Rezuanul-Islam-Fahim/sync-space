@@ -26,45 +26,25 @@ const start = async () => {
 
     const app = composeDependencies({ logger, config, connection });
 
-    const server = app.listen(PORT, () => {
-        logger.info(`Server started on port: ${PORT}`);
-    });
-
     let isShuttingDown = false;
+    let forceTimeout = null;
 
-    const shutdown = (signal, exitCode = 0) => {
+    const shutdown = async (signal, exitCode = 0) => {
         if (isShuttingDown) return;
         isShuttingDown = true;
 
-        logger.info(`\n'${signal}' received. Shutting down gracefully...`);
+        logger.info(`'${signal}' received. Shutting down gracefully...`);
 
-        // Stop accepting new connections
-        server.close(() => {
-            dbConnection
-                .disconnect()
-                .then(() => logger.flush?.())
-                .then(() => {
-                    process.exit(exitCode);
-                })
-                .catch(err => {
-                    logger.error('Error during shutdown:', err);
-                    Promise.resolve(logger.flush?.()).finally(() => {
-                        process.exit(1);
-                    });
-                });
-        });
-
-        // Close idle HTTP keep-alive connections so server.close() doesn't hang
-        if (typeof server.closeIdleConnections === 'function') {
-            server.closeIdleConnections();
-        }
-
-        const forceTimeout = setTimeout(async () => {
+        // Hard timeout limit: forcefully terminate process if graceful shutdown takes longer than 10 seconds
+        forceTimeout = setTimeout(async () => {
             try {
-                logger.error('Forced shutdown due to timeout.');
-                if (typeof server.closeAllConnections === 'function') {
+                logger.error(
+                    'Graceful shutdown timed out (10s). Forcing termination.'
+                );
+                if (typeof server?.closeAllConnections === 'function') {
                     server.closeAllConnections();
                 }
+                await dbConnection.disconnect();
                 await logger.flush?.();
             } catch (err) {
                 bootstrapLogger.error('Error during forced shutdown:', err);
@@ -73,34 +53,54 @@ const start = async () => {
             }
         }, 10000);
 
-        if (typeof forceTimeout.unref === 'function') {
-            forceTimeout.unref();
+        try {
+            // Close idle HTTP keep-alive connections
+            if (typeof server?.closeIdleConnections === 'function') {
+                server.closeIdleConnections();
+            }
+
+            // Stop accepting new HTTP requests
+            if (server && server.listening) {
+                await new Promise(resolve => server.close(resolve));
+                logger.info('HTTP server closed.');
+            }
+
+            // Disconnect from database
+            await dbConnection.disconnect();
+            logger.info('Database connection closed.');
+
+            await logger.flush?.();
+
+            if (forceTimeout) clearTimeout(forceTimeout);
+            process.exit(exitCode);
+        } catch (err) {
+            logger.error('Error during graceful shutdown:', err);
+            if (forceTimeout) clearTimeout(forceTimeout);
+            await logger.flush?.().catch(() => {});
+            process.exit(1);
         }
     };
 
+    const server = app.listen(PORT, () => {
+        logger.info(`Server started on port: ${PORT}`);
+    });
+
+    server.on('error', err => {
+        logger.error('HTTP server encountered an error:', err);
+        shutdown('SERVER_ERROR', 1);
+    });
+
     process.on('SIGTERM', () => shutdown('SIGTERM', 0));
     process.on('SIGINT', () => shutdown('SIGINT', 0));
+
     process.on('unhandledRejection', reason => {
         logger.error('Unhandled Rejection:', reason);
         shutdown('unhandledRejection', 1);
     });
-    process.on('uncaughtException', err => {
-        logger.error('Uncaught Exception — exiting process immediately:', err);
-        const timer = setTimeout(() => process.exit(1), 1000);
-        if (typeof timer.unref === 'function') {
-            timer.unref();
-        }
 
-        Promise.resolve(logger.flush?.())
-            .catch(flushErr => {
-                bootstrapLogger.error(
-                    'Error flushing logger on uncaughtException:',
-                    flushErr
-                );
-            })
-            .finally(() => {
-                process.exit(1);
-            });
+    process.on('uncaughtException', err => {
+        logger.error('Uncaught Exception — exiting process:', err);
+        shutdown('uncaughtException', 1);
     });
 };
 

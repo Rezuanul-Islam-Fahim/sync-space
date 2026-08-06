@@ -1,5 +1,5 @@
 import { UserWriterPort } from '../../application/ports/user-writer.port.js';
-import { ConflictError } from '../../../../shared/error/index.js';
+import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 import { UserMapper } from '../mappers/user.mapper.js';
 import {
     PROFILE_ALREADY_EXISTS,
@@ -34,7 +34,7 @@ export class UserWriterAdapter extends UserWriterPort {
         } catch (err) {
             if (err.code === 11000) {
                 const errorMessage = parseDuplicateKeyError(err);
-                throw new ConflictError(errorMessage);
+                throw new AppError(errorMessage, ErrorCode.ALREADY_EXISTS);
             }
             throw err;
         }

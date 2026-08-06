@@ -1,4 +1,4 @@
-import { UnauthorizedError } from '../../../../shared/error/index.js';
+import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 import { INVALID_CREDENTIALS } from '../../domain/auth-user.constant.js';
 
 export class LoginUserUseCase {
@@ -13,7 +13,7 @@ export class LoginUserUseCase {
         const user = await this.authUserReader.findByEmail(data.email);
 
         if (!user) {
-            throw new UnauthorizedError(INVALID_CREDENTIALS);
+            throw new AppError(INVALID_CREDENTIALS, ErrorCode.UNAUTHENTICATED);
         }
 
         const isPasswordMatch = await this.passwordHasher.compare(
@@ -22,7 +22,7 @@ export class LoginUserUseCase {
         );
 
         if (!isPasswordMatch) {
-            throw new UnauthorizedError(INVALID_CREDENTIALS);
+            throw new AppError(INVALID_CREDENTIALS, ErrorCode.UNAUTHENTICATED);
         }
 
         const tokens = await this.tokenGenerator.generateTokens(
