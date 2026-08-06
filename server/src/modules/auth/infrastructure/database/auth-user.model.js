@@ -24,7 +24,10 @@ const authUserSchema = new mongoose.Schema(
             default: false,
         },
     },
-    { timestamps: true }
+    {
+        timestamps: true,
+        autoIndex: process.env.NODE_ENV !== 'production',
+    }
 );
 
 const transform = (doc, ret) => {

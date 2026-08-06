@@ -71,7 +71,10 @@ const userSchema = new mongoose.Schema(
             default: null,
         },
     },
-    { timestamps: true }
+    {
+        timestamps: true,
+        autoIndex: process.env.NODE_ENV !== 'production',
+    }
 );
 
 userSchema.index({ status: 1, lastOnline: -1 });
