@@ -1,5 +1,6 @@
 import { AppError, ErrorCode } from '../../../shared/error/index.js';
 import { TOKEN_NOT_FOUND } from '../domain/auth-user.constant.js';
+import { catchAsync } from '../../../shared/util/index.js';
 
 /**
  * Middleware factory for authenticating HTTP requests using JWT tokens.
@@ -7,7 +8,7 @@ import { TOKEN_NOT_FOUND } from '../domain/auth-user.constant.js';
  * @param {import('../application/auth.facade.js').AuthFacade} authService
  */
 export const makeAuthenticate = authService => {
-    return async (req, _, next) => {
+    return catchAsync(async (req, _, next) => {
         let token;
 
         if (
@@ -18,9 +19,8 @@ export const makeAuthenticate = authService => {
         }
 
         if (!token) {
-            return next(
-                new AppError(TOKEN_NOT_FOUND, ErrorCode.UNAUTHENTICATED)
-            );
+            next(new AppError(TOKEN_NOT_FOUND, ErrorCode.UNAUTHENTICATED));
+            return;
         }
 
         const principal = await authService.verifyAccessToken(token);
@@ -29,5 +29,5 @@ export const makeAuthenticate = authService => {
         // principal is an intent-revealing object created by the AuthFacade.
         req.user = { id: principal.id, email: principal.email };
         next();
-    };
+    });
 };
