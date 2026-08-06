@@ -9,7 +9,13 @@ import {
     unknownRoutesHandler,
 } from '../shared/middleware/index.js';
 
-morgan.token('id', req => req.id || '-');
+let isMorganTokenRegistered = false;
+
+const registerMorganTokens = () => {
+    if (isMorganTokenRegistered) return;
+    morgan.token('id', req => req.id || '-');
+    isMorganTokenRegistered = true;
+};
 
 const devMorganFormat =
     ':method :url :status :response-time ms - :res[content-length] [reqId: :id]';
@@ -26,6 +32,8 @@ export const createApp = ({
     env = 'development',
     exposeStack = false,
 }) => {
+    registerMorganTokens();
+
     const app = express();
 
     if (trustProxy) {
