@@ -1,17 +1,26 @@
 import { AuthUser } from '../../domain/auth-user.entity.js';
 import { toRawObject } from '../../../../shared/infrastructure/index.js';
+import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 
 export class AuthUserMapper {
     static toDomain(raw) {
         if (!raw) return null;
 
         const document = toRawObject(raw);
+        const id = (document._id ?? document.id)?.toString();
+
+        if (!id || !document.email || !document.password) {
+            throw new AppError(
+                'Incomplete database record: AuthUser mapping failed due to missing required fields',
+                ErrorCode.INTERNAL_ERROR
+            );
+        }
 
         return new AuthUser({
-            id: (document._id ?? document.id)?.toString(),
+            id,
             email: document.email,
             password: document.password,
-            isVerified: document.isVerified,
+            isVerified: document.isVerified ?? false,
             createdAt: document.createdAt,
             updatedAt: document.updatedAt,
         });
