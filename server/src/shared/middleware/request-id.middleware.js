@@ -38,6 +38,6 @@ export const requestIdAttach = (req, res, next) => {
         req.clientRequestId = clientRequestId;
     }
 
-    res.setHeader('x-request-id', req.id);
+    res.setHeader('X-Request-Id', req.id);
     next();
 };

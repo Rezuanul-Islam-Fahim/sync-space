@@ -1,11 +1,18 @@
 /**
- * Converts Mongoose document objects to plain JavaScript objects if applicable.
+ * Safely converts Mongoose Document instances or plain JS objects into clean plain objects.
+ * Handles null/undefined inputs gracefully and executes `.toObject()` when passed Mongoose documents.
  *
- * @param {object} value
+ * @param {any} value
+ * @param {object} [options={ getters: true }]
  * @returns {object | null}
  */
-export const toRawObject = value => {
-    if (!value) return null;
+export const toRawObject = (value, options = { getters: true }) => {
+    if (value === null || value === undefined) return null;
+    if (typeof value !== 'object') return value;
 
-    return typeof value.toObject === 'function' ? value.toObject() : value;
+    if (typeof value.toObject === 'function') {
+        return value.toObject(options);
+    }
+
+    return value;
 };
