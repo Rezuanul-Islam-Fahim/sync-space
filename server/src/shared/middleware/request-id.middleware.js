@@ -22,11 +22,22 @@ const sanitizeRequestId = header => {
     return null;
 };
 
+/**
+ * Middleware that generates an un-spoofable, cryptographically strong UUIDv4
+ * request ID for server-side request tracing and logging.
+ *
+ * Incoming client `x-request-id` headers are sanitized and attached to `req.clientRequestId`
+ * for upstream correlation, but never override the server-generated `req.id`.
+ */
 export const requestIdAttach = (req, res, next) => {
     const incomingHeader = req.headers['x-request-id'];
-    const validId = sanitizeRequestId(incomingHeader);
+    const clientRequestId = sanitizeRequestId(incomingHeader);
 
-    req.id = validId || uuidv4();
+    req.id = uuidv4();
+    if (clientRequestId) {
+        req.clientRequestId = clientRequestId;
+    }
+
     res.setHeader('x-request-id', req.id);
     next();
 };
