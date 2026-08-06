@@ -37,7 +37,10 @@ export const composeDependencies = ({ logger, config, connection }) => {
     });
 
     // ── Routing ───────────────────────────────────────────────────────────────
-    const apiRouter = createApiRouter({ registrationModule, authModule });
+    const apiRouter = createApiRouter({
+        registrationRouter: registrationModule.router,
+        authRouter: authModule.router,
+    });
 
     const app = createApp({
         router: apiRouter,

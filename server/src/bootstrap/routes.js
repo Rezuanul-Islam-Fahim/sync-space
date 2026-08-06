@@ -1,18 +1,18 @@
 import express from 'express';
 
 /**
- * Builds the API router hierarchy by mounting module routes.
+ * Builds the API router hierarchy by mounting module routers.
  *
  * @param {{
- *   registrationModule: { router: import('express').Router },
- *   authModule: { router: import('express').Router }
- * }} modules
+ *   registrationRouter: import('express').Router,
+ *   authRouter: import('express').Router
+ * }} routers
  * @returns {import('express').Router}
  */
-export const createApiRouter = ({ registrationModule, authModule }) => {
+export const createApiRouter = ({ registrationRouter, authRouter }) => {
     const v1Router = express.Router();
-    v1Router.use('/auth/register', registrationModule.router);
-    v1Router.use('/auth', authModule.router);
+    v1Router.use('/auth/register', registrationRouter);
+    v1Router.use('/auth', authRouter);
 
     const apiRouter = express.Router();
     apiRouter.use('/v1', v1Router);

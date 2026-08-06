@@ -27,9 +27,9 @@ export const createApp = ({
     logger,
     corsOrigins,
     corsCredentials,
-    bodyLimit = '10kb',
-    trustProxy = false,
-    env = 'development',
+    bodyLimit,
+    trustProxy,
+    env,
     exposeStack = false,
 }) => {
     registerMorganTokens();
