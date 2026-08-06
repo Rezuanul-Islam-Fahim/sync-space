@@ -1,11 +1,6 @@
-import { AppError, ErrorCode } from '../error/index.js';
+import { NotFoundError } from '../error/index.js';
 import { ROUTE_NOT_FOUND } from '../constants/index.js';
 
 export const unknownRoutesHandler = (req, res, next) => {
-    next(
-        new AppError(
-            ROUTE_NOT_FOUND(req.originalUrl),
-            ErrorCode.RESOURCE_NOT_FOUND
-        )
-    );
+    next(new NotFoundError(ROUTE_NOT_FOUND(req.originalUrl)));
 };

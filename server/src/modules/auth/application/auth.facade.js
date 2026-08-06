@@ -1,4 +1,4 @@
-import { AppError, ErrorCode } from '../../../shared/error/index.js';
+import { UnauthorizedError } from '../../../shared/error/index.js';
 import { INVALID_TOKEN } from '../domain/auth-user.constant.js';
 import { TokenVerificationError } from '../domain/errors/token-verification.error.js';
 
@@ -70,7 +70,7 @@ export class AuthFacade {
             return { id: decoded.sub, email: decoded.email };
         } catch (error) {
             if (error instanceof TokenVerificationError) {
-                throw new AppError(INVALID_TOKEN, ErrorCode.UNAUTHENTICATED);
+                throw new UnauthorizedError(INVALID_TOKEN);
             }
             throw error;
         }

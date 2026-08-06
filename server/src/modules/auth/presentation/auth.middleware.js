@@ -1,4 +1,4 @@
-import { AppError, ErrorCode } from '../../../shared/error/index.js';
+import { UnauthorizedError } from '../../../shared/error/index.js';
 import { TOKEN_NOT_FOUND } from '../domain/auth-user.constant.js';
 import { catchAsync } from '../../../shared/util/index.js';
 
@@ -19,7 +19,7 @@ export const makeAuthenticate = authService => {
         }
 
         if (!token) {
-            next(new AppError(TOKEN_NOT_FOUND, ErrorCode.UNAUTHENTICATED));
+            next(new UnauthorizedError(TOKEN_NOT_FOUND));
             return;
         }
 
