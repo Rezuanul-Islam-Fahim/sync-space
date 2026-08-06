@@ -9,16 +9,11 @@ import {
 const parseDuplicateKeyError = err => {
     const keyPattern = err.keyPattern || {};
     const keyValue = err.keyValue || {};
-    const message = err.message || '';
 
-    if (
-        keyPattern.username ||
-        keyValue.username ||
-        message.includes('username')
-    ) {
+    if ('username' in keyPattern || 'username' in keyValue) {
         return USERNAME_ALREADY_TAKEN;
     }
-    if (keyPattern.authId || keyValue.authId || message.includes('authId')) {
+    if ('authId' in keyPattern || 'authId' in keyValue) {
         return PROFILE_ALREADY_EXISTS;
     }
     return PROFILE_ALREADY_EXISTS;
