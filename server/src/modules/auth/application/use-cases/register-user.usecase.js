@@ -10,7 +10,7 @@ export class RegisterUserUseCase {
     async execute(data) {
         const hashedPassword = await this.passwordHasher.hash(data.password);
 
-        const authUser = new AuthUser({
+        const authUser = AuthUser.create({
             email: data.email,
             password: hashedPassword,
             isVerified: false,

@@ -7,7 +7,7 @@ export class CreateUserUseCase {
     }
 
     async execute(data) {
-        const userData = new User({
+        const userData = User.create({
             authId: data.authId,
             username: data.username,
             displayName: data.displayName ?? null,

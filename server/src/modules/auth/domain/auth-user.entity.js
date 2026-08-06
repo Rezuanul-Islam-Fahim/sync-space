@@ -8,7 +8,7 @@
  */
 export class AuthUser {
     constructor({
-        id,
+        id = null,
         email,
         password,
         isVerified = false,
@@ -23,5 +23,19 @@ export class AuthUser {
         this.updatedAt = updatedAt;
 
         Object.freeze(this);
+    }
+
+    /**
+     * Factory method for instantiating a new AuthUser domain entity prior to persistence.
+     *
+     * @param {{ email: string, password: string, isVerified?: boolean }} props
+     * @returns {AuthUser}
+     */
+    static create({ email, password, isVerified = false }) {
+        return new AuthUser({
+            email,
+            password,
+            isVerified,
+        });
     }
 }

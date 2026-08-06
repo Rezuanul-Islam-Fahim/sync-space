@@ -9,7 +9,7 @@ import { UserStatus, BANNER_DEFAULT_COLOR } from './user.constant.js';
  */
 export class User {
     constructor({
-        id,
+        id = null,
         authId,
         username,
         displayName = null,
@@ -20,8 +20,8 @@ export class User {
         dateOfBirth,
         status = UserStatus.OFFLINE,
         lastOnline = null,
-        createdAt,
-        updatedAt,
+        createdAt = null,
+        updatedAt = null,
     }) {
         this.id = id;
         this.authId = authId;
@@ -37,5 +37,20 @@ export class User {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         Object.freeze(this);
+    }
+
+    /**
+     * Factory method for instantiating a new User profile domain entity prior to persistence.
+     *
+     * @param {{ authId: string, username: string, displayName?: string, dateOfBirth: Date }} props
+     * @returns {User}
+     */
+    static create({ authId, username, displayName = null, dateOfBirth }) {
+        return new User({
+            authId,
+            username,
+            displayName,
+            dateOfBirth,
+        });
     }
 }
