@@ -5,7 +5,7 @@ import {
 } from '../../application/ports/password-hasher.port.js';
 
 export class BcryptPasswordHasher extends PasswordHasherPort {
-    constructor({ saltRounds = 10 } = {}) {
+    constructor({ saltRounds = 12 } = {}) {
         super();
         this.saltRounds = saltRounds;
     }

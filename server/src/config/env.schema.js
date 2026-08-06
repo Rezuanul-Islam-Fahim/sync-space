@@ -10,7 +10,7 @@ export const envSchema = Joi.object({
     LOG_LEVEL: Joi.string()
         .valid('error', 'warn', 'info', 'http', 'debug')
         .default('debug'),
-    BCRYPT_SALT_ROUNDS: Joi.number().integer().min(4).max(31).default(10),
+    BCRYPT_SALT_ROUNDS: Joi.number().integer().min(4).max(31).default(12),
     BODY_LIMIT: Joi.string()
         .pattern(/^\d+(?:b|kb|mb|gb)$/i)
         .default('10kb')

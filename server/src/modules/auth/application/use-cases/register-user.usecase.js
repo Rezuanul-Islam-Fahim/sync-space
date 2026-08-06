@@ -1,4 +1,5 @@
 import { AuthUser } from '../../domain/auth-user.entity.js';
+import { maskEmail } from '../../../../shared/util/index.js';
 
 export class RegisterUserUseCase {
     constructor({ authUserWriter, passwordHasher, logger }) {
@@ -20,7 +21,7 @@ export class RegisterUserUseCase {
 
         this.logger?.info?.('Auth credentials registered successfully', {
             authUserId: savedUser.id,
-            email: savedUser.email,
+            email: maskEmail(savedUser.email),
         });
 
         return savedUser;

@@ -1,7 +1,11 @@
 import { matchedData } from 'express-validator';
 import { LoginRequestDto } from './dtos/login-request.dto.js';
 import { LoginResponseDto } from './dtos/login-response.dto.js';
-import { sendSuccessResponse, catchAsync } from '../../../shared/util/index.js';
+import {
+    sendSuccessResponse,
+    catchAsync,
+    maskEmail,
+} from '../../../shared/util/index.js';
 import { OK } from '../../../shared/constants/index.js';
 import { LOGIN_SUCCESSFUL } from './auth.messages.js';
 
@@ -16,7 +20,7 @@ export class AuthController {
         const requestDto = LoginRequestDto.from(validatedData);
 
         this.logger?.debug?.('Login request received', {
-            email: requestDto.email,
+            email: maskEmail(requestDto.email),
         });
 
         const loginData = await this.authService.loginUser(requestDto);

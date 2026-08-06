@@ -1,4 +1,5 @@
 import { AppError, ErrorCode } from '../../../../shared/error/index.js';
+import { maskEmail } from '../../../../shared/util/index.js';
 import { INVALID_CREDENTIALS } from '../../domain/auth-user.constant.js';
 
 export class LoginUserUseCase {
@@ -32,7 +33,7 @@ export class LoginUserUseCase {
 
         this.logger?.info?.('User login successful', {
             authUserId: user.id,
-            email: user.email,
+            email: maskEmail(user.email),
         });
 
         return {

@@ -1,5 +1,9 @@
 import { matchedData } from 'express-validator';
-import { catchAsync, sendSuccessResponse } from '../../../shared/util/index.js';
+import {
+    catchAsync,
+    sendSuccessResponse,
+    maskEmail,
+} from '../../../shared/util/index.js';
 import { CREATED } from '../../../shared/constants/index.js';
 import { RegistrationRequestDto } from './dtos/registration-request.dto.js';
 import { RegistrationResponseDto } from './dtos/registration-response.dto.js';
@@ -16,7 +20,7 @@ export class RegistrationController {
         const requestDto = RegistrationRequestDto.from(validatedData);
 
         this.logger?.debug?.('Registration request received', {
-            email: requestDto.email,
+            email: maskEmail(requestDto.email),
         });
 
         const registrationResult =

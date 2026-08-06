@@ -1,3 +1,5 @@
+import { maskEmail } from '../../../../shared/util/index.js';
+
 export class RegisterUserProfileUseCase {
     constructor({ authService, userService, logger }) {
         this.authService = authService;
@@ -47,7 +49,7 @@ export class RegisterUserProfileUseCase {
             {
                 authUserId: savedAuthUser.id,
                 userId: savedUserProfile.id,
-                email: savedAuthUser.email,
+                email: maskEmail(savedAuthUser.email),
             }
         );
 
