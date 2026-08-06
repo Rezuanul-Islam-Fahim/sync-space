@@ -39,16 +39,19 @@ const start = async () => {
         logger.info(`\n'${signal}' received. Shutting down gracefully...`);
 
         // Stop accepting new connections
-        server.close(async () => {
-            try {
-                await dbConnection.disconnect();
-                await logger.flush?.();
-                process.exit(exitCode);
-            } catch (err) {
-                logger.error('Error during shutdown:', err);
-                await logger.flush?.();
-                process.exit(1);
-            }
+        server.close(() => {
+            dbConnection
+                .disconnect()
+                .then(() => logger.flush?.())
+                .then(() => {
+                    process.exit(exitCode);
+                })
+                .catch(err => {
+                    logger.error('Error during shutdown:', err);
+                    Promise.resolve(logger.flush?.()).finally(() => {
+                        process.exit(1);
+                    });
+                });
         });
 
         // Close idle HTTP keep-alive connections so server.close() doesn't hang
