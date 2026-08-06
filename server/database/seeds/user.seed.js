@@ -1,4 +1,15 @@
-export const getSeedUsers = () => {
+/**
+ * Provides initial seed user dataset for non-production database seeding.
+ *
+ * @returns {Promise<Array<{
+ *   email: string,
+ *   username: string,
+ *   password: string,
+ *   displayName: string,
+ *   dateOfBirth: Date
+ * }>>}
+ */
+export const getSeedUsers = async () => {
     return [
         {
             email: 'test1@test.com',

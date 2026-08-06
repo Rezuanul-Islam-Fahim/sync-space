@@ -1,3 +1,4 @@
+import '../../src/bootstrap/env-loader.js';
 import {
     bootstrapLogger as logger,
     DatabaseConnectionAdapter,
@@ -64,11 +65,10 @@ const runSeeder = async () => {
         logger.info('Database seeded successfully!');
     } catch (err) {
         logger.error('Error seeding database:', err);
-        process.exit(1);
+        process.exitCode = 1;
     } finally {
         await dbConnection.disconnect();
         logger.info('DB connection closed.');
-        process.exit(0);
     }
 };
 
