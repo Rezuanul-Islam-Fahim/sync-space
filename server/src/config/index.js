@@ -1,34 +1,63 @@
-import dotenv from 'dotenv'
-import Joi from 'joi'
+import { envSchema } from './env.schema.js';
 
-dotenv.config()
+let cachedConfig;
 
-const envSchema = Joi.object({
-    NODE_ENV: Joi.string()
-        .allow('development', 'production')
-        .default('development'),
-    PORT: Joi.number().default(3000),
-    MONGODB_URI: Joi.string().required().description('Mongo DB url'),
-    LOG_LEVEL: Joi.string()
-        .allow('error', 'warn', 'info', 'http', 'debug')
-        .default('debug')
-}).unknown()
+/**
+ * Resets the cached configuration instance.
+ * Intended for test isolation when process.env changes between tests.
+ */
+export const resetConfig = () => {
+    cachedConfig = undefined;
+};
 
-const { error, value: envVars } = envSchema.validate(process.env)
+/**
+ * Retrieves the application configuration.
+ *
+ * @param {{ reload?: boolean }} [options]
+ * @returns {object}
+ */
+export const getConfig = ({ reload = false } = {}) => {
+    if (cachedConfig && !reload) {
+        return cachedConfig;
+    }
 
-if (error) {
-    throw new Error(`Config validation error: ${error.message}`)
-}
+    const { error, value: envVars } = envSchema.validate(process.env);
 
-const config = {
-    port: envVars.PORT,
-    env: envVars.NODE_ENV,
-    db: {
-        uri: envVars.MONGODB_URI
-    },
-    LOG_LEVEL: envVars.LOG_LEVEL
-}
+    if (error) {
+        throw new Error(`Config validation error: ${error.message}`);
+    }
 
-export const isDev = () => config.env === 'development';
+    const rawCorsOrigins = envVars.CORS_ORIGINS;
+    const corsOrigins = Array.isArray(rawCorsOrigins)
+        ? Object.freeze([...rawCorsOrigins])
+        : rawCorsOrigins;
 
-export default config
+    cachedConfig = Object.freeze({
+        port: envVars.PORT,
+        env: envVars.NODE_ENV,
+        db: Object.freeze({
+            uri: envVars.MONGODB_URI,
+            maxPoolSize: envVars.MONGODB_MAX_POOL_SIZE,
+            serverSelectionTimeoutMS: envVars.MONGODB_SELECTION_TIMEOUT_MS,
+            socketTimeoutMS: envVars.MONGODB_SOCKET_TIMEOUT_MS,
+            autoIndex: envVars.NODE_ENV !== 'production',
+        }),
+        logLevel: envVars.LOG_LEVEL,
+        bodyLimit: envVars.BODY_LIMIT,
+        auth: Object.freeze({
+            saltRounds: envVars.BCRYPT_SALT_ROUNDS,
+        }),
+        corsOrigins,
+        corsCredentials: corsOrigins !== '*',
+        trustProxy: envVars.TRUST_PROXY,
+        jwt: Object.freeze({
+            algorithm: envVars.JWT_ALGORITHM,
+            secret: envVars.JWT_SECRET,
+            expiresIn: envVars.JWT_EXPIRES_IN,
+            refreshSecret: envVars.JWT_REFRESH_SECRET,
+            refreshExpiresIn: envVars.JWT_REFRESH_EXPIRES_IN,
+        }),
+    });
+
+    return cachedConfig;
+};

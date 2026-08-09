@@ -1,56 +1,87 @@
-import { Link } from 'react-router';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router';
+
+import { Button, ErrorBox, Input } from '@/shared/components';
+import { APP_ROUTES } from '@/shared/config';
+
 import AuthWrapper from '../components/AuthWrapper';
-import LOGIN_FIELDS from '../constants/loginFields';
-import CommonInput from '@/shared/components/CommonInput';
-import CommonButton from '@/shared/components/CommonButton';
-import loginSchema from '../schemas/loginSchema';
+import { loginFields, loginSchema } from '../config/login.config';
+import UI_TEXT from '../constants/uiText';
+import { clearAuthError, loginUser } from '../store/authSlice';
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
+  const { isLoading, error } = useSelector(state => state.auth);
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log('Form submitted: ', data);
+  const onSubmit = async data => {
+    const loggedUser = await dispatch(loginUser(data)).unwrap();
+
+    if (loggedUser) {
+      toast.success('Login successful');
+    }
   };
 
+  useEffect(() => {
+    const subscription = watch(() => {
+      if (error) dispatch(clearAuthError());
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch, error, dispatch]);
+
+  useEffect(() => {
+    dispatch(clearAuthError());
+  }, [dispatch]);
+
   return (
-    <AuthWrapper header="Welcome back!" className="sm:w-[500px]">
-      <p className="text-sm text-discord-text-info text-center">
-        We're so exited to see you again!
+    <AuthWrapper header={UI_TEXT.login.header} className="sm:w-[500px]">
+      <p className="text-sm text-text-info text-center">
+        {UI_TEXT.login.subtitle}
       </p>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {LOGIN_FIELDS.map(({ name, ...field }) => (
-          <CommonInput
-            key={name}
-            {...register(name)}
-            {...field}
-            error={errors[name]}
+        {loginFields.map(attr => (
+          <Input
+            key={attr.name}
+            {...register(attr.name)}
+            {...attr}
+            error={errors[attr.name]}
           />
         ))}
 
-        <div className="mt-1">
-          <Link to="" className="text-discord-link text-sm hover:underline">
-            Forgot your password?
+        <div className="mt-1 mb-2">
+          <Link to="" className="text-link text-sm hover:underline">
+            {UI_TEXT.login.forgotPassword}
           </Link>
         </div>
 
-        <CommonButton className="mt-5">Login</CommonButton>
+        {error && <ErrorBox>{error}</ErrorBox>}
+
+        <Button className="mt-2" type="submit" isLoading={isLoading}>
+          {UI_TEXT.login.loginLink}
+        </Button>
 
         <div className="mt-2">
           <div className="flex flex-row gap-1">
-            <p className="text-sm text-discord-text-info">Need an account?</p>
+            <p className="text-sm text-text-info">
+              {UI_TEXT.login.needAccount}
+            </p>
             <Link
-              to="/register"
-              className="text-discord-link text-sm hover:underline"
+              to={APP_ROUTES.REGISTER}
+              className="text-link text-sm hover:underline"
             >
-              Register
+              {UI_TEXT.login.registerLink}
             </Link>
           </div>
         </div>

@@ -1,32 +1,51 @@
 {
-  "name": "server",
-  "version": "1.0.0",
-  "description": "",
-  "main": "src/server.js",
-  "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module",
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "express": "^5.1.0",
-    "express-validator": "^7.3.1",
-    "helmet": "^8.1.0",
-    "hpp": "^0.2.3",
-    "joi": "^18.0.2",
-    "mongoose": "^8.20.0",
-    "morgan": "^1.10.1",
-    "winston": "^3.19.0"
-  },
-  "devDependencies": {
-    "@types/bcrypt": "^6.0.0",
-    "@types/express": "^5.0.5",
-    "nodemon": "^3.1.10"
-  }
+    "name": "server",
+    "version": "1.0.0",
+    "description": "Backend server for a Sync Space built with the MERN stack.",
+    "main": "src/bootstrap/server.js",
+    "scripts": {
+        "start": "node src/bootstrap/server.js",
+        "dev": "nodemon src/bootstrap/server.js",
+        "lint": "eslint \"src/**/*.js\" \"database/**/*.js\"",
+        "lint:fix": "eslint \"src/**/*.js\" \"database/**/*.js\" --fix",
+        "format": "prettier \"src/**/*.js\" \"database/**/*.js\" \"*.{js,json,md}\" --write",
+        "format:check": "prettier \"src/**/*.js\" \"database/**/*.js\" \"*.{js,json,md}\" --check",
+        "db:migrate": "migrate-mongo up",
+        "db:migrate:down": "migrate-mongo down",
+        "db:migrate:status": "migrate-mongo status",
+        "db:seed": "node database/seeds/seeder.js"
+    },
+    "keywords": [],
+    "author": "Rezuanul Islam Fahim",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Rezuanul-Islam-Fahim/sync-space.git"
+    },
+    "license": "ISC",
+    "type": "module",
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "dependencies": {
+        "bcrypt": "^6.0.0",
+        "cors": "^2.8.5",
+        "dotenv": "^17.2.3",
+        "express": "^5.1.0",
+        "express-validator": "^7.3.1",
+        "helmet": "^8.1.0",
+        "hpp": "^0.2.3",
+        "joi": "^18.0.2",
+        "jsonwebtoken": "^9.0.3",
+        "migrate-mongo": "^14.0.7",
+        "mongoose": "^8.20.0",
+        "morgan": "^1.10.1",
+        "uuid": "^14.0.0",
+        "winston": "^3.19.0"
+    },
+    "devDependencies": {
+        "eslint": "^8.57.1",
+        "eslint-config-prettier": "^10.1.8",
+        "nodemon": "^3.1.10",
+        "prettier": "^3.8.3"
+    }
 }

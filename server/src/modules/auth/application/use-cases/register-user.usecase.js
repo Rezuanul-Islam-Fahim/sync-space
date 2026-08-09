@@ -1,0 +1,29 @@
+import { AuthUser } from '../../domain/auth-user.entity.js';
+import { maskEmail } from '../../../../shared/util/index.js';
+
+export class RegisterUserUseCase {
+    constructor({ authUserWriter, passwordHasher, logger }) {
+        this.authUserWriter = authUserWriter;
+        this.passwordHasher = passwordHasher;
+        this.logger = logger;
+    }
+
+    async execute(data) {
+        const hashedPassword = await this.passwordHasher.hash(data.password);
+
+        const authUser = AuthUser.create({
+            email: data.email,
+            password: hashedPassword,
+            isVerified: false,
+        });
+
+        const savedUser = await this.authUserWriter.createUser(authUser);
+
+        this.logger?.info?.('Auth credentials registered successfully', {
+            authUserId: savedUser.id,
+            email: maskEmail(savedUser.email),
+        });
+
+        return savedUser;
+    }
+}
