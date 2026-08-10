@@ -3,10 +3,14 @@ import {
     bootstrapLogger as logger,
     DatabaseConnectionAdapter,
 } from '../../src/shared/infrastructure/index.js';
-import { getAuthUserModel } from '../../src/modules/auth/infrastructure/database/auth-user.model.js';
-import { getUserModel } from '../../src/modules/user/infrastructure/database/user.model.js';
-import { composeAuthModule } from '../../src/modules/auth/index.js';
-import { composeUserModule } from '../../src/modules/user/index.js';
+import {
+    composeAuthModule,
+    getAuthUserModel,
+} from '../../src/modules/auth/index.js';
+import {
+    composeUserModule,
+    getUserModel,
+} from '../../src/modules/user/index.js';
 import { composeRegistrationModule } from '../../src/orchestration/registration/index.js';
 import { getSeedUsers } from './user.seed.js';
 import { getConfig } from '../../src/config/index.js';
