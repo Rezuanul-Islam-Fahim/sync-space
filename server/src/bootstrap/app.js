@@ -29,8 +29,7 @@ export const createApp = ({
     corsCredentials,
     bodyLimit,
     trustProxy,
-    env,
-    exposeStack = false,
+    isDev,
 }) => {
     registerMorganTokens();
 
@@ -52,8 +51,7 @@ export const createApp = ({
     app.use(express.urlencoded({ extended: false, limit: bodyLimit }));
     app.use(hpp());
 
-    const selectedMorganFormat =
-        env === 'development' ? devMorganFormat : prodMorganFormat;
+    const selectedMorganFormat = isDev ? devMorganFormat : prodMorganFormat;
 
     app.use(
         morgan(selectedMorganFormat, {
@@ -66,7 +64,7 @@ export const createApp = ({
     app.use('/api', router);
 
     app.use(unknownRoutesHandler);
-    app.use(makeErrorHandler({ logger, exposeStack }));
+    app.use(makeErrorHandler({ logger, exposeStack: isDev }));
 
     return app;
 };

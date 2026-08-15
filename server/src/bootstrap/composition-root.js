@@ -54,8 +54,7 @@ export const composeDependencies = ({ logger, config, connection }) => {
         corsCredentials: config.corsCredentials,
         bodyLimit: config.bodyLimit,
         trustProxy: config.trustProxy,
-        env: config.env,
-        exposeStack: config.env === 'development',
+        isDev: config.env === 'development',
     });
 
     return app;
