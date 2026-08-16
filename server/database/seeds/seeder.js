@@ -15,6 +15,11 @@ import { composeRegistrationModule } from '../../src/orchestration/registration/
 import { getSeedUsers } from './user.seed.js';
 import { getConfig } from '../../src/config/index.js';
 
+/**
+ * Connects to the database and seeds initial non-production user data.
+ *
+ * @returns {Promise<void>}
+ */
 const runSeeder = async () => {
     const config = getConfig();
     const dbConnection = new DatabaseConnectionAdapter({
@@ -41,12 +46,16 @@ const runSeeder = async () => {
         await authUserModel.deleteMany({});
         await userModel.deleteMany({});
 
-        const userModule = composeUserModule({ logger, connection, userModel });
+        const userModule = composeUserModule({
+            logger,
+            dbConnection: connection,
+            userModel,
+        });
         const authModule = composeAuthModule({
             logger,
             authConfig: config.auth,
             jwtConfig: config.jwt,
-            connection,
+            dbConnection: connection,
             authUserModel,
         });
         const registrationModule = composeRegistrationModule({

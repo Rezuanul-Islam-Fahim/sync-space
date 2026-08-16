@@ -1,12 +1,29 @@
 import { maskEmail } from '../../../../shared/util/index.js';
 
+/**
+ * Orchestrates multi-module registration saga: creates auth credentials first,
+ * then creates the user profile. Executes compensating rollback on failure.
+ */
 export class RegisterUserProfileUseCase {
+    /**
+     * @param {{
+     *   authService: import('../../../../modules/auth/index.js').AuthFacade,
+     *   userService: import('../../../../modules/user/index.js').UserFacade,
+     *   logger?: import('../../../../shared/ports/index.js').LoggerPort
+     * }} deps
+     */
     constructor({ authService, userService, logger }) {
         this.authService = authService;
         this.userService = userService;
         this.logger = logger;
     }
 
+    /**
+     * Executes registration saga.
+     *
+     * @param {{ email: string, password: string, username: string, displayName?: string, dateOfBirth: Date|string }} data
+     * @returns {Promise<{ authUser: import('../../../../modules/auth/application/dtos/auth-user.dto.js').AuthUserDto, userProfile: import('../../../../modules/user/application/dtos/user-profile.dto.js').UserProfileDto }>}
+     */
     async execute(data) {
         // 1. Create Auth Credentials
         const savedAuthUser = await this.authService.registerUser({

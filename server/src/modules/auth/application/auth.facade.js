@@ -54,7 +54,7 @@ export class AuthFacade {
      * Deletes an auth user record (used for saga compensating rollback).
      *
      * @param {string} id
-     * @returns {Promise<boolean>}
+     * @returns {Promise<void>}
      */
     deleteAuthUser(id) {
         return this.deleteAuthUserUseCase.execute(id);

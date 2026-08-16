@@ -12,6 +12,7 @@ import { composeRegistrationModule } from '../orchestration/registration/index.j
  *   config: object,
  *   connection?: import('mongoose').Connection
  * }} deps
+ * @returns {import('express').Application}
  */
 export const composeDependencies = ({ logger, config, connection }) => {
     // ── User bounded context ──────────────────────────────────────────────────
