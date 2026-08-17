@@ -13,7 +13,7 @@ export class UserReaderAdapter extends UserReaderPort {
     }
 
     async findById(id) {
-        const user = await this.userModel.findOne({ _id: id }).lean();
+        const user = await this.userModel.findById(id).lean();
         return UserMapper.toDomain(user);
     }
 
