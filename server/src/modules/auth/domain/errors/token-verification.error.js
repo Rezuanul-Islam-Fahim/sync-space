@@ -1,4 +1,8 @@
-import { TOKEN_VERIFICATION_FAILED } from '../auth-user.constant.js';
+import {
+    TOKEN_VERIFICATION_FAILED,
+    INVALID_TOKEN,
+    TOKEN_EXPIRED,
+} from '../auth-user.constant.js';
 
 /**
  * Thrown by token-verification infrastructure adapters when a token is
@@ -18,7 +22,7 @@ export class TokenVerificationError extends Error {
 }
 
 export class TokenExpiredError extends TokenVerificationError {
-    constructor(message = 'Token has expired', cause = null) {
+    constructor(message = TOKEN_EXPIRED, cause = null) {
         super(message, cause);
         this.name = 'TokenExpiredError';
         this.isExpired = true;
@@ -26,7 +30,7 @@ export class TokenExpiredError extends TokenVerificationError {
 }
 
 export class TokenInvalidError extends TokenVerificationError {
-    constructor(message = 'Token is invalid or malformed', cause = null) {
+    constructor(message = INVALID_TOKEN, cause = null) {
         super(message, cause);
         this.name = 'TokenInvalidError';
         this.isExpired = false;
