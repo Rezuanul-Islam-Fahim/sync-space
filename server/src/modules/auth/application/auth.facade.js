@@ -56,8 +56,8 @@ export class AuthFacade {
      * @param {string} id
      * @returns {Promise<void>}
      */
-    deleteAuthUser(id) {
-        return this.deleteAuthUserUseCase.execute(id);
+    async deleteAuthUser(id) {
+        await this.deleteAuthUserUseCase.execute(id);
     }
 
     /**
