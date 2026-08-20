@@ -3,6 +3,12 @@ import { toRawObject } from '../../../../shared/infrastructure/index.js';
 import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 
 export class UserMapper {
+    /**
+     * Maps a raw database document or plain object to a User domain entity.
+     *
+     * @param {any} raw
+     * @returns {User | null}
+     */
     static toDomain(raw) {
         if (!raw) return null;
 
@@ -34,6 +40,12 @@ export class UserMapper {
         });
     }
 
+    /**
+     * Maps a User domain entity to persistence document object.
+     *
+     * @param {User} domainUser
+     * @returns {object | null}
+     */
     static toPersistence(domainUser) {
         if (!domainUser) return null;
 

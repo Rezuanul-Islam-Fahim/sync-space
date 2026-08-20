@@ -11,6 +11,15 @@ const signAsync = promisify(jwt.sign);
 const verifyAsync = promisify(jwt.verify);
 
 export class JwtTokenGenerator extends TokenGeneratorPort {
+    /**
+     * @param {{
+     *   secret: string,
+     *   expiresIn: string,
+     *   refreshSecret: string,
+     *   refreshExpiresIn: string,
+     *   algorithm?: string
+     * }} options
+     */
     constructor({
         secret,
         expiresIn,
@@ -45,6 +54,13 @@ export class JwtTokenGenerator extends TokenGeneratorPort {
 }
 
 export class JwtTokenVerifier extends TokenVerifierPort {
+    /**
+     * @param {{
+     *   secret: string,
+     *   refreshSecret: string,
+     *   algorithm?: string
+     * }} options
+     */
     constructor({ secret, refreshSecret, algorithm = 'HS256' }) {
         super();
         this.secret = secret;

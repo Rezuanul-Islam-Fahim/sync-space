@@ -5,6 +5,9 @@ import {
 } from '../../application/ports/password-hasher.port.js';
 
 export class BcryptPasswordHasher extends PasswordHasherPort {
+    /**
+     * @param {{ saltRounds?: number }} [options]
+     */
     constructor({ saltRounds = 12 } = {}) {
         super();
         this.saltRounds = saltRounds;

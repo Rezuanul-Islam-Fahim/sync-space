@@ -26,7 +26,7 @@ export class AuthFacade {
     /**
      * Registers new user authentication credentials.
      *
-     * @param {object} credentials
+     * @param {{ email: string, password: string }} credentials
      * @returns {Promise<AuthUserDto>}
      */
     async registerUser(credentials) {

@@ -32,6 +32,15 @@ export const getHttpStatusForErrorCode = code => {
 
 // ── Main error handler ────────────────────────────────────────────────────────
 
+/**
+ * Creates the global Express error-handling middleware.
+ *
+ * @param {{
+ *   logger: import('../ports/index.js').LoggerPort,
+ *   exposeStack?: boolean
+ * }} options
+ * @returns {import('express').ErrorRequestHandler}
+ */
 export const makeErrorHandler = ({ logger, exposeStack = false }) => {
     return (err, req, res, _next) => {
         const error = err;

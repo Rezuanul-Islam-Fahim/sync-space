@@ -37,6 +37,13 @@ const transform = (doc, ret) => {
 authUserSchema.set('toJSON', { transform });
 authUserSchema.set('toObject', { transform });
 
+/**
+ * Returns the AuthUser Mongoose model for the given connection.
+ *
+ * @param {import('mongoose').Connection} connection
+ * @param {{ autoIndex?: boolean }} [options]
+ * @returns {import('mongoose').Model<any>}
+ */
 export const getAuthUserModel = (connection, { autoIndex } = {}) => {
     if (!connection) {
         throw new Error(

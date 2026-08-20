@@ -30,6 +30,8 @@ export class DatabaseConnectionAdapter {
 
     /**
      * Attaches event listeners to connection instance.
+     *
+     * @returns {void}
      */
     attachListeners() {
         if (!this.connection || this.isListenersAttached) return;
@@ -69,6 +71,8 @@ export class DatabaseConnectionAdapter {
 
     /**
      * Closes the database connection.
+     *
+     * @returns {Promise<void>}
      */
     async disconnect() {
         if (this.connection && this.connection.readyState !== 0) {
@@ -87,6 +91,8 @@ export class DatabaseConnectionAdapter {
 
     /**
      * Resets listeners and connection state.
+     *
+     * @returns {void}
      */
     reset() {
         if (this.connection && this.isListenersAttached) {

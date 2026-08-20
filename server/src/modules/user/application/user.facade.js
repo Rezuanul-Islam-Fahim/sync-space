@@ -28,7 +28,7 @@ export class UserFacade {
     /**
      * Creates a new user profile.
      *
-     * @param {object} data
+     * @param {{ authId: string, username: string, displayName?: string, dateOfBirth: Date | string }} data
      * @returns {Promise<UserProfileDto>}
      */
     async createUser(data) {

@@ -9,7 +9,16 @@ import {
 import { OK } from '../../../shared/constants/index.js';
 import { LOGIN_SUCCESSFUL } from './auth.messages.js';
 
+/**
+ * Controller handling authentication endpoints.
+ */
 export class AuthController {
+    /**
+     * @param {{
+     *   loginUserUseCase: import('../application/use-cases/login-user.usecase.js').LoginUserUseCase,
+     *   logger?: import('../../../shared/ports/index.js').LoggerPort
+     * }} deps
+     */
     constructor({ loginUserUseCase, logger }) {
         this.loginUserUseCase = loginUserUseCase;
         this.logger = logger;

@@ -22,6 +22,20 @@ const devMorganFormat =
 const prodMorganFormat =
     ':remote-addr - :remote-user [:date[clf]] [reqId: :id] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"';
 
+/**
+ * Creates and configures the Express application with middleware and routes.
+ *
+ * @param {{
+ *   router: import('express').Router,
+ *   logger: import('../shared/ports/index.js').LoggerPort,
+ *   corsOrigins: string | string[],
+ *   corsCredentials?: boolean,
+ *   bodyLimit: string,
+ *   trustProxy?: boolean,
+ *   isDev: boolean
+ * }} params
+ * @returns {import('express').Application}
+ */
 export const createApp = ({
     router,
     logger,

@@ -6,13 +6,13 @@ import {
 import {
     USERNAME_MIN_LENGTH,
     USERNAME_MAX_LENGTH,
-} from '../../../shared/constants/index.js';
-
-import {
     EMAIL_REQUIRED,
     EMAIL_INVALID,
     PASSWORD_REQUIRED,
     PASSWORD_LENGTH_ERROR,
+} from '../../../shared/constants/index.js';
+
+import {
     USERNAME_REQUIRED,
     USERNAME_LENGTH_ERROR,
     DISPLAY_NAME_INVALID,
