@@ -87,7 +87,6 @@ export const composeAuthModule = ({
     });
 
     const authService = new AuthFacade({
-        loginUserUseCase,
         registerUserUseCase,
         deleteAuthUserUseCase,
         verifyAccessTokenUseCase,

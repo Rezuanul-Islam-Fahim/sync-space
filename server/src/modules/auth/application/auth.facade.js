@@ -8,36 +8,19 @@ import { AccessTokenClaimsDto } from './dtos/access-token-claims.dto.js';
 export class AuthFacade {
     /**
      * @param {{
-     *   loginUserUseCase: import('./use-cases/login-user.usecase.js').LoginUserUseCase,
      *   registerUserUseCase: import('./use-cases/register-user.usecase.js').RegisterUserUseCase,
      *   deleteAuthUserUseCase: import('./use-cases/delete-auth-user.usecase.js').DeleteAuthUserUseCase,
      *   verifyAccessTokenUseCase: import('./use-cases/verify-access-token.usecase.js').VerifyAccessTokenUseCase
      * }} deps
      */
     constructor({
-        loginUserUseCase,
         registerUserUseCase,
         deleteAuthUserUseCase,
         verifyAccessTokenUseCase,
     }) {
-        this.loginUserUseCase = loginUserUseCase;
         this.registerUserUseCase = registerUserUseCase;
         this.deleteAuthUserUseCase = deleteAuthUserUseCase;
         this.verifyAccessTokenUseCase = verifyAccessTokenUseCase;
-    }
-
-    /**
-     * Authenticates user credentials and issues access tokens.
-     *
-     * @param {object} credentials
-     * @returns {Promise<{ user: AuthUserDto, tokens: object }>}
-     */
-    async loginUser(credentials) {
-        const result = await this.loginUserUseCase.execute(credentials);
-        return {
-            user: AuthUserDto.fromEntity(result.user),
-            tokens: result.tokens,
-        };
     }
 
     /**
