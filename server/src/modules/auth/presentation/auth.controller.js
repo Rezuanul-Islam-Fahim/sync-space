@@ -10,8 +10,8 @@ import { OK } from '../../../shared/constants/index.js';
 import { LOGIN_SUCCESSFUL } from './auth.messages.js';
 
 export class AuthController {
-    constructor({ authService, logger }) {
-        this.authService = authService;
+    constructor({ loginUserUseCase, logger }) {
+        this.loginUserUseCase = loginUserUseCase;
         this.logger = logger;
     }
 
@@ -23,7 +23,7 @@ export class AuthController {
             email: maskEmail(requestDto.email),
         });
 
-        const loginData = await this.authService.loginUser(requestDto);
+        const loginData = await this.loginUserUseCase.execute(requestDto);
 
         const responseDto = LoginResponseDto.from(loginData);
 

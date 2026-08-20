@@ -94,7 +94,7 @@ export const composeAuthModule = ({
     });
 
     const authController = new AuthController({
-        authService,
+        loginUserUseCase,
         logger,
     });
 
