@@ -1,4 +1,5 @@
 import { AuthUserDto } from './dtos/auth-user.dto.js';
+import { AccessTokenClaimsDto } from './dtos/access-token-claims.dto.js';
 
 /**
  * Public API Facade for the Auth Bounded Context.
@@ -61,12 +62,13 @@ export class AuthFacade {
     }
 
     /**
-     * Verifies access token and maps payload to an intent-revealing principal object.
+     * Verifies access token and maps payload to an intent-revealing claims object.
      *
      * @param {string} token
-     * @returns {Promise<{ id: string, email: string }>}
+     * @returns {Promise<AccessTokenClaimsDto>}
      */
-    verifyAccessToken(token) {
-        return this.verifyAccessTokenUseCase.execute(token);
+    async verifyAccessToken(token) {
+        const claims = await this.verifyAccessTokenUseCase.execute(token);
+        return AccessTokenClaimsDto.fromClaims(claims);
     }
 }
