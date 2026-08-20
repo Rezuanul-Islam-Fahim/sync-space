@@ -64,7 +64,8 @@ const runSeeder = async () => {
             logger,
         });
 
-        const registrationService = registrationModule.registrationService;
+        const registerUserProfileUseCase =
+            registrationModule.registerUserProfileUseCase;
 
         const seedUsers = await getSeedUsers();
         logger.info(
@@ -72,7 +73,7 @@ const runSeeder = async () => {
         );
 
         for (const userData of seedUsers) {
-            await registrationService.registerUser(userData);
+            await registerUserProfileUseCase.execute(userData);
         }
 
         logger.info('Database seeded successfully!');
