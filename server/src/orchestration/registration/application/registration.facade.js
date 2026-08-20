@@ -18,7 +18,7 @@ export class RegistrationFacade {
      * @param {object} registrationData
      * @returns {Promise<{ authUser: object, userProfile: object }>}
      */
-    registerUser(registrationData) {
-        return this.registerUserProfileUseCase.execute(registrationData);
+    async registerUser(registrationData) {
+        return await this.registerUserProfileUseCase.execute(registrationData);
     }
 }
