@@ -3,7 +3,7 @@ import {
     INVALID_TOKEN,
     TOKEN_EXPIRED,
 } from '../../domain/auth-user.constant.js';
-import { TokenVerificationError } from '../../domain/errors/token-verification.error.js';
+import { TokenVerificationError } from '../../infrastructure/security/errors/token-verification.error.js';
 
 export class VerifyAccessTokenUseCase {
     /**

@@ -5,7 +5,7 @@ import { TokenVerifierPort } from '../../application/ports/token-verifier.port.j
 import {
     TokenExpiredError,
     TokenInvalidError,
-} from '../../domain/errors/token-verification.error.js';
+} from './errors/token-verification.error.js';
 
 const signAsync = promisify(jwt.sign);
 const verifyAsync = promisify(jwt.verify);
