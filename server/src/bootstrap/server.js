@@ -101,9 +101,21 @@ const start = async () => {
         shutdown('unhandledRejection', 1);
     });
 
-    process.on('uncaughtException', err => {
-        logger.error('Uncaught Exception — exiting process:', err);
-        shutdown('uncaughtException', 1);
+    process.on('uncaughtException', async err => {
+        try {
+            logger.error(
+                'Uncaught Exception — immediately exiting process:',
+                err
+            );
+            if (server && server.listening) {
+                server.close();
+            }
+            await logger.flush?.(1000);
+        } catch {
+            // Ensure process termination even if logging fails
+        } finally {
+            process.exit(1);
+        }
     });
 };
 
