@@ -51,7 +51,7 @@ export const makeErrorHandler = ({ logger, exposeStack = false }) => {
                 ? error.errorCode
                 : ErrorCode.INTERNAL_ERROR;
         const statusCode = isOperational
-            ? error.statusCode || getHttpStatusForErrorCode(errorCode)
+            ? getHttpStatusForErrorCode(errorCode)
             : INTERNAL_SERVER_ERROR;
         const message = isOperational ? error.message : DEFAULT_ERROR;
         const requestId = req.id;
