@@ -1,6 +1,9 @@
 import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 import { maskEmail } from '../../../../shared/util/index.js';
-import { INVALID_CREDENTIALS } from '../../domain/auth-user.constant.js';
+import {
+    INVALID_CREDENTIALS,
+    DUMMY_PASSWORD_HASH,
+} from '../../domain/auth-user.constant.js';
 
 /**
  * Use case for validating user login credentials and issuing authentication tokens.
@@ -31,6 +34,11 @@ export class LoginUserUseCase {
         const user = await this.authUserReader.findByEmail(data.email);
 
         if (!user) {
+            // Mitigate timing attack/user enumeration: run password comparison against dummy hash
+            await this.passwordComparer.compare(
+                data.password,
+                DUMMY_PASSWORD_HASH
+            );
             throw new AppError(INVALID_CREDENTIALS, ErrorCode.UNAUTHENTICATED);
         }
 
