@@ -1,5 +1,3 @@
-import Joi from 'joi';
-
 /**
  * Custom Joi validator for parsing and validating the CORS_ORIGINS environment variable.
  *
@@ -33,10 +31,19 @@ export const corsOriginsValidator = (value, helpers) => {
     }
 
     for (const item of items) {
-        const { error } = Joi.string().uri().validate(item);
-        if (error) {
+        let isValid = false;
+        try {
+            const url = new URL(item);
+            isValid =
+                (url.protocol === 'http:' || url.protocol === 'https:') &&
+                url.origin === item;
+        } catch {
+            isValid = false;
+        }
+
+        if (!isValid) {
             return helpers.message(
-                `CORS_ORIGINS contains an invalid origin URI: "${item}"`
+                `CORS_ORIGINS contains an invalid origin URI: "${item}". Origins must follow the format "http(s)://host[:port]" without path or trailing slash.`
             );
         }
     }
