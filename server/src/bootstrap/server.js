@@ -54,6 +54,7 @@ const start = async () => {
                 process.exit(1);
             }
         }, 10000);
+        forceTimeout.unref();
 
         try {
             // Close idle HTTP keep-alive connections
