@@ -70,7 +70,7 @@ export class DatabaseConnectionAdapter {
     }
 
     /**
-     * Closes the database connection.
+     * Closes the database connection and resets internal state.
      *
      * @returns {Promise<void>}
      */
@@ -78,6 +78,7 @@ export class DatabaseConnectionAdapter {
         if (this.connection && this.connection.readyState !== 0) {
             await this.connection.close();
         }
+        this.reset();
     }
 
     /**
