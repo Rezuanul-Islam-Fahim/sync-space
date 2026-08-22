@@ -83,6 +83,7 @@ const runSeeder = async () => {
     } finally {
         await dbConnection.disconnect();
         logger.info('DB connection closed.');
+        await logger.flush?.();
     }
 };
 

@@ -48,6 +48,7 @@ const start = async () => {
                 await logger.flush?.();
             } catch (err) {
                 bootstrapLogger.error('Error during forced shutdown:', err);
+                await bootstrapLogger.flush?.();
             } finally {
                 process.exit(1);
             }
@@ -76,7 +77,7 @@ const start = async () => {
         } catch (err) {
             logger.error('Error during graceful shutdown:', err);
             if (forceTimeout) clearTimeout(forceTimeout);
-            await logger.flush?.().catch(() => {});
+            await logger.flush?.();
             process.exit(1);
         }
     };
