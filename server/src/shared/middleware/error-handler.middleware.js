@@ -61,6 +61,7 @@ export const makeErrorHandler = ({ logger, exposeStack = false }) => {
             errorCode,
             isOperational,
             requestId,
+            clientRequestId: req.clientRequestId,
             path: req.originalUrl,
             method: req.method,
             ip: req.ip,

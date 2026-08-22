@@ -14,6 +14,7 @@ let isMorganTokenRegistered = false;
 const registerMorganTokens = () => {
     if (isMorganTokenRegistered) return;
     morgan.token('id', req => req.id || '-');
+    morgan.token('client-id', req => req.clientRequestId || '-');
     isMorganTokenRegistered = true;
 };
 
@@ -59,6 +60,7 @@ export const createApp = ({
         cors({
             origin: corsOrigins,
             credentials: corsCredentials,
+            exposedHeaders: ['X-Request-Id'],
         })
     );
     app.use(express.json({ limit: bodyLimit }));
