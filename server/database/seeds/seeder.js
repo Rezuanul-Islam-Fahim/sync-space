@@ -3,14 +3,8 @@ import {
     bootstrapLogger as logger,
     DatabaseConnectionAdapter,
 } from '../../src/shared/infrastructure/index.js';
-import {
-    composeAuthModule,
-    getAuthUserModel,
-} from '../../src/modules/auth/index.js';
-import {
-    composeUserModule,
-    getUserModel,
-} from '../../src/modules/user/index.js';
+import { composeAuthModule } from '../../src/modules/auth/index.js';
+import { composeUserModule } from '../../src/modules/user/index.js';
 import { composeRegistrationModule } from '../../src/orchestration/registration/index.js';
 import { getSeedUsers } from './user.seed.js';
 import { getConfig } from '../../src/config/index.js';
@@ -39,24 +33,21 @@ const runSeeder = async () => {
 
         const connection = await dbConnection.connect();
 
-        const authUserModel = getAuthUserModel(connection);
-        const userModel = getUserModel(connection);
-
         logger.info('Clearing existing credentials and user profiles...');
-        await authUserModel.deleteMany({});
-        await userModel.deleteMany({});
+        await connection.collection('credentials').deleteMany({});
+        await connection.collection('users').deleteMany({});
 
         const userModule = composeUserModule({
             logger,
             dbConnection: connection,
-            userModel,
+            autoIndex: config.db?.autoIndex,
         });
         const authModule = composeAuthModule({
             logger,
             authConfig: config.auth,
             jwtConfig: config.jwt,
             dbConnection: connection,
-            authUserModel,
+            autoIndex: config.db?.autoIndex,
         });
         const registrationModule = composeRegistrationModule({
             authService: authModule.authService,
