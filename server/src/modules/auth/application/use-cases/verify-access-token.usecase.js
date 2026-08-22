@@ -1,4 +1,4 @@
-import { AppError, ErrorCode } from '../../../../shared/error/index.js';
+import { UnauthorizedError } from '../../../../shared/error/index.js';
 import {
     INVALID_TOKEN,
     TOKEN_EXPIRED,
@@ -22,7 +22,7 @@ export class VerifyAccessTokenUseCase {
      *
      * @param {string} token
      * @returns {Promise<{ id: string, email: string }>}
-     * @throws {AppError} if token is invalid or verification fails
+     * @throws {UnauthorizedError} if token is invalid or verification fails
      */
     async execute(token) {
         try {
@@ -31,7 +31,7 @@ export class VerifyAccessTokenUseCase {
         } catch (error) {
             if (error instanceof TokenVerificationError) {
                 const message = error.isExpired ? TOKEN_EXPIRED : INVALID_TOKEN;
-                throw new AppError(message, ErrorCode.UNAUTHENTICATED);
+                throw new UnauthorizedError(message);
             }
             throw error;
         }

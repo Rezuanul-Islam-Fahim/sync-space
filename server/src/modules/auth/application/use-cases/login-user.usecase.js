@@ -1,4 +1,4 @@
-import { AppError, ErrorCode } from '../../../../shared/error/index.js';
+import { UnauthorizedError } from '../../../../shared/error/index.js';
 import { maskEmail } from '../../../../shared/util/index.js';
 import {
     INVALID_CREDENTIALS,
@@ -39,7 +39,7 @@ export class LoginUserUseCase {
                 data.password,
                 DUMMY_PASSWORD_HASH
             );
-            throw new AppError(INVALID_CREDENTIALS, ErrorCode.UNAUTHENTICATED);
+            throw new UnauthorizedError(INVALID_CREDENTIALS);
         }
 
         const isPasswordMatch = await this.passwordComparer.compare(
@@ -48,7 +48,7 @@ export class LoginUserUseCase {
         );
 
         if (!isPasswordMatch) {
-            throw new AppError(INVALID_CREDENTIALS, ErrorCode.UNAUTHENTICATED);
+            throw new UnauthorizedError(INVALID_CREDENTIALS);
         }
 
         const tokens = await this.tokenGenerator.generateTokens(
