@@ -28,6 +28,7 @@ const start = async () => {
 
     let isShuttingDown = false;
     let forceTimeout = null;
+    let server = null;
 
     const shutdown = async (signal, exitCode = 0) => {
         if (isShuttingDown) return;
@@ -82,7 +83,7 @@ const start = async () => {
         }
     };
 
-    const server = app.listen(PORT, () => {
+    server = app.listen(PORT, () => {
         logger.info(`Server started on port: ${PORT}`);
     });
 
