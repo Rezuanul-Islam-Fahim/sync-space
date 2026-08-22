@@ -47,8 +47,8 @@ const start = async () => {
                 await dbConnection.disconnect();
                 await logger.flush?.();
             } catch (err) {
-                bootstrapLogger.error('Error during forced shutdown:', err);
-                await bootstrapLogger.flush?.();
+                logger.error('Error during forced shutdown:', err);
+                await logger.flush?.();
             } finally {
                 process.exit(1);
             }
