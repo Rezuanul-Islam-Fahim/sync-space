@@ -35,7 +35,6 @@ export const requestIdAttach = (req, res, next) => {
 
     const id = randomUUID();
     req.id = id;
-    req.requestId = id;
 
     if (clientRequestId) {
         req.clientRequestId = clientRequestId;
