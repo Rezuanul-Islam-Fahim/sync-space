@@ -6,7 +6,7 @@ export const envSchema = Joi.object({
         .valid('development', 'production')
         .default('development'),
     PORT: Joi.number().integer().min(1).max(65535).default(3000),
-    MONGODB_URI: Joi.string().required().description('MongoDB url'),
+    MONGODB_URI: Joi.string().uri().required().description('MongoDB url'),
     LOG_LEVEL: Joi.string()
         .valid('error', 'warn', 'info', 'http', 'debug')
         .default('debug'),
@@ -24,6 +24,7 @@ export const envSchema = Joi.object({
     TRUST_PROXY: Joi.boolean()
         .default(false)
         .description('Trust proxy headers (X-Forwarded-For)'),
+    REDIS_URL: Joi.string().uri().required().description('Redis url'),
     JWT_ALGORITHM: Joi.string()
         .valid('HS256', 'HS384', 'HS512', 'RS256', 'ES256')
         .default('HS256')

@@ -39,6 +39,7 @@
         "migrate-mongo": "^14.0.7",
         "mongoose": "^9.9.3",
         "morgan": "^1.11.0",
+        "redis": "^6.2.1",
         "uuid": "^14.0.2",
         "winston": "^3.19.0"
     },
