@@ -1,6 +1,7 @@
 import './env-loader.js';
 import {
     DatabaseConnectionAdapter,
+    RedisCacheAdapter,
     WinstonLoggerAdapter,
     bootstrapLogger,
 } from '../shared/infrastructure/index.js';
@@ -23,6 +24,13 @@ const start = async () => {
     });
 
     const connection = await dbConnection.connect();
+
+    const redisClient = new RedisCacheAdapter({
+        logger,
+        redisUrl: config.redis.uri,
+    });
+
+    await redisClient.connect();
 
     const app = composeDependencies({ logger, config, connection });
 
