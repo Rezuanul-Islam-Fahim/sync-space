@@ -9,11 +9,20 @@ import { EMAIL_ALREADY_REGISTERED } from '../../domain/auth-user.constant.js';
  * user module.
  */
 export class AuthUserWriterAdapter extends AuthUserWriterPort {
+    /**
+     * @param {{ authUserModel: import('mongoose').Model<any> }} deps
+     */
     constructor({ authUserModel }) {
         super();
         this.authUserModel = authUserModel;
     }
 
+    /**
+     * Persists new auth credentials to the database.
+     *
+     * @param {import('../../domain/auth-user.entity.js').AuthUser} authUser
+     * @returns {Promise<import('../../domain/auth-user.entity.js').AuthUser>}
+     */
     async createUser(authUser) {
         try {
             const persistenceData = AuthUserMapper.toPersistence(authUser);
@@ -29,6 +38,12 @@ export class AuthUserWriterAdapter extends AuthUserWriterPort {
         }
     }
 
+    /**
+     * Deletes auth credentials by ID.
+     *
+     * @param {string} id
+     * @returns {Promise<void>}
+     */
     async deleteById(id) {
         await this.authUserModel.findByIdAndDelete(id);
     }

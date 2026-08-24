@@ -10,6 +10,9 @@ import {
 const signAsync = promisify(jwt.sign);
 const verifyAsync = promisify(jwt.verify);
 
+/**
+ * Adapter implementing TokenGeneratorPort for signing JSON Web Tokens.
+ */
 export class JwtTokenGenerator extends TokenGeneratorPort {
     /**
      * @param {{
@@ -35,6 +38,13 @@ export class JwtTokenGenerator extends TokenGeneratorPort {
         this.algorithm = algorithm;
     }
 
+    /**
+     * Generates a pair of access and refresh tokens for the given user identity.
+     *
+     * @param {string} userId
+     * @param {string} email
+     * @returns {Promise<{ token: string, refreshToken: string }>}
+     */
     async generateTokens(userId, email) {
         const payload = { sub: userId, email };
 
@@ -53,6 +63,9 @@ export class JwtTokenGenerator extends TokenGeneratorPort {
     }
 }
 
+/**
+ * Adapter implementing TokenVerifierPort for verifying and decoding JSON Web Tokens.
+ */
 export class JwtTokenVerifier extends TokenVerifierPort {
     /**
      * @param {{
@@ -68,6 +81,12 @@ export class JwtTokenVerifier extends TokenVerifierPort {
         this.algorithm = algorithm;
     }
 
+    /**
+     * Verifies the authenticity and expiration of an access token.
+     *
+     * @param {string} token
+     * @returns {Promise<object>}
+     */
     async verifyAccessToken(token) {
         try {
             return await verifyAsync(token, this.secret, {
@@ -81,6 +100,12 @@ export class JwtTokenVerifier extends TokenVerifierPort {
         }
     }
 
+    /**
+     * Verifies the authenticity and expiration of a refresh token.
+     *
+     * @param {string} token
+     * @returns {Promise<object>}
+     */
     async verifyRefreshToken(token) {
         try {
             return await verifyAsync(token, this.refreshSecret, {

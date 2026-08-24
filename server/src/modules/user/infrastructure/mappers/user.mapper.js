@@ -2,6 +2,9 @@ import { User } from '../../domain/user.entity.js';
 import { toRawObject } from '../../../../shared/infrastructure/index.js';
 import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 
+/**
+ * Mapper responsible for converting between raw database documents and User domain entities or persistence objects.
+ */
 export class UserMapper {
     /**
      * Maps a raw database document or plain object to a User domain entity.

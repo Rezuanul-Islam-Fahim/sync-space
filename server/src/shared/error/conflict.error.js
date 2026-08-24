@@ -6,7 +6,7 @@ import { AppError, ErrorCode } from './app.error.js';
 export class ConflictError extends AppError {
     /**
      * @param {string} message - Human-readable error description
-     * @param {object|array} [errors] - Conflict error details
+     * @param {object|any[]} [errors] - Conflict error details
      */
     constructor(message, errors) {
         super(message, ErrorCode.ALREADY_EXISTS, errors);

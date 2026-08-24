@@ -4,8 +4,8 @@
 export class RegistrationResponseDto {
     /**
      * @param {{
-     *   authUser: import('../../../modules/auth/application/dtos/auth-user.dto.js').AuthUserDto | object,
-     *   userProfile: import('../../../modules/user/application/dtos/user-profile.dto.js').UserProfileDto | object
+     *   authUser: import('../../../../modules/auth/application/dtos/auth-user.dto.js').AuthUserDto | object,
+     *   userProfile: import('../../../../modules/user/application/dtos/user-profile.dto.js').UserProfileDto | object
      * }} params
      */
     constructor({ authUser, userProfile }) {
@@ -24,8 +24,8 @@ export class RegistrationResponseDto {
 
     /**
      * @param {{
-     *   authUser: import('../../../modules/auth/application/dtos/auth-user.dto.js').AuthUserDto | object,
-     *   userProfile: import('../../../modules/user/application/dtos/user-profile.dto.js').UserProfileDto | object
+     *   authUser: import('../../../../modules/auth/application/dtos/auth-user.dto.js').AuthUserDto | object,
+     *   userProfile: import('../../../../modules/user/application/dtos/user-profile.dto.js').UserProfileDto | object
      * }} params
      * @returns {RegistrationResponseDto}
      */

@@ -1,3 +1,6 @@
+/**
+ * Configuration file for migrate-mongo database schema migrations.
+ */
 import dotenv from 'dotenv';
 
 dotenv.config();

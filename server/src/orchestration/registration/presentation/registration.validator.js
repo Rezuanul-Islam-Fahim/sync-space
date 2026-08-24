@@ -20,6 +20,10 @@ import {
     DOB_INVALID,
 } from './registration.messages.js';
 
+/**
+ * Express-validator middleware array for the user registration endpoint.
+ * Validates email, password, username, displayName, and dateOfBirth fields.
+ */
 export const registrationValidation = [
     createEmailValidator({ EMAIL_REQUIRED, EMAIL_INVALID }),
     createPasswordValidator({ PASSWORD_REQUIRED, PASSWORD_LENGTH_ERROR }),

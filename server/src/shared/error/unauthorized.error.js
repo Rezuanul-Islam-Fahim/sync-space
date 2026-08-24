@@ -6,7 +6,7 @@ import { AppError, ErrorCode } from './app.error.js';
 export class UnauthorizedError extends AppError {
     /**
      * @param {string} message - Human-readable error description
-     * @param {object|array} [errors] - Authentication failure details
+     * @param {object|any[]} [errors] - Authentication failure details
      */
     constructor(message, errors) {
         super(message, ErrorCode.UNAUTHENTICATED, errors);

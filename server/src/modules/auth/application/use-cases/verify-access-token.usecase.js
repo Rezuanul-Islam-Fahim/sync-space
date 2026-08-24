@@ -5,6 +5,9 @@ import {
 } from '../../domain/auth-user.constant.js';
 import { TokenVerificationError } from '../../infrastructure/security/errors/token-verification.error.js';
 
+/**
+ * Use case for verifying access tokens and resolving user identity claims.
+ */
 export class VerifyAccessTokenUseCase {
     /**
      * @param {{

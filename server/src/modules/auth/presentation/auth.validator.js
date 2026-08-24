@@ -19,4 +19,8 @@ const passwordValidation = createPasswordValidator({
     PASSWORD_LENGTH_ERROR,
 });
 
+/**
+ * Express-validator middleware array for the login endpoint.
+ * Validates presence and format of email and password fields.
+ */
 export const loginValidation = [emailValidation, passwordValidation];

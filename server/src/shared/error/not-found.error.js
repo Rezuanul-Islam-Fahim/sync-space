@@ -6,7 +6,7 @@ import { AppError, ErrorCode } from './app.error.js';
 export class NotFoundError extends AppError {
     /**
      * @param {string} message - Human-readable error description
-     * @param {object|array} [errors] - Resource lookup details
+     * @param {object|any[]} [errors] - Resource lookup details
      */
     constructor(message, errors) {
         super(message, ErrorCode.RESOURCE_NOT_FOUND, errors);

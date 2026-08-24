@@ -2,6 +2,9 @@ import { AuthUser } from '../../domain/auth-user.entity.js';
 import { toRawObject } from '../../../../shared/infrastructure/index.js';
 import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 
+/**
+ * Mapper responsible for converting between raw database documents and AuthUser domain entities or persistence objects.
+ */
 export class AuthUserMapper {
     /**
      * Maps a raw database document or plain object to an AuthUser domain entity.

@@ -7,8 +7,8 @@ import { maskEmail } from '../../../../shared/util/index.js';
 export class RegisterUserProfileUseCase {
     /**
      * @param {{
-     *   authService: import('../../../../modules/auth/index.js').AuthFacade,
-     *   userService: import('../../../../modules/user/index.js').UserFacade,
+     *   authService: import('../../../../modules/auth/application/auth.facade.js').AuthFacade,
+     *   userService: import('../../../../modules/user/application/user.facade.js').UserFacade,
      *   logger?: import('../../../../shared/ports/index.js').LoggerPort
      * }} deps
      */
