@@ -62,7 +62,7 @@ export class RedisCacheAdapter {
                 this.onReconnecting
             );
             this.isListenersAttached = false;
-            this.redisClient = null;
         }
+        this.redisClient = null;
     }
 }
