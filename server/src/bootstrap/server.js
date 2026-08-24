@@ -53,8 +53,11 @@ const start = async () => {
                 if (typeof server?.closeAllConnections === 'function') {
                     server.closeAllConnections();
                 }
-                await dbConnection.disconnect();
-                await redisClient.disconnect();
+
+                await Promise.allSettled([
+                    dbConnection.disconnect(),
+                    redisClient.disconnect(),
+                ]);
 
                 await logger.flush?.();
             } catch (err) {
@@ -78,11 +81,10 @@ const start = async () => {
                 logger.info('HTTP server closed.');
             }
 
-            // Disconnect from database
-            await dbConnection.disconnect();
-
-            // Disconnect from redis
-            await redisClient.disconnect();
+            await Promise.allSettled([
+                dbConnection.disconnect(),
+                redisClient.disconnect(),
+            ]);
 
             await logger.flush?.();
 
