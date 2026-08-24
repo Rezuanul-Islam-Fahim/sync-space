@@ -54,6 +54,8 @@ const start = async () => {
                     server.closeAllConnections();
                 }
                 await dbConnection.disconnect();
+                await redisClient.disconnect();
+
                 await logger.flush?.();
             } catch (err) {
                 logger.error('Error during forced shutdown:', err);
@@ -78,7 +80,9 @@ const start = async () => {
 
             // Disconnect from database
             await dbConnection.disconnect();
-            logger.info('Database connection closed.');
+
+            // Disconnect from redis
+            await redisClient.disconnect();
 
             await logger.flush?.();
 
