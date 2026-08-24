@@ -1,5 +1,5 @@
-export { DatabaseConnectionAdapter } from './database/database-connection.adapter.js';
-export { RedisConnectionAdapter } from './cache/redis-connection.adapter.js';
+export { DatabaseConnectionManager } from './database/database-connection.manager.js';
+export { RedisConnectionManager } from './cache/redis-connection.manager.js';
 export { toRawObject } from './database/to-raw-object.util.js';
 export {
     WinstonLoggerAdapter,

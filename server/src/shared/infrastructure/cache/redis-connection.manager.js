@@ -1,6 +1,6 @@
 import { createClient } from 'redis';
 
-export class RedisConnectionAdapter {
+export class RedisConnectionManager {
     constructor({ logger, redisUrl }) {
         this.logger = logger;
         this.redisUrl = redisUrl;

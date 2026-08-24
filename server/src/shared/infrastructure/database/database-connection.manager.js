@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-export class DatabaseConnectionAdapter {
+export class DatabaseConnectionManager {
     /**
      * @param {{
      *   logger: import('../../ports/index.js').LoggerPort,

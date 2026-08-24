@@ -1,7 +1,7 @@
 import './env-loader.js';
 import {
-    DatabaseConnectionAdapter,
-    RedisConnectionAdapter,
+    DatabaseConnectionManager,
+    RedisConnectionManager,
     WinstonLoggerAdapter,
     bootstrapLogger,
 } from '../shared/infrastructure/index.js';
@@ -18,14 +18,14 @@ const start = async () => {
     // solely for the outer start().catch() boundary below.
     const logger = new WinstonLoggerAdapter({ logLevel: config.logLevel });
 
-    const dbConnection = new DatabaseConnectionAdapter({
+    const dbConnection = new DatabaseConnectionManager({
         logger,
         dbConfig: config.db,
     });
 
     const connection = await dbConnection.connect();
 
-    const redisClient = new RedisConnectionAdapter({
+    const redisClient = new RedisConnectionManager({
         logger,
         redisUrl: config.redis.uri,
     });
