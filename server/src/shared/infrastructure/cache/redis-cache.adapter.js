@@ -27,13 +27,15 @@ export class RedisCacheAdapter {
     }
 
     async connect() {
-        if (this.redisClient && this.redisClient.isReady) {
+        if (this.redisClient && this.redisClient.isOpen) {
             this.logger?.info('Redis client is already connected!');
             return this.redisClient;
         }
 
-        this.redisClient = createClient({ url: this.redisUrl });
-        this.attachListeners();
+        if (!this.redisClient) {
+            this.redisClient = createClient({ url: this.redisUrl });
+            this.attachListeners();
+        }
 
         await this.redisClient.connect();
 
