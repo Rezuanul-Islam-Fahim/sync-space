@@ -38,7 +38,7 @@ export const corsOriginsValidator = (value, helpers) => {
                 (url.protocol === 'http:' || url.protocol === 'https:') &&
                 url.origin === item;
         } catch {
-            isValid = false;
+            // invalid URL format
         }
 
         if (!isValid) {
