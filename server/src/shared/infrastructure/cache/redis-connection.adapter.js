@@ -1,6 +1,6 @@
 import { createClient } from 'redis';
 
-export class RedisCacheAdapter {
+export class RedisConnectionAdapter {
     constructor({ logger, redisUrl }) {
         this.logger = logger;
         this.redisUrl = redisUrl;
@@ -15,6 +15,9 @@ export class RedisCacheAdapter {
         this.onReconnecting = () => {
             this.logger?.warn('Redis client reconnecting...');
         };
+        this.onReady = () => {
+            this.logger?.info('Redis client ready for commands.');
+        };
     }
 
     attachListeners() {
@@ -23,6 +26,7 @@ export class RedisCacheAdapter {
         this.redisClient.on('error', this.onError);
         this.redisClient.on('connect', this.onConnect);
         this.redisClient.on('reconnecting', this.onReconnecting);
+        this.redisClient.on('ready', this.onReady);
         this.isListenersAttached = true;
     }
 
@@ -47,8 +51,19 @@ export class RedisCacheAdapter {
     }
 
     async disconnect() {
-        if (this.redisClient && this.redisClient.isOpen) {
-            await this.redisClient.quit();
+        try {
+            if (this.redisClient && this.redisClient.isOpen) {
+                await this.redisClient.close();
+            }
+        } catch (err) {
+            this.logger?.error('Error while quitting Redis:', err);
+
+            try {
+                this.redisClient?.destroy?.();
+            } catch (destroyErr) {
+                this.logger?.error('Error while destroying Redis:', destroyErr);
+            }
+        } finally {
             this.reset();
         }
     }
@@ -61,6 +76,7 @@ export class RedisCacheAdapter {
                 'reconnecting',
                 this.onReconnecting
             );
+            this.redisClient.removeListener('ready', this.onReady);
             this.isListenersAttached = false;
         }
         this.redisClient = null;
