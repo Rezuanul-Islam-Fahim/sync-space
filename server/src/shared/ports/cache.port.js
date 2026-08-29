@@ -7,7 +7,7 @@ export class CachePort {
         throw new Error('Method not implemented');
     }
 
-    del(_key) {
+    delete(_key) {
         throw new Error('Method not implemented');
     }
 }

@@ -12,3 +12,7 @@ export const TOKEN_EXPIRED = 'Authentication token has expired';
 export const USER_UNAVAILABLE =
     'The user belonging to this token no longer exists';
 export const TOKEN_VERIFICATION_FAILED = 'Token verification failed';
+
+// Cache keys and ttl's
+export const authSessionCacheKey = 'session';
+export const authSessionTimeToLive = 7 * 24 * 60 * 60;

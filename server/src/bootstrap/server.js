@@ -35,7 +35,6 @@ const start = async () => {
 
     const redisClient = new RedisClient({
         client: redisConnection.getConnection(),
-        logger,
     });
 
     const app = composeDependencies({

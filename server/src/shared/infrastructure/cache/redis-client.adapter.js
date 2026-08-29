@@ -1,10 +1,9 @@
 import { CachePort } from '../../ports/cache.port.js';
 
 export class RedisClient extends CachePort {
-    constructor({ client, logger }) {
+    constructor({ client }) {
         super();
         this.client = client;
-        this.logger = logger;
     }
 
     async get(key) {
@@ -12,10 +11,10 @@ export class RedisClient extends CachePort {
     }
 
     async set(key, value, ttl) {
-        return await this.client.set(key, value, { EX: ttl });
+        await this.client.set(key, value, { EX: ttl });
     }
 
-    async del(key) {
-        return await this.client.del(key);
+    async delete(key) {
+        await this.client.del(key);
     }
 }

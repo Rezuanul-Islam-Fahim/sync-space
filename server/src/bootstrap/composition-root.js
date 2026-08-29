@@ -18,7 +18,7 @@ export const composeDependencies = ({
     logger,
     config,
     connection,
-    _redisClient,
+    redisClient,
 }) => {
     // ── User bounded context ──────────────────────────────────────────────────
     const userModule = composeUserModule({
@@ -33,6 +33,7 @@ export const composeDependencies = ({
         authConfig: config.auth,
         jwtConfig: config.jwt,
         dbConnection: connection,
+        redisClient,
         autoIndex: config.db?.autoIndex,
     });
 

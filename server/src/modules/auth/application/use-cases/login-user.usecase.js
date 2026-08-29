@@ -14,13 +14,21 @@ export class LoginUserUseCase {
      *   authUserReader: import('../ports/auth-user-reader.port.js').AuthUserReaderPort,
      *   passwordComparer: import('../ports/password-hasher.port.js').PasswordComparerPort,
      *   tokenGenerator: import('../ports/token-generator.port.js').TokenGeneratorPort,
+     *   refreshTokenWriter: import('../ports/refresh-token-writer.port.js').RefreshTokenWriterPort,
      *   logger?: import('../../../../shared/ports/index.js').LoggerPort
      * }} deps
      */
-    constructor({ authUserReader, passwordComparer, tokenGenerator, logger }) {
+    constructor({
+        authUserReader,
+        passwordComparer,
+        tokenGenerator,
+        refreshTokenWriter,
+        logger,
+    }) {
         this.authUserReader = authUserReader;
         this.passwordComparer = passwordComparer;
         this.tokenGenerator = tokenGenerator;
+        this.refreshTokenWriter = refreshTokenWriter;
         this.logger = logger;
     }
 
