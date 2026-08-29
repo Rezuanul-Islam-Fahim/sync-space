@@ -1,5 +1,11 @@
 export class RefreshTokenWriterPort {
-    store(_sessionId, _authUserId, _token) {
+    /**
+     * @param {string} deviceId
+     * @param {string} authUserId
+     * @param {string} refreshToken
+     * @returns {Promise}
+     */
+    store({ _deviceId, _authUserId, _refreshToken }) {
         throw new Error('Method not implemented');
     }
 

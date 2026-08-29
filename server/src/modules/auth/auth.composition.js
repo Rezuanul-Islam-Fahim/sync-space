@@ -65,7 +65,7 @@ export const composeAuthModule = ({
     });
     const passwordComparer = new BcryptPasswordComparer();
     const refreshTokenWriter = new RefreshTokenWriterAdapter({
-        redisClient,
+        client: redisClient,
         logger,
     });
 

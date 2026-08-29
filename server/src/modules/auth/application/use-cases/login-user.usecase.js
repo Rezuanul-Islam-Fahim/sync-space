@@ -64,6 +64,12 @@ export class LoginUserUseCase {
             user.email
         );
 
+        await this.refreshTokenWriter.store({
+            deviceId: data.deviceId,
+            authUserId: user.id,
+            refreshToken: tokens.refreshToken,
+        });
+
         this.logger?.info?.('User login successful', {
             authUserId: user.id,
             email: maskEmail(user.email),
