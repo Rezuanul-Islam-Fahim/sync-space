@@ -1,6 +1,7 @@
 import './env-loader.js';
 import {
     DatabaseConnectionManager,
+    RedisClient,
     RedisConnectionManager,
     WinstonLoggerAdapter,
     bootstrapLogger,
@@ -32,7 +33,17 @@ const start = async () => {
 
     await redisConnection.connect();
 
-    const app = composeDependencies({ logger, config, connection });
+    const redisClient = new RedisClient({
+        client: redisConnection.getConnection(),
+        logger,
+    });
+
+    const app = composeDependencies({
+        logger,
+        config,
+        connection,
+        redisClient,
+    });
 
     let isShuttingDown = false;
     let forceTimeout = null;

@@ -14,7 +14,12 @@ import { composeRegistrationModule } from '../orchestration/registration/index.j
  * }} deps
  * @returns {import('express').Application}
  */
-export const composeDependencies = ({ logger, config, connection }) => {
+export const composeDependencies = ({
+    logger,
+    config,
+    connection,
+    _redisClient,
+}) => {
     // ── User bounded context ──────────────────────────────────────────────────
     const userModule = composeUserModule({
         logger,
