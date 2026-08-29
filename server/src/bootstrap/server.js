@@ -25,12 +25,12 @@ const start = async () => {
 
     const connection = await dbConnection.connect();
 
-    const redisClient = new RedisConnectionManager({
+    const redisConnection = new RedisConnectionManager({
         logger,
         redisUrl: config.redis.uri,
     });
 
-    await redisClient.connect();
+    await redisConnection.connect();
 
     const app = composeDependencies({ logger, config, connection });
 
@@ -56,7 +56,7 @@ const start = async () => {
 
                 await Promise.allSettled([
                     dbConnection.disconnect(),
-                    redisClient.disconnect(),
+                    redisConnection.disconnect(),
                 ]);
 
                 await logger.flush?.();
@@ -83,7 +83,7 @@ const start = async () => {
 
             await Promise.allSettled([
                 dbConnection.disconnect(),
-                redisClient.disconnect(),
+                redisConnection.disconnect(),
             ]);
 
             await logger.flush?.();
