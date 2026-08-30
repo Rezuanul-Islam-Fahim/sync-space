@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import { constructCacheKey } from '../../../../shared/util/index.js';
 import { RefreshTokenWriterPort } from '../../application/ports/refresh-token-writer.port.js';
 import {
@@ -13,11 +12,11 @@ export class RefreshTokenWriterAdapter extends RefreshTokenWriterPort {
         this.logger = logger;
     }
 
-    async store({ deviceId, authUserId, refreshToken }) {
+    async store(sessionId, authUserId, refreshToken) {
         const cacheKey = constructCacheKey(
             authSessionCacheKey,
             authUserId,
-            deviceId || randomUUID()
+            sessionId
         );
         await this.client.set(cacheKey, refreshToken, authSessionTimeToLive);
     }

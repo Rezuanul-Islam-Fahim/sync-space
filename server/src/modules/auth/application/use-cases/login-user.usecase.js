@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { UnauthorizedError } from '../../../../shared/error/index.js';
 import { maskEmail } from '../../../../shared/util/index.js';
 import {
@@ -59,16 +60,19 @@ export class LoginUserUseCase {
             throw new UnauthorizedError(INVALID_CREDENTIALS);
         }
 
+        const sessionId = data.deviceId || randomUUID();
+
         const tokens = await this.tokenGenerator.generateTokens(
             user.id,
-            user.email
+            user.email,
+            sessionId
         );
 
-        await this.refreshTokenWriter.store({
-            deviceId: data.deviceId,
-            authUserId: user.id,
-            refreshToken: tokens.refreshToken,
-        });
+        await this.refreshTokenWriter.store(
+            sessionId,
+            user.id,
+            tokens.refreshToken
+        );
 
         this.logger?.info?.('User login successful', {
             authUserId: user.id,

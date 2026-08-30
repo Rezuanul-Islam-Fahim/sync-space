@@ -43,17 +43,16 @@ export class JwtTokenGenerator extends TokenGeneratorPort {
      *
      * @param {string} userId
      * @param {string} email
+     * @param {string} sessionId
      * @returns {Promise<{ token: string, refreshToken: string }>}
      */
-    async generateTokens(userId, email) {
-        const payload = { sub: userId, email };
-
+    async generateTokens(userId, email, sessionId) {
         const [token, refreshToken] = await Promise.all([
-            signAsync(payload, this.secret, {
+            signAsync({ sub: userId, email }, this.secret, {
                 algorithm: this.algorithm,
                 expiresIn: this.expiresIn,
             }),
-            signAsync(payload, this.refreshSecret, {
+            signAsync({ sub: userId, sessionId }, this.refreshSecret, {
                 algorithm: this.algorithm,
                 expiresIn: this.refreshExpiresIn,
             }),
