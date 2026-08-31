@@ -18,6 +18,7 @@ import { getAuthUserModel } from './infrastructure/database/auth-user.model.js';
 import { AuthUserReaderAdapter } from './infrastructure/adapters/auth-user-reader.adapter.js';
 import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-writer.adapter.js';
 import { RefreshTokenWriterAdapter } from './infrastructure/cache/refresh-token-writer.adapter.js';
+import { RefreshTokenReaderAdapter } from './infrastructure/cache/refresh-token-reader.adapter.js';
 
 /**
  * Composes the auth module and returns its Express router and auth service facade.
@@ -64,7 +65,12 @@ export const composeAuthModule = ({
         saltRounds: authConfig.saltRounds,
     });
     const passwordComparer = new BcryptPasswordComparer();
+
     const refreshTokenWriter = new RefreshTokenWriterAdapter({
+        client: redisClient,
+        logger,
+    });
+    const _refreshTokenReader = new RefreshTokenReaderAdapter({
         client: redisClient,
         logger,
     });
