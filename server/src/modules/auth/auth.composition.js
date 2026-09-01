@@ -19,6 +19,7 @@ import { AuthUserReaderAdapter } from './infrastructure/adapters/auth-user-reade
 import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-writer.adapter.js';
 import { RefreshTokenWriterAdapter } from './infrastructure/cache/refresh-token-writer.adapter.js';
 import { RefreshTokenReaderAdapter } from './infrastructure/cache/refresh-token-reader.adapter.js';
+import { TokenRefreshUseCase } from './application/use-cases/token-refresh.usecase.js';
 
 /**
  * Composes the auth module and returns its Express router and auth service facade.
@@ -70,7 +71,7 @@ export const composeAuthModule = ({
         client: redisClient,
         logger,
     });
-    const _refreshTokenReader = new RefreshTokenReaderAdapter({
+    const refreshTokenReader = new RefreshTokenReaderAdapter({
         client: redisClient,
         logger,
     });
@@ -97,6 +98,12 @@ export const composeAuthModule = ({
     const verifyAccessTokenUseCase = new VerifyAccessTokenUseCase({
         tokenVerifier,
         logger,
+    });
+
+    const _tokenRefreshUseCase = new TokenRefreshUseCase({
+        tokenVerifier,
+        refreshTokenReader,
+        refreshTokenWriter,
     });
 
     const authService = new AuthFacade({
