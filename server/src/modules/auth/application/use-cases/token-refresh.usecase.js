@@ -16,19 +16,19 @@ export class TokenRefreshUseCase {
         this.logger = logger;
     }
 
-    async execute(token) {
+    async execute(data) {
         const {
             sub: authUserId,
             email,
             sessionId,
-        } = await this.tokenVerifier.verifyRefreshToken(token);
+        } = await this.tokenVerifier.verifyRefreshToken(data.token);
 
         const refreshToken = await this.refreshTokenReader.get(
             authUserId,
             sessionId
         );
 
-        if (!refreshToken || token !== refreshToken) {
+        if (!refreshToken || data.token !== refreshToken) {
             throw new UnauthorizedError('Session expired or invalid');
         }
 

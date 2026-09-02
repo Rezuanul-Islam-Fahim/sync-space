@@ -100,7 +100,7 @@ export const composeAuthModule = ({
         logger,
     });
 
-    const _tokenRefreshUseCase = new TokenRefreshUseCase({
+    const tokenRefreshUseCase = new TokenRefreshUseCase({
         tokenGenerator,
         tokenVerifier,
         refreshTokenReader,
@@ -116,6 +116,7 @@ export const composeAuthModule = ({
 
     const authController = new AuthController({
         loginUserUseCase,
+        tokenRefreshUseCase,
         logger,
     });
 
