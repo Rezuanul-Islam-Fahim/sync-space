@@ -86,6 +86,13 @@ const transform = (doc, ret) => {
 userSchema.set('toJSON', { transform });
 userSchema.set('toObject', { transform });
 
+/**
+ * Returns the User Mongoose model for the given connection.
+ *
+ * @param {import('mongoose').Connection} connection
+ * @param {{ autoIndex?: boolean }} [options]
+ * @returns {import('mongoose').Model<any>}
+ */
 export const getUserModel = (connection, { autoIndex } = {}) => {
     if (!connection) {
         throw new Error(

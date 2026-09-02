@@ -42,6 +42,9 @@ export const getConfig = ({ reload = false } = {}) => {
             socketTimeoutMS: envVars.MONGODB_SOCKET_TIMEOUT_MS,
             autoIndex: envVars.NODE_ENV !== 'production',
         }),
+        redis: Object.freeze({
+            uri: envVars.REDIS_URL,
+        }),
         logLevel: envVars.LOG_LEVEL,
         bodyLimit: envVars.BODY_LIMIT,
         auth: Object.freeze({

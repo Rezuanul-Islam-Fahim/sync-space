@@ -14,7 +14,7 @@ export class AppError extends Error {
     /**
      * @param {string} message - Human-readable error message
      * @param {string} [errorCode] - Error code string (e.g. 'INVALID_INPUT')
-     * @param {object|array} [errors] - Optional detailed validation error payload
+     * @param {object|any[]} [errors] - Optional detailed validation error payload
      */
     constructor(
         message,

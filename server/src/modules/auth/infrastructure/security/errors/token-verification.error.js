@@ -1,16 +1,21 @@
-import { TOKEN_VERIFICATION_FAILED } from '../auth-user.constant.js';
+import { AppError, ErrorCode } from '../../../../../shared/error/index.js';
+import {
+    TOKEN_VERIFICATION_FAILED,
+    INVALID_TOKEN,
+    TOKEN_EXPIRED,
+} from '../../../domain/auth-user.constant.js';
 
 /**
  * Thrown by token-verification infrastructure adapters when a token is
  * invalid, expired, or cannot be verified.
  *
  * This error is handled and translated at the application layer boundary
- * (`AuthFacade`) into an appropriate `AppError` — keeping presentation layer
+ * into an appropriate `AppError` — keeping the presentation layer
  * (middleware) decoupled from module internal error hierarchies.
  */
-export class TokenVerificationError extends Error {
+export class TokenVerificationError extends AppError {
     constructor(message = TOKEN_VERIFICATION_FAILED, cause = null) {
-        super(message);
+        super(message, ErrorCode.UNAUTHENTICATED);
         this.name = 'TokenVerificationError';
         this.cause = cause;
         this.isExpired = false;
@@ -18,7 +23,7 @@ export class TokenVerificationError extends Error {
 }
 
 export class TokenExpiredError extends TokenVerificationError {
-    constructor(message = 'Token has expired', cause = null) {
+    constructor(message = TOKEN_EXPIRED, cause = null) {
         super(message, cause);
         this.name = 'TokenExpiredError';
         this.isExpired = true;
@@ -26,7 +31,7 @@ export class TokenExpiredError extends TokenVerificationError {
 }
 
 export class TokenInvalidError extends TokenVerificationError {
-    constructor(message = 'Token is invalid or malformed', cause = null) {
+    constructor(message = INVALID_TOKEN, cause = null) {
         super(message, cause);
         this.name = 'TokenInvalidError';
         this.isExpired = false;

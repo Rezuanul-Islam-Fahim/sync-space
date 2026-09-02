@@ -1,14 +1,15 @@
-import {
-    createEmailValidator,
-    createPasswordValidator,
-} from '../../../shared/middleware/index.js';
-
+import { body } from 'express-validator';
 import {
     EMAIL_REQUIRED,
     EMAIL_INVALID,
     PASSWORD_REQUIRED,
     PASSWORD_LENGTH_ERROR,
-} from './auth.messages.js';
+} from '../../../shared/constants/index.js';
+import {
+    createEmailValidator,
+    createPasswordValidator,
+} from '../../../shared/middleware/index.js';
+import { DEVICE_ID_INVALID, TOKEN_REQUIRED } from './auth.messages.js';
 
 const emailValidation = createEmailValidator({
     EMAIL_REQUIRED,
@@ -20,4 +21,19 @@ const passwordValidation = createPasswordValidator({
     PASSWORD_LENGTH_ERROR,
 });
 
-export const loginValidation = [emailValidation, passwordValidation];
+/**
+ * Express-validator middleware array for the login endpoint.
+ * Validates presence and format of email and password fields.
+ */
+export const loginValidation = [
+    emailValidation,
+    passwordValidation,
+    body('deviceId')
+        .optional({ values: 'null' })
+        .isString()
+        .withMessage(DEVICE_ID_INVALID),
+];
+
+export const refreshValidation = [
+    body('token').notEmpty().withMessage(TOKEN_REQUIRED),
+];

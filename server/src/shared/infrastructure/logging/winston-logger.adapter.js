@@ -88,6 +88,10 @@ export class WinstonLoggerAdapter extends LoggerPort {
      * @returns {Promise<void>}
      */
     async flush(timeoutMs = 2000) {
+        if (this._logger.destroyed || this._logger.writableEnded) {
+            return Promise.resolve();
+        }
+
         return new Promise(resolve => {
             let timerId = null;
 

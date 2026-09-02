@@ -1,8 +1,4 @@
-export {
-    EMAIL_REQUIRED,
-    EMAIL_INVALID,
-    PASSWORD_REQUIRED,
-    PASSWORD_LENGTH_ERROR,
-} from '../../../shared/constants/index.js';
-
 export const LOGIN_SUCCESSFUL = 'Login successful';
+export const DEVICE_ID_INVALID = '`deviceId` must be a valid string';
+export const NEW_SESSION_GENERATED = 'New session generated';
+export const TOKEN_REQUIRED = 'Token is required';

@@ -17,6 +17,9 @@ import {
 import { getAuthUserModel } from './infrastructure/database/auth-user.model.js';
 import { AuthUserReaderAdapter } from './infrastructure/adapters/auth-user-reader.adapter.js';
 import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-writer.adapter.js';
+import { RefreshTokenWriterAdapter } from './infrastructure/cache/refresh-token-writer.adapter.js';
+import { RefreshTokenReaderAdapter } from './infrastructure/cache/refresh-token-reader.adapter.js';
+import { TokenRefreshUseCase } from './application/use-cases/token-refresh.usecase.js';
 
 /**
  * Composes the auth module and returns its Express router and auth service facade.
@@ -39,6 +42,7 @@ export const composeAuthModule = ({
     authConfig,
     jwtConfig,
     dbConnection,
+    redisClient,
     autoIndex,
     authUserModel = dbConnection
         ? getAuthUserModel(dbConnection, { autoIndex })
@@ -63,10 +67,20 @@ export const composeAuthModule = ({
     });
     const passwordComparer = new BcryptPasswordComparer();
 
+    const refreshTokenWriter = new RefreshTokenWriterAdapter({
+        client: redisClient,
+        logger,
+    });
+    const refreshTokenReader = new RefreshTokenReaderAdapter({
+        client: redisClient,
+        logger,
+    });
+
     const loginUserUseCase = new LoginUserUseCase({
         authUserReader,
         passwordComparer,
         tokenGenerator,
+        refreshTokenWriter,
         logger,
     });
 
@@ -86,15 +100,23 @@ export const composeAuthModule = ({
         logger,
     });
 
+    const tokenRefreshUseCase = new TokenRefreshUseCase({
+        tokenGenerator,
+        tokenVerifier,
+        refreshTokenReader,
+        refreshTokenWriter,
+        logger,
+    });
+
     const authService = new AuthFacade({
-        loginUserUseCase,
         registerUserUseCase,
         deleteAuthUserUseCase,
         verifyAccessTokenUseCase,
     });
 
     const authController = new AuthController({
-        authService,
+        loginUserUseCase,
+        tokenRefreshUseCase,
         logger,
     });
 

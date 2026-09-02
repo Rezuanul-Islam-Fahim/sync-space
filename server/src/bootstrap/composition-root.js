@@ -12,8 +12,14 @@ import { composeRegistrationModule } from '../orchestration/registration/index.j
  *   config: object,
  *   connection?: import('mongoose').Connection
  * }} deps
+ * @returns {import('express').Application}
  */
-export const composeDependencies = ({ logger, config, connection }) => {
+export const composeDependencies = ({
+    logger,
+    config,
+    connection,
+    redisClient,
+}) => {
     // ── User bounded context ──────────────────────────────────────────────────
     const userModule = composeUserModule({
         logger,
@@ -27,6 +33,7 @@ export const composeDependencies = ({ logger, config, connection }) => {
         authConfig: config.auth,
         jwtConfig: config.jwt,
         dbConnection: connection,
+        redisClient,
         autoIndex: config.db?.autoIndex,
     });
 
@@ -54,8 +61,7 @@ export const composeDependencies = ({ logger, config, connection }) => {
         corsCredentials: config.corsCredentials,
         bodyLimit: config.bodyLimit,
         trustProxy: config.trustProxy,
-        env: config.env,
-        exposeStack: config.env === 'development',
+        isDev: config.env === 'development',
     });
 
     return app;

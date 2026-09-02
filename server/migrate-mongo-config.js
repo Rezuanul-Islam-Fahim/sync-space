@@ -1,3 +1,6 @@
+/**
+ * Configuration file for migrate-mongo database schema migrations.
+ */
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -10,16 +13,22 @@ if (!mongoUri) {
 
 let databaseName;
 try {
-    const url = new URL(mongoUri);
-    databaseName = url.pathname.replace(/^\//, '').split('?')[0];
+    const url = new URL(mongoUri.replace(/^mongodb(\+srv)?:\/\//, 'http://'));
+    const pathname = url.pathname.replace(/^\//, '').split('?')[0];
+    if (pathname && !pathname.includes(':')) {
+        databaseName = decodeURIComponent(pathname);
+    }
 } catch {
-    databaseName = mongoUri
+    const rawPath = mongoUri
         .substring(mongoUri.lastIndexOf('/') + 1)
         .split('?')[0];
+    if (rawPath && !rawPath.includes(':')) {
+        databaseName = decodeURIComponent(rawPath);
+    }
 }
 
-if (!databaseName || databaseName.includes(':')) {
-    databaseName = 'sync_space';
+if (!databaseName) {
+    databaseName = process.env.DB_NAME || 'syncSpace';
 }
 
 const migrateMongoConfig = {

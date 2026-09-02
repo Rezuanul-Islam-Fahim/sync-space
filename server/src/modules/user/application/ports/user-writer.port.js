@@ -1,3 +1,6 @@
+/**
+ * User module's write port for persisting user profiles without depending on concrete database models.
+ */
 export class UserWriterPort {
     /**
      * Persists a new user profile.

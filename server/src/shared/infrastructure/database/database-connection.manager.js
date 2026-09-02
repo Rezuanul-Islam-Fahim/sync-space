@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-export class DatabaseConnectionAdapter {
+export class DatabaseConnectionManager {
     /**
      * @param {{
      *   logger: import('../../ports/index.js').LoggerPort,
@@ -30,6 +30,8 @@ export class DatabaseConnectionAdapter {
 
     /**
      * Attaches event listeners to connection instance.
+     *
+     * @returns {void}
      */
     attachListeners() {
         if (!this.connection || this.isListenersAttached) return;
@@ -68,12 +70,15 @@ export class DatabaseConnectionAdapter {
     }
 
     /**
-     * Closes the database connection.
+     * Closes the database connection and resets internal state.
+     *
+     * @returns {Promise<void>}
      */
     async disconnect() {
         if (this.connection && this.connection.readyState !== 0) {
             await this.connection.close();
         }
+        this.reset();
     }
 
     /**
@@ -87,6 +92,8 @@ export class DatabaseConnectionAdapter {
 
     /**
      * Resets listeners and connection state.
+     *
+     * @returns {void}
      */
     reset() {
         if (this.connection && this.isListenersAttached) {

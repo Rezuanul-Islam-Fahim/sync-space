@@ -1,3 +1,6 @@
+/**
+ * Port defining the contract for verifying access and refresh tokens (ISP segregated).
+ */
 export class TokenVerifierPort {
     /**
      * @param {string} _token

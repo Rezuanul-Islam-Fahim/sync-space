@@ -8,7 +8,6 @@
  */
 export const toRawObject = (value, options = { getters: true }) => {
     if (value === null || value === undefined) return null;
-    if (typeof value !== 'object') return value;
 
     const raw =
         typeof value.toObject === 'function'

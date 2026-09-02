@@ -3,14 +3,17 @@ import {
     bootstrapLogger as logger,
     DatabaseConnectionAdapter,
 } from '../../src/shared/infrastructure/index.js';
-import { getAuthUserModel } from '../../src/modules/auth/infrastructure/database/auth-user.model.js';
-import { getUserModel } from '../../src/modules/user/infrastructure/database/user.model.js';
 import { composeAuthModule } from '../../src/modules/auth/index.js';
 import { composeUserModule } from '../../src/modules/user/index.js';
 import { composeRegistrationModule } from '../../src/orchestration/registration/index.js';
 import { getSeedUsers } from './user.seed.js';
 import { getConfig } from '../../src/config/index.js';
 
+/**
+ * Connects to the database and seeds initial non-production user data.
+ *
+ * @returns {Promise<void>}
+ */
 const runSeeder = async () => {
     const config = getConfig();
     const dbConnection = new DatabaseConnectionAdapter({
@@ -30,20 +33,21 @@ const runSeeder = async () => {
 
         const connection = await dbConnection.connect();
 
-        const authUserModel = getAuthUserModel(connection);
-        const userModel = getUserModel(connection);
-
         logger.info('Clearing existing credentials and user profiles...');
-        await authUserModel.deleteMany({});
-        await userModel.deleteMany({});
+        await connection.collection('credentials').deleteMany({});
+        await connection.collection('users').deleteMany({});
 
-        const userModule = composeUserModule({ logger, connection, userModel });
+        const userModule = composeUserModule({
+            logger,
+            dbConnection: connection,
+            autoIndex: config.db?.autoIndex,
+        });
         const authModule = composeAuthModule({
             logger,
             authConfig: config.auth,
             jwtConfig: config.jwt,
-            connection,
-            authUserModel,
+            dbConnection: connection,
+            autoIndex: config.db?.autoIndex,
         });
         const registrationModule = composeRegistrationModule({
             authService: authModule.authService,
@@ -51,7 +55,8 @@ const runSeeder = async () => {
             logger,
         });
 
-        const registrationService = registrationModule.registrationService;
+        const registerUserProfileUseCase =
+            registrationModule.registerUserProfileUseCase;
 
         const seedUsers = await getSeedUsers();
         logger.info(
@@ -59,7 +64,7 @@ const runSeeder = async () => {
         );
 
         for (const userData of seedUsers) {
-            await registrationService.registerUser(userData);
+            await registerUserProfileUseCase.execute(userData);
         }
 
         logger.info('Database seeded successfully!');
@@ -69,6 +74,7 @@ const runSeeder = async () => {
     } finally {
         await dbConnection.disconnect();
         logger.info('DB connection closed.');
+        await logger.flush?.();
     }
 };
 

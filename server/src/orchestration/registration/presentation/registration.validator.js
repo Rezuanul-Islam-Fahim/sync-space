@@ -6,13 +6,13 @@ import {
 import {
     USERNAME_MIN_LENGTH,
     USERNAME_MAX_LENGTH,
-} from '../../../shared/constants/index.js';
-
-import {
     EMAIL_REQUIRED,
     EMAIL_INVALID,
     PASSWORD_REQUIRED,
     PASSWORD_LENGTH_ERROR,
+} from '../../../shared/constants/index.js';
+
+import {
     USERNAME_REQUIRED,
     USERNAME_LENGTH_ERROR,
     DISPLAY_NAME_INVALID,
@@ -20,6 +20,10 @@ import {
     DOB_INVALID,
 } from './registration.messages.js';
 
+/**
+ * Express-validator middleware array for the user registration endpoint.
+ * Validates email, password, username, displayName, and dateOfBirth fields.
+ */
 export const registrationValidation = [
     createEmailValidator({ EMAIL_REQUIRED, EMAIL_INVALID }),
     createPasswordValidator({ PASSWORD_REQUIRED, PASSWORD_LENGTH_ERROR }),
