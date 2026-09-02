@@ -1,3 +1,4 @@
+import { AppError, ErrorCode } from '../../../../../shared/error/index.js';
 import {
     TOKEN_VERIFICATION_FAILED,
     INVALID_TOKEN,
@@ -12,9 +13,9 @@ import {
  * into an appropriate `AppError` — keeping the presentation layer
  * (middleware) decoupled from module internal error hierarchies.
  */
-export class TokenVerificationError extends Error {
+export class TokenVerificationError extends AppError {
     constructor(message = TOKEN_VERIFICATION_FAILED, cause = null) {
-        super(message);
+        super(message, ErrorCode.UNAUTHENTICATED);
         this.name = 'TokenVerificationError';
         this.cause = cause;
         this.isExpired = false;

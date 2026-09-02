@@ -5,13 +5,14 @@ export const EMAIL_ALREADY_REGISTERED =
 export const DUMMY_PASSWORD_HASH =
     '$2b$12$e8wqrwK6f5t3g7e8r9t0yu1234567890123456789012345678901';
 
-// Token / authentication messages
+// Token / session / authentication messages
 export const TOKEN_NOT_FOUND = 'Authentication token is missing. Please log in';
 export const INVALID_TOKEN = 'Invalid or expired authentication token';
 export const TOKEN_EXPIRED = 'Authentication token has expired';
 export const USER_UNAVAILABLE =
     'The user belonging to this token no longer exists';
 export const TOKEN_VERIFICATION_FAILED = 'Token verification failed';
+export const SESSION_EXPIRED_INVALID = 'Session expired or invalid';
 
 // Cache keys and ttl's
 export const authSessionCacheKey = 'session';
