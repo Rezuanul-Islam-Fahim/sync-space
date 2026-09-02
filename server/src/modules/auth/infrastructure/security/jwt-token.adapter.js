@@ -52,7 +52,7 @@ export class JwtTokenGenerator extends TokenGeneratorPort {
                 algorithm: this.algorithm,
                 expiresIn: this.expiresIn,
             }),
-            signAsync({ sub: userId, sessionId }, this.refreshSecret, {
+            signAsync({ sub: userId, email, sessionId }, this.refreshSecret, {
                 algorithm: this.algorithm,
                 expiresIn: this.refreshExpiresIn,
             }),

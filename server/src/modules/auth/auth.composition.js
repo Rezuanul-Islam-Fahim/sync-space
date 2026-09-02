@@ -101,9 +101,11 @@ export const composeAuthModule = ({
     });
 
     const _tokenRefreshUseCase = new TokenRefreshUseCase({
+        tokenGenerator,
         tokenVerifier,
         refreshTokenReader,
         refreshTokenWriter,
+        logger,
     });
 
     const authService = new AuthFacade({
