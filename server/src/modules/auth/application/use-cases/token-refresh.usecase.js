@@ -27,7 +27,19 @@ export class TokenRefreshUseCase {
             tokenPayload.sessionId
         );
 
-        if (!refreshToken || data.token !== refreshToken) {
+        if (!refreshToken) {
+            throw new UnauthorizedError(SESSION_EXPIRED_INVALID);
+        }
+
+        if (data.token !== refreshToken) {
+            this.logger.warn('CRITICAL: Session compromised', {
+                authUserId: tokenPayload.authUserId,
+                sessionId: tokenPayload.sessionid,
+            });
+            await this.refreshTokenWriter.delete(
+                tokenPayload.sessionId,
+                tokenPayload.authUserId
+            );
             throw new UnauthorizedError(SESSION_EXPIRED_INVALID);
         }
 
