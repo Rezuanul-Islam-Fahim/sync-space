@@ -1,5 +1,8 @@
 import { UnauthorizedError } from '../../../shared/error/index.js';
-import { TOKEN_NOT_FOUND } from '../domain/auth-user.constant.js';
+import {
+    INVALID_TOKEN,
+    TOKEN_NOT_FOUND,
+} from '../domain/auth-user.constant.js';
 import { catchAsync, headerTokenExtract } from '../../../shared/util/index.js';
 
 /**
@@ -18,6 +21,14 @@ export const makeAuthenticate = authService => {
         }
 
         const principal = await authService.verifyAccessToken(token);
+
+        const blacklistedToken =
+            await this.authService.getBlacklistedLoginSession(principal.jti);
+
+        if (blacklistedToken) {
+            next(new UnauthorizedError(INVALID_TOKEN));
+            return;
+        }
 
         // Attach the authenticated principal details to the request. The
         // principal is an intent-revealing object created by the AuthFacade.

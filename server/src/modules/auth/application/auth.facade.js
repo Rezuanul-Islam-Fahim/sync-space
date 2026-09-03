@@ -11,16 +11,19 @@ export class AuthFacade {
      *   registerUserUseCase: import('./use-cases/register-user.usecase.js').RegisterUserUseCase,
      *   deleteAuthUserUseCase: import('./use-cases/delete-auth-user.usecase.js').DeleteAuthUserUseCase,
      *   verifyAccessTokenUseCase: import('./use-cases/verify-access-token.usecase.js').VerifyAccessTokenUseCase
+     *   getBlacklistedLoginUseCase: import('./use-cases/get-blacklisted-login.usecase.js').GetBlacklistedLoginUseCase
      * }} deps
      */
     constructor({
         registerUserUseCase,
         deleteAuthUserUseCase,
         verifyAccessTokenUseCase,
+        getBlacklistedLoginUseCase,
     }) {
         this.registerUserUseCase = registerUserUseCase;
         this.deleteAuthUserUseCase = deleteAuthUserUseCase;
         this.verifyAccessTokenUseCase = verifyAccessTokenUseCase;
+        this.getBlacklistedLoginUseCase = getBlacklistedLoginUseCase;
     }
 
     /**
@@ -53,5 +56,9 @@ export class AuthFacade {
     async verifyAccessToken(token) {
         const claims = await this.verifyAccessTokenUseCase.execute(token);
         return AccessTokenClaimsDto.fromClaims(claims);
+    }
+
+    async getBlacklistedLoginSession(jti) {
+        return this.getBlacklistedLoginUseCase.execute(jti);
     }
 }

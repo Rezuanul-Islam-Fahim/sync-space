@@ -8,4 +8,8 @@ export class SessionReaderPort {
     getSession(_authUserId, _sessionId) {
         throw new Error('Method not implemeneted');
     }
+
+    getBlacklistedLoginSession(_jti) {
+        throw new Error('Method not implemented');
+    }
 }

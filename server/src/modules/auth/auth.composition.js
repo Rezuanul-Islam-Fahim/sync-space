@@ -21,6 +21,7 @@ import { SessionWriterAdapter } from './infrastructure/cache/session-writer.adap
 import { SessionReaderAdapter } from './infrastructure/cache/session-reader.adapter.js';
 import { TokenRefreshUseCase } from './application/use-cases/token-refresh.usecase.js';
 import { LogoutUseCase } from './application/use-cases/logout.usecase.js';
+import { GetBlacklistedLoginUseCase } from './application/use-cases/get-blacklisted-login.usecase.js';
 
 /**
  * Composes the auth module and returns its Express router and auth service facade.
@@ -101,6 +102,10 @@ export const composeAuthModule = ({
         logger,
     });
 
+    const getBlacklistedLoginUseCase = new GetBlacklistedLoginUseCase({
+        sessionReader,
+    });
+
     const tokenRefreshUseCase = new TokenRefreshUseCase({
         tokenGenerator,
         tokenVerifier,
@@ -120,6 +125,7 @@ export const composeAuthModule = ({
         registerUserUseCase,
         deleteAuthUserUseCase,
         verifyAccessTokenUseCase,
+        getBlacklistedLoginUseCase,
     });
 
     const authController = new AuthController({

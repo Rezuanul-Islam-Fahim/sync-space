@@ -15,6 +15,6 @@ export const TOKEN_VERIFICATION_FAILED = 'Token verification failed';
 export const SESSION_EXPIRED_INVALID = 'Session expired or invalid';
 
 // Cache keys and ttl's
-export const authSessionCacheKey = 'session';
-export const accessTokenBlacklist = 'access_token_blacklist';
-export const authSessionTimeToLive = 7 * 24 * 60 * 60;
+export const AUTH_SESSION_CACHE_KEY = 'session';
+export const ACCESS_TOKEN_BLACKLIST_KEY = 'access_token_blacklist';
+export const AUTH_SESSION_TIME_TO_LIVE = 7 * 24 * 60 * 60;
