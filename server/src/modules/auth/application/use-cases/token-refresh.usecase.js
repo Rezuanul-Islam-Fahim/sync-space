@@ -33,12 +33,12 @@ export class TokenRefreshUseCase {
 
         if (data.token !== refreshToken) {
             this.logger.warn('CRITICAL: Session compromised', {
-                authUserId: tokenPayload.authUserId,
-                sessionId: tokenPayload.sessionid,
+                authUserId: tokenPayload.sub,
+                sessionId: tokenPayload.sessionId,
             });
             await this.refreshTokenWriter.delete(
                 tokenPayload.sessionId,
-                tokenPayload.authUserId
+                tokenPayload.sub
             );
             throw new UnauthorizedError(SESSION_EXPIRED_INVALID);
         }
