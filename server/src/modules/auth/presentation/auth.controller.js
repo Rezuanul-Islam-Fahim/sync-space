@@ -19,12 +19,19 @@ export class AuthController {
      * @param {{
      *   loginUserUseCase: import('../application/use-cases/login-user.usecase.js').LoginUserUseCase,
      *   tokenRefreshUseCase: import('../application/use-cases/token-refresh.usecase.js').TokenRefreshUseCase
+     *   logoutUseCase: import('../application/use-cases/logout.usecase.js').LogoutUseCase
      *   logger?: import('../../../shared/ports/index.js').LoggerPort
      * }} deps
      */
-    constructor({ loginUserUseCase, tokenRefreshUseCase, logger }) {
+    constructor({
+        loginUserUseCase,
+        tokenRefreshUseCase,
+        logoutUseCase,
+        logger,
+    }) {
         this.loginUserUseCase = loginUserUseCase;
         this.tokenRefreshUseCase = tokenRefreshUseCase;
+        this.logoutUseCase = logoutUseCase;
         this.logger = logger;
     }
 
@@ -68,4 +75,6 @@ export class AuthController {
             message: NEW_SESSION_GENERATED,
         });
     });
+
+    logout = catchAsync(async (_req, _res) => {});
 }

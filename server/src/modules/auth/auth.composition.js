@@ -20,6 +20,7 @@ import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-write
 import { RefreshTokenWriterAdapter } from './infrastructure/cache/refresh-token-writer.adapter.js';
 import { RefreshTokenReaderAdapter } from './infrastructure/cache/refresh-token-reader.adapter.js';
 import { TokenRefreshUseCase } from './application/use-cases/token-refresh.usecase.js';
+import { LogoutUseCase } from './application/use-cases/logout.usecase.js';
 
 /**
  * Composes the auth module and returns its Express router and auth service facade.
@@ -108,6 +109,13 @@ export const composeAuthModule = ({
         logger,
     });
 
+    const logoutUseCase = new LogoutUseCase({
+        tokenVerifier,
+        refreshTokenReader,
+        refreshTokenWriter,
+        logger,
+    });
+
     const authService = new AuthFacade({
         registerUserUseCase,
         deleteAuthUserUseCase,
@@ -117,6 +125,7 @@ export const composeAuthModule = ({
     const authController = new AuthController({
         loginUserUseCase,
         tokenRefreshUseCase,
+        logoutUseCase,
         logger,
     });
 
