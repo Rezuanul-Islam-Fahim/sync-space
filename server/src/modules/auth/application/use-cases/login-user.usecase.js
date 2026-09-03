@@ -62,11 +62,11 @@ export class LoginUserUseCase {
 
         const sessionId = data.deviceId || randomUUID();
 
-        const tokens = await this.tokenGenerator.generateTokens(
-            user.id,
-            user.email,
-            sessionId
-        );
+        const tokens = await this.tokenGenerator.generateTokens({
+            userId: user.id,
+            email: user.email,
+            sessionId,
+        });
 
         await this.refreshTokenWriter.store(
             sessionId,

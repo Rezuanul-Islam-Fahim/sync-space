@@ -6,6 +6,7 @@ import {
     TokenExpiredError,
     TokenInvalidError,
 } from './errors/token-verification.error.js';
+import { randomUUID } from 'crypto';
 
 const signAsync = promisify(jwt.sign);
 const verifyAsync = promisify(jwt.verify);
@@ -46,11 +47,12 @@ export class JwtTokenGenerator extends TokenGeneratorPort {
      * @param {string} sessionId
      * @returns {Promise<{ token: string, refreshToken: string }>}
      */
-    async generateTokens(userId, email, sessionId) {
+    async generateTokens({ userId, email, sessionId }) {
         const [token, refreshToken] = await Promise.all([
             signAsync({ sub: userId, email }, this.secret, {
                 algorithm: this.algorithm,
                 expiresIn: this.expiresIn,
+                jwtid: randomUUID(),
             }),
             signAsync({ sub: userId, email, sessionId }, this.refreshSecret, {
                 algorithm: this.algorithm,

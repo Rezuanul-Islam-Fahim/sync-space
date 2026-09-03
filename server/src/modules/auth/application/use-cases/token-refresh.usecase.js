@@ -44,11 +44,11 @@ export class TokenRefreshUseCase {
         }
 
         const { token: newToken, refreshToken: newRefreshToken } =
-            await this.tokenGenerator.generateTokens(
-                tokenPayload.sub,
-                tokenPayload.email,
-                tokenPayload.sessionId
-            );
+            await this.tokenGenerator.generateTokens({
+                userId: tokenPayload.sub,
+                email: tokenPayload.email,
+                sessionId: tokenPayload.sessionId,
+            });
 
         await this.refreshTokenWriter.store(
             tokenPayload.sessionId,
