@@ -5,11 +5,15 @@ export class SessionWriterPort {
      * @param {string} _refreshToken
      * @returns {Promise}
      */
-    storeRefreshToken(_sessionId, _authUserId, _refreshToken) {
+    initiateSession(_sessionId, _authUserId, _refreshToken) {
         throw new Error('Method not implemented');
     }
 
-    deleteRefreshToken(_sessionId, _authUserId) {
+    clearSession(_sessionId, _authUserId) {
+        throw new Error('Method not implemented');
+    }
+
+    blacklistLoginSession(_jti, _ttl) {
         throw new Error('Method not implemented');
     }
 }

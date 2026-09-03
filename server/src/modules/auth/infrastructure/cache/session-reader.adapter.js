@@ -9,7 +9,7 @@ export class SessionReaderAdapter extends SessionReaderPort {
         this.logger = logger;
     }
 
-    async getRefreshToken(authUserId, sessionId) {
+    async getSession(authUserId, sessionId) {
         const cacheKey = constructCacheKey(
             authSessionCacheKey,
             authUserId,

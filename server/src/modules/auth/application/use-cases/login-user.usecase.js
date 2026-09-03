@@ -68,7 +68,7 @@ export class LoginUserUseCase {
             sessionId,
         });
 
-        await this.sessionWriter.storeRefreshToken(
+        await this.sessionWriter.initiateSession(
             sessionId,
             user.id,
             tokens.refreshToken

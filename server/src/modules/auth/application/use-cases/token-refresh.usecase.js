@@ -22,7 +22,7 @@ export class TokenRefreshUseCase {
             data.token
         );
 
-        const refreshToken = await this.sessionReader.getRefreshToken(
+        const refreshToken = await this.sessionReader.getSession(
             tokenPayload.sub,
             tokenPayload.sessionId
         );
@@ -36,7 +36,7 @@ export class TokenRefreshUseCase {
                 authUserId: tokenPayload.sub,
                 sessionId: tokenPayload.sessionId,
             });
-            await this.sessionWriter.deleteRefreshToken(
+            await this.sessionWriter.clearSession(
                 tokenPayload.sessionId,
                 tokenPayload.sub
             );
@@ -50,7 +50,7 @@ export class TokenRefreshUseCase {
                 sessionId: tokenPayload.sessionId,
             });
 
-        await this.sessionWriter.storeRefreshToken(
+        await this.sessionWriter.initiateSession(
             tokenPayload.sessionId,
             tokenPayload.sub,
             newRefreshToken
