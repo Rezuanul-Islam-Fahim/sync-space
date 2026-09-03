@@ -15,7 +15,7 @@ export class LoginUserUseCase {
      *   authUserReader: import('../ports/auth-user-reader.port.js').AuthUserReaderPort,
      *   passwordComparer: import('../ports/password-hasher.port.js').PasswordComparerPort,
      *   tokenGenerator: import('../ports/token-generator.port.js').TokenGeneratorPort,
-     *   refreshTokenWriter: import('../ports/refresh-token-writer.port.js').RefreshTokenWriterPort,
+     *   sessionWriter: import('../ports/session-writer.port.js').sessionWriterPort,
      *   logger?: import('../../../../shared/ports/index.js').LoggerPort
      * }} deps
      */
@@ -23,13 +23,13 @@ export class LoginUserUseCase {
         authUserReader,
         passwordComparer,
         tokenGenerator,
-        refreshTokenWriter,
+        sessionWriter,
         logger,
     }) {
         this.authUserReader = authUserReader;
         this.passwordComparer = passwordComparer;
         this.tokenGenerator = tokenGenerator;
-        this.refreshTokenWriter = refreshTokenWriter;
+        this.sessionWriter = sessionWriter;
         this.logger = logger;
     }
 
@@ -68,7 +68,7 @@ export class LoginUserUseCase {
             sessionId,
         });
 
-        await this.refreshTokenWriter.store(
+        await this.sessionWriter.storeRefreshToken(
             sessionId,
             user.id,
             tokens.refreshToken

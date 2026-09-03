@@ -17,8 +17,8 @@ import {
 import { getAuthUserModel } from './infrastructure/database/auth-user.model.js';
 import { AuthUserReaderAdapter } from './infrastructure/adapters/auth-user-reader.adapter.js';
 import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-writer.adapter.js';
-import { RefreshTokenWriterAdapter } from './infrastructure/cache/refresh-token-writer.adapter.js';
-import { RefreshTokenReaderAdapter } from './infrastructure/cache/refresh-token-reader.adapter.js';
+import { SessionWriterAdapter } from './infrastructure/cache/session-writer.adapter.js';
+import { SessionReaderAdapter } from './infrastructure/cache/session-reader.adapter.js';
 import { TokenRefreshUseCase } from './application/use-cases/token-refresh.usecase.js';
 import { LogoutUseCase } from './application/use-cases/logout.usecase.js';
 
@@ -68,11 +68,11 @@ export const composeAuthModule = ({
     });
     const passwordComparer = new BcryptPasswordComparer();
 
-    const refreshTokenWriter = new RefreshTokenWriterAdapter({
+    const sessionWriter = new SessionWriterAdapter({
         client: redisClient,
         logger,
     });
-    const refreshTokenReader = new RefreshTokenReaderAdapter({
+    const sessionReader = new SessionReaderAdapter({
         client: redisClient,
         logger,
     });
@@ -81,7 +81,7 @@ export const composeAuthModule = ({
         authUserReader,
         passwordComparer,
         tokenGenerator,
-        refreshTokenWriter,
+        sessionWriter,
         logger,
     });
 
@@ -104,15 +104,15 @@ export const composeAuthModule = ({
     const tokenRefreshUseCase = new TokenRefreshUseCase({
         tokenGenerator,
         tokenVerifier,
-        refreshTokenReader,
-        refreshTokenWriter,
+        sessionReader,
+        sessionWriter,
         logger,
     });
 
     const logoutUseCase = new LogoutUseCase({
         tokenVerifier,
-        refreshTokenReader,
-        refreshTokenWriter,
+        sessionReader,
+        sessionWriter,
         logger,
     });
 

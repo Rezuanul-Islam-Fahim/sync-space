@@ -6,14 +6,14 @@ export class TokenRefreshUseCase {
     constructor({
         tokenGenerator,
         tokenVerifier,
-        refreshTokenReader,
-        refreshTokenWriter,
+        sessionReader,
+        sessionWriter,
         logger,
     }) {
         this.tokenGenerator = tokenGenerator;
         this.tokenVerifier = tokenVerifier;
-        this.refreshTokenReader = refreshTokenReader;
-        this.refreshTokenWriter = refreshTokenWriter;
+        this.sessionReader = sessionReader;
+        this.sessionWriter = sessionWriter;
         this.logger = logger;
     }
 
@@ -22,7 +22,7 @@ export class TokenRefreshUseCase {
             data.token
         );
 
-        const refreshToken = await this.refreshTokenReader.get(
+        const refreshToken = await this.sessionReader.getRefreshToken(
             tokenPayload.sub,
             tokenPayload.sessionId
         );
@@ -36,7 +36,7 @@ export class TokenRefreshUseCase {
                 authUserId: tokenPayload.sub,
                 sessionId: tokenPayload.sessionId,
             });
-            await this.refreshTokenWriter.delete(
+            await this.sessionWriter.deleteRefreshToken(
                 tokenPayload.sessionId,
                 tokenPayload.sub
             );
@@ -50,7 +50,7 @@ export class TokenRefreshUseCase {
                 sessionId: tokenPayload.sessionId,
             });
 
-        await this.refreshTokenWriter.store(
+        await this.sessionWriter.storeRefreshToken(
             tokenPayload.sessionId,
             tokenPayload.sub,
             newRefreshToken

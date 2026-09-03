@@ -3,15 +3,10 @@ import { maskEmail } from '../../../../shared/util/index.js';
 import { SESSION_EXPIRED_INVALID } from '../../domain/auth-user.constant.js';
 
 export class LogoutUseCase {
-    constructor({
-        tokenVerifier,
-        refreshTokenReader,
-        refreshTokenWriter,
-        logger,
-    }) {
+    constructor({ tokenVerifier, sessionReader, sessionWriter, logger }) {
         this.tokenVerifier = tokenVerifier;
-        this.refreshTokenReader = refreshTokenReader;
-        this.refreshTokenWriter = refreshTokenWriter;
+        this.sessionReader = sessionReader;
+        this.sessionWriter = sessionWriter;
         this.logger = logger;
     }
 
@@ -22,7 +17,7 @@ export class LogoutUseCase {
             sessionId,
         } = await this.tokenVerifier.verifyRefreshToken(data.refreshToken);
 
-        const refreshToken = await this.refreshTokenReader.get(
+        const refreshToken = await this.sessionReader.getRefreshToken(
             authUserId,
             sessionId
         );
@@ -31,7 +26,7 @@ export class LogoutUseCase {
             throw new UnauthorizedError(SESSION_EXPIRED_INVALID);
         }
 
-        await this.refreshTokenWriter.delete(sessionId, authUserId);
+        await this.sessionWriter.deleteRefreshToken(sessionId, authUserId);
 
         this.logger.info('Session cleared successful', {
             authUserId,

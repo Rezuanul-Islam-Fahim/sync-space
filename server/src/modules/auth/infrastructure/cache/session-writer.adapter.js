@@ -1,18 +1,18 @@
 import { constructCacheKey } from '../../../../shared/util/index.js';
-import { RefreshTokenWriterPort } from '../../application/ports/refresh-token-writer.port.js';
+import { SessionWriterPort } from '../../application/ports/session-writer.port.js';
 import {
     authSessionCacheKey,
     authSessionTimeToLive,
 } from '../../domain/auth-user.constant.js';
 
-export class RefreshTokenWriterAdapter extends RefreshTokenWriterPort {
+export class SessionWriterAdapter extends SessionWriterPort {
     constructor({ client, logger }) {
         super();
         this.client = client;
         this.logger = logger;
     }
 
-    async store(sessionId, authUserId, refreshToken) {
+    async storeRefreshToken(sessionId, authUserId, refreshToken) {
         const cacheKey = constructCacheKey(
             authSessionCacheKey,
             authUserId,
@@ -21,7 +21,7 @@ export class RefreshTokenWriterAdapter extends RefreshTokenWriterPort {
         await this.client.set(cacheKey, refreshToken, authSessionTimeToLive);
     }
 
-    async delete(sessionId, authUserId) {
+    async deleteRefreshToken(sessionId, authUserId) {
         const cacheKey = constructCacheKey(
             authSessionCacheKey,
             authUserId,
