@@ -10,6 +10,7 @@ import {
 } from '../../../shared/util/index.js';
 import { OK } from '../../../shared/constants/index.js';
 import { LOGIN_SUCCESSFUL, NEW_SESSION_GENERATED } from './auth.messages.js';
+import { LogoutRequestDto } from './dtos/logout-request.dto.js';
 
 /**
  * Controller handling authentication endpoints.
@@ -76,5 +77,16 @@ export class AuthController {
         });
     });
 
-    logout = catchAsync(async (_req, _res) => {});
+    logout = catchAsync(async (req, res) => {
+        const validatedData = matchedData(req);
+        const requestDto = LogoutRequestDto(validatedData);
+
+        await this.logoutUseCase.execute(requestDto);
+
+        sendSuccessResponse({
+            res,
+            statusCode: OK,
+            message: 'Logout successful',
+        });
+    });
 }

@@ -25,7 +25,7 @@ export const sendSuccessResponse = ({
         message,
     };
 
-    if (data !== undefined) {
+    if (data) {
         response.data = data;
     }
 
