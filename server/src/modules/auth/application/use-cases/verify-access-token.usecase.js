@@ -30,7 +30,7 @@ export class VerifyAccessTokenUseCase {
     async execute(token) {
         try {
             const decoded = await this.tokenVerifier.verifyAccessToken(token);
-            return { id: decoded.sub, email: decoded.email };
+            return { id: decoded.sub, email: decoded.email, jti: decoded.jti };
         } catch (error) {
             if (error instanceof TokenVerificationError) {
                 const message = error.isExpired ? TOKEN_EXPIRED : INVALID_TOKEN;

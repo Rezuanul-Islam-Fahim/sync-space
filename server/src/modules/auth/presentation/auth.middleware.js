@@ -11,7 +11,10 @@ import { catchAsync, headerTokenExtract } from '../../../shared/util/index.js';
  * @param {import('../application/auth.facade.js').AuthFacade} authService
  * @returns {import('express').RequestHandler}
  */
-export const makeAuthenticate = authService => {
+export const makeAuthenticate = ({
+    verifyAccessTokenUseCase,
+    getBlacklistedLoginUseCase,
+}) => {
     return catchAsync(async (req, _, next) => {
         const token = headerTokenExtract(req.headers.authorization);
 
@@ -20,9 +23,9 @@ export const makeAuthenticate = authService => {
             return;
         }
 
-        const principal = await authService.verifyAccessToken(token);
+        const principal = await verifyAccessTokenUseCase.execute(token);
 
-        const blacklistedToken = await authService.getBlacklistedLoginSession(
+        const blacklistedToken = await getBlacklistedLoginUseCase.execute(
             principal.jti
         );
 

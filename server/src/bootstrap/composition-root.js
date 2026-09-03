@@ -20,13 +20,6 @@ export const composeDependencies = ({
     connection,
     redisClient,
 }) => {
-    // ── User bounded context ──────────────────────────────────────────────────
-    const userModule = composeUserModule({
-        logger,
-        dbConnection: connection,
-        autoIndex: config.db?.autoIndex,
-    });
-
     // ── Auth bounded context ──────────────────────────────────────────────────
     const authModule = composeAuthModule({
         logger,
@@ -37,9 +30,12 @@ export const composeDependencies = ({
         autoIndex: config.db?.autoIndex,
     });
 
-    // ── Middleware ────────────────────────────────────────────────────────────
-    // Authentication middleware factory is exported from the auth module
-    // but not applied globally here; routes should explicitly opt in.
+    // ── User bounded context ──────────────────────────────────────────────────
+    const userModule = composeUserModule({
+        logger,
+        dbConnection: connection,
+        autoIndex: config.db?.autoIndex,
+    });
 
     // ── Registration bounded context / Composite layer ────────────────────────
     const registrationModule = composeRegistrationModule({

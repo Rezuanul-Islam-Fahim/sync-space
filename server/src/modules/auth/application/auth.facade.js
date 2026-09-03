@@ -1,5 +1,4 @@
 import { AuthUserDto } from './dtos/auth-user.dto.js';
-import { AccessTokenClaimsDto } from './dtos/access-token-claims.dto.js';
 
 /**
  * Public API Facade for the Auth Bounded Context.
@@ -10,20 +9,11 @@ export class AuthFacade {
      * @param {{
      *   registerUserUseCase: import('./use-cases/register-user.usecase.js').RegisterUserUseCase,
      *   deleteAuthUserUseCase: import('./use-cases/delete-auth-user.usecase.js').DeleteAuthUserUseCase,
-     *   verifyAccessTokenUseCase: import('./use-cases/verify-access-token.usecase.js').VerifyAccessTokenUseCase
-     *   getBlacklistedLoginUseCase: import('./use-cases/get-blacklisted-login.usecase.js').GetBlacklistedLoginUseCase
      * }} deps
      */
-    constructor({
-        registerUserUseCase,
-        deleteAuthUserUseCase,
-        verifyAccessTokenUseCase,
-        getBlacklistedLoginUseCase,
-    }) {
+    constructor({ registerUserUseCase, deleteAuthUserUseCase }) {
         this.registerUserUseCase = registerUserUseCase;
         this.deleteAuthUserUseCase = deleteAuthUserUseCase;
-        this.verifyAccessTokenUseCase = verifyAccessTokenUseCase;
-        this.getBlacklistedLoginUseCase = getBlacklistedLoginUseCase;
     }
 
     /**
@@ -45,20 +35,5 @@ export class AuthFacade {
      */
     async deleteAuthUser(id) {
         await this.deleteAuthUserUseCase.execute(id);
-    }
-
-    /**
-     * Verifies access token and maps payload to an intent-revealing claims object.
-     *
-     * @param {string} token
-     * @returns {Promise<AccessTokenClaimsDto>}
-     */
-    async verifyAccessToken(token) {
-        const claims = await this.verifyAccessTokenUseCase.execute(token);
-        return AccessTokenClaimsDto.fromClaims(claims);
-    }
-
-    async getBlacklistedLoginSession(jti) {
-        return this.getBlacklistedLoginUseCase.execute(jti);
     }
 }
