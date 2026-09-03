@@ -7,6 +7,7 @@ import {
     sendSuccessResponse,
     catchAsync,
     maskEmail,
+    headerTokenExtract,
 } from '../../../shared/util/index.js';
 import { OK } from '../../../shared/constants/index.js';
 import {
@@ -82,10 +83,11 @@ export class AuthController {
     });
 
     logout = catchAsync(async (req, res) => {
+        const token = headerTokenExtract(req.headers.authorization);
         const validatedData = matchedData(req);
         const requestDto = LogoutRequestDto.from(validatedData);
 
-        await this.logoutUseCase.execute(requestDto);
+        await this.logoutUseCase.execute({ ...requestDto, token });
 
         sendSuccessResponse({
             res,

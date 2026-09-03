@@ -20,7 +20,7 @@ export class LogoutUseCase {
             sub: authUserId,
             email,
             sessionId,
-        } = await this.tokenVerifier.verifyRefreshToken(data.token);
+        } = await this.tokenVerifier.verifyRefreshToken(data.refreshToken);
 
         const refreshToken = await this.refreshTokenReader.get(
             authUserId,

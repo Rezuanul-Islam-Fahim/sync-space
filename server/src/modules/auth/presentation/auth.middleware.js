@@ -1,6 +1,6 @@
 import { UnauthorizedError } from '../../../shared/error/index.js';
 import { TOKEN_NOT_FOUND } from '../domain/auth-user.constant.js';
-import { catchAsync } from '../../../shared/util/index.js';
+import { catchAsync, headerTokenExtract } from '../../../shared/util/index.js';
 
 /**
  * Middleware factory for authenticating HTTP requests using JWT tokens.
@@ -10,14 +10,7 @@ import { catchAsync } from '../../../shared/util/index.js';
  */
 export const makeAuthenticate = authService => {
     return catchAsync(async (req, _, next) => {
-        let token;
-
-        if (
-            req.headers.authorization &&
-            req.headers.authorization.startsWith('Bearer')
-        ) {
-            token = req.headers.authorization.split(' ')[1];
-        }
+        const token = headerTokenExtract(req.headers.authorization);
 
         if (!token) {
             next(new UnauthorizedError(TOKEN_NOT_FOUND));

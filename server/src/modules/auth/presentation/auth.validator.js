@@ -9,7 +9,7 @@ import {
     createEmailValidator,
     createPasswordValidator,
 } from '../../../shared/middleware/index.js';
-import { DEVICE_ID_INVALID, TOKEN_REQUIRED } from './auth.messages.js';
+import { DEVICE_ID_INVALID, REFRESH_TOKEN_REQUIRED } from './auth.messages.js';
 
 const emailValidation = createEmailValidator({
     EMAIL_REQUIRED,
@@ -21,7 +21,9 @@ const passwordValidation = createPasswordValidator({
     PASSWORD_LENGTH_ERROR,
 });
 
-const tokenValidation = body('token').notEmpty().withMessage(TOKEN_REQUIRED);
+const refreshTokenValidation = body('refreshToken')
+    .notEmpty()
+    .withMessage(REFRESH_TOKEN_REQUIRED);
 
 /**
  * Express-validator middleware array for the login endpoint.
@@ -36,6 +38,6 @@ export const loginValidation = [
         .withMessage(DEVICE_ID_INVALID),
 ];
 
-export const refreshValidation = [tokenValidation];
+export const refreshValidation = [refreshTokenValidation];
 
-export const logoutValidation = [tokenValidation];
+export const logoutValidation = [refreshTokenValidation];
