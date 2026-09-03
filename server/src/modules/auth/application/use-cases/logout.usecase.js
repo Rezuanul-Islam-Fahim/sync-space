@@ -27,7 +27,7 @@ export class LogoutUseCase {
             sessionId
         );
 
-        if (!refreshToken || refreshToken !== data.token) {
+        if (!refreshToken) {
             throw new UnauthorizedError(SESSION_EXPIRED_INVALID);
         }
 
