@@ -22,8 +22,9 @@ export const makeAuthenticate = authService => {
 
         const principal = await authService.verifyAccessToken(token);
 
-        const blacklistedToken =
-            await this.authService.getBlacklistedLoginSession(principal.jti);
+        const blacklistedToken = await authService.getBlacklistedLoginSession(
+            principal.jti
+        );
 
         if (blacklistedToken) {
             next(new UnauthorizedError(INVALID_TOKEN));
