@@ -9,7 +9,11 @@ import {
     maskEmail,
 } from '../../../shared/util/index.js';
 import { OK } from '../../../shared/constants/index.js';
-import { LOGIN_SUCCESSFUL, NEW_SESSION_GENERATED } from './auth.messages.js';
+import {
+    LOGIN_SUCCESSFUL,
+    LOGOUT_SUCCESSFUL,
+    NEW_SESSION_GENERATED,
+} from './auth.messages.js';
 import { LogoutRequestDto } from './dtos/logout-request.dto.js';
 
 /**
@@ -79,14 +83,14 @@ export class AuthController {
 
     logout = catchAsync(async (req, res) => {
         const validatedData = matchedData(req);
-        const requestDto = LogoutRequestDto(validatedData);
+        const requestDto = LogoutRequestDto.from(validatedData);
 
         await this.logoutUseCase.execute(requestDto);
 
         sendSuccessResponse({
             res,
             statusCode: OK,
-            message: 'Logout successful',
+            message: LOGOUT_SUCCESSFUL,
         });
     });
 }

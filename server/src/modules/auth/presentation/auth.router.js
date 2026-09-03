@@ -1,5 +1,9 @@
 import express from 'express';
-import { loginValidation, refreshValidation } from './auth.validator.js';
+import {
+    loginValidation,
+    logoutValidation,
+    refreshValidation,
+} from './auth.validator.js';
 import { validate } from '../../../shared/middleware/index.js';
 
 /**
@@ -18,6 +22,7 @@ export const createAuthRouter = ({ authController }) => {
         validate,
         authController.tokenRefresh
     );
+    router.post('/logout', logoutValidation, validate, authController.logout);
 
     return router;
 };

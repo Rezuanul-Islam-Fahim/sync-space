@@ -21,6 +21,8 @@ const passwordValidation = createPasswordValidator({
     PASSWORD_LENGTH_ERROR,
 });
 
+const tokenValidation = body('token').notEmpty().withMessage(TOKEN_REQUIRED);
+
 /**
  * Express-validator middleware array for the login endpoint.
  * Validates presence and format of email and password fields.
@@ -34,6 +36,6 @@ export const loginValidation = [
         .withMessage(DEVICE_ID_INVALID),
 ];
 
-export const refreshValidation = [
-    body('token').notEmpty().withMessage(TOKEN_REQUIRED),
-];
+export const refreshValidation = [tokenValidation];
+
+export const logoutValidation = [tokenValidation];
