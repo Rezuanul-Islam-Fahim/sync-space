@@ -1,6 +1,6 @@
 export class TokenRefreshRequestDto {
-    constructor({ token }) {
-        this.token = token;
+    constructor({ refreshToken }) {
+        this.refreshToken = refreshToken;
     }
 
     static from(data) {

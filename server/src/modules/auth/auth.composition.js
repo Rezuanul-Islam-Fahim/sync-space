@@ -108,6 +108,7 @@ export const composeAuthModule = ({
     });
 
     const tokenRefreshUseCase = new TokenRefreshUseCase({
+        authUserReader,
         tokenGenerator,
         tokenVerifier,
         sessionReader,

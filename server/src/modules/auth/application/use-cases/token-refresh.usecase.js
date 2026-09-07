@@ -1,15 +1,20 @@
 import { UnauthorizedError } from '../../../../shared/error/index.js';
 import { maskEmail } from '../../../../shared/util/index.js';
-import { SESSION_EXPIRED_INVALID } from '../../domain/auth-user.constant.js';
+import {
+    SESSION_EXPIRED_INVALID,
+    USER_UNAVAILABLE,
+} from '../../domain/auth-user.constant.js';
 
 export class TokenRefreshUseCase {
     constructor({
+        authUserReader,
         tokenGenerator,
         tokenVerifier,
         sessionReader,
         sessionWriter,
         logger,
     }) {
+        this.authUserReader = authUserReader;
         this.tokenGenerator = tokenGenerator;
         this.tokenVerifier = tokenVerifier;
         this.sessionReader = sessionReader;
@@ -18,47 +23,52 @@ export class TokenRefreshUseCase {
     }
 
     async execute(data) {
-        const tokenPayload = await this.tokenVerifier.verifyRefreshToken(
-            data.token
-        );
+        const {
+            sub: userId,
+            sessionId,
+            email,
+        } = await this.tokenVerifier.verifyRefreshToken(data.refreshToken);
 
         const refreshToken = await this.sessionReader.getSession(
-            tokenPayload.sub,
-            tokenPayload.sessionId
+            userId,
+            sessionId
         );
 
         if (!refreshToken) {
             throw new UnauthorizedError(SESSION_EXPIRED_INVALID);
         }
 
-        if (data.token !== refreshToken) {
+        if (data.refreshToken !== refreshToken) {
             this.logger.warn('CRITICAL: Session compromised', {
-                authUserId: tokenPayload.sub,
-                sessionId: tokenPayload.sessionId,
+                authUserId: userId,
+                sessionId: sessionId,
             });
-            await this.sessionWriter.clearSession(
-                tokenPayload.sessionId,
-                tokenPayload.sub
-            );
+            await this.sessionWriter.clearSession(sessionId, userId);
             throw new UnauthorizedError(SESSION_EXPIRED_INVALID);
+        }
+
+        const user = await this.authUserReader.findById(userId);
+
+        if (!user) {
+            throw new UnauthorizedError(USER_UNAVAILABLE);
         }
 
         const { token: newToken, refreshToken: newRefreshToken } =
             await this.tokenGenerator.generateTokens({
-                userId: tokenPayload.sub,
-                email: tokenPayload.email,
-                sessionId: tokenPayload.sessionId,
+                userId: userId,
+                email: user.email,
+                sessionId: sessionId,
             });
 
         await this.sessionWriter.initiateSession(
-            tokenPayload.sessionId,
-            tokenPayload.sub,
+            sessionId,
+            userId,
             newRefreshToken
         );
 
         this.logger.info('New session generated (token + refresh-token)', {
-            authUserId: tokenPayload.sub,
-            email: maskEmail(tokenPayload.email),
+            authUserId: userId,
+            email: maskEmail(email),
         });
 
         return { newToken, newRefreshToken };

@@ -18,7 +18,6 @@ export const createAuthRouter = ({ authController, authenticate }) => {
     router.post('/login', loginValidation, validate, authController.login);
     router.post(
         '/refresh',
-        authenticate,
         refreshValidation,
         validate,
         authController.tokenRefresh
