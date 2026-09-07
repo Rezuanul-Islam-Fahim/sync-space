@@ -41,6 +41,8 @@ export class LogoutUseCase {
             if (!(error instanceof TokenVerificationError)) {
                 throw error;
             }
+
+            throw new UnauthorizedError(error.message);
         }
 
         this.logger.info('Session cleared successfully', {
