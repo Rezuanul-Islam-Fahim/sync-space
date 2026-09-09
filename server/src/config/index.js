@@ -60,6 +60,8 @@ export const getConfig = ({ reload = false } = {}) => {
             refreshSecret: envVars.JWT_REFRESH_SECRET,
             refreshExpiresIn: envVars.JWT_REFRESH_EXPIRES_IN,
         }),
+        tokenHashAlgorithm: envVars.TOKEN_HASH_ALGORITHM,
+        tokenHashDigest: envVars.TOKEN_HASH_DIGEST,
     });
 
     return cachedConfig;

@@ -53,4 +53,10 @@ export const envSchema = Joi.object({
         .description(
             'JWT refresh token expiration time (e.g., 7d, 30d, 14 days)'
         ),
+    TOKEN_HASH_ALGORITHM: Joi.string()
+        .default('sha256')
+        .description('Algorithm for hashing tokens'),
+    TOKEN_HASH_DIGEST: Joi.string()
+        .default('hex')
+        .description('Method of token conversion'),
 }).options({ stripUnknown: true });
