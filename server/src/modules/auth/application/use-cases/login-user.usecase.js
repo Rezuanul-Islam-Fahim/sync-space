@@ -72,14 +72,16 @@ export class LoginUserUseCase {
             sessionId,
         });
 
+        const hashedRefreshToken = this.tokenHasher.hash(
+            REFRESH_TOKEN_HASH_ALGORITHM,
+            REFRESH_TOKEN_HASH_DIGEST,
+            tokens.refreshToken
+        );
+
         await this.sessionWriter.initiateSession(
             sessionId,
             user.id,
-            this.tokenHasher.hash(
-                REFRESH_TOKEN_HASH_ALGORITHM,
-                REFRESH_TOKEN_HASH_DIGEST,
-                tokens.refreshToken
-            )
+            hashedRefreshToken
         );
 
         this.logger?.info?.('User login successful', {
