@@ -66,6 +66,7 @@ export class TokenRefreshUseCase {
             const user = await this.authUserReader.findById(userId);
 
             if (!user) {
+                await this.sessionWriter.clearSession(userId, sessionId);
                 throw new NotFoundError(USER_UNAVAILABLE);
             }
 
