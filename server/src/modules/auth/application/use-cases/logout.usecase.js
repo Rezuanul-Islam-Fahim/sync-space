@@ -1,5 +1,10 @@
+import { UnauthorizedError } from '../../../../shared/error/unauthorized.error.js';
 import { maskEmail } from '../../../../shared/util/index.js';
-import { TokenExpiredError } from '../../infrastructure/security/errors/token-verification.error.js';
+import { INVALID_TOKEN } from '../../domain/auth-user.constant.js';
+import {
+    TokenExpiredError,
+    TokenInvalidError,
+} from '../../infrastructure/security/errors/token-verification.error.js';
 
 export class LogoutUseCase {
     constructor({ tokenVerifier, sessionReader, sessionWriter, logger }) {
@@ -33,7 +38,9 @@ export class LogoutUseCase {
 
                     await this.sessionWriter.blacklistLoginSession(jti, ttl);
                 } catch (error) {
-                    if (!(error instanceof TokenExpiredError)) {
+                    if (error instanceof TokenInvalidError) {
+                        throw new UnauthorizedError(INVALID_TOKEN);
+                    } else if (!(error instanceof TokenExpiredError)) {
                         throw error;
                     }
                 }
@@ -44,7 +51,9 @@ export class LogoutUseCase {
                 });
             }
         } catch (error) {
-            if (!(error instanceof TokenExpiredError)) {
+            if (error instanceof TokenInvalidError) {
+                throw new UnauthorizedError(INVALID_TOKEN);
+            } else if (!(error instanceof TokenExpiredError)) {
                 throw error;
             }
         }
