@@ -5,16 +5,28 @@ import {
 } from '../../application/ports/token-hasher.port.js';
 
 export class TokenHasherAdapter extends TokenHasherPort {
-    hash(algorithm, digest, token) {
-        return createHash(algorithm).update(token).digest(digest);
+    constructor({ algorithm, digest }) {
+        super();
+        this.algorithm = algorithm;
+        this.digest = digest;
+    }
+
+    hash(token) {
+        return createHash(this.algorithm).update(token).digest(this.digest);
     }
 }
 
 export class TokenHashComparerAdapter extends TokenHashComparerPort {
-    compare(algorithm, digest, incomingToken, storedHashedHex) {
-        const incomingHashHex = createHash(algorithm)
+    constructor({ algorithm, digest }) {
+        super();
+        this.algorithm = algorithm;
+        this.digest = digest;
+    }
+
+    compare(incomingToken, storedHashedHex) {
+        const incomingHashHex = createHash(this.algorithm)
             .update(incomingToken)
-            .digest(digest);
+            .digest(this.digest);
 
         const incomingBuffer = Buffer.from(incomingHashHex, 'utf8');
         const storedBuffer = Buffer.from(storedHashedHex, 'utf8');

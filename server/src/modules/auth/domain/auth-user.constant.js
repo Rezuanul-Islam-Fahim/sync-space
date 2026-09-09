@@ -18,6 +18,3 @@ export const SESSION_EXPIRED_INVALID = 'Session expired or invalid';
 export const AUTH_SESSION_CACHE_KEY = 'session';
 export const ACCESS_TOKEN_BLACKLIST_KEY = 'access_token_blacklist';
 export const AUTH_SESSION_TIME_TO_LIVE = 7 * 24 * 60 * 60;
-
-export const REFRESH_TOKEN_HASH_ALGORITHM = 'sha256';
-export const REFRESH_TOKEN_HASH_DIGEST = 'hex';

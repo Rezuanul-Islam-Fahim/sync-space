@@ -2,8 +2,6 @@ import { randomUUID } from 'node:crypto';
 import { UnauthorizedError } from '../../../../shared/error/index.js';
 import { maskEmail } from '../../../../shared/util/index.js';
 import {
-    REFRESH_TOKEN_HASH_ALGORITHM,
-    REFRESH_TOKEN_HASH_DIGEST,
     SESSION_EXPIRED_INVALID,
     USER_UNAVAILABLE,
 } from '../../domain/auth-user.constant.js';
@@ -46,8 +44,6 @@ export class TokenRefreshUseCase {
         }
 
         const isTokenMatched = this.tokenHashComparer.compare(
-            REFRESH_TOKEN_HASH_ALGORITHM,
-            REFRESH_TOKEN_HASH_DIGEST,
             data.refreshToken,
             refreshToken
         );
@@ -76,11 +72,7 @@ export class TokenRefreshUseCase {
                 sessionId: newSessionId,
             });
 
-        const hashedRefreshToken = this.tokenHasher.hash(
-            REFRESH_TOKEN_HASH_ALGORITHM,
-            REFRESH_TOKEN_HASH_DIGEST,
-            newRefreshToken
-        );
+        const hashedRefreshToken = this.tokenHasher.hash(newRefreshToken);
 
         await this.sessionWriter.initiateSession(
             newSessionId,

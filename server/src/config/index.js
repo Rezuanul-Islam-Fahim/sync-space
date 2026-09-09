@@ -49,6 +49,8 @@ export const getConfig = ({ reload = false } = {}) => {
         bodyLimit: envVars.BODY_LIMIT,
         auth: Object.freeze({
             saltRounds: envVars.BCRYPT_SALT_ROUNDS,
+            tokenHashAlgorithm: envVars.TOKEN_HASH_ALGORITHM,
+            tokenHashDigest: envVars.TOKEN_HASH_DIGEST,
         }),
         corsOrigins,
         corsCredentials: corsOrigins !== '*',
@@ -60,8 +62,6 @@ export const getConfig = ({ reload = false } = {}) => {
             refreshSecret: envVars.JWT_REFRESH_SECRET,
             refreshExpiresIn: envVars.JWT_REFRESH_EXPIRES_IN,
         }),
-        tokenHashAlgorithm: envVars.TOKEN_HASH_ALGORITHM,
-        tokenHashDigest: envVars.TOKEN_HASH_DIGEST,
     });
 
     return cachedConfig;

@@ -4,8 +4,6 @@ import { maskEmail } from '../../../../shared/util/index.js';
 import {
     INVALID_CREDENTIALS,
     DUMMY_PASSWORD_HASH,
-    REFRESH_TOKEN_HASH_ALGORITHM,
-    REFRESH_TOKEN_HASH_DIGEST,
 } from '../../domain/auth-user.constant.js';
 
 /**
@@ -72,11 +70,7 @@ export class LoginUserUseCase {
             sessionId,
         });
 
-        const hashedRefreshToken = this.tokenHasher.hash(
-            REFRESH_TOKEN_HASH_ALGORITHM,
-            REFRESH_TOKEN_HASH_DIGEST,
-            tokens.refreshToken
-        );
+        const hashedRefreshToken = this.tokenHasher.hash(tokens.refreshToken);
 
         await this.sessionWriter.initiateSession(
             sessionId,
