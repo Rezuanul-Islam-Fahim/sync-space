@@ -23,13 +23,14 @@ export class VerifyAccessTokenUseCase {
     /**
      * Verifies access token and maps payload to an intent-revealing principal object.
      *
-     * @param {string} token
+     * @param {string} accessToken
      * @returns {Promise<{ id: string, email: string }>}
-     * @throws {UnauthorizedError} if token is invalid or verification fails
+     * @throws {UnauthorizedError} if accessToken is invalid or verification fails
      */
-    async execute(token) {
+    async execute(accessToken) {
         try {
-            const decoded = await this.tokenVerifier.verifyAccessToken(token);
+            const decoded =
+                await this.tokenVerifier.verifyAccessToken(accessToken);
             return { id: decoded.sub, email: decoded.email, jti: decoded.jti };
         } catch (error) {
             if (error instanceof TokenVerificationError) {

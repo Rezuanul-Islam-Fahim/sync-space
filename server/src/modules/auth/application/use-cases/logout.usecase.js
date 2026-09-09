@@ -32,7 +32,9 @@ export class LogoutUseCase {
 
                 try {
                     const { jti, exp } =
-                        await this.tokenVerifier.verifyAccessToken(data.token);
+                        await this.tokenVerifier.verifyAccessToken(
+                            data.accessToken
+                        );
 
                     const ttl = exp - Math.floor(Date.now() / 1000);
 

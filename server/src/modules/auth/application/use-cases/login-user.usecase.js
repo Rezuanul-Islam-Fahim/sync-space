@@ -39,7 +39,7 @@ export class LoginUserUseCase {
      * Authenticates user credentials and returns user domain entity with tokens.
      *
      * @param {{ email: string, password: string }} data
-     * @returns {Promise<{ user: import('../../domain/auth-user.entity.js').AuthUser, tokens: { token: string, refreshToken: string } }>}
+     * @returns {Promise<{ user: import('../../domain/auth-user.entity.js').AuthUser, tokens: { accessToken: string, refreshToken: string } }>}
      */
     async execute(data) {
         const user = await this.authUserReader.findByEmail(data.email);

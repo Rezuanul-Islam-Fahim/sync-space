@@ -69,12 +69,14 @@ export class TokenRefreshUseCase {
                 throw new NotFoundError(USER_UNAVAILABLE);
             }
 
-            const { token: newToken, refreshToken: newRefreshToken } =
-                await this.tokenGenerator.generateTokens({
-                    userId,
-                    email: user.email,
-                    sessionId,
-                });
+            const {
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken,
+            } = await this.tokenGenerator.generateTokens({
+                userId,
+                email: user.email,
+                sessionId,
+            });
 
             const hashedRefreshToken = this.tokenHasher.hash(newRefreshToken);
 
@@ -84,12 +86,15 @@ export class TokenRefreshUseCase {
                 hashedRefreshToken
             );
 
-            this.logger.info('New session generated (token + refresh-token)', {
-                authUserId: userId,
-                email: maskEmail(email),
-            });
+            this.logger.info(
+                'New session generated (access-token + refresh-token)',
+                {
+                    authUserId: userId,
+                    email: maskEmail(email),
+                }
+            );
 
-            return { newToken, newRefreshToken };
+            return { newAccessToken, newRefreshToken };
         } catch (error) {
             if (error instanceof TokenVerificationError) {
                 const message = error.isExpired ? TOKEN_EXPIRED : INVALID_TOKEN;

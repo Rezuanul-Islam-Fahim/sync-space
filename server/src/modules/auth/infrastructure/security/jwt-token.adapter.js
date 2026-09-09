@@ -45,10 +45,10 @@ export class JwtTokenGenerator extends TokenGeneratorPort {
      * @param {string} userId
      * @param {string} email
      * @param {string} sessionId
-     * @returns {Promise<{ token: string, refreshToken: string }>}
+     * @returns {Promise<{ accessToken: string, refreshToken: string }>}
      */
     async generateTokens({ userId, email, sessionId }) {
-        const [token, refreshToken] = await Promise.all([
+        const [accessToken, refreshToken] = await Promise.all([
             signAsync({ sub: userId, email }, this.secret, {
                 algorithm: this.algorithm,
                 expiresIn: this.expiresIn,
@@ -60,7 +60,7 @@ export class JwtTokenGenerator extends TokenGeneratorPort {
             }),
         ]);
 
-        return { token, refreshToken };
+        return { accessToken, refreshToken };
     }
 }
 
@@ -85,12 +85,12 @@ export class JwtTokenVerifier extends TokenVerifierPort {
     /**
      * Verifies the authenticity and expiration of an access token.
      *
-     * @param {string} token
+     * @param {string} accessToken
      * @returns {Promise<object>}
      */
-    async verifyAccessToken(token) {
+    async verifyAccessToken(accessToken) {
         try {
-            return await verifyAsync(token, this.secret, {
+            return await verifyAsync(accessToken, this.secret, {
                 algorithms: [this.algorithm],
             });
         } catch (error) {
@@ -104,12 +104,12 @@ export class JwtTokenVerifier extends TokenVerifierPort {
     /**
      * Verifies the authenticity and expiration of a refresh token.
      *
-     * @param {string} token
+     * @param {string} refreshToken
      * @returns {Promise<object>}
      */
-    async verifyRefreshToken(token) {
+    async verifyRefreshToken(refreshToken) {
         try {
-            return await verifyAsync(token, this.refreshSecret, {
+            return await verifyAsync(refreshToken, this.refreshSecret, {
                 algorithms: [this.algorithm],
             });
         } catch (error) {

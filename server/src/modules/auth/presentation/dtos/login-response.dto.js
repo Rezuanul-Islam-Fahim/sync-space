@@ -7,7 +7,7 @@ export class LoginResponseDto {
     /**
      * @param {{
      *   user: import('../../domain/auth-user.entity.js').AuthUser | object,
-     *   tokens: { token: string, refreshToken: string }
+     *   tokens: { accessToken: string, refreshToken: string }
      * }} loginData
      */
     constructor({ user, tokens }) {
@@ -18,7 +18,7 @@ export class LoginResponseDto {
     /**
      * @param {{
      *   user: import('../../domain/auth-user.entity.js').AuthUser | object,
-     *   tokens: { token: string, refreshToken: string }
+     *   tokens: { accessToken: string, refreshToken: string }
      * }} loginData
      * @returns {LoginResponseDto}
      */

@@ -3,7 +3,7 @@
  */
 export class TokenGeneratorPort {
     /**
-     * @returns {Promise<{ token: string, refreshToken: string }>}
+     * @returns {Promise<{ accessToken: string, refreshToken: string }>}
      */
     generateTokens({ _userId, _email, _sessionId }) {
         throw new Error('Method not implemented');

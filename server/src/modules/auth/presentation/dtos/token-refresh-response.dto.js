@@ -1,6 +1,6 @@
 export class TokenRefreshResponseDto {
-    constructor({ token, refreshToken }) {
-        this.token = token;
+    constructor({ accessToken, refreshToken }) {
+        this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
 

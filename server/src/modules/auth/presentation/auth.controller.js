@@ -66,11 +66,11 @@ export class AuthController {
         const tokenRefreshRequestDto =
             TokenRefreshRequestDto.from(validatedData);
 
-        const { newToken: token, newRefreshToken: refreshToken } =
+        const { newAccessToken: accessToken, newRefreshToken: refreshToken } =
             await this.tokenRefreshUseCase.execute(tokenRefreshRequestDto);
 
         const tokenRefreshResponseDto = TokenRefreshResponseDto.from({
-            token,
+            accessToken,
             refreshToken,
         });
 
@@ -83,11 +83,11 @@ export class AuthController {
     });
 
     logout = catchAsync(async (req, res) => {
-        const token = headerTokenExtract(req.headers.authorization);
+        const accessToken = headerTokenExtract(req.headers.authorization);
         const validatedData = matchedData(req);
         const requestDto = LogoutRequestDto.from(validatedData);
 
-        await this.logoutUseCase.execute({ ...requestDto, token });
+        await this.logoutUseCase.execute({ ...requestDto, accessToken });
 
         sendSuccessResponse({
             res,

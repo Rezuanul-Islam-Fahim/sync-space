@@ -16,14 +16,14 @@ export const makeAuthenticate = ({
     getBlacklistedLoginUseCase,
 }) => {
     return catchAsync(async (req, _, next) => {
-        const token = headerTokenExtract(req.headers.authorization);
+        const accessToken = headerTokenExtract(req.headers.authorization);
 
-        if (!token) {
+        if (!accessToken) {
             next(new UnauthorizedError(TOKEN_NOT_FOUND));
             return;
         }
 
-        const principal = await verifyAccessTokenUseCase.execute(token);
+        const principal = await verifyAccessTokenUseCase.execute(accessToken);
 
         const blacklistedToken = await getBlacklistedLoginUseCase.execute(
             principal.jti
