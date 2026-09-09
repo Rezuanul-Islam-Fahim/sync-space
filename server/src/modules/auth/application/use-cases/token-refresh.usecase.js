@@ -16,6 +16,7 @@ export class TokenRefreshUseCase {
         sessionReader,
         sessionWriter,
         tokenHasher,
+        tokenHashComparer,
         logger,
     }) {
         this.authUserReader = authUserReader;
@@ -24,6 +25,7 @@ export class TokenRefreshUseCase {
         this.sessionReader = sessionReader;
         this.sessionWriter = sessionWriter;
         this.tokenHasher = tokenHasher;
+        this.tokenHashComparer = tokenHashComparer;
         this.logger = logger;
     }
 
@@ -43,7 +45,14 @@ export class TokenRefreshUseCase {
             throw new UnauthorizedError(SESSION_EXPIRED_INVALID);
         }
 
-        if (data.refreshToken !== refreshToken) {
+        const isTokenMatched = this.tokenHashComparer.compare(
+            REFRESH_TOKEN_HASH_ALGORITHM,
+            REFRESH_TOKEN_HASH_DIGEST,
+            data.refreshToken,
+            refreshToken
+        );
+
+        if (!isTokenMatched) {
             this.logger.warn('CRITICAL: Session compromised', {
                 authUserId: userId,
                 sessionId: sessionId,

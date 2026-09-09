@@ -23,7 +23,10 @@ import { TokenRefreshUseCase } from './application/use-cases/token-refresh.useca
 import { LogoutUseCase } from './application/use-cases/logout.usecase.js';
 import { GetBlacklistedLoginUseCase } from './application/use-cases/get-blacklisted-login.usecase.js';
 import { makeAuthenticate } from './presentation/auth.middleware.js';
-import { TokenHasherAdapter } from './infrastructure/security/token-hasher.adapter.js';
+import {
+    TokenHashComparerAdapter,
+    TokenHasherAdapter,
+} from './infrastructure/security/token-hasher.adapter.js';
 
 /**
  * Composes the auth module and returns its Express router and auth service facade.
@@ -81,6 +84,7 @@ export const composeAuthModule = ({
     });
 
     const tokenHasher = new TokenHasherAdapter();
+    const tokenHashComparer = new TokenHashComparerAdapter();
 
     const loginUserUseCase = new LoginUserUseCase({
         authUserReader,
@@ -118,6 +122,7 @@ export const composeAuthModule = ({
         sessionReader,
         sessionWriter,
         tokenHasher,
+        tokenHashComparer,
         logger,
     });
 
