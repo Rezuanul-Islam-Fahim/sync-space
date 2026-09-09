@@ -76,7 +76,7 @@ export class AuthController {
 
         sendSuccessResponse({
             res,
-            data: tokenRefreshResponseDto,
+            data: { tokens: tokenRefreshResponseDto },
             statusCode: OK,
             message: NEW_SESSION_GENERATED,
         });
