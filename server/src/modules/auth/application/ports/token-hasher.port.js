@@ -3,3 +3,9 @@ export class TokenHasherPort {
         throw new Error('Method not implemented');
     }
 }
+
+export class TokenHashComparerPort {
+    compare(_algorith, _digest, _incomingToken, _storedHashedHex) {
+        throw new Error('Method not implemented');
+    }
+}
