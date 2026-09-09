@@ -57,6 +57,8 @@ export const getConfig = ({ reload = false } = {}) => {
         trustProxy: envVars.TRUST_PROXY,
         jwt: Object.freeze({
             algorithm: envVars.JWT_ALGORITHM,
+            issuer: envVars.JWT_ISSUER,
+            audience: envVars.JWT_AUDIENCE,
             secret: envVars.JWT_SECRET,
             expiresIn: envVars.JWT_EXPIRES_IN,
             refreshSecret: envVars.JWT_REFRESH_SECRET,

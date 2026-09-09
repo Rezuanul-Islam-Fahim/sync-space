@@ -29,6 +29,8 @@ export const envSchema = Joi.object({
         .valid('HS256', 'HS384', 'HS512', 'RS256', 'ES256')
         .default('HS256')
         .description('JWT signing algorithm'),
+    JWT_ISSUER: Joi.string().required().description('JWT token issuer'),
+    JWT_AUDIENCE: Joi.string().required().description('JWT token audience'),
     JWT_SECRET: Joi.string()
         .min(32)
         .required()

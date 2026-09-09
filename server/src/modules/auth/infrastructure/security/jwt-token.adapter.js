@@ -21,6 +21,8 @@ export class JwtTokenGenerator extends TokenGeneratorPort {
      *   expiresIn: string,
      *   refreshSecret: string,
      *   refreshExpiresIn: string,
+     *   issuer: string,
+     *   audience: string,
      *   algorithm?: string
      * }} options
      */
@@ -29,6 +31,8 @@ export class JwtTokenGenerator extends TokenGeneratorPort {
         expiresIn,
         refreshSecret,
         refreshExpiresIn,
+        issuer,
+        audience,
         algorithm = 'HS256',
     }) {
         super();
@@ -36,6 +40,8 @@ export class JwtTokenGenerator extends TokenGeneratorPort {
         this.expiresIn = expiresIn;
         this.refreshSecret = refreshSecret;
         this.refreshExpiresIn = refreshExpiresIn;
+        this.issuer = issuer;
+        this.audience = audience;
         this.algorithm = algorithm;
     }
 
@@ -52,11 +58,15 @@ export class JwtTokenGenerator extends TokenGeneratorPort {
             signAsync({ sub: userId, email }, this.secret, {
                 algorithm: this.algorithm,
                 expiresIn: this.expiresIn,
+                issuer: this.issuer,
+                audience: this.audience,
                 jwtid: randomUUID(),
             }),
             signAsync({ sub: userId, email, sessionId }, this.refreshSecret, {
                 algorithm: this.algorithm,
                 expiresIn: this.refreshExpiresIn,
+                issuer: this.issuer,
+                audience: this.audience,
             }),
         ]);
 
@@ -72,13 +82,23 @@ export class JwtTokenVerifier extends TokenVerifierPort {
      * @param {{
      *   secret: string,
      *   refreshSecret: string,
+     *   issuer: string,
+     *   audience: string,
      *   algorithm?: string
      * }} options
      */
-    constructor({ secret, refreshSecret, algorithm = 'HS256' }) {
+    constructor({
+        secret,
+        refreshSecret,
+        issuer,
+        audience,
+        algorithm = 'HS256',
+    }) {
         super();
         this.secret = secret;
         this.refreshSecret = refreshSecret;
+        this.issuer = issuer;
+        this.audience = audience;
         this.algorithm = algorithm;
     }
 
@@ -92,6 +112,8 @@ export class JwtTokenVerifier extends TokenVerifierPort {
         try {
             return await verifyAsync(accessToken, this.secret, {
                 algorithms: [this.algorithm],
+                issuer: this.issuer,
+                audience: this.audience,
             });
         } catch (error) {
             if (error.name === 'TokenExpiredError') {
@@ -111,6 +133,8 @@ export class JwtTokenVerifier extends TokenVerifierPort {
         try {
             return await verifyAsync(refreshToken, this.refreshSecret, {
                 algorithms: [this.algorithm],
+                issuer: this.issuer,
+                audience: this.audience,
             });
         } catch (error) {
             if (error.name === 'TokenExpiredError') {
