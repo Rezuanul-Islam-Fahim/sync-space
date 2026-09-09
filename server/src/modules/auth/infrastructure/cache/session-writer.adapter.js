@@ -13,7 +13,7 @@ export class SessionWriterAdapter extends SessionWriterPort {
         this.logger = logger;
     }
 
-    async initiateSession(sessionId, authUserId, refreshToken) {
+    async initiateSession(sessionId, authUserId, hashedRefreshToken) {
         const cacheKey = constructCacheKey(
             AUTH_SESSION_CACHE_KEY,
             authUserId,
@@ -21,7 +21,7 @@ export class SessionWriterAdapter extends SessionWriterPort {
         );
         await this.client.set(
             cacheKey,
-            refreshToken,
+            hashedRefreshToken,
             AUTH_SESSION_TIME_TO_LIVE
         );
     }

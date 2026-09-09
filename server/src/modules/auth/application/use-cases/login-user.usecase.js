@@ -4,6 +4,8 @@ import { maskEmail } from '../../../../shared/util/index.js';
 import {
     INVALID_CREDENTIALS,
     DUMMY_PASSWORD_HASH,
+    REFRESH_TOKEN_HASH_ALGORITHM,
+    REFRESH_TOKEN_HASH_DIGEST,
 } from '../../domain/auth-user.constant.js';
 
 /**
@@ -24,12 +26,14 @@ export class LoginUserUseCase {
         passwordComparer,
         tokenGenerator,
         sessionWriter,
+        tokenHasher,
         logger,
     }) {
         this.authUserReader = authUserReader;
         this.passwordComparer = passwordComparer;
         this.tokenGenerator = tokenGenerator;
         this.sessionWriter = sessionWriter;
+        this.tokenHasher = tokenHasher;
         this.logger = logger;
     }
 
@@ -71,7 +75,11 @@ export class LoginUserUseCase {
         await this.sessionWriter.initiateSession(
             sessionId,
             user.id,
-            tokens.refreshToken
+            this.tokenHasher.hash(
+                REFRESH_TOKEN_HASH_ALGORITHM,
+                REFRESH_TOKEN_HASH_DIGEST,
+                tokens.refreshToken
+            )
         );
 
         this.logger?.info?.('User login successful', {
