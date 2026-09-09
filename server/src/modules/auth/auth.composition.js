@@ -76,6 +76,7 @@ export const composeAuthModule = ({
 
     const sessionWriter = new SessionWriterAdapter({
         client: redisClient,
+        sessionTimeToLive: jwtConfig.refreshExpiresIn,
         logger,
     });
     const sessionReader = new SessionReaderAdapter({

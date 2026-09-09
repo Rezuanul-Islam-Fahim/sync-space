@@ -1,15 +1,16 @@
+import ms from 'ms';
 import { constructCacheKey } from '../../../../shared/util/index.js';
 import { SessionWriterPort } from '../../application/ports/session-writer.port.js';
 import {
     ACCESS_TOKEN_BLACKLIST_KEY,
     AUTH_SESSION_CACHE_KEY,
-    AUTH_SESSION_TIME_TO_LIVE,
 } from '../../domain/auth-user.constant.js';
 
 export class SessionWriterAdapter extends SessionWriterPort {
-    constructor({ client, logger }) {
+    constructor({ client, sessionTimeToLive, logger }) {
         super();
         this.client = client;
+        this.sessionTimeToLive = Math.floor(ms(sessionTimeToLive) / 1000);
         this.logger = logger;
     }
 
@@ -22,7 +23,7 @@ export class SessionWriterAdapter extends SessionWriterPort {
         await this.client.set(
             cacheKey,
             hashedRefreshToken,
-            AUTH_SESSION_TIME_TO_LIVE
+            this.sessionTimeToLive
         );
     }
 
