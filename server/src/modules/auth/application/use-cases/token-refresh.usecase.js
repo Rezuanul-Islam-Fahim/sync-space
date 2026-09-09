@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { UnauthorizedError } from '../../../../shared/error/index.js';
 import { maskEmail } from '../../../../shared/util/index.js';
 import {
@@ -53,15 +54,17 @@ export class TokenRefreshUseCase {
             throw new UnauthorizedError(USER_UNAVAILABLE);
         }
 
+        const newSessionId = randomUUID();
+
         const { token: newToken, refreshToken: newRefreshToken } =
             await this.tokenGenerator.generateTokens({
-                userId: userId,
+                userId,
                 email: user.email,
-                sessionId: sessionId,
+                sessionId: newSessionId,
             });
 
         await this.sessionWriter.initiateSession(
-            sessionId,
+            newSessionId,
             userId,
             newRefreshToken
         );

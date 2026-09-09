@@ -60,7 +60,7 @@ export class LoginUserUseCase {
             throw new UnauthorizedError(INVALID_CREDENTIALS);
         }
 
-        const sessionId = data.deviceId || randomUUID();
+        const sessionId = randomUUID();
 
         const tokens = await this.tokenGenerator.generateTokens({
             userId: user.id,
