@@ -73,8 +73,8 @@ export class LoginUserUseCase {
         const hashedRefreshToken = this.tokenHasher.hash(tokens.refreshToken);
 
         await this.sessionWriter.initiateSession(
-            sessionId,
             user.id,
+            sessionId,
             hashedRefreshToken
         );
 

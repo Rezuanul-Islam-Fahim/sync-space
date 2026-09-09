@@ -14,7 +14,7 @@ export class SessionWriterAdapter extends SessionWriterPort {
         this.logger = logger;
     }
 
-    async initiateSession(sessionId, authUserId, hashedRefreshToken) {
+    async initiateSession(authUserId, sessionId, hashedRefreshToken) {
         const cacheKey = constructCacheKey(
             AUTH_SESSION_CACHE_KEY,
             authUserId,
@@ -27,7 +27,7 @@ export class SessionWriterAdapter extends SessionWriterPort {
         );
     }
 
-    async clearSession(sessionId, authUserId) {
+    async clearSession(authUserId, sessionId) {
         const cacheKey = constructCacheKey(
             AUTH_SESSION_CACHE_KEY,
             authUserId,

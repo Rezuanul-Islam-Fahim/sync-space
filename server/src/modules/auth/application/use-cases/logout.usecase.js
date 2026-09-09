@@ -28,7 +28,7 @@ export class LogoutUseCase {
             );
 
             if (session) {
-                await this.sessionWriter.clearSession(sessionId, authUserId);
+                await this.sessionWriter.clearSession(authUserId, sessionId);
 
                 try {
                     const { jti, exp } =

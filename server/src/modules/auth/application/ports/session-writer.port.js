@@ -5,11 +5,11 @@ export class SessionWriterPort {
      * @param {string} _refreshToken
      * @returns {Promise}
      */
-    initiateSession(_sessionId, _authUserId, _refreshToken) {
+    initiateSession(_authUserId, _sessionId, _refreshToken) {
         throw new Error('Method not implemented');
     }
 
-    clearSession(_sessionId, _authUserId) {
+    clearSession(_authUserId, _sessionId) {
         throw new Error('Method not implemented');
     }
 

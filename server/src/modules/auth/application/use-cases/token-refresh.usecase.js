@@ -59,7 +59,7 @@ export class TokenRefreshUseCase {
                     authUserId: userId,
                     sessionId: sessionId,
                 });
-                await this.sessionWriter.clearSession(sessionId, userId);
+                await this.sessionWriter.clearSession(userId, sessionId);
                 throw new UnauthorizedError(SESSION_EXPIRED_INVALID);
             }
 
@@ -79,8 +79,8 @@ export class TokenRefreshUseCase {
             const hashedRefreshToken = this.tokenHasher.hash(newRefreshToken);
 
             await this.sessionWriter.initiateSession(
-                sessionId,
                 userId,
+                sessionId,
                 hashedRefreshToken
             );
 
