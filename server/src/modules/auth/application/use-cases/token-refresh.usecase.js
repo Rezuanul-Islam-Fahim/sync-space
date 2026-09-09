@@ -1,4 +1,7 @@
-import { UnauthorizedError } from '../../../../shared/error/index.js';
+import {
+    NotFoundError,
+    UnauthorizedError,
+} from '../../../../shared/error/index.js';
 import { maskEmail } from '../../../../shared/util/index.js';
 import {
     SESSION_EXPIRED_INVALID,
@@ -59,7 +62,7 @@ export class TokenRefreshUseCase {
         const user = await this.authUserReader.findById(userId);
 
         if (!user) {
-            throw new UnauthorizedError(USER_UNAVAILABLE);
+            throw new NotFoundError(USER_UNAVAILABLE);
         }
 
         const { token: newToken, refreshToken: newRefreshToken } =
