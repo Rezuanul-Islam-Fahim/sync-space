@@ -10,4 +10,12 @@ export class CachePort {
     delete(_key) {
         throw new Error('Method not implemented');
     }
+
+    acquireLock(_key, _value, _ttl) {
+        throw new Error('Method not implemented');
+    }
+
+    releaseLock(_key, _value) {
+        throw new Error('Method not implemented');
+    }
 }
