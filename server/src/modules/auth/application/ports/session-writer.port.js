@@ -16,4 +16,16 @@ export class SessionWriterPort {
     blacklistLoginSession(_jti, _ttl) {
         throw new Error('Method not implemented');
     }
+
+    lockSessionRefresh(_refreshToken, _identifier) {
+        throw new Error('Method not implemented');
+    }
+
+    unlockSessionRefresh(_refreshToken, _identifier) {
+        throw new Error('Method not implemented');
+    }
+
+    cacheSession(_userId, _accessToken, _refreshToken) {
+        throw new Error('Method not implemented');
+    }
 }

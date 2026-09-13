@@ -7,3 +7,7 @@ export const constructCacheKey = (mainKey, secondaryKey, ...keys) => {
 
     return key;
 };
+
+export const constructCacheLockKey = (mainKey, secondaryKey) => {
+    return `lock:${mainKey}:${secondaryKey}`;
+};

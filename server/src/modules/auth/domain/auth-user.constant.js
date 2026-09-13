@@ -17,3 +17,5 @@ export const SESSION_EXPIRED_INVALID = 'Session expired or invalid';
 // Cache keys and ttl's
 export const AUTH_SESSION_CACHE_KEY = 'session';
 export const ACCESS_TOKEN_BLACKLIST_KEY = 'access_token_blacklist';
+export const AUTH_CACHED_SESSION_CACHE_KEY = 'cached_session';
+export const SESSION_LOCK_EXPIRATION = 5; // 5 seconds
