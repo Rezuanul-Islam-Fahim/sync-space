@@ -13,9 +13,13 @@ export const USER_UNAVAILABLE =
     'The user belonging to this token no longer exists';
 export const TOKEN_VERIFICATION_FAILED = 'Token verification failed';
 export const SESSION_EXPIRED_INVALID = 'Session expired or invalid';
+export const TOKEN_REFRESH_TIMEOUT =
+    'Token refresh timeout. Please try again later';
 
 // Cache keys and ttl's
 export const AUTH_SESSION_CACHE_KEY = 'session';
 export const ACCESS_TOKEN_BLACKLIST_KEY = 'access_token_blacklist';
 export const AUTH_CACHED_SESSION_CACHE_KEY = 'cached_session';
 export const SESSION_LOCK_EXPIRATION = 5; // 5 seconds
+export const GET_CACHED_SESSION_WAITING_TIME = 3; // 3 seconds
+export const GET_CACHED_SESSION_POLLING_INTERVAL = 100; // 100 milliseconds

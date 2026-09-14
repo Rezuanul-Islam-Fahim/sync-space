@@ -67,7 +67,7 @@ export class AuthController {
             TokenRefreshRequestDto.from(validatedData);
 
         const { newAccessToken: accessToken, newRefreshToken: refreshToken } =
-            await this.tokenRefreshUseCase.execute(tokenRefreshRequestDto);
+            await this.tokenRefreshUseCase.execute(res, tokenRefreshRequestDto);
 
         const tokenRefreshResponseDto = TokenRefreshResponseDto.from({
             accessToken,

@@ -12,4 +12,8 @@ export class SessionReaderPort {
     getBlacklistedLoginSession(_jti) {
         throw new Error('Method not implemented');
     }
+
+    getCachedSession(_refreshToken) {
+        throw new Error('Method not implemeneted');
+    }
 }

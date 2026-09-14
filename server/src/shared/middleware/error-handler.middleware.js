@@ -7,6 +7,7 @@ import {
     NOT_FOUND,
     CONFLICT,
     INTERNAL_SERVER_ERROR,
+    TIMED_OUT,
     DEFAULT_ERROR,
 } from '../constants/index.js';
 
@@ -16,6 +17,7 @@ const errorCodeRegistry = new Map([
     [ErrorCode.UNAUTHENTICATED, UNAUTHORIZED],
     [ErrorCode.PERMISSION_DENIED, FORBIDDEN],
     [ErrorCode.RESOURCE_NOT_FOUND, NOT_FOUND],
+    [ErrorCode.TIMED_OUT, TIMED_OUT],
     [ErrorCode.ALREADY_EXISTS, CONFLICT],
     [ErrorCode.INTERNAL_ERROR, INTERNAL_SERVER_ERROR],
 ]);

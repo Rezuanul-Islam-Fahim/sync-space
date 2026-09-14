@@ -3,14 +3,18 @@ import {
     NotFoundError,
     UnauthorizedError,
 } from '../../../../shared/error/index.js';
-import { maskEmail } from '../../../../shared/util/index.js';
+import { maskEmail, waitedResponse } from '../../../../shared/util/index.js';
 import {
     SESSION_EXPIRED_INVALID,
     TOKEN_EXPIRED,
     INVALID_TOKEN,
     USER_UNAVAILABLE,
+    TOKEN_REFRESH_TIMEOUT,
+    GET_CACHED_SESSION_WAITING_TIME,
+    GET_CACHED_SESSION_POLLING_INTERVAL,
 } from '../../domain/auth-user.constant.js';
 import { TokenVerificationError } from '../../infrastructure/security/errors/token-verification.error.js';
+import { NEW_SESSION_GENERATED } from '../../presentation/auth.messages.js';
 
 export class TokenRefreshUseCase {
     constructor({
@@ -33,7 +37,7 @@ export class TokenRefreshUseCase {
         this.logger = logger;
     }
 
-    async execute(data) {
+    async execute(res, data) {
         let sessionLockIdentifier;
 
         try {
@@ -73,15 +77,36 @@ export class TokenRefreshUseCase {
                 throw new NotFoundError(USER_UNAVAILABLE);
             }
 
+            const refreshTokenHash = this.tokenHasher.hash(data.refreshToken);
             sessionLockIdentifier = randomUUID();
 
             const locked = await this.sessionWriter.lockSessionRefresh(
-                data.refreshToken,
+                refreshTokenHash,
                 sessionLockIdentifier
             );
 
             if (!locked) {
-                // ...
+                return await waitedResponse({
+                    res,
+                    waitingTime: GET_CACHED_SESSION_WAITING_TIME,
+                    pollInterval: GET_CACHED_SESSION_POLLING_INTERVAL,
+                    message: NEW_SESSION_GENERATED,
+                    errorMessage: TOKEN_REFRESH_TIMEOUT,
+                    resultCallback: async () =>
+                        await this.sessionReader.getCachedSession(
+                            refreshTokenHash
+                        ),
+                    constructData: result => {
+                        const resultObj = JSON.parse(result);
+
+                        return {
+                            tokens: {
+                                accessToken: resultObj.accessToken,
+                                refreshToken: resultObj.refreshToken,
+                            },
+                        };
+                    },
+                });
             }
 
             const {
@@ -93,18 +118,18 @@ export class TokenRefreshUseCase {
                 sessionId,
             });
 
+            await this.sessionWriter.cacheSession(
+                refreshTokenHash,
+                newAccessToken,
+                newRefreshToken
+            );
+
             const hashedRefreshToken = this.tokenHasher.hash(newRefreshToken);
 
             await this.sessionWriter.initiateSession(
                 userId,
                 sessionId,
                 hashedRefreshToken
-            );
-
-            await this.sessionWriter.cacheSession(
-                data.refreshToken,
-                newAccessToken,
-                newRefreshToken
             );
 
             this.logger.info(
@@ -124,10 +149,12 @@ export class TokenRefreshUseCase {
 
             throw error;
         } finally {
-            await this.client.unlockSessionRefresh(
-                data.refreshToken,
-                sessionLockIdentifier
-            );
+            if (sessionLockIdentifier) {
+                await this.sessionWriter.unlockSessionRefresh(
+                    data.refreshToken,
+                    sessionLockIdentifier
+                );
+            }
         }
     }
 }

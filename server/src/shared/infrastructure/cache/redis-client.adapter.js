@@ -19,7 +19,7 @@ export class RedisClient extends CachePort {
     }
 
     async acquireLock(key, value, ttl) {
-        await this.client.set(key, value, { NX: true, EX: ttl });
+        return await this.client.set(key, value, { NX: true, EX: ttl });
     }
 
     async releaseLock(key, value) {
