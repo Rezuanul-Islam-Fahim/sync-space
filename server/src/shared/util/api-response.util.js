@@ -59,16 +59,16 @@ export const sendErrorResponse = ({
         message,
     };
 
-    if (errorCode !== undefined) {
+    if (errorCode) {
         response.errorCode = errorCode;
     }
-    if (errors !== undefined) {
+    if (errors) {
         response.errors = errors;
     }
-    if (requestId !== undefined) {
+    if (requestId) {
         response.requestId = requestId;
     }
-    if (stack !== undefined) {
+    if (stack) {
         response.stack = stack;
     }
 

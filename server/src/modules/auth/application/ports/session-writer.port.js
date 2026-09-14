@@ -25,7 +25,7 @@ export class SessionWriterPort {
         throw new Error('Method not implemented');
     }
 
-    cacheSession(_userId, _accessToken, _refreshToken) {
+    cacheSession(_prevRefreshToken, _accessToken, _refreshToken) {
         throw new Error('Method not implemented');
     }
 }

@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import {
     NotFoundError,
     UnauthorizedError,
@@ -33,6 +34,8 @@ export class TokenRefreshUseCase {
     }
 
     async execute(data) {
+        let sessionLockIdentifier;
+
         try {
             const {
                 sub: userId,
@@ -70,6 +73,17 @@ export class TokenRefreshUseCase {
                 throw new NotFoundError(USER_UNAVAILABLE);
             }
 
+            sessionLockIdentifier = randomUUID();
+
+            const locked = await this.sessionWriter.lockSessionRefresh(
+                data.refreshToken,
+                sessionLockIdentifier
+            );
+
+            if (!locked) {
+                // ...
+            }
+
             const {
                 accessToken: newAccessToken,
                 refreshToken: newRefreshToken,
@@ -85,6 +99,12 @@ export class TokenRefreshUseCase {
                 userId,
                 sessionId,
                 hashedRefreshToken
+            );
+
+            await this.sessionWriter.cacheSession(
+                data.refreshToken,
+                newAccessToken,
+                newRefreshToken
             );
 
             this.logger.info(
@@ -103,6 +123,11 @@ export class TokenRefreshUseCase {
             }
 
             throw error;
+        } finally {
+            await this.client.unlockSessionRefresh(
+                data.refreshToken,
+                sessionLockIdentifier
+            );
         }
     }
 }
