@@ -1,17 +1,43 @@
 import { matchedData } from 'express-validator';
 import { LoginRequestDto } from './dtos/login-request.dto.js';
 import { LoginResponseDto } from './dtos/login-response.dto.js';
+import { TokenRefreshResponseDto } from './dtos/token-refresh-response.dto.js';
+import { TokenRefreshRequestDto } from './dtos/token-refresh-request.dto.js';
 import {
     sendSuccessResponse,
     catchAsync,
     maskEmail,
+    headerTokenExtract,
 } from '../../../shared/util/index.js';
 import { OK } from '../../../shared/constants/index.js';
-import { LOGIN_SUCCESSFUL } from './auth.messages.js';
+import {
+    LOGIN_SUCCESSFUL,
+    LOGOUT_SUCCESSFUL,
+    NEW_SESSION_GENERATED,
+} from './auth.messages.js';
+import { LogoutRequestDto } from './dtos/logout-request.dto.js';
 
+/**
+ * Controller handling authentication endpoints.
+ */
 export class AuthController {
-    constructor({ authService, logger }) {
-        this.authService = authService;
+    /**
+     * @param {{
+     *   loginUserUseCase: import('../application/use-cases/login-user.usecase.js').LoginUserUseCase,
+     *   tokenRefreshUseCase: import('../application/use-cases/token-refresh.usecase.js').TokenRefreshUseCase
+     *   logoutUseCase: import('../application/use-cases/logout.usecase.js').LogoutUseCase
+     *   logger?: import('../../../shared/ports/index.js').LoggerPort
+     * }} deps
+     */
+    constructor({
+        loginUserUseCase,
+        tokenRefreshUseCase,
+        logoutUseCase,
+        logger,
+    }) {
+        this.loginUserUseCase = loginUserUseCase;
+        this.tokenRefreshUseCase = tokenRefreshUseCase;
+        this.logoutUseCase = logoutUseCase;
         this.logger = logger;
     }
 
@@ -23,7 +49,7 @@ export class AuthController {
             email: maskEmail(requestDto.email),
         });
 
-        const loginData = await this.authService.loginUser(requestDto);
+        const loginData = await this.loginUserUseCase.execute(requestDto);
 
         const responseDto = LoginResponseDto.from(loginData);
 
@@ -32,6 +58,41 @@ export class AuthController {
             data: responseDto,
             statusCode: OK,
             message: LOGIN_SUCCESSFUL,
+        });
+    });
+
+    tokenRefresh = catchAsync(async (req, res) => {
+        const validatedData = matchedData(req);
+        const tokenRefreshRequestDto =
+            TokenRefreshRequestDto.from(validatedData);
+
+        const { newAccessToken: accessToken, newRefreshToken: refreshToken } =
+            await this.tokenRefreshUseCase.execute(res, tokenRefreshRequestDto);
+
+        const tokenRefreshResponseDto = TokenRefreshResponseDto.from({
+            accessToken,
+            refreshToken,
+        });
+
+        sendSuccessResponse({
+            res,
+            data: { tokens: tokenRefreshResponseDto },
+            statusCode: OK,
+            message: NEW_SESSION_GENERATED,
+        });
+    });
+
+    logout = catchAsync(async (req, res) => {
+        const accessToken = headerTokenExtract(req.headers.authorization);
+        const validatedData = matchedData(req);
+        const requestDto = LogoutRequestDto.from(validatedData);
+
+        await this.logoutUseCase.execute({ ...requestDto, accessToken });
+
+        sendSuccessResponse({
+            res,
+            statusCode: OK,
+            message: LOGOUT_SUCCESSFUL,
         });
     });
 }

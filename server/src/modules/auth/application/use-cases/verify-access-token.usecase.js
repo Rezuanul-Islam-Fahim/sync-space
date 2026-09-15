@@ -1,10 +1,13 @@
-import { AppError, ErrorCode } from '../../../../shared/error/index.js';
+import { UnauthorizedError } from '../../../../shared/error/index.js';
 import {
     INVALID_TOKEN,
     TOKEN_EXPIRED,
 } from '../../domain/auth-user.constant.js';
-import { TokenVerificationError } from '../../domain/errors/token-verification.error.js';
+import { TokenVerificationError } from '../../infrastructure/security/errors/token-verification.error.js';
 
+/**
+ * Use case for verifying access tokens and resolving user identity claims.
+ */
 export class VerifyAccessTokenUseCase {
     /**
      * @param {{
@@ -20,18 +23,19 @@ export class VerifyAccessTokenUseCase {
     /**
      * Verifies access token and maps payload to an intent-revealing principal object.
      *
-     * @param {string} token
+     * @param {string} accessToken
      * @returns {Promise<{ id: string, email: string }>}
-     * @throws {AppError} if token is invalid or verification fails
+     * @throws {UnauthorizedError} if accessToken is invalid or verification fails
      */
-    async execute(token) {
+    async execute(accessToken) {
         try {
-            const decoded = await this.tokenVerifier.verifyAccessToken(token);
-            return { id: decoded.sub, email: decoded.email };
+            const decoded =
+                await this.tokenVerifier.verifyAccessToken(accessToken);
+            return { id: decoded.sub, email: decoded.email, jti: decoded.jti };
         } catch (error) {
             if (error instanceof TokenVerificationError) {
                 const message = error.isExpired ? TOKEN_EXPIRED : INVALID_TOKEN;
-                throw new AppError(message, ErrorCode.UNAUTHENTICATED);
+                throw new UnauthorizedError(message);
             }
             throw error;
         }

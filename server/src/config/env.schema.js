@@ -5,8 +5,8 @@ export const envSchema = Joi.object({
     NODE_ENV: Joi.string()
         .valid('development', 'production')
         .default('development'),
-    PORT: Joi.number().integer().default(3000),
-    MONGODB_URI: Joi.string().required().description('MongoDB url'),
+    PORT: Joi.number().integer().min(1).max(65535).default(3000),
+    MONGODB_URI: Joi.string().uri().required().description('MongoDB url'),
     LOG_LEVEL: Joi.string()
         .valid('error', 'warn', 'info', 'http', 'debug')
         .default('debug'),
@@ -24,22 +24,41 @@ export const envSchema = Joi.object({
     TRUST_PROXY: Joi.boolean()
         .default(false)
         .description('Trust proxy headers (X-Forwarded-For)'),
+    REDIS_URL: Joi.string().uri().required().description('Redis url'),
     JWT_ALGORITHM: Joi.string()
         .valid('HS256', 'HS384', 'HS512', 'RS256', 'ES256')
         .default('HS256')
         .description('JWT signing algorithm'),
+    JWT_ISSUER: Joi.string().required().description('JWT token issuer'),
+    JWT_AUDIENCE: Joi.string().required().description('JWT token audience'),
     JWT_SECRET: Joi.string()
         .min(32)
         .required()
         .description('JWT secret key (minimum 32 characters)'),
     JWT_EXPIRES_IN: Joi.string()
+        .pattern(
+            /^(?:\d+|\d+\s*(?:ms|s|m|h|d|w|y|years?|days?|hours?|hrs?|minutes?|mins?|seconds?|secs?))$/i
+        )
         .required()
-        .description('JWT token expiration time'),
+        .description(
+            'JWT token expiration time (e.g., 15m, 1h, 7d, 2 days, 3600)'
+        ),
     JWT_REFRESH_SECRET: Joi.string()
         .min(32)
         .required()
         .description('JWT refresh secret key (minimum 32 characters)'),
     JWT_REFRESH_EXPIRES_IN: Joi.string()
+        .pattern(
+            /^(?:\d+|\d+\s*(?:ms|s|m|h|d|w|y|years?|days?|hours?|hrs?|minutes?|mins?|seconds?|secs?))$/i
+        )
         .required()
-        .description('JWT refresh token expiration time'),
+        .description(
+            'JWT refresh token expiration time (e.g., 7d, 30d, 14 days)'
+        ),
+    TOKEN_HASH_ALGORITHM: Joi.string()
+        .default('sha256')
+        .description('Algorithm for hashing tokens'),
+    TOKEN_HASH_DIGEST: Joi.string()
+        .default('hex')
+        .description('Method of token conversion'),
 }).options({ stripUnknown: true });

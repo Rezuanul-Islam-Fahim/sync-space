@@ -1,3 +1,7 @@
+/**
+ * Auth module's write port for persisting and removing authentication credentials
+ * without depending on concrete database models.
+ */
 export class AuthUserWriterPort {
     /**
      * Persists authentication credentials from the given fully-populated AuthUser domain entity.

@@ -17,6 +17,16 @@ import {
 import { getAuthUserModel } from './infrastructure/database/auth-user.model.js';
 import { AuthUserReaderAdapter } from './infrastructure/adapters/auth-user-reader.adapter.js';
 import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-writer.adapter.js';
+import { SessionWriterAdapter } from './infrastructure/cache/session-writer.adapter.js';
+import { SessionReaderAdapter } from './infrastructure/cache/session-reader.adapter.js';
+import { TokenRefreshUseCase } from './application/use-cases/token-refresh.usecase.js';
+import { LogoutUseCase } from './application/use-cases/logout.usecase.js';
+import { GetBlacklistedLoginUseCase } from './application/use-cases/get-blacklisted-login.usecase.js';
+import { makeAuthenticate } from './presentation/auth.middleware.js';
+import {
+    TokenHashComparerAdapter,
+    TokenHasherAdapter,
+} from './infrastructure/security/token-hasher.adapter.js';
 
 /**
  * Composes the auth module and returns its Express router and auth service facade.
@@ -39,6 +49,7 @@ export const composeAuthModule = ({
     authConfig,
     jwtConfig,
     dbConnection,
+    redisClient,
     autoIndex,
     authUserModel = dbConnection
         ? getAuthUserModel(dbConnection, { autoIndex })
@@ -63,10 +74,31 @@ export const composeAuthModule = ({
     });
     const passwordComparer = new BcryptPasswordComparer();
 
+    const sessionWriter = new SessionWriterAdapter({
+        client: redisClient,
+        sessionTimeToLive: jwtConfig.refreshExpiresIn,
+        logger,
+    });
+    const sessionReader = new SessionReaderAdapter({
+        client: redisClient,
+        logger,
+    });
+
+    const tokenHasher = new TokenHasherAdapter({
+        algorithm: authConfig.tokenHashAlgorithm,
+        digest: authConfig.tokenHashDigest,
+    });
+    const tokenHashComparer = new TokenHashComparerAdapter({
+        algorithm: authConfig.tokenHashAlgorithm,
+        digest: authConfig.tokenHashDigest,
+    });
+
     const loginUserUseCase = new LoginUserUseCase({
         authUserReader,
         passwordComparer,
         tokenGenerator,
+        sessionWriter,
+        tokenHasher,
         logger,
     });
 
@@ -86,24 +118,53 @@ export const composeAuthModule = ({
         logger,
     });
 
+    const getBlacklistedLoginUseCase = new GetBlacklistedLoginUseCase({
+        sessionReader,
+    });
+
+    const tokenRefreshUseCase = new TokenRefreshUseCase({
+        authUserReader,
+        tokenGenerator,
+        tokenVerifier,
+        sessionReader,
+        sessionWriter,
+        tokenHasher,
+        tokenHashComparer,
+        logger,
+    });
+
+    const logoutUseCase = new LogoutUseCase({
+        tokenVerifier,
+        sessionReader,
+        sessionWriter,
+        logger,
+    });
+
     const authService = new AuthFacade({
-        loginUserUseCase,
         registerUserUseCase,
         deleteAuthUserUseCase,
-        verifyAccessTokenUseCase,
     });
 
     const authController = new AuthController({
-        authService,
+        loginUserUseCase,
+        tokenRefreshUseCase,
+        logoutUseCase,
         logger,
+    });
+
+    const authenticate = makeAuthenticate({
+        verifyAccessTokenUseCase,
+        getBlacklistedLoginUseCase,
     });
 
     const router = createAuthRouter({
         authController,
+        authenticate,
     });
 
     return {
         router,
         authService,
+        authenticate,
     };
 };

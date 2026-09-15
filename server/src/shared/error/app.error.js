@@ -4,6 +4,7 @@ export const ErrorCode = Object.freeze({
     PERMISSION_DENIED: 'PERMISSION_DENIED',
     RESOURCE_NOT_FOUND: 'RESOURCE_NOT_FOUND',
     ALREADY_EXISTS: 'ALREADY_EXISTS',
+    TIMED_OUT: 'TIMED_OUT',
     INTERNAL_ERROR: 'INTERNAL_ERROR',
 });
 
@@ -14,7 +15,7 @@ export class AppError extends Error {
     /**
      * @param {string} message - Human-readable error message
      * @param {string} [errorCode] - Error code string (e.g. 'INVALID_INPUT')
-     * @param {object|array} [errors] - Optional detailed validation error payload
+     * @param {object|any[]} [errors] - Optional detailed validation error payload
      */
     constructor(
         message,

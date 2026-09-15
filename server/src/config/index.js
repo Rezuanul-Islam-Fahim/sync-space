@@ -42,16 +42,23 @@ export const getConfig = ({ reload = false } = {}) => {
             socketTimeoutMS: envVars.MONGODB_SOCKET_TIMEOUT_MS,
             autoIndex: envVars.NODE_ENV !== 'production',
         }),
+        redis: Object.freeze({
+            uri: envVars.REDIS_URL,
+        }),
         logLevel: envVars.LOG_LEVEL,
         bodyLimit: envVars.BODY_LIMIT,
         auth: Object.freeze({
             saltRounds: envVars.BCRYPT_SALT_ROUNDS,
+            tokenHashAlgorithm: envVars.TOKEN_HASH_ALGORITHM,
+            tokenHashDigest: envVars.TOKEN_HASH_DIGEST,
         }),
         corsOrigins,
         corsCredentials: corsOrigins !== '*',
         trustProxy: envVars.TRUST_PROXY,
         jwt: Object.freeze({
             algorithm: envVars.JWT_ALGORITHM,
+            issuer: envVars.JWT_ISSUER,
+            audience: envVars.JWT_AUDIENCE,
             secret: envVars.JWT_SECRET,
             expiresIn: envVars.JWT_EXPIRES_IN,
             refreshSecret: envVars.JWT_REFRESH_SECRET,

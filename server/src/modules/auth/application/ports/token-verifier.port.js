@@ -1,17 +1,20 @@
+/**
+ * Port defining the contract for verifying access and refresh tokens (ISP segregated).
+ */
 export class TokenVerifierPort {
     /**
-     * @param {string} _token
+     * @param {string} _accessToken
      * @returns {Promise<object>} Decoded token payload containing user identity claims
      */
-    verifyAccessToken(_token) {
+    verifyAccessToken(_accessToken) {
         throw new Error('Method not implemented');
     }
 
     /**
-     * @param {string} _token
+     * @param {string} _refreshToken
      * @returns {Promise<object>} Decoded token payload containing user identity claims
      */
-    verifyRefreshToken(_token) {
+    verifyRefreshToken(_refreshToken) {
         throw new Error('Method not implemented');
     }
 }
