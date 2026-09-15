@@ -58,14 +58,14 @@ export class SessionWriterAdapter extends SessionWriterPort {
         await this.client.releaseLock(key, identifier);
     }
 
-    async cacheSession(prevRefreshToken, acessToken, refreshToken) {
+    async cacheSession(prevRefreshToken, accessToken, refreshToken) {
         const key = constructCacheKey(
             AUTH_CACHED_SESSION_CACHE_KEY,
             prevRefreshToken
         );
         await this.client.set(
             key,
-            JSON.stringify({ acessToken, refreshToken }),
+            JSON.stringify({ accessToken, refreshToken }),
             SESSION_LOCK_EXPIRATION
         );
     }
