@@ -1,15 +1,7 @@
-import { TimedOutError } from '../error/index.js';
-import { sendSuccessResponse } from './api-response.util.js';
-import { OK } from '../constants/http-status.constant.js';
-
 export const waitedResponse = async ({
     waitingTime,
     pollInterval,
     resultCallback,
-    res,
-    message,
-    errorMessage,
-    constructData,
 }) => {
     const now = Date.now();
 
@@ -18,12 +10,6 @@ export const waitedResponse = async ({
 
         const result = await resultCallback();
 
-        if (result) {
-            const data = constructData(result);
-
-            return sendSuccessResponse({ res, data, statusCode: OK, message });
-        }
+        if (result) return result;
     }
-
-    throw new TimedOutError(errorMessage);
 };

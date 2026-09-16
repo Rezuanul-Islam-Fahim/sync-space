@@ -1,5 +1,8 @@
 import { randomUUID } from 'node:crypto';
-import { UnauthorizedError } from '../../../../shared/error/index.js';
+import {
+    TimedOutError,
+    UnauthorizedError,
+} from '../../../../shared/error/index.js';
 import { maskEmail, waitedResponse } from '../../../../shared/util/index.js';
 import {
     SESSION_EXPIRED_INVALID,
@@ -11,7 +14,6 @@ import {
     GET_CACHED_SESSION_POLLING_INTERVAL,
 } from '../../domain/auth-user.constant.js';
 import { TokenVerificationError } from '../../infrastructure/security/errors/token-verification.error.js';
-import { NEW_SESSION_GENERATED } from '../../presentation/auth.messages.js';
 
 export class TokenRefreshUseCase {
     constructor({
@@ -34,7 +36,7 @@ export class TokenRefreshUseCase {
         this.logger = logger;
     }
 
-    async execute(res, data) {
+    async execute(data) {
         let sessionLockIdentifier;
         let refreshTokenHash;
 
@@ -84,27 +86,25 @@ export class TokenRefreshUseCase {
             );
 
             if (!locked) {
-                return await waitedResponse({
-                    res,
+                const result = await waitedResponse({
                     waitingTime: GET_CACHED_SESSION_WAITING_TIME,
                     pollInterval: GET_CACHED_SESSION_POLLING_INTERVAL,
-                    message: NEW_SESSION_GENERATED,
-                    errorMessage: TOKEN_REFRESH_TIMEOUT,
                     resultCallback: async () =>
                         await this.sessionReader.getCachedSession(
                             refreshTokenHash
                         ),
-                    constructData: result => {
-                        const resultObj = JSON.parse(result);
-
-                        return {
-                            tokens: {
-                                accessToken: resultObj.accessToken,
-                                refreshToken: resultObj.refreshToken,
-                            },
-                        };
-                    },
                 });
+
+                if (result) {
+                    const resultObj = JSON.parse(result);
+
+                    return {
+                        accessToken: resultObj.accessToken,
+                        refreshToken: resultObj.refreshToken,
+                    };
+                } else {
+                    throw new TimedOutError(TOKEN_REFRESH_TIMEOUT);
+                }
             }
 
             const {
@@ -138,7 +138,10 @@ export class TokenRefreshUseCase {
                 }
             );
 
-            return { newAccessToken, newRefreshToken };
+            return {
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken,
+            };
         } catch (error) {
             if (error instanceof TokenVerificationError) {
                 const message = error.isExpired ? TOKEN_EXPIRED : INVALID_TOKEN;

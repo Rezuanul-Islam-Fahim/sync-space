@@ -66,13 +66,11 @@ export class AuthController {
         const tokenRefreshRequestDto =
             TokenRefreshRequestDto.from(validatedData);
 
-        const { newAccessToken: accessToken, newRefreshToken: refreshToken } =
-            await this.tokenRefreshUseCase.execute(res, tokenRefreshRequestDto);
+        const tokens = await this.tokenRefreshUseCase.execute(
+            tokenRefreshRequestDto
+        );
 
-        const tokenRefreshResponseDto = TokenRefreshResponseDto.from({
-            accessToken,
-            refreshToken,
-        });
+        const tokenRefreshResponseDto = TokenRefreshResponseDto.from(tokens);
 
         sendSuccessResponse({
             res,
