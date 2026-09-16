@@ -21,7 +21,7 @@ export const waitedResponse = async ({
         if (result) {
             const data = constructData(result);
 
-            return sendSuccessResponse({ res, data, OK, message });
+            return sendSuccessResponse({ res, data, statusCode: OK, message });
         }
     }
 
