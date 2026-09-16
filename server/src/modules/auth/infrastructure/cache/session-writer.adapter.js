@@ -5,6 +5,7 @@ import {
     ACCESS_TOKEN_BLACKLIST_KEY,
     AUTH_CACHED_SESSION_CACHE_KEY,
     AUTH_SESSION_CACHE_KEY,
+    CACHED_SESSION_EXPIRATION,
     SESSION_LOCK_EXPIRATION,
 } from '../../domain/auth-user.constant.js';
 import { constructCacheLockKey } from '../../../../shared/util/construct-cache-key.util.js';
@@ -66,7 +67,7 @@ export class SessionWriterAdapter extends SessionWriterPort {
         await this.client.set(
             key,
             JSON.stringify({ accessToken, refreshToken }),
-            SESSION_LOCK_EXPIRATION
+            CACHED_SESSION_EXPIRATION
         );
     }
 }

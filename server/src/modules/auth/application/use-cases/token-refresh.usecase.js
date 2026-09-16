@@ -56,6 +56,19 @@ export class TokenRefreshUseCase {
                 throw new UnauthorizedError(SESSION_EXPIRED_INVALID);
             }
 
+            refreshTokenHash = this.tokenHasher.hash(data.refreshToken);
+            const cachedSession =
+                await this.sessionReader.getCachedSession(refreshTokenHash);
+
+            if (cachedSession) {
+                const resultObj = JSON.parse(cachedSession);
+
+                return {
+                    accessToken: resultObj.accessToken,
+                    refreshToken: resultObj.refreshToken,
+                };
+            }
+
             const isTokenMatched = this.tokenHashComparer.compare(
                 data.refreshToken,
                 refreshToken
@@ -77,7 +90,6 @@ export class TokenRefreshUseCase {
                 throw new UnauthorizedError(USER_UNAVAILABLE);
             }
 
-            refreshTokenHash = this.tokenHasher.hash(data.refreshToken);
             sessionLockIdentifier = randomUUID();
 
             const locked = await this.sessionWriter.lockSessionRefresh(
@@ -122,12 +134,13 @@ export class TokenRefreshUseCase {
                 newRefreshToken
             );
 
-            const hashedRefreshToken = this.tokenHasher.hash(newRefreshToken);
+            const hashedNewRefreshToken =
+                this.tokenHasher.hash(newRefreshToken);
 
             await this.sessionWriter.initiateSession(
                 userId,
                 sessionId,
-                hashedRefreshToken
+                hashedNewRefreshToken
             );
 
             this.logger.info(
