@@ -39,6 +39,7 @@ export class TokenRefreshUseCase {
 
     async execute(res, data) {
         let sessionLockIdentifier;
+        let refreshTokenHash;
 
         try {
             const {
@@ -77,7 +78,7 @@ export class TokenRefreshUseCase {
                 throw new NotFoundError(USER_UNAVAILABLE);
             }
 
-            const refreshTokenHash = this.tokenHasher.hash(data.refreshToken);
+            refreshTokenHash = this.tokenHasher.hash(data.refreshToken);
             sessionLockIdentifier = randomUUID();
 
             const locked = await this.sessionWriter.lockSessionRefresh(
@@ -151,7 +152,7 @@ export class TokenRefreshUseCase {
         } finally {
             if (sessionLockIdentifier) {
                 await this.sessionWriter.unlockSessionRefresh(
-                    data.refreshToken,
+                    refreshTokenHash,
                     sessionLockIdentifier
                 );
             }
