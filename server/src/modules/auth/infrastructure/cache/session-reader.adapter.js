@@ -33,6 +33,9 @@ export class SessionReaderAdapter extends SessionReaderPort {
             AUTH_CACHED_SESSION_CACHE_KEY,
             refreshToken
         );
-        return await this.client.get(cacheKey);
+        const result = await this.client.get(cacheKey);
+        const resultObj = JSON.parse(result);
+
+        return resultObj;
     }
 }

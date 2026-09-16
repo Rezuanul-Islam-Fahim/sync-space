@@ -61,11 +61,9 @@ export class TokenRefreshUseCase {
                 await this.sessionReader.getCachedSession(refreshTokenHash);
 
             if (cachedSession) {
-                const resultObj = JSON.parse(cachedSession);
-
                 return {
-                    accessToken: resultObj.accessToken,
-                    refreshToken: resultObj.refreshToken,
+                    accessToken: cachedSession.accessToken,
+                    refreshToken: cachedSession.refreshToken,
                 };
             }
 
@@ -98,7 +96,7 @@ export class TokenRefreshUseCase {
             );
 
             if (!locked) {
-                const result = await waitedResponse({
+                const cachedSessionResult = await waitedResponse({
                     waitingTime: GET_CACHED_SESSION_WAITING_TIME,
                     pollInterval: GET_CACHED_SESSION_POLLING_INTERVAL,
                     resultCallback: async () =>
@@ -107,12 +105,10 @@ export class TokenRefreshUseCase {
                         ),
                 });
 
-                if (result) {
-                    const resultObj = JSON.parse(result);
-
+                if (cachedSessionResult) {
                     return {
-                        accessToken: resultObj.accessToken,
-                        refreshToken: resultObj.refreshToken,
+                        accessToken: cachedSessionResult.accessToken,
+                        refreshToken: cachedSessionResult.refreshToken,
                     };
                 } else {
                     throw new TimedOutError(TOKEN_REFRESH_TIMEOUT);
