@@ -12,7 +12,7 @@ import { validate } from '../../../shared/middleware/index.js';
  * @param {{ authController: import('./auth.controller.js').AuthController }} deps
  * @returns {import('express').Router}
  */
-export const createAuthRouter = ({ authController, authenticate }) => {
+export const createAuthRouter = ({ authController, _authenticate }) => {
     const router = express.Router();
 
     router.post('/login', loginValidation, validate, authController.login);
@@ -22,13 +22,7 @@ export const createAuthRouter = ({ authController, authenticate }) => {
         validate,
         authController.tokenRefresh
     );
-    router.post(
-        '/logout',
-        authenticate,
-        logoutValidation,
-        validate,
-        authController.logout
-    );
+    router.post('/logout', logoutValidation, validate, authController.logout);
 
     return router;
 };
