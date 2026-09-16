@@ -34,8 +34,10 @@ export class SessionReaderAdapter extends SessionReaderPort {
             refreshToken
         );
         const result = await this.client.get(cacheKey);
-        const resultObj = JSON.parse(result);
 
+        if (!result) return undefined;
+
+        const resultObj = JSON.parse(result);
         return resultObj;
     }
 }
