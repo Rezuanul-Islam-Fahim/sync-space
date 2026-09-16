@@ -1,8 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import {
-    NotFoundError,
-    UnauthorizedError,
-} from '../../../../shared/error/index.js';
+import { UnauthorizedError } from '../../../../shared/error/index.js';
 import { maskEmail, waitedResponse } from '../../../../shared/util/index.js';
 import {
     SESSION_EXPIRED_INVALID,
@@ -75,7 +72,7 @@ export class TokenRefreshUseCase {
 
             if (!user) {
                 await this.sessionWriter.clearSession(userId, sessionId);
-                throw new NotFoundError(USER_UNAVAILABLE);
+                throw new UnauthorizedError(USER_UNAVAILABLE);
             }
 
             refreshTokenHash = this.tokenHasher.hash(data.refreshToken);
