@@ -1,17 +1,16 @@
-import { AppError, ErrorCode } from '../../../../../shared/error/index.js';
+import { AppError, ErrorCode } from '../../../../shared/error/index.js';
 import {
     TOKEN_VERIFICATION_FAILED,
     INVALID_TOKEN,
     TOKEN_EXPIRED,
-} from '../../../domain/auth-user.constant.js';
+} from '../../domain/auth-user.constant.js';
 
 /**
- * Thrown by token-verification infrastructure adapters when a token is
- * invalid, expired, or cannot be verified.
+ * Thrown by token verification operations when a token is invalid,
+ * expired, or cannot be verified.
  *
- * This error is handled and translated at the application layer boundary
- * into an appropriate `AppError` — keeping the presentation layer
- * (middleware) decoupled from module internal error hierarchies.
+ * Defined in the application layer as a contract for TokenVerifierPort
+ * implementations, preserving the Dependency Inversion Principle.
  */
 export class TokenVerificationError extends AppError {
     constructor(message = TOKEN_VERIFICATION_FAILED, cause = null) {

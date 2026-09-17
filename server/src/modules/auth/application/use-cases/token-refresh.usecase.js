@@ -13,7 +13,7 @@ import {
     GET_CACHED_SESSION_WAITING_TIME,
     GET_CACHED_SESSION_POLLING_INTERVAL,
 } from '../../domain/auth-user.constant.js';
-import { TokenVerificationError } from '../../infrastructure/security/errors/token-verification.error.js';
+import { TokenVerificationError } from '../errors/token-verification.error.js';
 
 /**
  * Use case for refreshing authentication tokens and managing session lifecycle.

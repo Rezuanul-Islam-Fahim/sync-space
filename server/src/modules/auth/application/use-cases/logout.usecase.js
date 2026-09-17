@@ -5,7 +5,7 @@ import {
     TokenExpiredError,
     TokenInvalidError,
     TokenVerificationError,
-} from '../../infrastructure/security/errors/token-verification.error.js';
+} from '../errors/token-verification.error.js';
 
 /**
  * Use case for logging out a user, clearing their refresh token session, and blacklisting the access token.

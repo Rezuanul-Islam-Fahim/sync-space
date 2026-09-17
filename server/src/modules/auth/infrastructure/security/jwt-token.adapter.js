@@ -5,7 +5,7 @@ import { TokenVerifierPort } from '../../application/ports/token-verifier.port.j
 import {
     TokenExpiredError,
     TokenInvalidError,
-} from './errors/token-verification.error.js';
+} from '../../application/errors/token-verification.error.js';
 import { randomUUID } from 'crypto';
 
 const signAsync = promisify(jwt.sign);
