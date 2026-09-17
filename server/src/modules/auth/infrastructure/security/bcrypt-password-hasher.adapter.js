@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import bcrypt from 'bcrypt';
 import {
     PasswordHasherPort,
@@ -14,6 +15,16 @@ export class BcryptPasswordHasher extends PasswordHasherPort {
     constructor({ saltRounds = 12 } = {}) {
         super();
         this.saltRounds = saltRounds;
+    }
+
+    /**
+     * Generates a random dummy password hash synchronously for boot-time timing-attack mitigation.
+     *
+     * @param {number} [saltRounds]
+     * @returns {string}
+     */
+    static generateDummyHash(saltRounds = 12) {
+        return bcrypt.hashSync(randomUUID(), saltRounds);
     }
 
     /**

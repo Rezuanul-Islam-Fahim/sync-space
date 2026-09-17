@@ -5,7 +5,7 @@
  * @param {number} options.waitingTime - Maximum time to wait in seconds.
  * @param {number} options.pollInterval - Polling interval in milliseconds.
  * @param {() => Promise<any>} options.resultCallback - Async function returning the result.
- * @returns {Promise<any>} The result of the callback or undefined if timeout is reached.
+ * @returns {Promise<any | null>} The result of the callback or null if timeout is reached.
  */
 export const waitedResponse = async ({
     waitingTime,
@@ -21,4 +21,6 @@ export const waitedResponse = async ({
 
         if (result) return result;
     }
+
+    return null;
 };

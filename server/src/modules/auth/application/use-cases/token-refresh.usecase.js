@@ -182,11 +182,22 @@ export class TokenRefreshUseCase {
 
             throw error;
         } finally {
-            if (sessionLockIdentifier) {
-                await this.sessionRefreshLock.releaseLock(
-                    refreshTokenHash,
-                    sessionLockIdentifier
-                );
+            if (sessionLockIdentifier && refreshTokenHash) {
+                try {
+                    await this.sessionRefreshLock.releaseLock(
+                        refreshTokenHash,
+                        sessionLockIdentifier
+                    );
+                } catch (releaseError) {
+                    this.logger?.warn?.(
+                        'Failed to release session refresh lock in finally block',
+                        {
+                            refreshTokenHash,
+                            sessionLockIdentifier,
+                            error: releaseError.message,
+                        }
+                    );
+                }
             }
         }
     }

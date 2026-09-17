@@ -9,13 +9,9 @@ import {
     unknownRoutesHandler,
 } from '../shared/middleware/index.js';
 
-let isMorganTokenRegistered = false;
-
 const registerMorganTokens = () => {
-    if (isMorganTokenRegistered) return;
     morgan.token('id', req => req.id || '-');
     morgan.token('client-id', req => req.clientRequestId || '-');
-    isMorganTokenRegistered = true;
 };
 
 const devMorganFormat =

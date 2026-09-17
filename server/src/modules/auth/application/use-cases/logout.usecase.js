@@ -79,6 +79,8 @@ export class LogoutUseCase {
             } else if (!(error instanceof TokenExpiredError)) {
                 throw error;
             }
+            // Intentionally ignore TokenExpiredError: users should be allowed to
+            // log out and clear their local session state even if the refresh token has expired.
         }
     }
 }

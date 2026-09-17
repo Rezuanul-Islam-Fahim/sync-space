@@ -96,12 +96,17 @@ export const composeAuthModule = ({
         tokenHasher,
     });
 
+    const dummyPasswordHash = BcryptPasswordHasher.generateDummyHash(
+        authConfig.saltRounds
+    );
+
     const loginUserUseCase = new LoginUserUseCase({
         authUserReader,
         passwordComparer,
         tokenGenerator,
         sessionStore,
         tokenHasher,
+        dummyPasswordHash,
         logger,
     });
 

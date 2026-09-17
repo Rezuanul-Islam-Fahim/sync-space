@@ -17,6 +17,7 @@ export class LoginUserUseCase {
      *   tokenGenerator: import('../ports/token-generator.port.js').TokenGeneratorPort,
      *   sessionStore: import('../ports/session-store.port.js').SessionStorePort,
      *   tokenHasher: import('../ports/token-hasher.port.js').TokenHasherPort,
+     *   dummyPasswordHash?: string,
      *   logger?: import('../../../../shared/ports/index.js').LoggerPort
      * }} deps
      */
@@ -26,6 +27,7 @@ export class LoginUserUseCase {
         tokenGenerator,
         sessionStore,
         tokenHasher,
+        dummyPasswordHash = DUMMY_PASSWORD_HASH,
         logger,
     }) {
         this.authUserReader = authUserReader;
@@ -33,6 +35,7 @@ export class LoginUserUseCase {
         this.tokenGenerator = tokenGenerator;
         this.sessionStore = sessionStore;
         this.tokenHasher = tokenHasher;
+        this.dummyPasswordHash = dummyPasswordHash;
         this.logger = logger;
     }
 
@@ -49,7 +52,7 @@ export class LoginUserUseCase {
             // Mitigate timing attack/user enumeration: run password comparison against dummy hash
             await this.passwordComparer.compare(
                 data.password,
-                DUMMY_PASSWORD_HASH
+                this.dummyPasswordHash
             );
             throw new UnauthorizedError(INVALID_CREDENTIALS);
         }

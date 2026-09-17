@@ -6,15 +6,8 @@
  * @param {...string} keys
  * @returns {string}
  */
-export const constructCacheKey = (mainKey, secondaryKey, ...keys) => {
-    let key = `${mainKey}:${secondaryKey}`;
-
-    keys.forEach(v => {
-        key = key.concat(':', v);
-    });
-
-    return key;
-};
+export const constructCacheKey = (mainKey, secondaryKey, ...keys) =>
+    [mainKey, secondaryKey, ...keys].join(':');
 
 /**
  * Constructs a standardized distributed lock key.
