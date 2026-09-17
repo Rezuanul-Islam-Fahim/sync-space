@@ -30,23 +30,28 @@ export class LogoutUseCase {
             if (session) {
                 await this.sessionWriter.clearSession(authUserId, sessionId);
 
-                try {
-                    const { jti, exp } =
-                        await this.tokenVerifier.verifyAccessToken(
-                            data.accessToken
+                if (data.accessToken) {
+                    try {
+                        const { jti, exp } =
+                            await this.tokenVerifier.verifyAccessToken(
+                                data.accessToken
+                            );
+
+                        const ttl = Math.max(
+                            1,
+                            exp - Math.floor(Date.now() / 1000)
                         );
 
-                    const ttl = Math.max(
-                        1,
-                        exp - Math.floor(Date.now() / 1000)
-                    );
-
-                    await this.sessionWriter.blacklistLoginSession(jti, ttl);
-                } catch (error) {
-                    if (error instanceof TokenInvalidError) {
-                        throw new UnauthorizedError(INVALID_TOKEN);
-                    } else if (!(error instanceof TokenExpiredError)) {
-                        throw error;
+                        await this.sessionWriter.blacklistLoginSession(
+                            jti,
+                            ttl
+                        );
+                    } catch (error) {
+                        if (error instanceof TokenInvalidError) {
+                            throw new UnauthorizedError(INVALID_TOKEN);
+                        } else if (!(error instanceof TokenExpiredError)) {
+                            throw error;
+                        }
                     }
                 }
 
