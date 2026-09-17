@@ -21,7 +21,7 @@ import { TokenVerificationError } from '../errors/token-verification.error.js';
 export class TokenRefreshUseCase {
     /**
      * @param {{
-     *   authUserReader: import('../ports/auth-user-reader.port.js').AuthUserReaderPort,
+     *   authUserReader: import('../ports/auth-user-reader.port.js').AuthUserByIdReaderPort,
      *   tokenGenerator: import('../ports/token-generator.port.js').TokenGeneratorPort,
      *   tokenVerifier: import('../ports/token-verifier.port.js').TokenVerifierPort,
      *   sessionStore: import('../ports/session-store.port.js').SessionStorePort,

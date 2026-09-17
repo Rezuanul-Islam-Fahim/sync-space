@@ -4,7 +4,7 @@
 export class GetUserByUsernameUseCase {
     /**
      * @param {{
-     *   userReader: import('../ports/user-reader.port.js').UserReaderPort,
+     *   userReader: import('../ports/user-reader.port.js').UserByUsernameReaderPort,
      *   logger?: import('../../../../shared/ports/index.js').LoggerPort
      * }} deps
      */

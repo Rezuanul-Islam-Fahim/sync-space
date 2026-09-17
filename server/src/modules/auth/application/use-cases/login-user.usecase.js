@@ -12,7 +12,7 @@ import {
 export class LoginUserUseCase {
     /**
      * @param {{
-     *   authUserReader: import('../ports/auth-user-reader.port.js').AuthUserReaderPort,
+     *   authUserReader: import('../ports/auth-user-reader.port.js').AuthUserByEmailReaderPort,
      *   passwordComparer: import('../ports/password-hasher.port.js').PasswordComparerPort,
      *   tokenGenerator: import('../ports/token-generator.port.js').TokenGeneratorPort,
      *   sessionStore: import('../ports/session-store.port.js').SessionStorePort,
