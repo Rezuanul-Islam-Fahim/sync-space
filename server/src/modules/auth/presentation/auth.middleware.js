@@ -8,7 +8,10 @@ import { catchAsync, headerTokenExtract } from '../../../shared/util/index.js';
 /**
  * Middleware factory for authenticating HTTP requests using JWT tokens.
  *
- * @param {import('../application/auth.facade.js').AuthFacade} authService
+ * @param {{
+ *   verifyAccessTokenUseCase: import('../application/use-cases/verify-access-token.usecase.js').VerifyAccessTokenUseCase,
+ *   getBlacklistedLoginUseCase: import('../application/use-cases/get-blacklisted-login.usecase.js').GetBlacklistedLoginUseCase
+ * }} deps
  * @returns {import('express').RequestHandler}
  */
 export const makeAuthenticate = ({
@@ -35,7 +38,7 @@ export const makeAuthenticate = ({
         }
 
         // Attach the authenticated principal details to the request. The
-        // principal is an intent-revealing object created by the AuthFacade.
+        // principal is an intent-revealing object returned by the verifyAccessTokenUseCase.
         req.user = { id: principal.id, email: principal.email };
         next();
     });

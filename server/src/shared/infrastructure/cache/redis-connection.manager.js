@@ -1,6 +1,12 @@
 import { createClient } from 'redis';
 
+/**
+ * Manages the Redis client connection and lifecycle.
+ */
 export class RedisConnectionManager {
+    /**
+     * @param {{ logger?: import('../../ports/index.js').LoggerPort, redisUrl: string }} deps
+     */
     constructor({ logger, redisUrl }) {
         this.logger = logger;
         this.redisUrl = redisUrl;
@@ -20,6 +26,9 @@ export class RedisConnectionManager {
         };
     }
 
+    /**
+     * Attaches lifecycle event listeners to the Redis client.
+     */
     attachListeners() {
         if (!this.redisClient || this.isListenersAttached) return;
 
@@ -30,6 +39,10 @@ export class RedisConnectionManager {
         this.isListenersAttached = true;
     }
 
+    /**
+     * Connects to the Redis server.
+     * @returns {Promise<ReturnType<typeof createClient>>}
+     */
     async connect() {
         if (this.redisClient && this.redisClient.isOpen) {
             this.logger?.info('Redis client is already connected!');
@@ -46,10 +59,18 @@ export class RedisConnectionManager {
         return this.redisClient;
     }
 
+    /**
+     * Returns the active Redis client connection.
+     * @returns {ReturnType<typeof createClient> | null}
+     */
     getConnection() {
         return this.redisClient;
     }
 
+    /**
+     * Disconnects from the Redis server and destroys the client.
+     * @returns {Promise<void>}
+     */
     async disconnect() {
         try {
             if (this.redisClient && this.redisClient.isOpen) {
@@ -68,6 +89,9 @@ export class RedisConnectionManager {
         }
     }
 
+    /**
+     * Resets the client and removes event listeners.
+     */
     reset() {
         if (this.redisClient && this.isListenersAttached) {
             this.redisClient.removeListener('error', this.onError);

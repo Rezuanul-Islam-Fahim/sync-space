@@ -9,6 +9,12 @@ import {
 import { getConfig } from '../config/index.js';
 import { composeDependencies } from './composition-root.js';
 
+/**
+ * Initializes infrastructure dependencies and starts the Express HTTP server.
+ * Defines handlers for graceful shutdown on process termination signals.
+ *
+ * @returns {Promise<void>}
+ */
 const start = async () => {
     const config = getConfig();
     const PORT = config.port;

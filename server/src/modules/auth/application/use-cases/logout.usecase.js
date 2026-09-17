@@ -7,7 +7,18 @@ import {
     TokenVerificationError,
 } from '../../infrastructure/security/errors/token-verification.error.js';
 
+/**
+ * Use case for logging out a user, clearing their refresh token session, and blacklisting the access token.
+ */
 export class LogoutUseCase {
+    /**
+     * @param {{
+     *   tokenVerifier: import('../ports/token-verifier.port.js').TokenVerifierPort,
+     *   sessionReader: import('../ports/session-reader.port.js').SessionReaderPort,
+     *   sessionWriter: import('../ports/session-writer.port.js').SessionWriterPort,
+     *   logger?: import('../../../../shared/ports/index.js').LoggerPort
+     * }} deps
+     */
     constructor({ tokenVerifier, sessionReader, sessionWriter, logger }) {
         this.tokenVerifier = tokenVerifier;
         this.sessionReader = sessionReader;
@@ -15,6 +26,12 @@ export class LogoutUseCase {
         this.logger = logger;
     }
 
+    /**
+     * Executes the logout operation.
+     *
+     * @param {{ refreshToken: string, accessToken?: string }} data
+     * @returns {Promise<void>}
+     */
     async execute(data) {
         try {
             const {

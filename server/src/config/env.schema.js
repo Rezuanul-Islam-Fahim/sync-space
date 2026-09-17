@@ -1,6 +1,10 @@
 import Joi from 'joi';
 import { corsOriginsValidator } from './cors.config.js';
 
+/**
+ * Joi schema for validating and coercing environment variables.
+ * @type {import('joi').ObjectSchema}
+ */
 export const envSchema = Joi.object({
     NODE_ENV: Joi.string()
         .valid('development', 'production')

@@ -15,7 +15,8 @@ export class LoginUserUseCase {
      *   authUserReader: import('../ports/auth-user-reader.port.js').AuthUserReaderPort,
      *   passwordComparer: import('../ports/password-hasher.port.js').PasswordComparerPort,
      *   tokenGenerator: import('../ports/token-generator.port.js').TokenGeneratorPort,
-     *   sessionWriter: import('../ports/session-writer.port.js').sessionWriterPort,
+     *   sessionWriter: import('../ports/session-writer.port.js').SessionWriterPort,
+     *   tokenHasher: import('../ports/token-hasher.port.js').TokenHasherPort,
      *   logger?: import('../../../../shared/ports/index.js').LoggerPort
      * }} deps
      */

@@ -15,7 +15,22 @@ import {
 } from '../../domain/auth-user.constant.js';
 import { TokenVerificationError } from '../../infrastructure/security/errors/token-verification.error.js';
 
+/**
+ * Use case for refreshing authentication tokens and managing session lifecycle.
+ */
 export class TokenRefreshUseCase {
+    /**
+     * @param {{
+     *   authUserReader: import('../ports/auth-user-reader.port.js').AuthUserReaderPort,
+     *   tokenGenerator: import('../ports/token-generator.port.js').TokenGeneratorPort,
+     *   tokenVerifier: import('../ports/token-verifier.port.js').TokenVerifierPort,
+     *   sessionReader: import('../ports/session-reader.port.js').SessionReaderPort,
+     *   sessionWriter: import('../ports/session-writer.port.js').SessionWriterPort,
+     *   tokenHasher: import('../ports/token-hasher.port.js').TokenHasherPort,
+     *   tokenHashComparer: import('../ports/token-hasher.port.js').TokenHashComparerPort,
+     *   logger?: import('../../../../shared/ports/index.js').LoggerPort
+     * }} deps
+     */
     constructor({
         authUserReader,
         tokenGenerator,
@@ -36,6 +51,12 @@ export class TokenRefreshUseCase {
         this.logger = logger;
     }
 
+    /**
+     * Executes the token refresh process, verifying the incoming refresh token and generating new ones.
+     *
+     * @param {{ refreshToken: string }} data
+     * @returns {Promise<{ accessToken: string, refreshToken: string }>}
+     */
     async execute(data) {
         let sessionLockIdentifier;
         let refreshTokenHash;
