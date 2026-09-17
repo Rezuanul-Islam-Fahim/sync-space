@@ -4,6 +4,7 @@ import { INVALID_TOKEN } from '../../domain/auth-user.constant.js';
 import {
     TokenExpiredError,
     TokenInvalidError,
+    TokenVerificationError,
 } from '../../infrastructure/security/errors/token-verification.error.js';
 
 export class LogoutUseCase {
@@ -47,9 +48,7 @@ export class LogoutUseCase {
                             ttl
                         );
                     } catch (error) {
-                        if (error instanceof TokenInvalidError) {
-                            throw new UnauthorizedError(INVALID_TOKEN);
-                        } else if (!(error instanceof TokenExpiredError)) {
+                        if (!(error instanceof TokenVerificationError)) {
                             throw error;
                         }
                     }
