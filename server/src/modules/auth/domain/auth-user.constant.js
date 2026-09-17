@@ -22,5 +22,5 @@ export const ACCESS_TOKEN_BLACKLIST_KEY = 'access_token_blacklist';
 export const AUTH_CACHED_SESSION_CACHE_KEY = 'cached_session';
 export const SESSION_LOCK_EXPIRATION = 5; // 5 seconds
 export const CACHED_SESSION_EXPIRATION = 10; // 10 seconds
-export const GET_CACHED_SESSION_WAITING_TIME = 3; // 3 seconds
+export const GET_CACHED_SESSION_WAITING_TIME = 7; // 7 seconds
 export const GET_CACHED_SESSION_POLLING_INTERVAL = 100; // 100 milliseconds
