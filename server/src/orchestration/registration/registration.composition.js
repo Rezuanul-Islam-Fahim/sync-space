@@ -37,6 +37,5 @@ export const composeRegistrationModule = ({
 
     return {
         router,
-        registerUserProfileUseCase,
     };
 };
