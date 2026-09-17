@@ -36,7 +36,10 @@ export class LogoutUseCase {
                             data.accessToken
                         );
 
-                    const ttl = exp - Math.floor(Date.now() / 1000);
+                    const ttl = Math.max(
+                        1,
+                        exp - Math.floor(Date.now() / 1000)
+                    );
 
                     await this.sessionWriter.blacklistLoginSession(jti, ttl);
                 } catch (error) {
