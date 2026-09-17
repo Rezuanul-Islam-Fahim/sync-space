@@ -4,20 +4,20 @@
 export class GetBlacklistedLoginUseCase {
     /**
      * @param {{
-     *   sessionReader: import('../ports/session-reader.port.js').SessionReaderPort
+     *   tokenBlacklist: import('../ports/token-blacklist.port.js').TokenBlacklistPort
      * }} deps
      */
-    constructor({ sessionReader }) {
-        this.sessionReader = sessionReader;
+    constructor({ tokenBlacklist }) {
+        this.tokenBlacklist = tokenBlacklist;
     }
 
     /**
-     * Executes the retrieval of a blacklisted session.
+     * Executes the check for whether a token session is blacklisted.
      *
      * @param {string} jti - The JWT ID to check for blacklisting.
-     * @returns {Promise<boolean | object>} The blacklisted session if found, else false/null.
+     * @returns {Promise<boolean>} True if blacklisted, false otherwise.
      */
     async execute(jti) {
-        return await this.sessionReader.getBlacklistedLoginSession(jti);
+        return await this.tokenBlacklist.isTokenBlacklisted(jti);
     }
 }

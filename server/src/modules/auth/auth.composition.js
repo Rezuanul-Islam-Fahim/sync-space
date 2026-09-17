@@ -17,8 +17,9 @@ import {
 import { getAuthUserModel } from './infrastructure/database/auth-user.model.js';
 import { AuthUserReaderAdapter } from './infrastructure/adapters/auth-user-reader.adapter.js';
 import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-writer.adapter.js';
-import { SessionWriterAdapter } from './infrastructure/cache/session-writer.adapter.js';
-import { SessionReaderAdapter } from './infrastructure/cache/session-reader.adapter.js';
+import { RedisSessionStoreAdapter } from './infrastructure/cache/redis-session-store.adapter.js';
+import { RedisTokenBlacklistAdapter } from './infrastructure/cache/redis-token-blacklist.adapter.js';
+import { RedisSessionRefreshLockAdapter } from './infrastructure/cache/redis-session-refresh-lock.adapter.js';
 import { TokenRefreshUseCase } from './application/use-cases/token-refresh.usecase.js';
 import { LogoutUseCase } from './application/use-cases/logout.usecase.js';
 import { GetBlacklistedLoginUseCase } from './application/use-cases/get-blacklisted-login.usecase.js';
@@ -73,12 +74,16 @@ export const composeAuthModule = ({
     });
     const passwordComparer = new BcryptPasswordComparer();
 
-    const sessionWriter = new SessionWriterAdapter({
+    const sessionStore = new RedisSessionStoreAdapter({
         client: redisClient,
         sessionTimeToLive: jwtConfig.refreshExpiresIn,
         logger,
     });
-    const sessionReader = new SessionReaderAdapter({
+    const tokenBlacklist = new RedisTokenBlacklistAdapter({
+        client: redisClient,
+        logger,
+    });
+    const sessionRefreshLock = new RedisSessionRefreshLockAdapter({
         client: redisClient,
         logger,
     });
@@ -96,7 +101,7 @@ export const composeAuthModule = ({
         authUserReader,
         passwordComparer,
         tokenGenerator,
-        sessionWriter,
+        sessionStore,
         tokenHasher,
         logger,
     });
@@ -118,15 +123,15 @@ export const composeAuthModule = ({
     });
 
     const getBlacklistedLoginUseCase = new GetBlacklistedLoginUseCase({
-        sessionReader,
+        tokenBlacklist,
     });
 
     const tokenRefreshUseCase = new TokenRefreshUseCase({
         authUserReader,
         tokenGenerator,
         tokenVerifier,
-        sessionReader,
-        sessionWriter,
+        sessionStore,
+        sessionRefreshLock,
         tokenHasher,
         tokenHashComparer,
         logger,
@@ -134,8 +139,8 @@ export const composeAuthModule = ({
 
     const logoutUseCase = new LogoutUseCase({
         tokenVerifier,
-        sessionReader,
-        sessionWriter,
+        sessionStore,
+        tokenBlacklist,
         logger,
     });
 

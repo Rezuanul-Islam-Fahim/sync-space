@@ -24,8 +24,8 @@ export class TokenRefreshUseCase {
      *   authUserReader: import('../ports/auth-user-reader.port.js').AuthUserReaderPort,
      *   tokenGenerator: import('../ports/token-generator.port.js').TokenGeneratorPort,
      *   tokenVerifier: import('../ports/token-verifier.port.js').TokenVerifierPort,
-     *   sessionReader: import('../ports/session-reader.port.js').SessionReaderPort,
-     *   sessionWriter: import('../ports/session-writer.port.js').SessionWriterPort,
+     *   sessionStore: import('../ports/session-store.port.js').SessionStorePort,
+     *   sessionRefreshLock: import('../ports/session-refresh-lock.port.js').SessionRefreshLockPort,
      *   tokenHasher: import('../ports/token-hasher.port.js').TokenHasherPort,
      *   tokenHashComparer: import('../ports/token-hasher.port.js').TokenHashComparerPort,
      *   logger?: import('../../../../shared/ports/index.js').LoggerPort
@@ -35,8 +35,8 @@ export class TokenRefreshUseCase {
         authUserReader,
         tokenGenerator,
         tokenVerifier,
-        sessionReader,
-        sessionWriter,
+        sessionStore,
+        sessionRefreshLock,
         tokenHasher,
         tokenHashComparer,
         logger,
@@ -44,8 +44,8 @@ export class TokenRefreshUseCase {
         this.authUserReader = authUserReader;
         this.tokenGenerator = tokenGenerator;
         this.tokenVerifier = tokenVerifier;
-        this.sessionReader = sessionReader;
-        this.sessionWriter = sessionWriter;
+        this.sessionStore = sessionStore;
+        this.sessionRefreshLock = sessionRefreshLock;
         this.tokenHasher = tokenHasher;
         this.tokenHashComparer = tokenHashComparer;
         this.logger = logger;
@@ -68,7 +68,7 @@ export class TokenRefreshUseCase {
                 email,
             } = await this.tokenVerifier.verifyRefreshToken(data.refreshToken);
 
-            const refreshToken = await this.sessionReader.getSession(
+            const refreshToken = await this.sessionStore.getSession(
                 userId,
                 sessionId
             );
@@ -79,7 +79,9 @@ export class TokenRefreshUseCase {
 
             refreshTokenHash = this.tokenHasher.hash(data.refreshToken);
             const cachedSession =
-                await this.sessionReader.getCachedSession(refreshTokenHash);
+                await this.sessionRefreshLock.getCachedSession(
+                    refreshTokenHash
+                );
 
             if (cachedSession) {
                 return {
@@ -98,20 +100,20 @@ export class TokenRefreshUseCase {
                     authUserId: userId,
                     sessionId: sessionId,
                 });
-                await this.sessionWriter.clearSession(userId, sessionId);
+                await this.sessionStore.deleteSession(userId, sessionId);
                 throw new UnauthorizedError(SESSION_EXPIRED_INVALID);
             }
 
             const user = await this.authUserReader.findById(userId);
 
             if (!user) {
-                await this.sessionWriter.clearSession(userId, sessionId);
+                await this.sessionStore.deleteSession(userId, sessionId);
                 throw new UnauthorizedError(USER_UNAVAILABLE);
             }
 
             sessionLockIdentifier = randomUUID();
 
-            const locked = await this.sessionWriter.lockSessionRefresh(
+            const locked = await this.sessionRefreshLock.acquireLock(
                 refreshTokenHash,
                 sessionLockIdentifier
             );
@@ -121,7 +123,7 @@ export class TokenRefreshUseCase {
                     waitingTime: GET_CACHED_SESSION_WAITING_TIME,
                     pollInterval: GET_CACHED_SESSION_POLLING_INTERVAL,
                     resultCallback: async () =>
-                        await this.sessionReader.getCachedSession(
+                        await this.sessionRefreshLock.getCachedSession(
                             refreshTokenHash
                         ),
                 });
@@ -145,7 +147,7 @@ export class TokenRefreshUseCase {
                 sessionId,
             });
 
-            await this.sessionWriter.cacheSession(
+            await this.sessionRefreshLock.cacheSession(
                 refreshTokenHash,
                 newAccessToken,
                 newRefreshToken
@@ -154,7 +156,7 @@ export class TokenRefreshUseCase {
             const hashedNewRefreshToken =
                 this.tokenHasher.hash(newRefreshToken);
 
-            await this.sessionWriter.initiateSession(
+            await this.sessionStore.saveSession(
                 userId,
                 sessionId,
                 hashedNewRefreshToken
@@ -181,7 +183,7 @@ export class TokenRefreshUseCase {
             throw error;
         } finally {
             if (sessionLockIdentifier) {
-                await this.sessionWriter.unlockSessionRefresh(
+                await this.sessionRefreshLock.releaseLock(
                     refreshTokenHash,
                     sessionLockIdentifier
                 );

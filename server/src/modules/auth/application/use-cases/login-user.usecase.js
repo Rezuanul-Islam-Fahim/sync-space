@@ -15,7 +15,7 @@ export class LoginUserUseCase {
      *   authUserReader: import('../ports/auth-user-reader.port.js').AuthUserReaderPort,
      *   passwordComparer: import('../ports/password-hasher.port.js').PasswordComparerPort,
      *   tokenGenerator: import('../ports/token-generator.port.js').TokenGeneratorPort,
-     *   sessionWriter: import('../ports/session-writer.port.js').SessionWriterPort,
+     *   sessionStore: import('../ports/session-store.port.js').SessionStorePort,
      *   tokenHasher: import('../ports/token-hasher.port.js').TokenHasherPort,
      *   logger?: import('../../../../shared/ports/index.js').LoggerPort
      * }} deps
@@ -24,14 +24,14 @@ export class LoginUserUseCase {
         authUserReader,
         passwordComparer,
         tokenGenerator,
-        sessionWriter,
+        sessionStore,
         tokenHasher,
         logger,
     }) {
         this.authUserReader = authUserReader;
         this.passwordComparer = passwordComparer;
         this.tokenGenerator = tokenGenerator;
-        this.sessionWriter = sessionWriter;
+        this.sessionStore = sessionStore;
         this.tokenHasher = tokenHasher;
         this.logger = logger;
     }
@@ -73,7 +73,7 @@ export class LoginUserUseCase {
 
         const hashedRefreshToken = this.tokenHasher.hash(tokens.refreshToken);
 
-        await this.sessionWriter.initiateSession(
+        await this.sessionStore.saveSession(
             user.id,
             sessionId,
             hashedRefreshToken

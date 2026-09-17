@@ -14,15 +14,15 @@ export class LogoutUseCase {
     /**
      * @param {{
      *   tokenVerifier: import('../ports/token-verifier.port.js').TokenVerifierPort,
-     *   sessionReader: import('../ports/session-reader.port.js').SessionReaderPort,
-     *   sessionWriter: import('../ports/session-writer.port.js').SessionWriterPort,
+     *   sessionStore: import('../ports/session-store.port.js').SessionStorePort,
+     *   tokenBlacklist: import('../ports/token-blacklist.port.js').TokenBlacklistPort,
      *   logger?: import('../../../../shared/ports/index.js').LoggerPort
      * }} deps
      */
-    constructor({ tokenVerifier, sessionReader, sessionWriter, logger }) {
+    constructor({ tokenVerifier, sessionStore, tokenBlacklist, logger }) {
         this.tokenVerifier = tokenVerifier;
-        this.sessionReader = sessionReader;
-        this.sessionWriter = sessionWriter;
+        this.sessionStore = sessionStore;
+        this.tokenBlacklist = tokenBlacklist;
         this.logger = logger;
     }
 
@@ -40,13 +40,13 @@ export class LogoutUseCase {
                 sessionId,
             } = await this.tokenVerifier.verifyRefreshToken(data.refreshToken);
 
-            const session = await this.sessionReader.getSession(
+            const session = await this.sessionStore.getSession(
                 authUserId,
                 sessionId
             );
 
             if (session) {
-                await this.sessionWriter.clearSession(authUserId, sessionId);
+                await this.sessionStore.deleteSession(authUserId, sessionId);
 
                 if (data.accessToken) {
                     try {
@@ -60,10 +60,7 @@ export class LogoutUseCase {
                             exp - Math.floor(Date.now() / 1000)
                         );
 
-                        await this.sessionWriter.blacklistLoginSession(
-                            jti,
-                            ttl
-                        );
+                        await this.tokenBlacklist.blacklistToken(jti, ttl);
                     } catch (error) {
                         if (!(error instanceof TokenVerificationError)) {
                             throw error;
