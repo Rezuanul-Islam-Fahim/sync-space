@@ -1,64 +1,22 @@
-import winston from 'winston';
-import path from 'path';
 import { LoggerPort } from '../../ports/index.js';
 
-const levels = {
-    error: 0,
-    warn: 1,
-    info: 2,
-    http: 3,
-    debug: 4,
-};
-
-const colors = {
-    error: 'red',
-    warn: 'yellow',
-    info: 'green',
-    http: 'magenta',
-    debug: 'white',
-};
-
-winston.addColors(colors);
-
-const consoleFormat = winston.format.combine(
-    winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
-    winston.format.colorize({ all: true }),
-    winston.format.printf(info => {
-        const reqIdStr = info.requestId ? ` [reqId: ${info.requestId}]` : '';
-        return `${info.timestamp} (${info.level})${reqIdStr} ${info.message}`;
-    })
-);
-
-const fileFormat = winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json()
-);
-
+/**
+ * Adapter implementing LoggerPort by delegating to an injected Winston logger instance.
+ */
 export class WinstonLoggerAdapter extends LoggerPort {
-    constructor({ logLevel, logDir } = {}) {
+    /**
+     * @param {{ logger: import('winston').Logger }} deps
+     */
+    constructor({ logger }) {
         super();
 
-        const resolvedLogLevel = logLevel || 'debug';
-        const resolvedLogDir = logDir || path.join(process.cwd(), 'logs');
+        if (!logger) {
+            throw new Error(
+                'WinstonLoggerAdapter requires a configured winston.Logger instance.'
+            );
+        }
 
-        this._logger = winston.createLogger({
-            level: resolvedLogLevel,
-            levels,
-            transports: [
-                new winston.transports.Console({
-                    format: consoleFormat,
-                }),
-                new winston.transports.File({
-                    filename: path.join(resolvedLogDir, 'error.log'),
-                    level: 'error',
-                    format: fileFormat,
-                }),
-                new winston.transports.File({
-                    filename: path.join(resolvedLogDir, 'combined.log'),
-                    format: fileFormat,
-                }),
-            ],
-        });
+        this._logger = logger;
     }
 
     info(message, meta) {
@@ -88,6 +46,10 @@ export class WinstonLoggerAdapter extends LoggerPort {
      * @returns {Promise<void>}
      */
     async flush(timeoutMs = 2000) {
+        if (this._logger.destroyed || this._logger.writableEnded) {
+            return Promise.resolve();
+        }
+
         return new Promise(resolve => {
             let timerId = null;
 
@@ -126,20 +88,3 @@ export class WinstonLoggerAdapter extends LoggerPort {
         });
     }
 }
-
-/**
- * Pre-config bootstrap logger — intentionally reads LOG_LEVEL directly from
- * process.env BEFORE Joi validation runs.
- *
- * PURPOSE: Used ONLY for the `start().catch()` boundary in server.js (where
- * the application logger created from validated config.logLevel hasn't been
- * instantiated yet) and standalone CLI scripts (e.g. database seeders).
- *
- * DO NOT import this singleton in any application domain or feature module.
- * Instead, inject the validated logger through the DI system (composition root)
- * to maintain testability and ensure a consistent logger instance throughout the
- * application.
- */
-export const bootstrapLogger = new WinstonLoggerAdapter({
-    logLevel: process.env.LOG_LEVEL,
-});

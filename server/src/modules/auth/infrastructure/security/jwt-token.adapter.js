@@ -5,17 +5,34 @@ import { TokenVerifierPort } from '../../application/ports/token-verifier.port.j
 import {
     TokenExpiredError,
     TokenInvalidError,
-} from '../../domain/errors/token-verification.error.js';
+} from '../../application/errors/token-verification.error.js';
+import { randomUUID } from 'crypto';
 
 const signAsync = promisify(jwt.sign);
 const verifyAsync = promisify(jwt.verify);
 
+/**
+ * Adapter implementing TokenGeneratorPort for signing JSON Web Tokens.
+ */
 export class JwtTokenGenerator extends TokenGeneratorPort {
+    /**
+     * @param {{
+     *   secret: string,
+     *   expiresIn: string,
+     *   refreshSecret: string,
+     *   refreshExpiresIn: string,
+     *   issuer: string,
+     *   audience: string,
+     *   algorithm?: string
+     * }} options
+     */
     constructor({
         secret,
         expiresIn,
         refreshSecret,
         refreshExpiresIn,
+        issuer,
+        audience,
         algorithm = 'HS256',
     }) {
         super();
@@ -23,39 +40,80 @@ export class JwtTokenGenerator extends TokenGeneratorPort {
         this.expiresIn = expiresIn;
         this.refreshSecret = refreshSecret;
         this.refreshExpiresIn = refreshExpiresIn;
+        this.issuer = issuer;
+        this.audience = audience;
         this.algorithm = algorithm;
     }
 
-    async generateTokens(userId, email) {
-        const payload = { sub: userId, email };
-
-        const [token, refreshToken] = await Promise.all([
-            signAsync(payload, this.secret, {
+    /**
+     * Generates a pair of access and refresh tokens for the given user identity.
+     *
+     * @param {string} userId
+     * @param {string} email
+     * @param {string} sessionId
+     * @returns {Promise<{ accessToken: string, refreshToken: string }>}
+     */
+    async generateTokens({ userId, email, sessionId }) {
+        const [accessToken, refreshToken] = await Promise.all([
+            signAsync({ sub: userId, email }, this.secret, {
                 algorithm: this.algorithm,
                 expiresIn: this.expiresIn,
+                issuer: this.issuer,
+                audience: this.audience,
+                jwtid: randomUUID(),
             }),
-            signAsync(payload, this.refreshSecret, {
+            signAsync({ sub: userId, email, sessionId }, this.refreshSecret, {
                 algorithm: this.algorithm,
                 expiresIn: this.refreshExpiresIn,
+                issuer: this.issuer,
+                audience: this.audience,
             }),
         ]);
 
-        return { token, refreshToken };
+        return { accessToken, refreshToken };
     }
 }
 
+/**
+ * Adapter implementing TokenVerifierPort for verifying and decoding JSON Web Tokens.
+ */
 export class JwtTokenVerifier extends TokenVerifierPort {
-    constructor({ secret, refreshSecret, algorithm = 'HS256' }) {
+    /**
+     * @param {{
+     *   secret: string,
+     *   refreshSecret: string,
+     *   issuer: string,
+     *   audience: string,
+     *   algorithm?: string
+     * }} options
+     */
+    constructor({
+        secret,
+        refreshSecret,
+        issuer,
+        audience,
+        algorithm = 'HS256',
+    }) {
         super();
         this.secret = secret;
         this.refreshSecret = refreshSecret;
+        this.issuer = issuer;
+        this.audience = audience;
         this.algorithm = algorithm;
     }
 
-    async verifyAccessToken(token) {
+    /**
+     * Verifies the authenticity and expiration of an access token.
+     *
+     * @param {string} accessToken
+     * @returns {Promise<object>}
+     */
+    async verifyAccessToken(accessToken) {
         try {
-            return await verifyAsync(token, this.secret, {
+            return await verifyAsync(accessToken, this.secret, {
                 algorithms: [this.algorithm],
+                issuer: this.issuer,
+                audience: this.audience,
             });
         } catch (error) {
             if (error.name === 'TokenExpiredError') {
@@ -65,10 +123,18 @@ export class JwtTokenVerifier extends TokenVerifierPort {
         }
     }
 
-    async verifyRefreshToken(token) {
+    /**
+     * Verifies the authenticity and expiration of a refresh token.
+     *
+     * @param {string} refreshToken
+     * @returns {Promise<object>}
+     */
+    async verifyRefreshToken(refreshToken) {
         try {
-            return await verifyAsync(token, this.refreshSecret, {
+            return await verifyAsync(refreshToken, this.refreshSecret, {
                 algorithms: [this.algorithm],
+                issuer: this.issuer,
+                audience: this.audience,
             });
         } catch (error) {
             if (error.name === 'TokenExpiredError') {

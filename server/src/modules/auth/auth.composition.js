@@ -17,6 +17,16 @@ import {
 import { getAuthUserModel } from './infrastructure/database/auth-user.model.js';
 import { AuthUserReaderAdapter } from './infrastructure/adapters/auth-user-reader.adapter.js';
 import { AuthUserWriterAdapter } from './infrastructure/adapters/auth-user-writer.adapter.js';
+import { RedisSessionStoreAdapter } from './infrastructure/cache/redis-session-store.adapter.js';
+import { RedisTokenBlacklistAdapter } from './infrastructure/cache/redis-token-blacklist.adapter.js';
+import { RedisSessionRefreshLockAdapter } from './infrastructure/cache/redis-session-refresh-lock.adapter.js';
+import { TokenRefreshUseCase } from './application/use-cases/token-refresh.usecase.js';
+import { LogoutUseCase } from './application/use-cases/logout.usecase.js';
+import { GetBlacklistedLoginUseCase } from './application/use-cases/get-blacklisted-login.usecase.js';
+import {
+    TokenHashComparerAdapter,
+    TokenHasherAdapter,
+} from './infrastructure/security/token-hasher.adapter.js';
 
 /**
  * Composes the auth module and returns its Express router and auth service facade.
@@ -39,6 +49,7 @@ export const composeAuthModule = ({
     authConfig,
     jwtConfig,
     dbConnection,
+    redisClient,
     autoIndex,
     authUserModel = dbConnection
         ? getAuthUserModel(dbConnection, { autoIndex })
@@ -63,10 +74,39 @@ export const composeAuthModule = ({
     });
     const passwordComparer = new BcryptPasswordComparer();
 
+    const sessionStore = new RedisSessionStoreAdapter({
+        client: redisClient,
+        sessionTimeToLive: jwtConfig.refreshExpiresIn,
+        logger,
+    });
+    const tokenBlacklist = new RedisTokenBlacklistAdapter({
+        client: redisClient,
+        logger,
+    });
+    const sessionRefreshLock = new RedisSessionRefreshLockAdapter({
+        client: redisClient,
+        logger,
+    });
+
+    const tokenHasher = new TokenHasherAdapter({
+        algorithm: authConfig.tokenHashAlgorithm,
+        digest: authConfig.tokenHashDigest,
+    });
+    const tokenHashComparer = new TokenHashComparerAdapter({
+        tokenHasher,
+    });
+
+    const dummyPasswordHash = BcryptPasswordHasher.generateDummyHash(
+        authConfig.saltRounds
+    );
+
     const loginUserUseCase = new LoginUserUseCase({
         authUserReader,
         passwordComparer,
         tokenGenerator,
+        sessionStore,
+        tokenHasher,
+        dummyPasswordHash,
         logger,
     });
 
@@ -86,15 +126,39 @@ export const composeAuthModule = ({
         logger,
     });
 
+    const getBlacklistedLoginUseCase = new GetBlacklistedLoginUseCase({
+        tokenBlacklist,
+    });
+
+    const tokenRefreshUseCase = new TokenRefreshUseCase({
+        authUserReader,
+        tokenGenerator,
+        tokenVerifier,
+        sessionStore,
+        sessionRefreshLock,
+        tokenHasher,
+        tokenHashComparer,
+        logger,
+    });
+
+    const logoutUseCase = new LogoutUseCase({
+        tokenVerifier,
+        sessionStore,
+        tokenBlacklist,
+        logger,
+    });
+
     const authService = new AuthFacade({
-        loginUserUseCase,
         registerUserUseCase,
         deleteAuthUserUseCase,
         verifyAccessTokenUseCase,
+        getBlacklistedLoginUseCase,
     });
 
     const authController = new AuthController({
-        authService,
+        loginUserUseCase,
+        tokenRefreshUseCase,
+        logoutUseCase,
         logger,
     });
 

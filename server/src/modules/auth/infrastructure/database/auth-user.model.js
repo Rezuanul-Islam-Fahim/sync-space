@@ -1,53 +1,66 @@
 import mongoose from 'mongoose';
 
 /**
- * Auth-bounded-context schema.
+ * Auth-bounded-context schema factory.
  *
  * Stored in the `credentials` collection — intentionally separate from the
- * `users` (profile) collection owned by the user module.  Only the fields
+ * `users` (profile) collection owned by the user module. Only the fields
  * required to authenticate a principal are persisted here.
+ *
+ * @param {{ autoIndex?: boolean }} [options]
+ * @returns {import('mongoose').Schema}
  */
-const authUserSchema = new mongoose.Schema(
-    {
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-            index: true,
+export const createAuthUserSchema = ({ autoIndex } = {}) => {
+    const schema = new mongoose.Schema(
+        {
+            email: {
+                type: String,
+                required: true,
+                unique: true,
+                index: true,
+            },
+            password: {
+                type: String,
+                required: true,
+            },
+            isVerified: {
+                type: Boolean,
+                default: false,
+            },
         },
-        password: {
-            type: String,
-            required: true,
-        },
-        isVerified: {
-            type: Boolean,
-            default: false,
-        },
-    },
-    {
-        timestamps: true,
-    }
-);
+        {
+            timestamps: true,
+            ...(autoIndex !== undefined ? { autoIndex } : {}),
+        }
+    );
 
-const transform = (doc, ret) => {
-    delete ret.__v;
-    return ret;
+    const transform = (doc, ret) => {
+        delete ret.__v;
+        return ret;
+    };
+
+    schema.set('toJSON', { transform });
+    schema.set('toObject', { transform });
+
+    return schema;
 };
 
-authUserSchema.set('toJSON', { transform });
-authUserSchema.set('toObject', { transform });
-
+/**
+ * Returns the AuthUser Mongoose model for the given connection.
+ *
+ * @param {import('mongoose').Connection} connection
+ * @param {{ autoIndex?: boolean }} [options]
+ * @returns {import('mongoose').Model<any>}
+ */
 export const getAuthUserModel = (connection, { autoIndex } = {}) => {
     if (!connection) {
         throw new Error(
             'Database connection instance is required to resolve getAuthUserModel.'
         );
     }
-    if (autoIndex !== undefined) {
-        authUserSchema.set('autoIndex', autoIndex);
+    if (connection.models?.AuthUser) {
+        return connection.models.AuthUser;
     }
-    return (
-        connection.models?.AuthUser ||
-        connection.model('AuthUser', authUserSchema, 'credentials')
-    );
+    const schema = createAuthUserSchema({ autoIndex });
+    return connection.model('AuthUser', schema, 'credentials');
 };

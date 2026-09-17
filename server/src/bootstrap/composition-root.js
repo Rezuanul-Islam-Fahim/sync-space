@@ -12,27 +12,30 @@ import { composeRegistrationModule } from '../orchestration/registration/index.j
  *   config: object,
  *   connection?: import('mongoose').Connection
  * }} deps
+ * @returns {import('express').Application}
  */
-export const composeDependencies = ({ logger, config, connection }) => {
-    // ── User bounded context ──────────────────────────────────────────────────
-    const userModule = composeUserModule({
-        logger,
-        dbConnection: connection,
-        autoIndex: config.db?.autoIndex,
-    });
-
+export const composeDependencies = ({
+    logger,
+    config,
+    connection,
+    redisClient,
+}) => {
     // ── Auth bounded context ──────────────────────────────────────────────────
     const authModule = composeAuthModule({
         logger,
         authConfig: config.auth,
         jwtConfig: config.jwt,
         dbConnection: connection,
+        redisClient,
         autoIndex: config.db?.autoIndex,
     });
 
-    // ── Middleware ────────────────────────────────────────────────────────────
-    // Authentication middleware factory is exported from the auth module
-    // but not applied globally here; routes should explicitly opt in.
+    // ── User bounded context ──────────────────────────────────────────────────
+    const userModule = composeUserModule({
+        logger,
+        dbConnection: connection,
+        autoIndex: config.db?.autoIndex,
+    });
 
     // ── Registration bounded context / Composite layer ────────────────────────
     const registrationModule = composeRegistrationModule({
@@ -54,8 +57,7 @@ export const composeDependencies = ({ logger, config, connection }) => {
         corsCredentials: config.corsCredentials,
         bodyLimit: config.bodyLimit,
         trustProxy: config.trustProxy,
-        env: config.env,
-        exposeStack: config.env === 'development',
+        isDev: config.env === 'development',
     });
 
     return app;

@@ -1,12 +1,20 @@
 import './env-loader.js';
 import {
-    DatabaseConnectionAdapter,
-    WinstonLoggerAdapter,
+    DatabaseConnectionManager,
+    RedisClient,
+    RedisConnectionManager,
+    createApplicationLogger,
     bootstrapLogger,
 } from '../shared/infrastructure/index.js';
 import { getConfig } from '../config/index.js';
 import { composeDependencies } from './composition-root.js';
 
+/**
+ * Initializes infrastructure dependencies and starts the Express HTTP server.
+ * Defines handlers for graceful shutdown on process termination signals.
+ *
+ * @returns {Promise<void>}
+ */
 const start = async () => {
     const config = getConfig();
     const PORT = config.port;
@@ -15,19 +23,39 @@ const start = async () => {
     // LOG_LEVEL defaults and coercions are applied before the logger is used.
     // bootstrapLogger (module-level singleton) is reserved
     // solely for the outer start().catch() boundary below.
-    const logger = new WinstonLoggerAdapter({ logLevel: config.logLevel });
+    const logger = createApplicationLogger({
+        logLevel: config.logLevel,
+        enableFileLogging: config.env === 'development',
+    });
 
-    const dbConnection = new DatabaseConnectionAdapter({
+    const dbConnection = new DatabaseConnectionManager({
         logger,
         dbConfig: config.db,
     });
 
     const connection = await dbConnection.connect();
 
-    const app = composeDependencies({ logger, config, connection });
+    const redisConnection = new RedisConnectionManager({
+        logger,
+        redisUrl: config.redis.uri,
+    });
+
+    await redisConnection.connect();
+
+    const redisClient = new RedisClient({
+        client: redisConnection.getConnection(),
+    });
+
+    const app = composeDependencies({
+        logger,
+        config,
+        connection,
+        redisClient,
+    });
 
     let isShuttingDown = false;
     let forceTimeout = null;
+    let server = null;
 
     const shutdown = async (signal, exitCode = 0) => {
         if (isShuttingDown) return;
@@ -44,14 +72,21 @@ const start = async () => {
                 if (typeof server?.closeAllConnections === 'function') {
                     server.closeAllConnections();
                 }
-                await dbConnection.disconnect();
+
+                await Promise.allSettled([
+                    dbConnection.disconnect(),
+                    redisConnection.disconnect(),
+                ]);
+
                 await logger.flush?.();
             } catch (err) {
-                bootstrapLogger.error('Error during forced shutdown:', err);
+                logger.error('Error during forced shutdown:', err);
+                await logger.flush?.();
             } finally {
                 process.exit(1);
             }
         }, 10000);
+        forceTimeout.unref();
 
         try {
             // Close idle HTTP keep-alive connections
@@ -65,9 +100,10 @@ const start = async () => {
                 logger.info('HTTP server closed.');
             }
 
-            // Disconnect from database
-            await dbConnection.disconnect();
-            logger.info('Database connection closed.');
+            await Promise.allSettled([
+                dbConnection.disconnect(),
+                redisConnection.disconnect(),
+            ]);
 
             await logger.flush?.();
 
@@ -76,12 +112,12 @@ const start = async () => {
         } catch (err) {
             logger.error('Error during graceful shutdown:', err);
             if (forceTimeout) clearTimeout(forceTimeout);
-            await logger.flush?.().catch(() => {});
+            await logger.flush?.();
             process.exit(1);
         }
     };
 
-    const server = app.listen(PORT, () => {
+    server = app.listen(PORT, () => {
         logger.info(`Server started on port: ${PORT}`);
     });
 
@@ -98,9 +134,21 @@ const start = async () => {
         shutdown('unhandledRejection', 1);
     });
 
-    process.on('uncaughtException', err => {
-        logger.error('Uncaught Exception — exiting process:', err);
-        shutdown('uncaughtException', 1);
+    process.on('uncaughtException', async err => {
+        try {
+            logger.error(
+                'Uncaught Exception — immediately exiting process:',
+                err
+            );
+            if (server && server.listening) {
+                server.close();
+            }
+            await logger.flush?.(1000);
+        } catch {
+            // Ensure process termination even if logging fails
+        } finally {
+            process.exit(1);
+        }
     });
 };
 

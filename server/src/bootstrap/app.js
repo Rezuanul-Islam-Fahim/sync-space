@@ -9,12 +9,9 @@ import {
     unknownRoutesHandler,
 } from '../shared/middleware/index.js';
 
-let isMorganTokenRegistered = false;
-
 const registerMorganTokens = () => {
-    if (isMorganTokenRegistered) return;
     morgan.token('id', req => req.id || '-');
-    isMorganTokenRegistered = true;
+    morgan.token('client-id', req => req.clientRequestId || '-');
 };
 
 const devMorganFormat =
@@ -22,6 +19,20 @@ const devMorganFormat =
 const prodMorganFormat =
     ':remote-addr - :remote-user [:date[clf]] [reqId: :id] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"';
 
+/**
+ * Creates and configures the Express application with middleware and routes.
+ *
+ * @param {{
+ *   router: import('express').Router,
+ *   logger: import('../shared/ports/index.js').LoggerPort,
+ *   corsOrigins: string | string[],
+ *   corsCredentials?: boolean,
+ *   bodyLimit: string,
+ *   trustProxy?: boolean,
+ *   isDev: boolean
+ * }} params
+ * @returns {import('express').Application}
+ */
 export const createApp = ({
     router,
     logger,
@@ -29,8 +40,7 @@ export const createApp = ({
     corsCredentials,
     bodyLimit,
     trustProxy,
-    env,
-    exposeStack = false,
+    isDev,
 }) => {
     registerMorganTokens();
 
@@ -46,14 +56,14 @@ export const createApp = ({
         cors({
             origin: corsOrigins,
             credentials: corsCredentials,
+            exposedHeaders: ['X-Request-Id'],
         })
     );
     app.use(express.json({ limit: bodyLimit }));
     app.use(express.urlencoded({ extended: false, limit: bodyLimit }));
     app.use(hpp());
 
-    const selectedMorganFormat =
-        env === 'development' ? devMorganFormat : prodMorganFormat;
+    const selectedMorganFormat = isDev ? devMorganFormat : prodMorganFormat;
 
     app.use(
         morgan(selectedMorganFormat, {
@@ -66,7 +76,7 @@ export const createApp = ({
     app.use('/api', router);
 
     app.use(unknownRoutesHandler);
-    app.use(makeErrorHandler({ logger, exposeStack }));
+    app.use(makeErrorHandler({ logger, exposeStack: isDev }));
 
     return app;
 };

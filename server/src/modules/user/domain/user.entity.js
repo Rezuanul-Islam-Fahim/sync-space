@@ -42,7 +42,7 @@ export class User {
     /**
      * Factory method for instantiating a new User profile domain entity prior to persistence.
      *
-     * @param {{ authId: string, username: string, displayName?: string, dateOfBirth: Date }} props
+     * @param {{ authId: string, username: string, displayName?: string, dateOfBirth: Date | string }} props
      * @returns {User}
      */
     static create({ authId, username, displayName = null, dateOfBirth }) {

@@ -1,12 +1,26 @@
-// Reserved for domain-level auth constants (e.g. TOKEN_EXPIRY, MAX_LOGIN_ATTEMPTS)
+// Domain-level auth error and status messages
 export const INVALID_CREDENTIALS = 'Invalid Email or Password';
 export const EMAIL_ALREADY_REGISTERED =
     'User with this email is already registered';
+export const DUMMY_PASSWORD_HASH =
+    '$2b$12$e8wqrwK6f5t3g7e8r9t0yu1234567890123456789012345678901';
 
-// Token / authentication messages
+// Token / session / authentication messages
 export const TOKEN_NOT_FOUND = 'Authentication token is missing. Please log in';
 export const INVALID_TOKEN = 'Invalid or expired authentication token';
 export const TOKEN_EXPIRED = 'Authentication token has expired';
 export const USER_UNAVAILABLE =
     'The user belonging to this token no longer exists';
 export const TOKEN_VERIFICATION_FAILED = 'Token verification failed';
+export const SESSION_EXPIRED_INVALID = 'Session expired or invalid';
+export const TOKEN_REFRESH_TIMEOUT =
+    'Token refresh timeout. Please try again later';
+
+// Cache keys and ttl's
+export const AUTH_SESSION_CACHE_KEY = 'session';
+export const ACCESS_TOKEN_BLACKLIST_KEY = 'access_token_blacklist';
+export const AUTH_CACHED_SESSION_CACHE_KEY = 'cached_session';
+export const SESSION_LOCK_EXPIRATION = 5; // 5 seconds
+export const CACHED_SESSION_EXPIRATION = 10; // 10 seconds
+export const GET_CACHED_SESSION_WAITING_TIME = 7; // 7 seconds
+export const GET_CACHED_SESSION_POLLING_INTERVAL = 100; // 100 milliseconds
