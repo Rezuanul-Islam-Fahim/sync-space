@@ -3,7 +3,7 @@ import {
     DatabaseConnectionManager,
     RedisClient,
     RedisConnectionManager,
-    WinstonLoggerAdapter,
+    createApplicationLogger,
     bootstrapLogger,
 } from '../shared/infrastructure/index.js';
 import { getConfig } from '../config/index.js';
@@ -23,7 +23,10 @@ const start = async () => {
     // LOG_LEVEL defaults and coercions are applied before the logger is used.
     // bootstrapLogger (module-level singleton) is reserved
     // solely for the outer start().catch() boundary below.
-    const logger = new WinstonLoggerAdapter({ logLevel: config.logLevel });
+    const logger = createApplicationLogger({
+        logLevel: config.logLevel,
+        enableFileLogging: config.env === 'development',
+    });
 
     const dbConnection = new DatabaseConnectionManager({
         logger,

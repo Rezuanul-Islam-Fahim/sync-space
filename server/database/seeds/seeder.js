@@ -1,7 +1,7 @@
 import '../../src/bootstrap/env-loader.js';
 import {
     bootstrapLogger as logger,
-    DatabaseConnectionAdapter,
+    DatabaseConnectionManager,
 } from '../../src/shared/infrastructure/index.js';
 import { composeAuthModule } from '../../src/modules/auth/index.js';
 import { composeUserModule } from '../../src/modules/user/index.js';
@@ -16,7 +16,7 @@ import { getConfig } from '../../src/config/index.js';
  */
 const runSeeder = async () => {
     const config = getConfig();
-    const dbConnection = new DatabaseConnectionAdapter({
+    const dbConnection = new DatabaseConnectionManager({
         logger,
         dbConfig: config.db,
     });
