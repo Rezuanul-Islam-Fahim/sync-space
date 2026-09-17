@@ -1,15 +1,15 @@
-import { maskEmail } from '../../../../shared/util/index.js';
+import { maskEmail } from '../../shared/util/index.js';
 
 /**
  * Orchestrates multi-module registration saga: creates auth credentials first,
  * then creates the user profile. Executes compensating rollback on failure.
  */
-export class RegisterUserProfileUseCase {
+export class RegisterUserProfileSaga {
     /**
      * @param {{
-     *   authService: import('../../../../modules/auth/application/auth.facade.js').AuthFacade,
-     *   userService: import('../../../../modules/user/application/user.facade.js').UserFacade,
-     *   logger?: import('../../../../shared/ports/index.js').LoggerPort
+     *   authService: import('../../modules/auth/application/auth.facade.js').AuthFacade,
+     *   userService: import('../../modules/user/application/user.facade.js').UserFacade,
+     *   logger?: import('../../shared/ports/index.js').LoggerPort
      * }} deps
      */
     constructor({ authService, userService, logger }) {
@@ -22,7 +22,7 @@ export class RegisterUserProfileUseCase {
      * Executes registration saga.
      *
      * @param {{ email: string, password: string, username: string, displayName?: string, dateOfBirth: Date|string }} data
-     * @returns {Promise<{ authUser: import('../../../../modules/auth/application/dtos/auth-user.dto.js').AuthUserDto, userProfile: import('../../../../modules/user/application/dtos/user-profile.dto.js').UserProfileDto }>}
+     * @returns {Promise<{ authUser: import('../../modules/auth/application/dtos/auth-user.dto.js').AuthUserDto, userProfile: import('../../modules/user/application/dtos/user-profile.dto.js').UserProfileDto }>}
      */
     async execute(data) {
         // 1. Create Auth Credentials

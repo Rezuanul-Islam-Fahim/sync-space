@@ -1,9 +1,9 @@
-import { RegisterUserProfileUseCase } from './application/use-cases/register-user-profile.usecase.js';
+import { RegisterUserProfileSaga } from './registration.saga.js';
 import { RegistrationController } from './presentation/registration.controller.js';
 import { createRegistrationRouter } from './presentation/registration.router.js';
 
 /**
- * Composes the registration module dependencies and returns the Express router and registration use case.
+ * Composes the registration orchestration components and returns the Express router.
  *
  * @param {{
  *   authService: import('../../modules/auth/application/auth.facade.js').AuthFacade,
@@ -11,8 +11,7 @@ import { createRegistrationRouter } from './presentation/registration.router.js'
  *   logger?: import('../../shared/ports/index.js').LoggerPort
  * }} deps
  * @returns {{
- *   router: import('express').Router,
- *   registerUserProfileUseCase: import('./application/use-cases/register-user-profile.usecase.js').RegisterUserProfileUseCase
+ *   router: import('express').Router
  * }}
  */
 export const composeRegistrationModule = ({
@@ -20,14 +19,14 @@ export const composeRegistrationModule = ({
     userService,
     logger,
 }) => {
-    const registerUserProfileUseCase = new RegisterUserProfileUseCase({
+    const registrationSaga = new RegisterUserProfileSaga({
         authService,
         userService,
         logger,
     });
 
     const registrationController = new RegistrationController({
-        registerUserProfileUseCase,
+        registrationSaga,
         logger,
     });
 

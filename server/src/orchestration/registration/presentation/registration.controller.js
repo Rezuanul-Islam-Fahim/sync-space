@@ -15,12 +15,12 @@ import { USER_CREATED } from './registration.messages.js';
 export class RegistrationController {
     /**
      * @param {{
-     *   registerUserProfileUseCase: import('../application/use-cases/register-user-profile.usecase.js').RegisterUserProfileUseCase,
+     *   registrationSaga: import('../registration.saga.js').RegisterUserProfileSaga,
      *   logger?: import('../../../shared/ports/index.js').LoggerPort
      * }} deps
      */
-    constructor({ registerUserProfileUseCase, logger }) {
-        this.registerUserProfileUseCase = registerUserProfileUseCase;
+    constructor({ registrationSaga, logger }) {
+        this.registrationSaga = registrationSaga;
         this.logger = logger;
     }
 
@@ -33,7 +33,7 @@ export class RegistrationController {
         });
 
         const registrationResult =
-            await this.registerUserProfileUseCase.execute(requestDto);
+            await this.registrationSaga.execute(requestDto);
 
         const responseDto = RegistrationResponseDto.from(registrationResult);
 
