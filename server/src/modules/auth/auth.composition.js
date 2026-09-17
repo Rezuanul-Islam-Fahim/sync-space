@@ -93,8 +93,7 @@ export const composeAuthModule = ({
         digest: authConfig.tokenHashDigest,
     });
     const tokenHashComparer = new TokenHashComparerAdapter({
-        algorithm: authConfig.tokenHashAlgorithm,
-        digest: authConfig.tokenHashDigest,
+        tokenHasher,
     });
 
     const loginUserUseCase = new LoginUserUseCase({

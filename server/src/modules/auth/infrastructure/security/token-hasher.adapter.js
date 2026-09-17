@@ -29,16 +29,28 @@ export class TokenHasherAdapter extends TokenHasherPort {
 }
 
 /**
- * Adapter implementing TokenHashComparerPort using Node.js crypto module.
+ * Adapter implementing TokenHashComparerPort using Node.js crypto timingSafeEqual
+ * and an injected TokenHasherPort.
  */
 export class TokenHashComparerAdapter extends TokenHashComparerPort {
     /**
-     * @param {{ algorithm: string, digest: import('node:crypto').BinaryToTextEncoding }} options
+     * @param {{
+     *   tokenHasher?: import('../../application/ports/token-hasher.port.js').TokenHasherPort,
+     *   algorithm?: string,
+     *   digest?: import('node:crypto').BinaryToTextEncoding
+     * }} options
      */
-    constructor({ algorithm, digest }) {
+    constructor({ tokenHasher, algorithm, digest } = {}) {
         super();
-        this.algorithm = algorithm;
-        this.digest = digest;
+        if (tokenHasher) {
+            this.tokenHasher = tokenHasher;
+        } else if (algorithm && digest) {
+            this.tokenHasher = new TokenHasherAdapter({ algorithm, digest });
+        } else {
+            throw new Error(
+                'Either tokenHasher or algorithm and digest must be provided to TokenHashComparerAdapter.'
+            );
+        }
     }
 
     /**
@@ -49,9 +61,7 @@ export class TokenHashComparerAdapter extends TokenHashComparerPort {
      * @returns {boolean}
      */
     compare(incomingToken, storedHashedHex) {
-        const incomingHashHex = createHash(this.algorithm)
-            .update(incomingToken)
-            .digest(this.digest);
+        const incomingHashHex = this.tokenHasher.hash(incomingToken);
 
         const incomingBuffer = Buffer.from(incomingHashHex, 'utf8');
         const storedBuffer = Buffer.from(storedHashedHex, 'utf8');
