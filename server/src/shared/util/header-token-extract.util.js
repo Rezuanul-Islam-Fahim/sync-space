@@ -5,8 +5,9 @@
  * @returns {string | null} The extracted token, or null if invalid or missing.
  */
 export const headerTokenExtract = authorization => {
-    if (authorization && authorization.startsWith('Bearer')) {
-        return authorization.split(' ')[1];
+    if (authorization && authorization.startsWith('Bearer ')) {
+        const token = authorization.slice(7).trim();
+        return token || null;
     }
 
     return null;

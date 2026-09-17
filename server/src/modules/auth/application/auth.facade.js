@@ -1,4 +1,7 @@
 import { AuthUserDto } from './dtos/auth-user.dto.js';
+import { AccessTokenClaimsDto } from './dtos/access-token-claims.dto.js';
+import { UnauthorizedError } from '../../../shared/error/index.js';
+import { INVALID_TOKEN } from '../domain/auth-user.constant.js';
 
 /**
  * Public API Facade for the Auth Bounded Context.
@@ -9,11 +12,20 @@ export class AuthFacade {
      * @param {{
      *   registerUserUseCase: import('./use-cases/register-user.usecase.js').RegisterUserUseCase,
      *   deleteAuthUserUseCase: import('./use-cases/delete-auth-user.usecase.js').DeleteAuthUserUseCase,
+     *   verifyAccessTokenUseCase: import('./use-cases/verify-access-token.usecase.js').VerifyAccessTokenUseCase,
+     *   getBlacklistedLoginUseCase: import('./use-cases/get-blacklisted-login.usecase.js').GetBlacklistedLoginUseCase,
      * }} deps
      */
-    constructor({ registerUserUseCase, deleteAuthUserUseCase }) {
+    constructor({
+        registerUserUseCase,
+        deleteAuthUserUseCase,
+        verifyAccessTokenUseCase,
+        getBlacklistedLoginUseCase,
+    }) {
         this.registerUserUseCase = registerUserUseCase;
         this.deleteAuthUserUseCase = deleteAuthUserUseCase;
+        this.verifyAccessTokenUseCase = verifyAccessTokenUseCase;
+        this.getBlacklistedLoginUseCase = getBlacklistedLoginUseCase;
     }
 
     /**
@@ -35,5 +47,26 @@ export class AuthFacade {
      */
     async deleteAuthUser(id) {
         await this.deleteAuthUserUseCase.execute(id);
+    }
+
+    /**
+     * Verifies an access token and ensures its session is not blacklisted.
+     *
+     * @param {string} token
+     * @returns {Promise<AccessTokenClaimsDto>}
+     * @throws {UnauthorizedError} if token is invalid, expired, or session is blacklisted
+     */
+    async verifyAccessToken(token) {
+        const principal = await this.verifyAccessTokenUseCase.execute(token);
+
+        const isBlacklisted = await this.getBlacklistedLoginUseCase.execute(
+            principal.jti
+        );
+
+        if (isBlacklisted) {
+            throw new UnauthorizedError(INVALID_TOKEN);
+        }
+
+        return AccessTokenClaimsDto.fromClaims(principal);
     }
 }

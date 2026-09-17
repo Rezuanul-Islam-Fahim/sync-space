@@ -6,3 +6,4 @@ export {
     createEmailValidator,
     createPasswordValidator,
 } from './validation-rules.middleware.js';
+export { makeAuthenticate } from './authenticate.middleware.js';

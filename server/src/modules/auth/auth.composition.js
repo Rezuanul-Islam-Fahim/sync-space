@@ -22,7 +22,6 @@ import { SessionReaderAdapter } from './infrastructure/cache/session-reader.adap
 import { TokenRefreshUseCase } from './application/use-cases/token-refresh.usecase.js';
 import { LogoutUseCase } from './application/use-cases/logout.usecase.js';
 import { GetBlacklistedLoginUseCase } from './application/use-cases/get-blacklisted-login.usecase.js';
-import { makeAuthenticate } from './presentation/auth.middleware.js';
 import {
     TokenHashComparerAdapter,
     TokenHasherAdapter,
@@ -143,6 +142,8 @@ export const composeAuthModule = ({
     const authService = new AuthFacade({
         registerUserUseCase,
         deleteAuthUserUseCase,
+        verifyAccessTokenUseCase,
+        getBlacklistedLoginUseCase,
     });
 
     const authController = new AuthController({
@@ -152,19 +153,12 @@ export const composeAuthModule = ({
         logger,
     });
 
-    const authenticate = makeAuthenticate({
-        verifyAccessTokenUseCase,
-        getBlacklistedLoginUseCase,
-    });
-
     const router = createAuthRouter({
         authController,
-        authenticate,
     });
 
     return {
         router,
         authService,
-        authenticate,
     };
 };
