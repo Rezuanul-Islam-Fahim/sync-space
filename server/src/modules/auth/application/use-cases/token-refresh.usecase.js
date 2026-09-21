@@ -5,7 +5,6 @@ import {
 } from '../../../../shared/error/index.js';
 import { maskEmail, waitedResponse } from '../../../../shared/util/index.js';
 import {
-    SESSION_EXPIRED_INVALID,
     TOKEN_EXPIRED,
     INVALID_TOKEN,
     USER_UNAVAILABLE,
@@ -71,46 +70,26 @@ export class TokenRefreshUseCase {
                 email,
             } = await this.tokenVerifier.verifyRefreshToken(data.refreshToken);
 
-            const refreshToken = await this.sessionStore.getSession(
-                userId,
-                sessionId
-            );
-
-            if (!refreshToken) {
-                throw new UnauthorizedError(SESSION_EXPIRED_INVALID);
-            }
-
-            refreshTokenHash = this.tokenHasher.hash(data.refreshToken);
-            const cachedSession =
-                await this.sessionRefreshLock.getCachedSession(
-                    refreshTokenHash
+            const validatedSession =
+                await this.sessionRotationService.validateSession(
+                    userId,
+                    sessionId,
+                    data.refreshToken
                 );
 
-            if (cachedSession) {
-                return {
-                    accessToken: cachedSession.accessToken,
-                    refreshToken: cachedSession.refreshToken,
-                };
+            if (validatedSession.cache) {
+                return validatedSession.tokens;
             }
 
-            const isTokenMatched = this.tokenHashComparer.compare(
-                data.refreshToken,
-                refreshToken
-            );
-
-            if (!isTokenMatched) {
-                this.logger.warn('CRITICAL: Session compromised', {
-                    authUserId: userId,
-                    sessionId: sessionId,
-                });
-                await this.sessionStore.deleteSession(userId, sessionId);
-                throw new UnauthorizedError(SESSION_EXPIRED_INVALID);
-            }
+            refreshTokenHash = validatedSession.refreshTokenHash;
 
             const user = await this.authUserReader.findById(userId);
 
             if (!user) {
-                await this.sessionStore.deleteSession(userId, sessionId);
+                await this.sessionRotationService.invalidateSession(
+                    userId,
+                    sessionId
+                );
                 throw new UnauthorizedError(USER_UNAVAILABLE);
             }
 
