@@ -16,10 +16,10 @@ export class SessionRotationService {
     /**
      *
      * @param {{
-     *   sessionStore: import('../ports/session-store.port').SessionStorePort
-     *   tokenHasher: import('../ports/token-hasher.port').TokenHasherPort
-     *   tokenHashComparer: import('../ports/token-hasher.port').TokenHashComparerPort
-     *   sessionRefreshLock: import('../ports/session-refresh-lock.port').SessionRefreshLockPort
+     *   sessionStore: import('../ports/session-store.port.js').SessionStorePort
+     *   tokenHasher: import('../ports/token-hasher.port.js').TokenHasherPort
+     *   tokenHashComparer: import('../ports/token-hasher.port.js').TokenHashComparerPort
+     *   sessionRefreshLock: import('../ports/session-refresh-lock.port.js').SessionRefreshLockPort
      *   logger: import('../../../../shared/ports/index.js').LoggerPort
      * }} deps
      */
@@ -48,8 +48,9 @@ export class SessionRotationService {
         }
 
         const incomingRefreshTokenHash = this.tokenHasher.hash(refreshToken);
-        const cachedSession =
-            await this.sessionRefreshLock.getCachedSession(refreshTokenHash);
+        const cachedSession = await this.sessionRefreshLock.getCachedSession(
+            incomingRefreshTokenHash
+        );
 
         if (cachedSession) {
             return {
@@ -67,7 +68,7 @@ export class SessionRotationService {
         );
 
         if (!isTokenMatched) {
-            this.logger.warn('CRITICAL: Session compromised', {
+            this.logger?.warn('CRITICAL: Session compromised', {
                 authUserId: userId,
                 sessionId: sessionId,
             });
@@ -136,7 +137,7 @@ export class SessionRotationService {
                 hashedNewRefreshToken
             );
 
-            this.logger.info(
+            this.logger?.info(
                 'New session generated (access-token + refresh-token)',
                 {
                     authUserId: userId,
@@ -155,7 +156,7 @@ export class SessionRotationService {
                     lockValue
                 );
             } catch (releaseError) {
-                this.logger?.warn?.(
+                this.logger?.warn(
                     'Failed to release session refresh lock in finally block',
                     {
                         refreshTokenHash,

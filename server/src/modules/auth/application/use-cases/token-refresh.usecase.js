@@ -72,11 +72,11 @@ export class TokenRefreshUseCase {
                     sessionId,
                     user.email,
                     async () =>
-                        await this.tokenGenerator.generateTokens(
+                        await this.tokenGenerator.generateTokens({
                             userId,
-                            user.email,
-                            sessionId
-                        )
+                            email: user.email,
+                            sessionId,
+                        })
                 );
 
             return {
