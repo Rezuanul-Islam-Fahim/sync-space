@@ -102,7 +102,6 @@ export const composeAuthModule = ({
     );
 
     const sessionRotationService = new SessionRotationService({
-        tokenGenerator,
         sessionStore,
         tokenHasher,
         tokenHashComparer,
@@ -145,10 +144,6 @@ export const composeAuthModule = ({
         sessionRotationService,
         tokenGenerator,
         tokenVerifier,
-        sessionStore,
-        sessionRefreshLock,
-        tokenHasher,
-        tokenHashComparer,
         logger,
     });
 
