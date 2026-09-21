@@ -9,9 +9,18 @@ import { RegistrationRequestDto } from './dtos/registration-request.dto.js';
 import { RegistrationResponseDto } from './dtos/registration-response.dto.js';
 import { USER_CREATED } from './registration.messages.js';
 
+/**
+ * Controller handling user registration requests and orchestrating registration sagas.
+ */
 export class RegistrationController {
-    constructor({ registrationService, logger }) {
-        this.registrationService = registrationService;
+    /**
+     * @param {{
+     *   registrationSaga: import('../registration.saga.js').RegisterUserProfileSaga,
+     *   logger?: import('../../../shared/ports/index.js').LoggerPort
+     * }} deps
+     */
+    constructor({ registrationSaga, logger }) {
+        this.registrationSaga = registrationSaga;
         this.logger = logger;
     }
 
@@ -24,7 +33,7 @@ export class RegistrationController {
         });
 
         const registrationResult =
-            await this.registrationService.registerUser(requestDto);
+            await this.registrationSaga.execute(requestDto);
 
         const responseDto = RegistrationResponseDto.from(registrationResult);
 

@@ -7,32 +7,60 @@ import {
     NOT_FOUND,
     CONFLICT,
     INTERNAL_SERVER_ERROR,
+    TIMED_OUT,
     DEFAULT_ERROR,
 } from '../constants/index.js';
 
-// Dynamic registry mapping error code strings to HTTP status codes
-const errorCodeRegistry = new Map([
-    [ErrorCode.INVALID_INPUT, BAD_REQUEST],
-    [ErrorCode.UNAUTHENTICATED, UNAUTHORIZED],
-    [ErrorCode.PERMISSION_DENIED, FORBIDDEN],
-    [ErrorCode.RESOURCE_NOT_FOUND, NOT_FOUND],
-    [ErrorCode.ALREADY_EXISTS, CONFLICT],
-    [ErrorCode.INTERNAL_ERROR, INTERNAL_SERVER_ERROR],
-]);
+/**
+ * Default immutable mapping from ErrorCode to HTTP status codes.
+ * @type {Readonly<Record<string, number>>}
+ */
+export const DEFAULT_ERROR_STATUS_MAP = Object.freeze({
+    [ErrorCode.INVALID_INPUT]: BAD_REQUEST,
+    [ErrorCode.UNAUTHENTICATED]: UNAUTHORIZED,
+    [ErrorCode.PERMISSION_DENIED]: FORBIDDEN,
+    [ErrorCode.RESOURCE_NOT_FOUND]: NOT_FOUND,
+    [ErrorCode.TIMED_OUT]: TIMED_OUT,
+    [ErrorCode.ALREADY_EXISTS]: CONFLICT,
+    [ErrorCode.INTERNAL_ERROR]: INTERNAL_SERVER_ERROR,
+});
 
 /**
  * Resolves the HTTP status code for a given error code.
  *
  * @param {string} code
+ * @param {Record<string, number>} [statusMap]
  * @returns {number}
  */
-export const getHttpStatusForErrorCode = code => {
-    return errorCodeRegistry.get(code) || INTERNAL_SERVER_ERROR;
+export const getHttpStatusForErrorCode = (
+    code,
+    statusMap = DEFAULT_ERROR_STATUS_MAP
+) => {
+    return statusMap[code] || INTERNAL_SERVER_ERROR;
 };
 
 // ── Main error handler ────────────────────────────────────────────────────────
 
-export const makeErrorHandler = ({ logger, exposeStack = false }) => {
+/**
+ * Creates the global Express error-handling middleware.
+ *
+ * @param {{
+ *   logger: import('../ports/index.js').LoggerPort,
+ *   exposeStack?: boolean,
+ *   customErrorMap?: Record<string, number>
+ * }} options
+ * @returns {import('express').ErrorRequestHandler}
+ */
+export const makeErrorHandler = ({
+    logger,
+    exposeStack = false,
+    customErrorMap = {},
+}) => {
+    const errorStatusMap = Object.freeze({
+        ...DEFAULT_ERROR_STATUS_MAP,
+        ...customErrorMap,
+    });
+
     return (err, req, res, _next) => {
         const error = err;
 
@@ -42,7 +70,7 @@ export const makeErrorHandler = ({ logger, exposeStack = false }) => {
                 ? error.errorCode
                 : ErrorCode.INTERNAL_ERROR;
         const statusCode = isOperational
-            ? error.statusCode || getHttpStatusForErrorCode(errorCode)
+            ? getHttpStatusForErrorCode(errorCode, errorStatusMap)
             : INTERNAL_SERVER_ERROR;
         const message = isOperational ? error.message : DEFAULT_ERROR;
         const requestId = req.id;
@@ -52,6 +80,7 @@ export const makeErrorHandler = ({ logger, exposeStack = false }) => {
             errorCode,
             isOperational,
             requestId,
+            clientRequestId: req.clientRequestId,
             path: req.originalUrl,
             method: req.method,
             ip: req.ip,

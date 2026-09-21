@@ -8,6 +8,7 @@ import {
  * Creates an express-validator chain for email field validation.
  *
  * @param {{ EMAIL_REQUIRED: string, EMAIL_INVALID: string }} messages
+ * @returns {import('express-validator').ValidationChain}
  */
 export const createEmailValidator = messages =>
     body('email')
@@ -22,6 +23,7 @@ export const createEmailValidator = messages =>
  * Creates an express-validator chain for password field validation.
  *
  * @param {{ PASSWORD_REQUIRED: string, PASSWORD_LENGTH_ERROR: string }} messages
+ * @returns {import('express-validator').ValidationChain}
  */
 export const createPasswordValidator = messages =>
     body('password')

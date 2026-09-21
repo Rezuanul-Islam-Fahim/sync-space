@@ -3,13 +3,6 @@ import {
     USERNAME_MAX_LENGTH,
 } from '../../../shared/constants/index.js';
 
-export {
-    EMAIL_REQUIRED,
-    EMAIL_INVALID,
-    PASSWORD_REQUIRED,
-    PASSWORD_LENGTH_ERROR,
-} from '../../../shared/constants/index.js';
-
 export const USER_CREATED = 'New user created successfully';
 export const USERNAME_REQUIRED = 'Username is required';
 export const USERNAME_LENGTH_ERROR = `Username must be between ${USERNAME_MIN_LENGTH} and ${USERNAME_MAX_LENGTH} characters`;

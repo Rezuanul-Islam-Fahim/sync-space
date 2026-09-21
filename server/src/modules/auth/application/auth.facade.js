@@ -1,4 +1,7 @@
 import { AuthUserDto } from './dtos/auth-user.dto.js';
+import { AccessTokenClaimsDto } from './dtos/access-token-claims.dto.js';
+import { UnauthorizedError } from '../../../shared/error/index.js';
+import { INVALID_TOKEN } from '../domain/auth-user.constant.js';
 
 /**
  * Public API Facade for the Auth Bounded Context.
@@ -7,42 +10,28 @@ import { AuthUserDto } from './dtos/auth-user.dto.js';
 export class AuthFacade {
     /**
      * @param {{
-     *   loginUserUseCase: import('./use-cases/login-user.usecase.js').LoginUserUseCase,
      *   registerUserUseCase: import('./use-cases/register-user.usecase.js').RegisterUserUseCase,
      *   deleteAuthUserUseCase: import('./use-cases/delete-auth-user.usecase.js').DeleteAuthUserUseCase,
-     *   verifyAccessTokenUseCase: import('./use-cases/verify-access-token.usecase.js').VerifyAccessTokenUseCase
+     *   verifyAccessTokenUseCase: import('./use-cases/verify-access-token.usecase.js').VerifyAccessTokenUseCase,
+     *   getBlacklistedLoginUseCase: import('./use-cases/get-blacklisted-login.usecase.js').GetBlacklistedLoginUseCase,
      * }} deps
      */
     constructor({
-        loginUserUseCase,
         registerUserUseCase,
         deleteAuthUserUseCase,
         verifyAccessTokenUseCase,
+        getBlacklistedLoginUseCase,
     }) {
-        this.loginUserUseCase = loginUserUseCase;
         this.registerUserUseCase = registerUserUseCase;
         this.deleteAuthUserUseCase = deleteAuthUserUseCase;
         this.verifyAccessTokenUseCase = verifyAccessTokenUseCase;
-    }
-
-    /**
-     * Authenticates user credentials and issues access tokens.
-     *
-     * @param {object} credentials
-     * @returns {Promise<{ user: AuthUserDto, tokens: object }>}
-     */
-    async loginUser(credentials) {
-        const result = await this.loginUserUseCase.execute(credentials);
-        return {
-            user: AuthUserDto.fromEntity(result.user),
-            tokens: result.tokens,
-        };
+        this.getBlacklistedLoginUseCase = getBlacklistedLoginUseCase;
     }
 
     /**
      * Registers new user authentication credentials.
      *
-     * @param {object} credentials
+     * @param {{ email: string, password: string }} credentials
      * @returns {Promise<AuthUserDto>}
      */
     async registerUser(credentials) {
@@ -54,19 +43,30 @@ export class AuthFacade {
      * Deletes an auth user record (used for saga compensating rollback).
      *
      * @param {string} id
-     * @returns {Promise<boolean>}
+     * @returns {Promise<void>}
      */
-    deleteAuthUser(id) {
-        return this.deleteAuthUserUseCase.execute(id);
+    async deleteAuthUser(id) {
+        await this.deleteAuthUserUseCase.execute(id);
     }
 
     /**
-     * Verifies access token and maps payload to an intent-revealing principal object.
+     * Verifies an access token and ensures its session is not blacklisted.
      *
      * @param {string} token
-     * @returns {Promise<{ id: string, email: string }>}
+     * @returns {Promise<AccessTokenClaimsDto>}
+     * @throws {UnauthorizedError} if token is invalid, expired, or session is blacklisted
      */
-    verifyAccessToken(token) {
-        return this.verifyAccessTokenUseCase.execute(token);
+    async verifyAccessToken(token) {
+        const principal = await this.verifyAccessTokenUseCase.execute(token);
+
+        const isBlacklisted = await this.getBlacklistedLoginUseCase.execute(
+            principal.jti
+        );
+
+        if (isBlacklisted) {
+            throw new UnauthorizedError(INVALID_TOKEN);
+        }
+
+        return AccessTokenClaimsDto.fromClaims(principal);
     }
 }

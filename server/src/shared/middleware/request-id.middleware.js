@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'node:crypto';
 
 // Validates alphanumeric, hyphen, and underscore characters up to 64 characters
 const REQUEST_ID_REGEX = /^[a-zA-Z0-9_-]{1,64}$/;
@@ -30,14 +30,16 @@ const sanitizeRequestId = header => {
  * for upstream correlation, but never override the server-generated `req.id`.
  */
 export const requestIdAttach = (req, res, next) => {
-    const incomingHeader = req.headers['x-request-id'];
+    const incomingHeader = req.get('x-request-id');
     const clientRequestId = sanitizeRequestId(incomingHeader);
 
-    req.id = uuidv4();
+    const id = randomUUID();
+    req.id = id;
+
     if (clientRequestId) {
         req.clientRequestId = clientRequestId;
     }
 
-    res.setHeader('X-Request-Id', req.id);
+    res.setHeader('X-Request-Id', id);
     next();
 };

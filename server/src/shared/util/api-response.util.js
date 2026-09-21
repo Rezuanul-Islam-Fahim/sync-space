@@ -20,7 +20,16 @@ export const sendSuccessResponse = ({
     statusCode = OK,
     message = DEFAULT_SUCCESS,
 }) => {
-    return res.status(statusCode).json({ statusCode, data, message });
+    const response = {
+        statusCode,
+        message,
+    };
+
+    if (data) {
+        response.data = data;
+    }
+
+    return res.status(statusCode).json(response);
 };
 
 /**
@@ -45,12 +54,23 @@ export const sendErrorResponse = ({
     requestId,
     stack,
 }) => {
-    return res.status(statusCode).json({
+    const response = {
         statusCode,
         message,
-        errorCode,
-        errors,
-        requestId,
-        stack,
-    });
+    };
+
+    if (errorCode) {
+        response.errorCode = errorCode;
+    }
+    if (errors) {
+        response.errors = errors;
+    }
+    if (requestId) {
+        response.requestId = requestId;
+    }
+    if (stack) {
+        response.stack = stack;
+    }
+
+    return res.status(statusCode).json(response);
 };
