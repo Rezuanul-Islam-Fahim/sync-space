@@ -22,6 +22,7 @@ export class TokenRefreshUseCase {
     /**
      * @param {{
      *   authUserReader: import('../ports/auth-user-reader.port.js').AuthUserByIdReaderPort,
+     *   sessionRotationService: import('../services/session-rotation.service.js').SessionRotationService,
      *   tokenGenerator: import('../ports/token-generator.port.js').TokenGeneratorPort,
      *   tokenVerifier: import('../ports/token-verifier.port.js').TokenVerifierPort,
      *   sessionStore: import('../ports/session-store.port.js').SessionStorePort,
@@ -33,6 +34,7 @@ export class TokenRefreshUseCase {
      */
     constructor({
         authUserReader,
+        sessionRotationService,
         tokenGenerator,
         tokenVerifier,
         sessionStore,
@@ -42,6 +44,7 @@ export class TokenRefreshUseCase {
         logger,
     }) {
         this.authUserReader = authUserReader;
+        this.sessionRotationService = sessionRotationService;
         this.tokenGenerator = tokenGenerator;
         this.tokenVerifier = tokenVerifier;
         this.sessionStore = sessionStore;
