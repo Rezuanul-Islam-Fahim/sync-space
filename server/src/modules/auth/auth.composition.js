@@ -101,7 +101,14 @@ export const composeAuthModule = ({
         authConfig.saltRounds
     );
 
-    const sessionRotationService = new SessionRotationService();
+    const sessionRotationService = new SessionRotationService({
+        tokenGenerator,
+        sessionStore,
+        tokenHasher,
+        tokenHashComparer,
+        sessionRefreshLock,
+        logger,
+    });
 
     const loginUserUseCase = new LoginUserUseCase({
         authUserReader,
