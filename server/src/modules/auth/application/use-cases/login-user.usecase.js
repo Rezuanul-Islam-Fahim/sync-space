@@ -1,10 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { UnauthorizedError } from '../../../../shared/error/index.js';
 import { maskEmail } from '../../../../shared/util/index.js';
-import {
-    INVALID_CREDENTIALS,
-    DUMMY_PASSWORD_HASH,
-} from '../../domain/auth-user.constant.js';
+import { INVALID_CREDENTIALS } from '../../domain/auth-user.constant.js';
 
 /**
  * Use case for validating user login credentials and issuing authentication tokens.
@@ -17,7 +14,7 @@ export class LoginUserUseCase {
      *   tokenGenerator: import('../ports/token-generator.port.js').TokenGeneratorPort,
      *   sessionStore: import('../ports/session-store.port.js').SessionStorePort,
      *   tokenHasher: import('../ports/token-hasher.port.js').TokenHasherPort,
-     *   dummyPasswordHash?: string,
+     *   dummyPasswordHash: string,
      *   logger?: import('../../../../shared/ports/index.js').LoggerPort
      * }} deps
      */
@@ -27,7 +24,7 @@ export class LoginUserUseCase {
         tokenGenerator,
         sessionStore,
         tokenHasher,
-        dummyPasswordHash = DUMMY_PASSWORD_HASH,
+        dummyPasswordHash,
         logger,
     }) {
         this.authUserReader = authUserReader;
