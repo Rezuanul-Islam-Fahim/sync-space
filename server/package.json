@@ -24,7 +24,7 @@
     "license": "ISC",
     "type": "module",
     "engines": {
-        "node": ">=18.0.0"
+        "node": ">=24"
     },
     "dependencies": {
         "bcrypt": "^6.0.0",
