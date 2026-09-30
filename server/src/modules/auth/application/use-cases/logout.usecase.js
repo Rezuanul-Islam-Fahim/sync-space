@@ -68,7 +68,7 @@ export class LogoutUseCase {
                     }
                 }
 
-                this.logger.info('Session cleared successfully', {
+                this.logger?.info('Session cleared successfully', {
                     authUserId,
                     email: maskEmail(email),
                 });
