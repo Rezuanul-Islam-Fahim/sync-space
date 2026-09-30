@@ -1,91 +1,34 @@
-import { randomUUID } from 'node:crypto';
-import {
-    TimedOutError,
-    UnauthorizedError,
-} from '../../../../shared/error/index.js';
-import {
-    GET_CACHED_SESSION_POLLING_INTERVAL,
-    GET_CACHED_SESSION_WAITING_TIME,
-    SESSION_EXPIRED_INVALID,
-    TOKEN_REFRESH_TIMEOUT,
-} from '../../domain/auth-user.constant.js';
 import { maskEmail } from '../../../../shared/util/mask-email.util.js';
-import { waitedResponse } from '../../../../shared/util/index.js';
 
+/**
+ * Service responsible for executing session rotation under a distributed lock.
+ */
 export class SessionRotationService {
     /**
-     *
      * @param {{
-     *   sessionStore: import('../ports/session-store.port.js').SessionStorePort
-     *   tokenHasher: import('../ports/token-hasher.port.js').TokenHasherPort
-     *   tokenHashComparer: import('../ports/token-hasher.port.js').TokenHashComparerPort
-     *   sessionRefreshLock: import('../ports/session-refresh-lock.port.js').SessionRefreshLockPort
-     *   logger: import('../../../../shared/ports/index.js').LoggerPort
+     *   sessionStore: import('../ports/session-store.port.js').SessionStorePort,
+     *   tokenHasher: import('../ports/token-hasher.port.js').TokenHasherPort,
+     *   sessionLockService: import('./session-lock.service.js').SessionLockService,
+     *   logger?: import('../../../../shared/ports/index.js').LoggerPort
      * }} deps
      */
-    constructor({
-        sessionStore,
-        tokenHasher,
-        tokenHashComparer,
-        sessionRefreshLock,
-        logger,
-    }) {
+    constructor({ sessionStore, tokenHasher, sessionLockService, logger }) {
         this.sessionStore = sessionStore;
         this.tokenHasher = tokenHasher;
-        this.tokenHashComparer = tokenHashComparer;
-        this.sessionRefreshLock = sessionRefreshLock;
+        this.sessionLockService = sessionLockService;
         this.logger = logger;
     }
 
-    async validateSession(userId, sessionId, refreshToken) {
-        const refreshTokenHash = await this.sessionStore.getSession(
-            userId,
-            sessionId
-        );
-
-        if (!refreshTokenHash) {
-            throw new UnauthorizedError(SESSION_EXPIRED_INVALID);
-        }
-
-        const incomingRefreshTokenHash = this.tokenHasher.hash(refreshToken);
-        const cachedSession = await this.sessionRefreshLock.getCachedSession(
-            incomingRefreshTokenHash
-        );
-
-        if (cachedSession) {
-            return {
-                cache: true,
-                tokens: {
-                    accessToken: cachedSession.accessToken,
-                    refreshToken: cachedSession.refreshToken,
-                },
-            };
-        }
-
-        const isTokenMatched = this.tokenHashComparer.compare(
-            refreshToken,
-            refreshTokenHash
-        );
-
-        if (!isTokenMatched) {
-            this.logger?.warn('CRITICAL: Session compromised', {
-                authUserId: userId,
-                sessionId: sessionId,
-            });
-            await this.sessionStore.deleteSession(userId, sessionId);
-            throw new UnauthorizedError(SESSION_EXPIRED_INVALID);
-        }
-
-        return {
-            cache: false,
-            refreshTokenHash: incomingRefreshTokenHash,
-        };
-    }
-
-    async invalidateSession(userId, sessionId) {
-        await this.sessionStore.deleteSession(userId, sessionId);
-    }
-
+    /**
+     * Rotates session within a distributed lock: generates new tokens, caches them, and persists the new session.
+     *
+     * @param {string} refreshTokenHash
+     * @param {string} userId
+     * @param {string} sessionId
+     * @param {string} email
+     * @param {() => Promise<{ accessToken: string, refreshToken: string }>} tokenFactory
+     * @returns {Promise<{ accessToken: string, refreshToken: string }>}
+     */
     async rotateSessionWithLock(
         refreshTokenHash,
         userId,
@@ -93,37 +36,10 @@ export class SessionRotationService {
         email,
         tokenFactory
     ) {
-        const lockValue = randomUUID();
-
-        try {
-            const locked = await this.sessionRefreshLock.acquireLock(
-                refreshTokenHash,
-                lockValue
-            );
-
-            if (!locked) {
-                const cachedSessionResult = await waitedResponse({
-                    waitingTime: GET_CACHED_SESSION_WAITING_TIME,
-                    pollInterval: GET_CACHED_SESSION_POLLING_INTERVAL,
-                    resultCallback: async () =>
-                        await this.sessionRefreshLock.getCachedSession(
-                            refreshTokenHash
-                        ),
-                });
-
-                if (!cachedSessionResult) {
-                    throw new TimedOutError(TOKEN_REFRESH_TIMEOUT);
-                }
-
-                return {
-                    accessToken: cachedSessionResult.accessToken,
-                    refreshToken: cachedSessionResult.refreshToken,
-                };
-            }
-
+        return this.sessionLockService.withLock(refreshTokenHash, async () => {
             const { accessToken, refreshToken } = await tokenFactory();
 
-            await this.sessionRefreshLock.cacheSession(
+            await this.sessionLockService.cacheSession(
                 refreshTokenHash,
                 accessToken,
                 refreshToken
@@ -149,22 +65,6 @@ export class SessionRotationService {
                 accessToken,
                 refreshToken,
             };
-        } finally {
-            try {
-                await this.sessionRefreshLock.releaseLock(
-                    refreshTokenHash,
-                    lockValue
-                );
-            } catch (releaseError) {
-                this.logger?.warn(
-                    'Failed to release session refresh lock in finally block',
-                    {
-                        refreshTokenHash,
-                        lockValue,
-                        error: releaseError.message,
-                    }
-                );
-            }
-        }
+        });
     }
 }

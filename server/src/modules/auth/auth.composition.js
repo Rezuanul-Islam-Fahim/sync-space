@@ -27,7 +27,11 @@ import {
     TokenHashComparerAdapter,
     TokenHasherAdapter,
 } from './infrastructure/security/token-hasher.adapter.js';
-import { SessionRotationService } from './application/services/session-rotation.service.js';
+import {
+    SessionLockService,
+    SessionRotationService,
+    SessionValidatorService,
+} from './application/services/index.js';
 
 /**
  * Composes the auth module and returns its Express router and auth service facade.
@@ -101,11 +105,23 @@ export const composeAuthModule = ({
         authConfig.saltRounds
     );
 
-    const sessionRotationService = new SessionRotationService({
+    const sessionLockService = new SessionLockService({
+        sessionRefreshLock,
+        logger,
+    });
+
+    const sessionValidatorService = new SessionValidatorService({
         sessionStore,
         tokenHasher,
         tokenHashComparer,
-        sessionRefreshLock,
+        sessionLockService,
+        logger,
+    });
+
+    const sessionRotationService = new SessionRotationService({
+        sessionStore,
+        tokenHasher,
+        sessionLockService,
         logger,
     });
 
@@ -141,6 +157,7 @@ export const composeAuthModule = ({
 
     const tokenRefreshUseCase = new TokenRefreshUseCase({
         authUserReader,
+        sessionValidatorService,
         sessionRotationService,
         tokenGenerator,
         tokenVerifier,
