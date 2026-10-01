@@ -30,7 +30,7 @@ import {
 import {
     SessionLockService,
     SessionRotationService,
-    SessionValidatorService,
+    SessionValidationService,
 } from './application/services/index.js';
 
 /**
@@ -110,7 +110,7 @@ export const composeAuthModule = ({
         logger,
     });
 
-    const sessionValidatorService = new SessionValidatorService({
+    const sessionValidationService = new SessionValidationService({
         sessionStore,
         tokenHasher,
         tokenHashComparer,
@@ -157,7 +157,7 @@ export const composeAuthModule = ({
 
     const tokenRefreshUseCase = new TokenRefreshUseCase({
         authUserReader,
-        sessionValidatorService,
+        sessionValidationService,
         sessionRotationService,
         tokenGenerator,
         tokenVerifier,

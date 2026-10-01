@@ -4,7 +4,7 @@ import { SESSION_EXPIRED_INVALID } from '../../domain/auth-user.constant.js';
 /**
  * Service responsible for validating sessions and detecting compromised session tokens.
  */
-export class SessionValidatorService {
+export class SessionValidationService {
     /**
      * @param {{
      *   sessionStore: import('../ports/session-store.port.js').SessionStorePort,

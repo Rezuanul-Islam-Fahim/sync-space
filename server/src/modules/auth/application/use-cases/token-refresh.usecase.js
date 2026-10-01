@@ -13,7 +13,7 @@ export class TokenRefreshUseCase {
     /**
      * @param {{
      *   authUserReader: import('../ports/auth-user-reader.port.js').AuthUserByIdReaderPort,
-     *   sessionValidatorService: import('../services/session-validator.service.js').SessionValidatorService,
+     *   sessionValidationService: import('../services/session-validation.service.js').SessionValidationService,
      *   sessionRotationService: import('../services/session-rotation.service.js').SessionRotationService,
      *   tokenGenerator: import('../ports/token-generator.port.js').TokenGeneratorPort,
      *   tokenVerifier: import('../ports/token-verifier.port.js').TokenVerifierPort,
@@ -22,14 +22,14 @@ export class TokenRefreshUseCase {
      */
     constructor({
         authUserReader,
-        sessionValidatorService,
+        sessionValidationService,
         sessionRotationService,
         tokenGenerator,
         tokenVerifier,
         logger,
     }) {
         this.authUserReader = authUserReader;
-        this.sessionValidatorService = sessionValidatorService;
+        this.sessionValidationService = sessionValidationService;
         this.sessionRotationService = sessionRotationService;
         this.tokenGenerator = tokenGenerator;
         this.tokenVerifier = tokenVerifier;
@@ -48,7 +48,7 @@ export class TokenRefreshUseCase {
                 await this.tokenVerifier.verifyRefreshToken(data.refreshToken);
 
             const validatedSession =
-                await this.sessionValidatorService.validateSession(
+                await this.sessionValidationService.validateSession(
                     userId,
                     sessionId,
                     data.refreshToken
@@ -61,7 +61,7 @@ export class TokenRefreshUseCase {
             const user = await this.authUserReader.findById(userId);
 
             if (!user) {
-                await this.sessionValidatorService.invalidateSession(
+                await this.sessionValidationService.invalidateSession(
                     userId,
                     sessionId
                 );
