@@ -1,4 +1,4 @@
-import { maskEmail } from '../../../../shared/util/mask-email.util.js';
+import { maskEmail } from '../../../../shared/util/index.js';
 
 /**
  * Service responsible for executing session rotation under a distributed lock.
